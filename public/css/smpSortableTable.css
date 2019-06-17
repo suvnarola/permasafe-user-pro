@@ -1,0 +1,38 @@
+.smpSortableTable--nav {
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.smpSortableTable--sortable,
+.smpSortableTable--nav-links {
+    cursor: pointer;
+    color: #3b8ede;
+}
+
+.smpSortableTable--sortable.desc::after {
+    content: '\25B2';
+}
+
+.smpSortableTable--sortable.asc::after {
+    content: '\25BC';
+}
+
+.smpSortableTable--nav-links.smpSortableTable--disabled {
+    cursor: not-allowed;
+    color: lightgrey;
+}
+
+.smpSortableTable--prev,
+.smpSortableTable--first {
+    float: left;
+    margin-right: 15px;
+}
+
+.smpSortableTable--next
+,  .smpSortableTable--last{
+    float: right;
+    margin-left: 15px;
+}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<user>
+  <member_number>46</member_number>
+  <first_name>Jani</first_name>
+  <last_name>Reminder</last_name>
+  <pmsafe_phone_number>7845784589</pmsafe_phone_number>
+  <pmsafe_address_1>address1</pmsafe_address_1>
+  <pmsafe_address_2>address2</pmsafe_address_2>
+  <pmsafe_city>surat</pmsafe_city>
+  <pmsafe_state>gujarat</pmsafe_state>
+  <pmsafe_zip_code>395001</pmsafe_zip_code>
+  <pmsafe_email>ka@narola.email</pmsafe_email>
+  <vehicle_info>
+        <pmsafe_vehicle_year>2022</pmsafe_vehicle_year>
+        <pmsafe_vehicle_make>abc</pmsafe_vehicle_make>
+        <pmsafe_vehicle_model>xyz</pmsafe_vehicle_model>
+        <pmsafe_vin>121</pmsafe_vin>
+        <pmsafe_vehicle_mileage>150</pmsafe_vehicle_mileage>
+  </vehicle_info>
+</user>

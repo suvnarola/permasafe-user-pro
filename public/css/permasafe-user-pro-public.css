@@ -1,0 +1,325 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
+
+.perma-black-overlay {position: fixed;top: 0;left: 0;background: rgba(0, 0, 0, 0.56);z-index: 5;width: 100%;height: 100%;display: block;z-index: 99999;}
+.perma-load-image {height: 65px;left: 50%;margin-left: -32.5px;margin-top: -32.5px;position: fixed;top: 50%;width: 65px;display: block;z-index: 999991;}
+#pmsafe-response .perma-error{color: #a94442;background-color: #f2dede;border-color: #ebccd1;padding: 15px;margin-bottom: 20px;border: 1px solid transparent;border-radius: 4px;display: block;}
+#pmsafe-response .perma-success{color: #155724;background-color: #d4edda;border-color: #c3e6cb;padding: 15px;margin-bottom: 20px;border: 1px solid transparent;border-radius: 4px;display: block;}
+.perma_message {margin-bottom: 0px !important;}
+#perma-warranty-form #perma-warranty-head,#perma-warranty-form h3  ,#perma-warranty-form + h3 {color: #333;  font-weight: 600; text-align: center;}
+#perma-warranty-form .perma-customer-info,.perma-vehicle-info,.perma-terms-info,.perma-dealer-info {width: 960px;margin: 20px auto;padding: 25px;border: 2px solid #1565a9;}
+.perma-customer-info > div,.perma-vehicle-info > div,.perma-terms-info > div, .perma-dealer-info > div{display: table;width:100%;}
+#perma-warranty-form div label,.perma-terms-info div label{width:20%;max-width:20%;margin-bottom: 10px;display:table-cell;vertical-align: middle;}
+#perma-warranty-form div input,.perma-terms-info div input{display:table-cell;vertical-align: middle;width:100%;max-width:100%;margin-bottom: 10px;box-shadow: none;border: 0;background: #f4f4f4;}
+.perma-customer-info p b,.perma-customer-info p b u,.perma-vehicle-info p b u,.perma-terms-info p b u, .perma-dealer-info p b u{color:#333;}
+.perma-customer-info p,.perma-vehicle-info p,.perma-terms-info p, .perma-dealer-info p{font-size: 14px;color: #888;padding-bottom: 10px;}
+/*new layout*/
+.perma-vehicle-info label {
+    width: 45% !important;
+}
+.perma-dealer-info .add_label {
+    width: 10% !important;
+}
+/*new layout*/
+.left-side,.right-side,.center-row{display:table;width:50%;float:left;}
+.left-side{padding-right: 10px;}
+.right-side{padding-left: 10px;}
+.center-row{ width:60%; margin: 0 20%;}
+.perma-terms-info div label{ width:50%; max-width:40%;}
+.perma-terms-info div input{width:100%;}
+.heading{color: #333;font-size: 24px;text-align: center;margin: 10px auto;line-height: 34px;}
+.main-heading{color: #333;}
+.sub-heading{color:#888;}
+.head-block{background: #333;width: 100%;display: block;text-align: center;color: #fff;font-size: 13px;padding: 4px 0;margin-bottom: 10px;}
+.perma-footer-meta{width: 960px;margin: 20px auto;padding: 25px;text-align: center;}
+.perma-footer-meta h2,.perma-footer-meta h3{text-align: center;}
+.download-pdf,#print-pdf {text-align: center;background-color: #333 !important;color: #fff;width: auto !important;padding: 10px;border-radius: 5px;display: inline-block !important;}
+#print-pdf {margin-right: 10px;font-size: 15px;margin-bottom: 0 !important;font-weight: bold;padding: 12px 15px;}
+.download-pdf:hover{color: #fff;}
+#perma_register_form span.error,#perma_salesperson_form span.error,#perma_registered_user_form span.error,#perma_user_info_form span.error, .filter-wrap span.error{color:#ff0000 !important;}
+header#top nav > ul > li > a, body.material #search-outer #search input[type="text"]{    font-size: 13px !important;margin: 0 10px !important;}
+.vehicle-wrap > div {display: flex;}
+.vehicle-wrap > div div:first-child {color: #000;font-weight: 500;margin-right: 15px;min-width: 90px;}
+input#myInput {margin: 0 0 20px 0;background: transparent;border: 1px solid #eee;box-shadow: none;border-radius: 4px;}
+#perma-user-name h1 {font-size: 28px;line-height: normal;}
+#perma-user-name h3 {font-size: 18px;line-height: normal;}
+#perma-warranty-wrapper #export-dealer-csv {float: right;margin: 0 0 15px 0 !important;}
+/*datatable-head*/
+.dataTables_wrapper .fg-toolbar div.dataTables_length label {display: flex !important;align-items: center;}
+.dataTables_wrapper .fg-toolbar div.dataTables_length label .fancy-select-wrap {padding-top: 0;margin: 0 6px;}
+.dataTables_wrapper .fg-toolbar .dataTables_filter label {display: flex;align-items: center;}
+.dataTables_wrapper thead tr th {  font-size: 13px;}
+.dataTables_wrapper thead tr th span {right: 0 !important;}
+button.dt-button.buttons-csv.buttons-html5, button.dt-button.buttons-pdf.buttons-html5, button.dt-button.buttons-excel.buttons-html5,button.dt-button.buttons-print{background-color: #333;padding: 7px 26px;border: none;color: #fff;cursor: pointer;float: left;}
+button.dt-button.buttons-pdf.buttons-html5, button.dt-button.buttons-excel.buttons-html5, button.dt-button.buttons-print{ margin-left: 10px;}
+.nisl-pdf-link{display: none;}
+div#dealertable_filter label,
+div#view_customer_table_filter label {display: flex;align-items: center;margin-bottom: 15px;}
+div#dealertable_filter label input[type="search"],
+div#view_customer_table_filter label input[type="search"]{width: 100%;margin-left: 15px;    min-width: 200px;}
+div#view_code_table_filter label,
+#customertable_filter label {display: flex;align-items: center;margin-bottom: 15px;}
+div#view_code_table_filter label input[type="search"],
+#customertable_filter label input[type="search"]{margin-left: 15px;min-width: 200px;}
+div#view_code_table_wrapper {  margin-top: 70px;}
+div#perma-warranty-wrapper a.back_link {float: right;}
+div#perma-warranty-wrapper a input[type="button"] {margin-right: 0 !important;}
+table#view_customer_table {  width: 100% !important;}
+table#view_customer_table  thead tr th span {right: -12px !important;}
+input#s2id_autogen1_search{display: none;}
+div#perma-warranty-wrapper {position: relative;}
+div#perma-warranty-wrapper .filter-wrapper {display: flex;position: absolute;right: 23%;top: -12px;z-index: 1;}
+div#perma-warranty-wrapper .filter-wrapper .fancy-select-wrap{min-width: 160px;}
+div#perma-warranty-wrapper .filter-wrapper .fancy-select-wrap + .fancy-select-wrap {margin-left: 15px;}
+.filter-main-wrapper { position: relative;clear: both;}
+.filter-main-wrapper .filter-wrapper {right: 25% !important;top: -10px !important;}
+#s2id_autogen2_search{display: none;}
+.range-count{    font-size: 15px;font-weight: bold;}
+.range-count span{    display: inline-block;width: 30px;height: 30px;background: #2a6dba;line-height: 30px;text-align: center;color: #fff;border-radius: 60px;font-size: 13px;margin-right: 30px;margin-left: 5px;}
+#search_tbl_filter{display: none;}
+.search-result-wrap {padding-top: 100px;}
+table#customertable.dataTable.nowrap th, table#customertable.dataTable.nowrap td {white-space: normal;}
+table#view_customer_table.dataTable.nowrap th, table#view_customer_table.dataTable.nowrap td {white-space: normal;}
+a.ui-state-default:hover {background-color: #007fff !important;color: #ffffff !important;}
+/*datatable-head-over*/
+.profile-name a{text-transform: capitalize;}
+.pum-close{background-color:#4778b5 !important;}
+.contents{
+    min-height: 90px;
+}
+table#search_tbl td{
+padding: 0;
+vertical-align: middle;
+}
+table#search_tbl  td a{
+    padding: 8px 10px;
+}
+.dis-contents{min-height: 110px;}
+
+
+@media(max-width:1200px){
+  .distributor-account-wrap .vc_col-sm-9,
+  .distributor-account-wrap .vc_col-sm-3{width: 100% !important;}
+  .instance-3 {  margin-left: 0 !important; }
+}
+@media screen and (max-width:1140px){
+    #perma-warranty-form .perma-customer-info, .perma-vehicle-info,.perma-dealer-info, .perma-terms-info, .perma-footer-meta{width: 100%;}
+    div#perma-warranty-wrapper .filter-wrapper{    right: 34% !important;}
+}
+@media(max-width:1024px){
+  body.page-template-default .container{max-width: 100% !important;  padding: 0 15px;}
+  .dataTables_wrapper{overflow: auto;}
+  .search-result-wrap{flex-wrap: wrap; }
+  .search-result-wrap .data-result-wrap {  width: 100% !important;}
+  .search-result-wrap .tbl-result-wrap {  width: 100% !important;}
+}
+@media screen and (max-width:991px){
+    .left-side, .right-side,.center-row{width:100%;padding: 0;}
+    .heading{font-size: 22px !important;}
+    .center-row{margin: 0;}
+    div#perma-warranty-wrapper .filter-wrapper {  right: 40% !important;}
+    div#perma-warranty-wrapper .filter-wrapper{width: 100%;position: unset;margin: 0 0 15px 0;}
+    div#perma-warranty-wrapper .filter-wrapper .fancy-select-wrap{width: 50%;}
+    .filter-wrap{flex-wrap: wrap;    min-height: auto !important;}
+    .filter-wrap .select-filter-wrap,
+    .filter-wrap .input-filter-wrap,
+    .filter-wrap .btn-filter-wrap{width:100% !important;margin: 0 0 30px 0; padding: 0 0 !important;  }
+}
+@media(max-width:767px){
+  div#perma-warranty-wrapper .filter-wrapper {position: inherit;right: auto !important;flex-wrap: wrap;width: 100%;}
+  div#perma-warranty-wrapper .filter-wrapper .fancy-select-wrap{width: 100%;margin: 0 !important;}
+  .tabbed[data-style="minimal"] .wpb_tabs_nav{    margin-bottom: 30px !important;}
+  button.dt-button.buttons-csv.buttons-html5{float: none;}
+  .dt-buttons button.dt-button {display: inline-block;width: 100%;margin: 0 0 8px 0 !important;}
+  .dataTables_wrapper .dt-buttons {display: inline-block;    width: 100%;}
+  .reports-wrap .reports-wrap-inner{width: 100% !important;flex-wrap: wrap !important;}
+  .reports-wrap .reports-wrap-inner .label-input {width: 100% !important;}
+  .reports-wrap .reports-wrap-inner .input-div {  width: 100% !important;}
+  .filter-wrap .input-filter-wrap {  flex-wrap: wrap;}
+  .wpb_wrapper .filter-wrap .input-filter-wrap label, .wpb_wrapper .filter-wrap .input-filter-wrap input {width: 100% !important;margin: 3px 0;}
+  .filter-wrap .select-filter-wrap, .filter-wrap .input-filter-wrap, .filter-wrap .btn-filter-wrap{    margin: 0 0 15px 0 !important; }
+}
+@media screen and (max-width:690px){
+    #perma-warranty-form div input, .perma-terms-info div input{width:100%;}
+    #perma-warranty-form div label, .perma-terms-info div label{margin-bottom: 5px;}
+    .heading {font-size: 18px !important;}
+    #perma-warranty-form .perma-customer-info, .perma-vehicle-info, .perma-terms-info, .perma-dealer-info{padding: 15px;}
+}
+@media screen and (max-width:480px){
+    #perma-warranty-form div label, .perma-terms-info div label, #perma-warranty-form div input, .perma-terms-info div input{display: block; max-width: 100%; width: 100%;}
+}
+input[type=text]:focus{border: 1px solid #6C82BB !important;}
+
+
+/*card css*/
+body .card-wrap {width: 30.33%;background: #ffffff !important;float: left;margin: 0 1% 2% 1% !important;padding: 15px !important;text-align: center;color: #4678b5;min-height: 200px;border: 2px solid #1565a9;border-radius: 10px;}
+body .card-wrap h3 {margin-top: 10px;color: #4678b5;margin-bottom: 10px !important;letter-spacing: 1px;font-weight: bold;font-size: 1.5em !important;line-height: 95%;}
+body .card-wrap h4 {color: #7f7f7f;font-size: 1em !important;margin-bottom: 30px !important;text-transform: uppercase;letter-spacing: 1px;line-height: 92%;}
+body .card-wrap p.member_number {color: #4678b5;padding-bottom: 15px;font-size: 3.5em;display: inline-block;width: 100%;font-weight: bold;}
+body .card-wrap span {display: inline-block;padding: 0 2px;font-size: 16px;letter-spacing: 1px;vertical-align: middle;}
+body .card-wrap-2 {width: 30.33%;background: #099AF4 !important;float: left;margin: 0 1% 2% 1% !important;padding: 15px !important;text-align: center;color: #ffffff;min-height: 200px;border: 2px solid #099AF4;border-radius: 10px;}
+body .card-wrap-2 h3 {margin-top: 10px;color: #ffffff;margin-bottom: 10px !important;letter-spacing: 1px;font-weight: bold;font-size: 1.5em !important;line-height: 95%;}
+body .card-wrap-2 h4 {color: #efefef;font-size: 1em !important;margin-bottom: 30px !important;text-transform: uppercase;letter-spacing: 1px;line-height: 92%;}
+body .card-wrap-2 p.member_number-2 {padding-bottom: 15px;font-size: 3.5em;display: inline-block;width: 100%;font-weight: bold;}
+body .card-wrap span {display: inline-block;padding: 0 2px;font-size: 16px;letter-spacing: 1px;vertical-align: middle;}
+a.more-btn img {width: 30px !important;margin: 0 auto;}
+a.more-btn {cursor: pointer;display: block;width: 100%;background: #4578b5;padding: 10px 4px;text-align: center;border-radius: 100px;max-width: 100px;margin: 20px auto 0;}
+#tab-vehicle-registrations .vc_column-inner > .wpb_wrapper {display: inline-block;width: 100%;}
+ul#paginator {clear: both;display: block;text-align: center;}
+ul#paginator li {list-style: none;}
+#pmsafe_skip_price,#pmsafe_update_price,input#pmsafe_next, #pmsafe_update_prefix, #dialog_upgrade, #dialog_upgrade_no {padding: 15px 22px!important;margin-top: 1.5em;background-color: #4778b5!important;}
+#mebership_info_table_filter{margin-bottom: 10px;}
+#mebership_info_table_filter input{margin-left: 0 !important;}
+#mebership_date_table_filter{margin-bottom: 10px;}
+#mebership_date_table_filter input{margin-left: 0 !important;}
+.filter-wrap {margin-bottom: 10px !important;}
+/* responsive card css */
+@media only screen and (max-width:690px) {
+body .card-wrap {
+  max-width: 100%;
+  width: 100%;
+}
+body .card-wrap-2 {
+  max-width: 100%;
+  width: 100%;
+}
+}
+
+/* Cosmetic only */
+/*#easyPaginate {width:300px;}
+#easyPaginate img {display:block;margin-bottom:10px;}*/
+.easyPaginateNav a {padding:5px;}
+.easyPaginateNav a.current {font-weight:bold;text-decoration:underline;}
+.easyPaginateNav {clear: both;text-align: center;width: 100% !important;}
+body .tabbed div#easyPaginate {display: inline-block;width: 100%;}
+body .tabbed div#easyPaginate .card-wrap {min-width: auto !important;}
+.page-navigation {text-align: center;}
+.page-navigation a {display: inline-block;height: 32px;width: 32px;line-height: 32px;border: 1px solid #ebecec;}
+.reports-wrap {
+    display: flex;
+    flex-wrap: wrap;
+}
+.reports-wrap .reports-wrap-inner {
+    width: 50%;
+    padding: 0 15px;
+    display: flex;
+    margin: 0 0 10px 0;
+}
+.reports-wrap .reports-wrap-inner .label-input {
+    width: 30%;
+}
+.reports-wrap .reports-wrap-inner .input-div {
+    width: 70%;
+}
+.reports-wrap .input-btn {
+    clear: both;
+    width: 100%;
+    text-align: center;
+    margin-top: 15px;
+}
+#membership_date_submit, #date_submit, .reports-wrap .input-btn input {
+    min-height: 36px;
+    padding: 0 20px;
+    margin: 0px 10px;
+    border-radius: 4px;
+    background: #1565a9;
+    font-size: 14px;
+    font-weight: bold;
+}
+.reports-wrap .input-btn input#search_reset {
+    background: #ddd;
+    border: 0;
+    color: #333;
+    cursor: pointer;
+}
+.view-data-wrap .view-data-wrap-inner {
+    display: flex;
+        padding: 0 15px;
+}
+.search-result-wrap .data-result-wrap .view-data-wrap h3 {
+    background: #1565a9;
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 18px;
+    text-align: center;
+}
+.search-result-wrap .data-result-wrap .view-data-wrap .expired {
+    color: red;
+}
+.search-result-wrap .data-result-wrap .view-data-wrap p.expired {
+    text-align: center;
+    padding-bottom: 5px;
+}
+.search-result-wrap .data-result-wrap .view-data-wrap .active {
+    color: #00ac00;
+}
+.view-data-wrap .view-data-wrap-inner .label-input {
+    width: 15%;
+}
+.search-result-wrap .tbl-result-wrap table#search_tbl td:first-child {
+    position: relative;
+}
+.search-result-wrap .tbl-result-wrap table#search_tbl td:first-child a.view-data {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    padding: 15px;
+    color: #000;
+}
+.search-result-wrap .tbl-result-wrap table#search_tbl td img.attachment-thumbnail {
+    margin-bottom: 0;
+}
+.search-result-wrap .tbl-result-wrap table#search_tbl td a {
+    display: block;color: #000;
+}
+.search-result-wrap .data-result-wrap{width:30%;}
+.search-result-wrap .data-result-wrap .view-data-wrap {
+    background: #fff;
+    box-shadow: 0 0 10px 4px #0000002e;
+    border-radius: 3px;
+    margin-top: 28px;
+        margin-left: 15px;
+            padding-bottom: 10px;
+}
+.search-result-wrap {
+    display: flex;
+}
+.search-result-wrap .tbl-result-wrap {
+    width: 70%;
+}
+.view-data-wrap .view-data-wrap-inner .label-input {
+    min-width: 140px;
+}
+.filter-wrap {
+    display: flex;
+    width: 100%;
+     /*min-height: 400px;*/
+    align-items: flex-start;
+}
+.filter-wrap .select-filter-wrap {
+    width: 30%;
+}
+.filter-wrap .input-filter-wrap {
+    width: 50%;
+    display: flex;
+    align-items: center;
+        padding: 0 15px;  
+}
+.filter-wrap .btn-filter-wrap {
+    width: 20%;
+}
+.filter-wrap .input-filter-wrap input {
+    width: 40% !important;
+        margin: 0 10px;
+}
+.filter-wrap .btn-filter-wrap input#date_submit, .filter-wrap .btn-filter-wrap input#membership_date_submit {
+    width: 100%;
+    margin: 0;
+}
+.filter-wrap .select-filter-wrap .fancy-select-wrap {
+    padding-top: 0;
+}

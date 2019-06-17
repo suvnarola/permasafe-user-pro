@@ -1,0 +1,39 @@
+.perma-black-overlay {position: fixed;top: 0;left: 0;background: rgba(0, 0, 0, 0.56);z-index: 5;width: 100%;height: 100%;display: block;z-index: 99999;}
+.perma-load-image {height: 65px;left: 50%;margin-left: -32.5px;margin-top: -32.5px;position: fixed;top: 50%;width: 65px;display: block;z-index: 999991;}
+#pmsafe-response .perma-error{color: #a94442;background-color: #f2dede;border-color: #ebccd1;padding: 15px;margin-bottom: 20px;border: 1px solid transparent;border-radius: 4px;display: block;}
+#pmsafe-response .perma-success{color: #155724;background-color: #d4edda;border-color: #c3e6cb;padding: 15px;margin-bottom: 20px;border: 1px solid transparent;border-radius: 4px;display: block;}
+
+#perma-warranty-form #perma-warranty-head,#perma-warranty-form h3  ,#perma-warranty-form + h3 {color: #333;  font-weight: 600; text-align: center;}
+#perma-warranty-form .perma-customer-info,.perma-vehicle-info,.perma-terms-info {width: 960px;margin: 20px auto;padding: 25px;border: 2px solid #1565a9;}
+.perma-customer-info > div,.perma-vehicle-info > div,.perma-terms-info > div{display: table;width:100%;}
+#perma-warranty-form div label,.perma-terms-info div label{width:20%;max-width:20%;margin-bottom: 10px;display:table-cell;vertical-align: middle;}
+#perma-warranty-form div input,.perma-terms-info div input{display:table-cell;vertical-align: middle;width:100%;max-width:100%;margin-bottom: 10px;box-shadow: none;border: 0;background: #f4f4f4;}
+.perma-customer-info p b,.perma-customer-info p b u,.perma-vehicle-info p b u,.perma-terms-info p b u{color:#333;}
+.perma-customer-info p,.perma-vehicle-info p,.perma-terms-info p{font-size: 14px;color: #888;padding-bottom: 10px;}
+.left-side,.right-side,.center-row{display:table;width:50%;float:left;}
+.left-side{padding-right: 10px;}
+.right-side{padding-left: 10px;}
+.center-row{ width:60%; margin: 0 20%;}
+.perma-terms-info div label{ width:40%; max-width:40%;}
+.perma-terms-info div input{width:100%;}
+.heading{
+    color: #333;
+    font-size: 24px;
+    text-align: center;
+    margin: 10px auto;
+    line-height: 34px;
+}
+.main-heading{color: #333;}
+.sub-heading{color:#888;}
+.head-block{
+    background: #333;
+    width: 100%;
+    display: block;
+    text-align: center;
+    color: #fff;
+    font-size: 13px;
+    padding: 4px 0;
+    margin-bottom: 10px;
+}
+.perma-footer-meta{width: 960px;margin: 20px auto;padding: 25px;}
+.perma-footer-meta h2,.perma-footer-meta h3{text-align: center;}
