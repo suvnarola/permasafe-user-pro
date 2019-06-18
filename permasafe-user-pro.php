@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The plugin bootstrap file
  *
