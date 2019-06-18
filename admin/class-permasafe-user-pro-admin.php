@@ -907,6 +907,8 @@ class Permasafe_User_Pro_Admin {
 				delete_post_meta( $post_id, 'is_upgraded' );
 				delete_post_meta( $post_id, 'upgraded_date' );
 				delete_post_meta( $post_id, 'upgraded_by' );
+				delete_post_meta( $post_id, 'updated_selling_price' );
+				delete_post_meta( $post_id, 'updated_selling_price_by' );
 
         		$response = 'Code reset Successfully.';
         	}else if($exist_status == 'available'){

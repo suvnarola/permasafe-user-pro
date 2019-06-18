@@ -373,6 +373,26 @@ class PMSafe_Bulk_Invitation{
                 
                 echo '<tr>';
                     echo '<th>';
+                        echo '<label><strong>Only Allow Dealers to Register</strong></label>';
+                    echo '</th>';
+                    echo '<td>';
+                    $checked = get_post_meta($post_id,'pmsafe_code_allow_dealer',true);
+                    if($edit_action == 'edit'){
+                        if($checked == 1 ){
+                            echo '<input type="checkbox" name="pmsafe_code_allow_dealer" id="pmsafe_code_allow_dealer" class="widefat" checked="true"/>';
+                        }else{
+                            echo '<input type="checkbox" name="pmsafe_code_allow_dealer" id="pmsafe_code_allow_dealer" class="widefat" />';
+                        }
+                    }else{
+                        
+                            echo '<input type="checkbox" name="pmsafe_code_allow_dealer" id="pmsafe_code_allow_dealer" class="widefat" />';
+                        
+                    }
+                    echo '</td>';
+                echo '</tr>';
+
+                echo '<tr>';
+                    echo '<th>';
                         echo '<label><strong>Upgradable</strong></label>';
                     echo '</th>';
                     echo '<td>';
@@ -390,8 +410,6 @@ class PMSafe_Bulk_Invitation{
                     }
                     echo '</td>';
                 echo '</tr>';
-
-               
 
                 if($edit_action == 'edit'){
                     if($checked == 1){
@@ -627,6 +645,7 @@ class PMSafe_Bulk_Invitation{
         $distributor = $_POST['distributor'];
         $select = $_POST['select'];
         $chk = $_POST['chk'];
+        $allow_dealer = $_POST['allow_dealer'];
         $upgradable_prefix_str = implode(",",$select);
         
         $key = '_pmsafe_bulk_invitation_id';
@@ -657,6 +676,15 @@ class PMSafe_Bulk_Invitation{
         {
             delete_post_meta($post_id,'upgradable_prefix');
             update_post_meta($post_id, 'pmsafe_invitation_code_upgradable', 0 );
+        }
+
+        if($allow_dealer == 1)
+        {
+            update_post_meta($post_id, 'pmsafe_code_allow_dealer', 1 );
+        }
+        if($allow_dealer == 0)
+        {
+            update_post_meta($post_id, 'pmsafe_code_allow_dealer', 0 );
         }
         
         update_post_meta($post_id, '_pmsafe_invitation_prefix', $benifit_package );
@@ -812,6 +840,9 @@ class PMSafe_Bulk_Invitation{
             $invitation_meta['_pmsafe_invitation_prefix'] = $_POST['pmsafe_invitation_prefix'];
             if(isset($_POST['pmsafe_invitation_code_upgradable'])){
                 $invitation_meta['pmsafe_invitation_code_upgradable'] = 1;
+            }
+            if(isset($_POST['pmsafe_code_allow_dealer'])){
+                $invitation_meta['pmsafe_code_allow_dealer'] = 1;
             }
             $invitation_meta['_pmsafe_code_create_date'] = $_POST['pmsafe_code_create_date'];
             $invitation_meta['upgradable_prefix'] = $upgradable_prefix_str;

@@ -149,6 +149,7 @@ table#search_tbl  td a{
 }
 @media screen and (max-width:480px){
     #perma-warranty-form div label, .perma-terms-info div label, #perma-warranty-form div input, .perma-terms-info div input{display: block; max-width: 100%; width: 100%;}
+    .perma-vehicle-info label{width:100% !important;}
 }
 input[type=text]:focus{border: 1px solid #6C82BB !important;}
 

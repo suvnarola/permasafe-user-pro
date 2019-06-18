@@ -832,11 +832,19 @@ jQuery( document ).ready(function() {
         var select =  jQuery('#pmsafe_invitation_upgradable_prefix').select2('val');
         // var select =  JSON.stringify(jQuery("#pmsafe_invitation_upgradable_prefix option:selected").text());
         var chk = jQuery('#pmsafe_invitation_code_upgradable'). prop("checked");
+        var allow_dealer = jQuery('#pmsafe_code_allow_dealer'). prop("checked");
         if(chk == true){
             chk = 1;
         }
         if(chk == false){
             chk = 0;
+        }
+        
+        if(allow_dealer == true){
+            allow_dealer = 1;
+        }
+        if(allow_dealer == false){
+            allow_dealer = 0;
         }
         //  alert(code_access_leval + ' ' + dealer + ' ' + distributor + ' ' + benifit_package + ' ' +select + ' '+chk);
 
@@ -848,7 +856,8 @@ jQuery( document ).ready(function() {
             dealer: dealer,
             distributor: distributor,
             select : select,
-            chk : chk    
+            chk : chk,    
+            allow_dealer : allow_dealer    
         };
         jQuery('.perma-admin-loader').show();
         jQuery.ajax({
@@ -879,20 +888,27 @@ jQuery( document ).ready(function() {
             post_id: post_id,
             
         };
-
+        if (confirm('Are you sure to Delete?')) {
+            jQuery('.perma-admin-loader').show();
         jQuery.ajax({
             type: 'POST',
             url: pmAjax.ajaxurl,
             data: data,
             success: function (response) {
+                jQuery('.perma-admin-loader').hide();
                 var obj = jQuery.parseJSON(response);
                 if(obj.status == true){
+                    
                         window.location.replace(obj.redirect);
                 }
             },
             dataType: 'html'
         });
         return false;
+        }else{
+            alert('Batch code is not deleted.');
+        }
+        
      });
 
     jQuery.urlParam = function(name){
@@ -915,7 +931,7 @@ jQuery( document ).ready(function() {
             action: 'reset_code',
             post_id : post_id
         };
-
+        if (confirm('Are you sure to Delete?')) {
         jQuery.ajax({
             type: 'POST',
             url: pmAjax.ajaxurl,
@@ -928,13 +944,16 @@ jQuery( document ).ready(function() {
             dataType: 'html'
         });
         return false;
+        }else{
+            alert('Code is not deleted.');
+        }
     });
 
     jQuery(document).on("click","#search-batch-code", function(e) {
         e.preventDefault();
         jQuery('.error').remove();
         var validflag = true;
-        var search_val = jQuery('#search-input').val()
+        var search_val = jQuery('#search-input').val();
         
         if(jQuery('#search-input').val().trim()=="" ){
             jQuery('#search-input').css({'border':'1px solid #ff0000','color':'#ff0000'});

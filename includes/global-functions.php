@@ -492,10 +492,16 @@ function pmsafe_warranty_card($user_id,$membercode){
 
     $price_arr = get_user_meta($dealer_id,'pricing_pacakge',true);
     $selling_price = $price_arr[$benefits_package]['selling_price'];
-    if($selling_price){
-        $selling_price = $selling_price;
+    $updated_selling_price = get_post_meta($post_id,'updated_selling_price',true);
+
+    if($updated_selling_price){
+        $selling_price = $updated_selling_price;
     }else{
-        $selling_price = 0;
+        if($selling_price){
+            $selling_price = $selling_price;
+        }else{
+            $selling_price = 0;
+        }
     }
     // echo '<pre>';
     //     print_r($vehicle_info);
@@ -1029,10 +1035,16 @@ function pmsafe_warranty_card_pdf($user_id,$member_code){
 
     $price_arr = get_user_meta($dealer_id,'pricing_pacakge',true);
     $selling_price = $price_arr[$benefits_package]['selling_price'];
-    if($selling_price){
-        $selling_price = $selling_price;
+    $updated_selling_price = get_post_meta($post_id,'updated_selling_price',true);
+
+    if($updated_selling_price){
+        $selling_price = $updated_selling_price;
     }else{
-        $selling_price = 0;
+        if($selling_price){
+            $selling_price = $selling_price;
+        }else{
+            $selling_price = 0;
+        }
     }
 
     $html = '';

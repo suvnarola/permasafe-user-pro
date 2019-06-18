@@ -3531,14 +3531,21 @@ class Permasafe_User_Pro_Public {
                 }else{
                 
                     $member_code_id = pmsafe_if_code_exist($member_code);
-                    if($member_code_id){
-                        $response = array('status' => true,'code'=>$member_code);
+                    $bulk_id =  get_post_meta($member_code_id,'_pmsafe_bulk_invitation_id',true);
+                    $is_allow_dealer = get_post_meta($bulk_id,'pmsafe_code_allow_dealer',true);
+                    if($is_allow_dealer == 1){
+                        $response = array('status' => false,'message'=>'<span class="perma-error"><strong>Error!</strong> You do not have permission to register this code. If you believe this is an error, please contact us <a href="'.get_site_url().'/contact">here</a>.</span>');
                         echo json_encode($response);
-                    }
-                    else{
+                    }else{
+                        if($member_code_id){
+                            $response = array('status' => true,'code'=>$member_code);
+                            echo json_encode($response);
+                        }
+                        else{
 
-                        $response = array('status' => false,'message'=>'<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="'.get_site_url().'/contact">here</a>.</span>');
-                        echo json_encode($response);
+                            $response = array('status' => false,'message'=>'<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="'.get_site_url().'/contact">here</a>.</span>');
+                            echo json_encode($response);
+                        }
                     }
                 }
             }
@@ -3820,6 +3827,7 @@ class Permasafe_User_Pro_Public {
             $selling_price = $price_arr[$package]['selling_price'];
             $html = '';
             $html .= '<div id="update_package_price">';
+            if($selling_price != ''){
                 $html .= '<h3>Do you want to change selling price for benefit package: '.$package.' ?</h3>';
                 $html .= '<input type="hidden" value="'.$package.'" id="get_package">';
                 $html .= '<input type="hidden" value="'.$code_id.'" id="get_code_id">';
@@ -3828,6 +3836,10 @@ class Permasafe_User_Pro_Public {
                 $html .= '</div>';
                 $html .= '<input type="button" id="pmsafe_update_price" value="Update" style="margin-top:10px;clear:both;float:left;">';
                 $html .= '<input type="button" id="pmsafe_skip_price" value="Skip" style="margin-top:10px;margin-left:10px;float:left;">';
+            }else{
+                $html .= '<h3>Admin hasn\'t assigned selling price yet for benefit package: '.$package.'</h3>';
+                $html .= '<input type="button" id="pmsafe_skip_price" value="Skip" style="margin-top:10px;float:left;">';
+            }
             $html .= '</div>';
             echo $html;
             die;
@@ -3836,23 +3848,22 @@ class Permasafe_User_Pro_Public {
         public function update_benefit_package_price(){
             $package = $_POST['package'];
             $code_id = $_POST['code_id'];
+            $login_id = $_POST['login_id'];
             $dealer_login = get_post_meta($code_id,'_pmsafe_dealer',true);
             $user = get_user_by('login',$dealer_login);
             $dealer_id = $user->ID;
-            $selling_price = $_POST['selling_price'];
+            $input_selling_price = $_POST['selling_price'];
 
             $get_price_arr = get_user_meta($dealer_id,'pricing_pacakge',true);
-            $dealer_cost = $get_price_arr[$package]['dealer_cost'];
-            unset($get_price_arr[$package]);
-            
-            $price_arr[$package] = array(
-                'dealer_cost' => $dealer_cost,
-                'selling_price' => $selling_price
-            );
-            $new_price_arr = $get_price_arr + $price_arr;
-            // pr($new_price_arr);
-            update_user_meta($dealer_id,'pricing_pacakge',$new_price_arr);
-            $response = array('status'=>true,'msg'=>'Selling price is successfully updated for package '.$package);
+            $selling_price = $get_price_arr[$package]['selling_price'];
+            if($selling_price != $input_selling_price){
+                update_post_meta($code_id,'updated_selling_price',$input_selling_price);
+                update_post_meta($code_id,'updated_selling_price_by',$login_id);
+                $response = array('status'=>true,'msg'=>'Selling price is successfully updated for package '.$package);
+            }else{
+                $response = array('status'=>true);
+            }
+           
             echo json_encode($response);
             die;
         }

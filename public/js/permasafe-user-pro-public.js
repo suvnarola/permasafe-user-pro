@@ -52,7 +52,8 @@ jQuery( document ).ready(function() {
                     if( obj.status == true ){
                         jQuery('#pmsafe-response').remove();
                         jQuery('#member_code_div').css('display','none');
-                        jQuery('#pmsafe_next').css('display','none');
+                        // jQuery('#pmsafe_next').css('display','none');
+                        jQuery('#pmsafe_next').remove();
                         jQuery('#member_number').val(obj.code);
                         if(obj.is_upgradable == 1){
                            jQuery('#dialog').removeAttr('style');
@@ -212,7 +213,8 @@ jQuery( document ).ready(function() {
             action : 'update_benefit_package_price',
             selling_price : selling_price,
             package : package,
-            code_id : code_id
+            code_id : code_id,
+            login_id : login_id
         }
         //Selling price
        if(jQuery('#selling_price').val().trim()=="" ){
