@@ -23,18 +23,18 @@ function test_nisl_function(){
     $no_of_code = 3;
     $rang1 = 1500;
     $rang2 = 1575;
-    
+
     for ($rang1; $rang1<=$rang2; $rang1++) {
         echo $prefix.($rang1);
         echo '<br>';
-    } 
-   
+    }
+
     die;
 }
 
 /**
  * Random code generator
- * 
+ *
  * @return type
  */
 function pmsafe_random_code(){
@@ -51,7 +51,7 @@ function pmsafe_redirect_function(){
 }
 /**
  * Unused code counter
- * 
+ *
  * @param type $post_id
  * @return type
  */
@@ -69,7 +69,7 @@ function pmsafe_unused_code_count($post_id){
             }
         }
     }
-    
+
     return $data;
 }
 
@@ -78,7 +78,7 @@ function pmsafe_unused_code_count($post_id){
 function pmsafe_if_code_exist($code){
     if(empty($code))
         return false;
-    
+
     $args = array(
         'post_type' => 'pmsafe_invitecode',
         'post_status' => 'publish',
@@ -107,7 +107,7 @@ function pmsafe_if_code_exist($code){
 
 /**
  * Check code status
- * 
+ *
  * @param type $code
  * @param type $post_id
  * @return boolean
@@ -115,12 +115,12 @@ function pmsafe_if_code_exist($code){
 function pmsafe_check_code_status($code,$post_id){
     if(empty($code))
         return false;
-    
+
 }
 
 /**
  * Create user
- * 
+ *
  * @param type $email
  * @param type $password
  * @return string
@@ -131,29 +131,29 @@ function pmsafe_create_user( $email, $password ,$member_code ){
     $user_password =  $password;
     // $user_name = $explode[0];
     $user_name = $member_code;
-    
+
     $user_id = username_exists( $user_name );
     if ( !$user_id and email_exists($user_email) == false ) {
         $user_id = wp_create_user( $user_name, $user_password, $user_email );
-        
+
         $response = array(
             'user_type' => 'New',
             'user_id' => $user_id
         );
-        
+
     }else{
         $response = array(
             'user_type' => 'Exist',
             'user_id' => $user_id
         );
     }
-    
+
     return $response;
 }
 
 /**
  * Get all meta value from meta key
- * 
+ *
  * @global type $wpdb
  * @param type $key
  * @param type $type
@@ -167,8 +167,8 @@ function pmsafe_get_meta_values( $key = '', $type = 'post', $status = 'publish' 
     $r = $wpdb->get_results( $wpdb->prepare( "
         SELECT p.ID, pm.meta_value FROM {$wpdb->postmeta} pm
         LEFT JOIN {$wpdb->posts} p ON p.ID = pm.post_id
-        WHERE pm.meta_key = '%s' 
-        AND p.post_status = '%s' 
+        WHERE pm.meta_key = '%s'
+        AND p.post_status = '%s'
         AND p.post_type = '%s'
     ", $key, $status, $type ));
 
@@ -180,7 +180,7 @@ function pmsafe_get_meta_values( $key = '', $type = 'post', $status = 'publish' 
 
 /**
 * Get post id from meta key and value
-* 
+*
 * @param string $key
 * @param mixed $value
 * @return int|bool
@@ -191,7 +191,7 @@ function get_post_id_by_meta_key_and_value($key, $value) {
     if (is_array($meta) && !empty($meta) && isset($meta[0])) {
         $meta = $meta[0];
     }
-    
+
     if (is_object($meta)) {
         return $meta->post_id;
     }else {
@@ -201,14 +201,14 @@ function get_post_id_by_meta_key_and_value($key, $value) {
 
 /**
  * Get benefit PDF URL by prefix
- * 
+ *
  * @param type $prefix
  * @return boolean
  */
 function get_benefit_pdf_url($prefix){
     if(empty($prefix))
         return false;
-    
+
     $benefit_prefix_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
     if(!empty($benefit_prefix_id)){
         $benefit_pdf_id = get_post_meta($benefit_prefix_id, '_pmsafe_benefit_pdf', true);
@@ -262,7 +262,7 @@ function test_pmsafe_warranty_card(){
                 $val['pmsafe_pdf_link'] = $pdf_link;
                 echo "this is=>".$val['pmsafe_pdf_link'].'<br/>';
                 update_user_meta( $user_id, 'pmsafe_vehicle_info', $get_vehicle_info );
-                sleep(1);               
+                sleep(1);
             }
         }
     } else {
@@ -275,7 +275,7 @@ function test_pmsafe_warranty_card(){
    //  }
    //  echo '</ol>';
     // Array of WP_User objects.
-   
+
     // foreach ( $blogusers as $user ) {
     //     echo '<span>' . esc_html( $user->ID ) . '</span><br/>';
     // }
@@ -290,10 +290,10 @@ function test_pmsafe_warranty_card(){
     // echo "string2=>".$member_code_id;
     // die();
 
-    
-    
+
+
     echo "member=>".$membercode.'<br/>';
-    
+
     //$vehicle_information = get_the_author_meta('pmsafe_vehicle_info' ,$user_id);
     $vehicle_info = get_the_author_meta( 'pmsafe_vehicle_info', $user_id );
     // $vehicle_info = $vehicle_info[$membercode];
@@ -301,7 +301,7 @@ function test_pmsafe_warranty_card(){
     echo "<pre>";
     print_r($vehicle_info);
     echo "<pre>";
-    
+
     $get_vehicle_info = get_the_author_meta( 'pmsafe_vehicle_info', $user_id );
      foreach ($get_vehicle_info as $key=>$val) {
                 $member_code = $val['pmsafe_member_number'];
@@ -316,9 +316,9 @@ function test_pmsafe_warranty_card(){
             $val['pmsafe_pdf_link'] = $pdf_link;
             echo "this is=>".$val['pmsafe_pdf_link'].'<br/>';
             update_user_meta( $user_id, 'pmsafe_vehicle_info', $get_vehicle_info );
-            sleep(1);               
+            sleep(1);
         }
-    
+
      echo "<pre>";
     print_r($get_vehicle_info);
     echo "</pre>";
@@ -328,19 +328,19 @@ function test_pmsafe_warranty_card(){
 
 /**
  * user info tab
- * 
+ *
  * @param type $user_id
  * @return string
  */
 function pmsafe_warranty_user_info_card($user_id){
     $user = get_user_by( 'ID', $user_id );
     $html = '';
-    
+
     $html .= '<div id="perma-warranty-wrapper">';
         $html .= '<div id="pmsafe-response"></div>';
         $html .= '<div id="perma-warranty-form">';
         $html .= '<form name="perma_user_info" id="perma_user_info_form" method="POST">';
-            
+
             $html .= '<div class="perma-customer-info">';
                 $html .= '<div class="pdf-div">';
                     $html .= '<label class="pdf-label">Name:</label> <input class="nisl_name" name="nisl_name" type="text" value="'.esc_attr( get_the_author_meta( 'edit_first_name', $user_id ) ).' '.esc_attr( get_the_author_meta( 'edit_last_name', $user_id ) ).'" disabled autofocus/>';
@@ -360,23 +360,23 @@ function pmsafe_warranty_user_info_card($user_id){
                 $html .= '<div class="pdf-div">';
                     $html .= '<label class="pdf-label">Email:</label> <input type="text" value="'.$user->data->user_email.'" disabled/>';
                 $html .= '</div>';
-                
+
             $html .= '</div>';
 
-            
+
             $html .= '<input type="submit" id="pmsafe_save_user_info" value="Submit" style="display:none">';
         $html .= '</form>';
         $html .= '</div>';
 
-        
+
     $html .= '</div>';
-    
+
     return $html;
 }
 
 /**
  * dealer info tab
- * 
+ *
  * @param type $user_id
  * @return string
  */
@@ -384,12 +384,12 @@ function pmsafe_dealer_info_card($user_id){
     // echo $user_id;
     $user = get_user_by( 'ID', $user_id );
     $html = '';
-    
+
     $html .= '<div id="perma-warranty-wrapper">';
         $html .= '<div id="pmsafe-response"></div>';
         $html .= '<div id="perma-warranty-form">';
         $html .= '<form name="perma_dealer_info_form" id="perma_dealer_info_form" method="POST">';
-            
+
             $html .= '<div class="perma-customer-info">';
                 $html .= '<div class="pdf-div">';
                     $html .= '<label class="pdf-label">Name:</label> <input class="nisl_name" name="nisl_name" type="text" value="'.esc_attr( get_the_author_meta( 'dealer_name', $user_id ) ).'" disabled autofocus/>';
@@ -401,7 +401,7 @@ function pmsafe_dealer_info_card($user_id){
                         $address = $address1;
                     }
                     $html .= '<label class="pdf-label">Store Address:</label><input class="nisl_address" name="nisl_address" type="text" value="'.$address.'" disabled/>';
-                  
+
                 $html .= '</div>';
                 $html .= '<div class="pdf-div">';
                     $html .= '<label class="pdf-label">Phone:</label> <input class="nisl_phone" name="nisl_phone" type="text" value="'.esc_attr( get_the_author_meta( 'dealer_phone_number', $user_id ) ).'" disabled/>';
@@ -412,17 +412,17 @@ function pmsafe_dealer_info_card($user_id){
                 $html .= '<div class="pdf-div">';
                     $html .= '<label class="pdf-label">Email:</label> <input type="text" value="'.$user->data->user_email.'" disabled/>';
                 $html .= '</div>';
-                
+
             $html .= '</div>';
 
-            
+
             $html .= '<input type="submit" id="pmsafe_save_dealer_info" value="Submit" style="display:none">';
         $html .= '</form>';
         $html .= '</div>';
 
-        
+
     $html .= '</div>';
-    
+
     return $html;
 }
 
@@ -430,12 +430,12 @@ function pmsafe_dealer_user_info_card($user_id){
     // echo $user_id;
     $user = get_user_by( 'ID', $user_id );
     $html = '';
-    
+
     $html .= '<div id="perma-warranty-wrapper">';
         $html .= '<div id="pmsafe-response"></div>';
         $html .= '<div id="perma-warranty-form">';
         $html .= '<form name="perma_dealer_user_info_form" id="perma_dealer_user_info_form" method="POST">';
-            
+
             $html .= '<div class="perma-customer-info">';
                 $html .= '<div class="pdf-div">';
                     $html .= '<label class="pdf-label">First Name:</label> <input class="nisl_fname" name="nisl_fname" type="text" value="'.esc_attr( get_the_author_meta( 'contact_fname', $user_id ) ).'" disabled autofocus/>';
@@ -443,46 +443,46 @@ function pmsafe_dealer_user_info_card($user_id){
                 $html .= '<div class="pdf-div">';
                     $html .= '<label class="pdf-label">Last Name:</label> <input class="nisl_lname" name="nisl_lname" type="text" value="'.esc_attr( get_the_author_meta( 'contact_lname', $user_id ) ).'" disabled autofocus/>';
                 $html .= '</div>';
-                
+
                 $html .= '<div class="pdf-div">';
                     $html .= '<label class="pdf-label">Phone:</label> <input class="nisl_phone" name="nisl_phone" type="text" value="'.esc_attr( get_the_author_meta( 'contact_phone', $user_id ) ).'" disabled/>';
                 $html .= '</div>';
-                
+
                 $html .= '<div class="pdf-div">';
                     $html .= '<label class="pdf-label">Email:</label> <input type="text" value="'.$user->data->user_email.'" disabled/>';
                 $html .= '</div>';
-                
+
             $html .= '</div>';
 
-            
+
             $html .= '<input type="submit" id="pmsafe_save_dealer_user_info" value="Submit" style="display:none">';
         $html .= '</form>';
         $html .= '</div>';
 
-        
+
     $html .= '</div>';
-    
+
     return $html;
 }
 
 /**
  * Warranty card
- * 
+ *
  * @param type $user_id
  * @return string
  */
 function pmsafe_warranty_card($user_id,$membercode){
-    
+
     $user = get_user_by( 'ID', $user_id );
-   
-    
+
+
     $vehicle_info = get_the_author_meta( 'pmsafe_vehicle_info', $user_id );
     $vehicle_info = $vehicle_info[$membercode];
     $post_id = $vehicle_info['pmsafe_member_code_id'];
     $benefits_package = get_post_meta($vehicle_info['pmsafe_member_code_id'],'_pmsafe_code_prefix',true);
     $term_length_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$benefits_package);
     $term_length = get_post_meta( $term_length_id, '_pmsafe_benefit_term_length', true );
-    
+
     $dealer_login = get_post_meta($post_id,'_pmsafe_dealer', true);
     $dealers = get_user_by('login', $dealer_login);
     $dealer_id = $dealers->data->ID;
@@ -513,7 +513,7 @@ function pmsafe_warranty_card($user_id,$membercode){
     $html .= '<div id="perma-warranty-wrapper">';
         $html .= '<div id="perma-warranty-form">';
             $html .= '<div id="perma-warranty-head" class="pdf-css-head">';
-                
+
                 $html .= '<h2 class="main-heading">PermaSafe Limited Warranty Registration</h2>';
 
                 $html .= '<h3 class="sub-heading pdf-css-head">Customer Information</h3>';
@@ -560,8 +560,8 @@ function pmsafe_warranty_card($user_id,$membercode){
                 $html .= '<div class="pdf-div">';
                     $html .= '<label class="pdf-label">Signature:  X</label><input type="text" value="'.esc_attr( get_the_author_meta( 'first_name', $user_id ) ).' '.esc_attr( get_the_author_meta( 'last_name', $user_id ) ).'" disabled/>';
                 $html .= '</div>';
-                $html .= '<p><b>PERMASAFE PROTECTIVE COATINGS ("PPC"), offers a Product Limited Warranty ("Warranty") for interior surfaces treated with PERMASAFE SURFACE PROTECTION PRODUCTS. The Warranty is subject to all terms and conditions set forth in this registration form.</b></p>';
-                $html .= '<p>By electronically signing above, I hereby acknowledge and consent to all of the provisions and terms and conditions included in this registration form. I certify that my electronic signature shall have the same legal effect as an originally signed document under applicable federal or state electronic signature laws.</p>';
+                $html .= '<p><b>PERMASAFE PROTECTIVE COATINGS, LLC ("PPC"), offers a Limited Product Warranty ("Warranty") for specific vehicle surfaces treated with PERMASAFE SURFACE PROTECTION PRODUCTS. The Warranty is subject to all terms and conditions set forth in this registration form.</b></p>';
+                $html .= '<p>By electronically signing above, I hereby acknowledge that I have read this <b>Warranty</b> registration form completely, understand and consent to the terms and conditions and my obligations under the <b>Warranty</b>, and have received a complete copy of the <b>Warranty</b>. I certify that my electronic signature shall have the same legal effect as an originally signed document under applicable federal or state electronic signature laws.</p>';
             $html .= '</div>';
 
             $html .= '<h3>Vehicle Information</h3>';
@@ -610,8 +610,8 @@ function pmsafe_warranty_card($user_id,$membercode){
                 //     $html .= '</div>';
                 // $html .= '</div>';
             $html .= '</div>';
-        
-        
+
+
             $html .= '<h3>Dealership Information</h3>';
             $html .= '<div class="perma-dealer-info">';
                 $html .= '<div class="first-row pdf-div">';
@@ -626,7 +626,7 @@ function pmsafe_warranty_card($user_id,$membercode){
                     $html .= '<label class="pdf-label add_label">Address: </label> <input type="text" value="'.$dealer_address.'" disabled/>';
                 $html .= '</div>';
             $html .= '</div>';
-        
+
         $html .= '</div>';
 
 
@@ -650,30 +650,30 @@ function pmsafe_warranty_card($user_id,$membercode){
             $html .= '</div>';
             $html .= '<h2 class="heading">IF YOU HAVE ANY QUESTIONS REGARDING THIS WARRANTY OR FILING<br/> A CLAIM CONTACT WARRANTOR AT: (866) 372-9622</h2>';
             $html .= '<span class="head-block">I. DEFINITIONS</span>';
-            $html .= '<p><b><u>WARRANTOR ("WE," "US," "OUR"):</u> PERMASAFE PROTECTIVE COATINGS ("PPC"), 4613 North University Drive #470, Coral Springs, FL 33067, 866-372-9622,</b> who is the <b>Warrantor</b> to this <b>Warranty</b>, or any successor Warrantor designated by <b>PPC</b> from time to time.</p>';
+            $html .= '<p><b><u>ADMINISTRATOR/WARRANTOR ("WE," "US," "OUR"):</u> PERMASAFE PROTECTIVE COATINGS ("PPC"), 4613 North University Drive #470, Coral Springs, FL 33067, 866-372-9622,</b> who is the <b>Warrantor</b> to this <b>Warranty</b>, or any successor Warrantor designated by <b>PPC</b> from time to time.</p>';
             $html .= '<p><b><u>DEALER:</u></b> the dealership identified above under <b>Dealership Information.</b></p>';
             $html .= '<p><b><u>YOU OR YOUR:</u></b> the customer identified above under <b>Customer Information.</p>';
-         
+
         $html .= '</div>';
-        
+
         $prefix = get_post_meta($vehicle_info['pmsafe_member_code_id'],'_pmsafe_code_prefix',true);
         $benefit_prefix_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
-        
-        if(!empty($benefit_prefix_id)){        
+
+        if(!empty($benefit_prefix_id)){
             $html .= get_post_field('post_content',$benefit_prefix_id);
         }
-        
-  
+
+
     $html .= '</div>';
 // } //end foreach
 
-    
+
     return $html;
 }
 
 /**
  * Generate PDF
- * 
+ *
  * @param type $user_id
  * @return string
  */
@@ -682,20 +682,20 @@ function generate_pdf($user_id, $member_code){
 
     ob_start();  // start output buffering
     $mpdf = new mPDF();
-    
+
     $dir = plugin_dir_path( __DIR__ ). '/upload-pdf/';
-    
+
     if (is_dir($dir) === false) {
             mkdir($dir);
     }
-    
+
     $pdf_name = 'perma_warranty_'.$user_id.'_'.time();
     $dir = plugin_dir_path( __DIR__ ). '/upload-pdf/' . $pdf_name . '.pdf';
-    
+
 //    $user_id = get_current_user_id();
     $me_data = "";
     $me_data .= pmsafe_warranty_card_pdf($user_id,$member_code);
-    
+
     $mpdf->debug = true;
     $mpdf->SetDisplayMode('fullpage');
 //    $stylesheet = file_get_contents('https://permasafe.net/wp-content/plugins/permasafe-user-pro/public/css/permasafe-user-pro-public.css?ver=1528874605');
@@ -704,23 +704,23 @@ function generate_pdf($user_id, $member_code){
 
     $vehicle_info = get_the_author_meta( 'pmsafe_vehicle_info', $user_id );
     $vehicle_info = $vehicle_info[$member_code];
-    
+
     $prefix = get_post_meta($vehicle_info['pmsafe_member_code_id'],'_pmsafe_code_prefix',true);
 //    $new_pdf = plugin_dir_path( __DIR__ ). 'upload-pdf/example_4.pdf';
     $new_pdf = get_benefit_pdf_url($prefix);
-    
+
     // Apend another PDF
-    if(!empty($new_pdf)){        
+    if(!empty($new_pdf)){
         $mpdf->SetImportUse();
         $pagecount = $mpdf->SetSourceFile($new_pdf);
-        
+
         for ($i=1; $i<=($pagecount); $i++) {
             $mpdf->AddPage();
             $import_page = $mpdf->ImportPage($i);
             $mpdf->UseTemplate($import_page);
         }
     }
-    
+
     $mpdf->Output($dir, 'F');
     ob_end_flush();
 
@@ -730,25 +730,25 @@ function generate_pdf($user_id, $member_code){
 
 /**
  * Generate Sales person PDF
- * 
+ *
  * @param type $user_id
  * @return string
  */
 function sales_person_generate_pdf($pdf_array){
-    include_once(plugin_dir_path( __DIR__ ).'includes/MPDF/mpdf.php');    
+    include_once(plugin_dir_path( __DIR__ ).'includes/MPDF/mpdf.php');
 
     ob_start();  // start output buffering
     $mpdf = new mPDF();
-    
+
     $dir = plugin_dir_path( __DIR__ ). '/upload-pdf/';
-    
+
     if (is_dir($dir) === false) {
             mkdir($dir);
     }
-    
+
     $pdf_name = 'perma_warranty_sales_person_'.time();
     $dir = plugin_dir_path( __DIR__ ). '/upload-pdf/' . $pdf_name . '.pdf';
-    
+
     $html = '';
     $html .= '<div id="perma-warranty-wrapper">';
         $html .= '<div id="perma-warranty-form">';
@@ -784,8 +784,8 @@ function sales_person_generate_pdf($pdf_array){
                     $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 35%;text-align: right;">Signature: X</div> <div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 60%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;" >'.$pdf_array['first_name'].' '.$pdf_array['last_name'].'</div>';
                 $html .= '</div>';
                 $html .='</div>';
-                $html .= '<div style="font-family: Libre Franklin;font-size: 12px;padding-bottom: 0px;margin-bottom: 0px;"><b>PERMASAFE PROTECTIVE COATINGS ("PPC"), offers a Product Limited Warranty ("Warranty") for interior surfaces treated with PERMASAFE SURFACE PROTECTION PRODUCTS. The Warranty is subject to all terms and conditions set forth in this registration form.</b></div>';
-                $html .= '<div style="font-family: Libre Franklin;font-size: 12px;padding-bottom: 0px;margin-bottom: 0px;">By electronically signing above, I hereby acknowledge and consent to all of the provisions and terms and conditions included in this registration form. I certify that my electronic signature shall have the same legal effect as an originally signed document under applicable federal or state electronic signature laws.</div>';
+                $html .= '<div style="font-family: Libre Franklin;font-size: 12px;padding-bottom: 0px;margin-bottom: 0px;"><b>PERMASAFE PROTECTIVE COATINGS, LLC ("PPC"), offers a Limited Product Warranty ("Warranty") for specific vehicle surfaces treated with PERMASAFE SURFACE PROTECTION PRODUCTS. The Warranty is subject to all terms and conditions set forth in this registration form.</b></div>';
+                $html .= '<div style="font-family: Libre Franklin;font-size: 12px;padding-bottom: 0px;margin-bottom: 0px;">By electronically signing above, I hereby acknowledge that I have read this <b>Warranty</b> registration form completely, understand and consent to the terms and conditions and my obligations under the <b>Warranty</b>, and have received a complete copy of the <b>Warranty</b>. I certify that my electronic signature shall have the same legal effect as an originally signed document under applicable federal or state electronic signature laws.</div>';
             $html .= '</div>';
 
             $html .= '<div style="font-family: Libre Franklin;color: #000;font-weight: bold;text-align: center;margin-bottom: 5px;font-size: 16px;">Vehicle Information</div>';
@@ -832,11 +832,11 @@ function sales_person_generate_pdf($pdf_array){
                     $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 60%;text-align: right;">Expiration Date: </div><div style="margin-left:10px; font-family: Libre Franklin;float:left; width: 30%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;" >'.date('Y-m-d', strtotime("+42 months",strtotime($pdf_array['pmsafe_registration_date']))).'</div>';
                 $html .= '</div>';
             $html .= '</div>';
-            $html .= '<div style="font-family: Libre Franklin;color: #000;font-size: 16px;text-align: center;font-weight: bold;">IF YOU HAVE ANY QUESTIONS REGARDING THIS WARRANTY OR HOW TO FILE A CLAIM CONTACTWARRANTOR: (866) 372-9622</div>';
+            $html .= '<div style="font-family: Libre Franklin;color: #000;font-size: 12px;text-align: center;font-weight: bold;">IF YOU HAVE ANY QUESTIONS REGARDING THIS WARRANTY OR HOW TO FILE A CLAIM CONTACTWARRANTOR: (866) 372-9622</div>';
             $html .= '<div style="font-family: Libre Franklin;background: #000;width: 100%;display: block;text-align: center;color: #fff;font-size: 13px;">I. DEFINITIONS</div>';
-            $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;"><b style="font-size: 12px;color: #000;"><u style="font-size: 12px;color: #000;">WARRANTOR ("WE," "US," "OUR"):</u> PERMASAFE PROTECTIVE COATINGS ("PPC"), 4613 North University Drive #470, Coral Springs, FL 33067, 866-372-9622,</b> who is the <b style="font-size: 12px;color: #000;">Warrantor</b> to this <b style="font-size: 12px;color: #000;">Warranty</b>, or any successor Warrantor designated by <b style="font-size: 12px;color: #000;">PPC</b> from time to time.</div>';
-            $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;"><b style="font-size: 12px;color: #000;"><u style="font-size: 12px;color: #000;">DEALER:</u></b> the authorized retail seller of PermaSafe Products.</div>';
-            $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;"><b style="font-size: 12px;color: #000;"><u style="font-size: 12px;color: #000;">YOU OR YOUR:</u></b> the person listed in the Customer Information section on the Limited Warranty Registration.</div>';
+            $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;"><b style="font-size: 12px;color: #000;"><u style="font-size: 12px;color: #000;">ADMINISTRATOR/WARRANTOR ("WE," "US," "OUR"):</u> PERMASAFE PROTECTIVE COATINGS ("PPC"), 4613 North University Drive #470, Coral Springs, FL 33067, 866-372-9622,</b> who is the  <b style="font-size: 12px;color: #000;">Warrantor</b> to this <b style="font-size: 12px;color: #000;">Warranty</b>, or any successor Warrantor designated by <b style="font-size: 12px;color: #000;">PPC</b> from time to time.</div>';
+            $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;"><b style="font-size: 12px;color: #000;"><u style="font-size: 12px;color: #000;">DEALER:</u></b> the dealership identified above under <b>DEALERSHIP INFORMATION</b>.</p></div>';
+            $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;"><b style="font-size: 12px;color: #000;"><u style="font-size: 12px;color: #000;">YOU OR YOUR:</u></b> the customer identified above under <b>CUSTOMER INFORMATION</b>.</p></div>';
 //
             $html .= '<div style="font-family: Libre Franklin;background: #000;width: 100%;display: block;text-align: center;color: #fff;font-size: 13px;">II. WARRANTY TERM - REGISTRATION - CONDITIONS</div>';
             $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;"><b style="font-size: 12px;color: #000;"><u style="font-size: 12px;color: #000;">Warranty Term, Preowned Vehicles (Current Model Year and up to ten (10) prior Model Years):</u></b> Thirty six (36) months, commencing sixty (60) days from the Registration Date.</div>';
@@ -849,22 +849,22 @@ function sales_person_generate_pdf($pdf_array){
 //            $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;">If You wish to update Your registration information please visit www.PermaSafe.com, click on "Already Registered," enter Your Warranty Registration Number, log in, make the necessary changes and click "Update." If You need further assistance please email Us at info@PermaSafe.com.</div>';
 //            $html .= '<div style="font-family: Libre Franklin;font-size: 18px;text-align: center;font-weight: bold;">THANK YOU FOR CHOOSING PERMASAFE</div>';
 //        $html .= '</div>';
-        
+
 
     $html .= '</div>';
-    
+
     $mpdf->debug = true;
     $mpdf->SetDisplayMode('fullpage');
     $mpdf->WriteHTML($html);
-    
+
 //    $prefix = get_post_meta(get_the_author_meta( 'pmsafe_member_code_id', $user_id ),'_pmsafe_code_prefix',true);
 //    $new_pdf = plugin_dir_path( __DIR__ ). 'upload-pdf/example_4.pdf';
     $demo_benefit_prefix = esc_attr(get_option('pmsafe_demo_benefit_prefix'));
-    if(!empty($demo_benefit_prefix)){        
+    if(!empty($demo_benefit_prefix)){
         $new_pdf = get_benefit_pdf_url($demo_benefit_prefix);
 
         // Apend another PDF
-        if(!empty($new_pdf)){        
+        if(!empty($new_pdf)){
             $mpdf->SetImportUse();
             $pagecount = $mpdf->SetSourceFile($new_pdf);
             for ($i=1; $i<=($pagecount); $i++) {
@@ -874,7 +874,7 @@ function sales_person_generate_pdf($pdf_array){
             }
         }
     }
-    
+
     $mpdf->Output($dir, 'F');
     ob_end_flush();
 
@@ -884,14 +884,14 @@ function sales_person_generate_pdf($pdf_array){
 
 /**
  * Warranty card
- * 
+ *
  * @param type $user_id
  * @return string
  */
 function pmsafe_sales_person_warranty_card($array, $pdf_link){
-    
+
     $user = get_user_by( 'ID', $user_id );
-            
+
     $html = '';
     $html .= '<div id="perma-warranty-wrapper">';
         $html .= '<div id="perma-warranty-form">';
@@ -926,8 +926,8 @@ function pmsafe_sales_person_warranty_card($array, $pdf_link){
                 $html .= '<div class="pdf-div">';
                     $html .= '<label class="pdf-label">Signature:  X</label><input type="text" value="'.$array['first_name'].' '.$array['last_name'].'" />';
                 $html .= '</div>';
-                $html .= '<p><b>PERMASAFE PROTECTIVE COATINGS ("PPC"), offers a Product Limited Warranty ("Warranty") for interior surfaces treated with PERMASAFE SURFACE PROTECTION PRODUCTS. The Warranty is subject to all terms and conditions set forth in this registration form.</b></p>';
-                $html .= '<p>By electronically signing above, I hereby acknowledge and consent to all of the provisions and terms and conditions included in this registration form. I certify that my electronic signature shall have the same legal effect as an originally signed document under applicable federal or state electronic signature laws.</p>';
+                $html .= '<p><b>PERMASAFE PROTECTIVE COATINGS, LLC ("PPC"), offers a Limited Product Warranty ("Warranty") for specific vehicle surfaces treated with PERMASAFE SURFACE PROTECTION PRODUCTS. The Warranty is subject to all terms and conditions set forth in this registration form.</b></p>';
+                $html .= '<p>By electronically signing above, I hereby acknowledge that I have read this <b>Warranty</b> registration form completely, understand and consent to the terms and conditions and my obligations under the <b>Warranty</b>, and have received a complete copy of the <b>Warranty</b>. I certify that my electronic signature shall have the same legal effect as an originally signed document under applicable federal or state electronic signature laws.</p>';
             $html .= '</div>';
 
             $html .= '<h3>Vehicle Information</h3>';
@@ -976,16 +976,16 @@ function pmsafe_sales_person_warranty_card($array, $pdf_link){
             $html .= '</div>';
             $html .= '<h2 class="heading">IF YOU HAVE ANY QUESTIONS REGARDING THIS WARRANTY OR HOW TO FILE A CLAIM CONTACTWARRANTOR: (866) 372-9622</h2>';
             $html .= '<span class="head-block">I. DEFINITIONS</span>';
-            $html .= '<p><b><u>WARRANTOR ("WE," "US," "OUR"):</u> PERMASAFE PROTECTIVE COATINGS ("PPC"), 4613 North University Drive #470, Coral Springs, FL 33067, 866-372-9622,</b> who is the <b>Warrantor</b> to this <b>Warranty</b>, or any successor Warrantor designated by <b>PPC</b> from time to time.</p>';
-            $html .= '<p><b><u>DEALER:</u></b> the authorized retail seller of PermaSafe Products.</p>';
-            $html .= '<p><b><u>YOU OR YOUR:</u></b> the person listed in the Customer Information section on the Limited Warranty Registration.</p>';
+            $html .= '<p><b><u>ADMINISTRATOR/WARRANTOR ("WE," "US," "OUR"):</u> PERMASAFE PROTECTIVE COATINGS ("PPC"), 4613 North University Drive #470, Coral Springs, FL 33067, 866-372-9622,</b> who is the <b>Warrantor</b> to this <b>Warranty</b>, or any successor Warrantor designated by <b>PPC</b> from time to time.</p>';
+            $html .= '<p><b><u>DEALER:</u></b> the dealership identified above under <b>DEALERSHIP INFORMATION</b>.</p>';
+            $html .= '<p><b><u>YOU OR YOUR:</u></b> the customer identified above under <b>CUSTOMER INFORMATION</b>.</p>';
 
             $html .= '<span class="head-block">II. WARRANTY TERM - REGISTRATION - CONDITIONS</span>';
             $html .= '<p><b><u>Warranty Term, Preowned Vehicles (Current Model Year and up to ten (10) prior Model Years):</u></b> Thirty six (36) months, commencing sixty (60) days from the Registration Date.</p>';
             $html .= '<p><b><u>Warranty Term, New Vehicles:</u></b> Thirty six (36) months from the Registration Date.</p>';
             $html .= '<p><b>Registration:</b> In order to receive benefits under the terms of this <b>Warranty, You</b> must register this <b>Warranty</b> at www.PermaSafe.com within thirty (30) days of the date of the PermaSafe product purchase. Should <b>You</b> fail to register this <b>Warranty</b> at www.PermaSafe.com within thirty (30) days of the date of the PermaSafe product purchase, coverage may be denied. This <b>Warranty</b> gives <b>You</b> specific legal rights and <b>You</b> may also have other rights which vary from state to state. <b>PPC</b> does not authorize any person to create for <b>PPC</b> any other obligation or liability in connection with the <b>PERMASAFE</b> products or applications.</p>';
         $html .= '</div>';
-        
+
 //        $prefix = get_post_meta(get_the_author_meta( 'pmsafe_member_code_id', $user_id ),'_pmsafe_code_prefix',true);
         $demo_benefit_prefix = esc_attr(get_option('pmsafe_demo_benefit_prefix'));
         if(!empty($demo_benefit_prefix)){
@@ -993,13 +993,13 @@ function pmsafe_sales_person_warranty_card($array, $pdf_link){
             $html .= $myquery->post->post_content;
         }
 //        $benefit_prefix_id = 1078;
-//        
-//        if(!empty($benefit_prefix_id)){        
+//
+//        if(!empty($benefit_prefix_id)){
 //            $html .= get_post_field('post_content',$benefit_prefix_id);
 //        }
 
     $html .= '</div>';
-    
+
 //    echo $html;
 //    die;
 
@@ -1010,7 +1010,7 @@ function pmsafe_sales_person_warranty_card($array, $pdf_link){
 }
 
 /**
- * 
+ *
  * @param type $user_id
  * @return stringWarranty card PDF
  */
@@ -1018,14 +1018,14 @@ function pmsafe_warranty_card_pdf($user_id,$member_code){
     $user = get_user_by( 'ID', $user_id );
 
     $pdf_email = get_the_author_meta('pmsafe_email',$user_id);
-    
+
     $vehicle_info = get_the_author_meta( 'pmsafe_vehicle_info', $user_id );
     $vehicle_info = $vehicle_info[$member_code];
     $post_id = $vehicle_info['pmsafe_member_code_id'];
     $benefits_package = get_post_meta($vehicle_info['pmsafe_member_code_id'],'_pmsafe_code_prefix',true);
     $term_length_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$benefits_package);
     $term_length = get_post_meta( $term_length_id, '_pmsafe_benefit_term_length', true );
-    
+
     $dealer_login = get_post_meta($post_id,'_pmsafe_dealer', true);
     $dealers = get_user_by('login', $dealer_login);
     $dealer_id = $dealers->data->ID;
@@ -1053,10 +1053,10 @@ function pmsafe_warranty_card_pdf($user_id,$member_code){
 
         $html .= '<div id="perma-warranty-form">';
             $html .= '<div style="color: #000;font-weight: 600;text-align: center;">';
-                 $html .= '<img src="'.  plugins_url().'/permasafe-user-pro/public/images/PermaSafe-Logo-small.png" style="width: auto;height: 55px;" />';
-                
-                $html .= '<div style="font-family: Libre Franklin;font-size: 18px;line-height: normal;margin-bottom: 0px;color: #000;font-weight: bold;">PermaSafe Limited Warranty Registration</div>';
-                $html .= '<div style="font-family: Libre Franklin;color: #000;font-weight: bold;text-align: center;margin-bottom: 2px;font-size: 16px;">Customer Information</div>';
+                 $html .= '<img src="'.  plugins_url().'/permasafe-user-pro/public/images/PermaSafe-Logo-small.png" style="width: auto;height: 45px;" />';
+
+                $html .= '<div style="font-family: Libre Franklin;font-size: 17px;line-height: normal;margin-bottom: 0px;color: #000;font-weight: bold;">PermaSafe Limited Warranty Registration</div>';
+                $html .= '<div style="font-family: Libre Franklin;color: #000;font-weight: bold;text-align: center;margin-bottom: 2px;font-size: 15px;">Customer Information</div>';
             $html .= '</div>';
 
             $html .= '<div style="width: 960px;margin-bottom: 5px;padding: 5px;border: 2px solid #1565a9;">';
@@ -1086,21 +1086,21 @@ function pmsafe_warranty_card_pdf($user_id,$member_code){
                     $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 35%;text-align: right;">Signature: X</div> <div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 60%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;" >'.esc_attr( get_the_author_meta( 'first_name', $user_id ) ).' '.esc_attr( get_the_author_meta( 'last_name', $user_id ) ).'</div>';
                 $html .= '</div>';
                 $html .='</div>';
-                $html .= '<div style="font-family: Libre Franklin;font-size: 12px;padding-bottom: 0px;margin-bottom: 0px;"><b>PERMASAFE PROTECTIVE COATINGS ("PPC"), offers a Product Limited Warranty ("Warranty") for interior surfaces treated with PERMASAFE SURFACE PROTECTION PRODUCTS. The Warranty is subject to all terms and conditions set forth in this registration form.</b></div>';
-                $html .= '<div style="font-family: Libre Franklin;font-size: 12px;padding-bottom: 0px;margin-bottom: 0px;">By electronically signing above, I hereby acknowledge and consent to all of the provisions and terms and conditions included in this registration form. I certify that my electronic signature shall have the same legal effect as an originally signed document under applicable federal or state electronic signature laws.</div>';
+                $html .= '<div style="font-family: Libre Franklin;font-size: 12px;padding-bottom: 0px;margin-bottom: 0px;"><b>PERMASAFE PROTECTIVE COATINGS, LLC ("PPC"), offers a Limited Product Warranty ("Warranty") for specific vehicle surfaces treated with PERMASAFE SURFACE PROTECTION PRODUCTS. The Warranty is subject to all terms and conditions set forth in this registration form.</b></div>';
+                $html .= '<div style="font-family: Libre Franklin;font-size: 12px;padding-bottom: 0px;margin-bottom: 0px;">By electronically signing above, I hereby acknowledge that I have read this <b>Warranty</b> registration form completely, understand and consent to the terms and conditions and my obligations under the <b>Warranty</b>, and have received a complete copy of the <b>Warranty</b>. I certify that my electronic signature shall have the same legal effect as an originally signed document under applicable federal or state electronic signature laws.</div>';
             $html .= '</div>';
 
-            $html .= '<div style="font-family: Libre Franklin;color: #000;font-weight: bold;text-align: center;margin-bottom: 5px;font-size: 16px;">Vehicle and Sales Information</div>';
+            $html .= '<div style="font-family: Libre Franklin;color: #000;font-weight: bold;text-align: center;margin-bottom: 5px;font-size: 15px;">Vehicle and Sales Information</div>';
             $html .= '<div style="width: 960px;margin-bottom: 5px;padding: 5px;border: 2px solid #1565a9;">';
                 $html .= '<div style="display: block;width: 100%;">';
-                
+
                 $html .= '<div style="display: block;width: 50%;float: left; margin-bottom: 3px;">';
                     $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 40%;text-align: right;">Year:</div> <div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 50%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;" >'.esc_attr( $vehicle_info['pmsafe_vehicle_year'] ).'</div>';
                 $html .= '</div>';
                 $html .= '<div style="display: block;width: 50%;float: left; margin-bottom: 3px;">';
                     $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 60%;text-align: right;">Make:</div> <div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 30%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;" >'.esc_attr( $vehicle_info['pmsafe_vehicle_make'] ).'</div>';
                 $html .= '</div>';
-                   
+
                 $html .= '</div>';
                 $html .= '<div style="display: block;width: 100%;">';
 
@@ -1110,7 +1110,7 @@ function pmsafe_warranty_card_pdf($user_id,$member_code){
                     $html .= '<div style="display: block;width: 50%;float: left; margin-bottom: 3px;">';
                         $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 60%;text-align: right;">Mileage at Application: </div> <div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 30%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;" >'.esc_attr( $vehicle_info['pmsafe_vehicle_mileage'] ).'</div>';
                     $html .= '</div>';
-                    
+
                 $html .= '</div>';
                 $html .= '<div style="display: block;width: 100%;">';
 
@@ -1120,7 +1120,7 @@ function pmsafe_warranty_card_pdf($user_id,$member_code){
                     $html .= '<div style="display: block;width: 50%;float: left; margin-bottom: 3px;">';
                         $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 60%;text-align: right;">Product Purchase Price: </div> <div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 30%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;" >$'.$selling_price.'</div>';
                     $html .= '</div>';
-                
+
                 $html .= '</div>';
                 $html .= '<div style="display: block;width: 100%;">';
                     $html .= '<div style="display: block;width: 50%;float: left; margin-bottom: 3px;">';
@@ -1140,9 +1140,9 @@ function pmsafe_warranty_card_pdf($user_id,$member_code){
             $html .= '</div>';
         $html .= '</div>';
         // dealership info
-        $html .= '<div style="font-family: Libre Franklin;color: #000;font-weight: bold;text-align: center;margin-bottom: 5px;font-size: 16px;">Dealership Information</div>';
+        $html .= '<div style="font-family: Libre Franklin;color: #000;font-weight: bold;text-align: center;margin-bottom: 5px;font-size: 15px;">Dealership Information</div>';
             $html .= '<div style="width: 960px;margin-bottom: 5px;padding: 5px;border: 2px solid #1565a9;">';
-                
+
                 $html .= '<div style="display: block;width: 100%;">';
                     $html .= '<div style="display: block;width: 50%;float: left; margin-bottom: 3px;">';
                         $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 20%;text-align: right;">Name:</div> <div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 70%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;" >'.$dealer_name.'</div>';
@@ -1155,17 +1155,17 @@ function pmsafe_warranty_card_pdf($user_id,$member_code){
                 $html .= '<div style="display: block;width: 100%;">';
                     $html .= '<div style="display: block;width: 100%;float: left; margin-bottom: 3px;">';
 
-                        $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left;text-align:right;width:12%;">Address:</div> 
+                        $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left;text-align:right;width:12%;">Address:</div>
                         <div style="margin-left:10px;font-family: Libre Franklin;float:left;width: 80%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;" >'.$dealer_address.'</div>';
                     $html .= '</div>';
-                    
+
                 $html .= '</div>';
 
-                                
+
             $html .= '</div>';
         $html .= '</div>';
 
-        $html .= '<div style="font-family: Libre Franklin;color: #000;font-weight: bold;text-align: center;margin-bottom: 5px;font-size: 16px;">Limited Warranty Terms and Conditions</div>';
+        $html .= '<div style="font-family: Libre Franklin;color: #000;font-weight: bold;text-align: center;margin-bottom: 5px;font-size: 15px;">Limited Warranty Terms and Conditions</div>';
         $html .= '<div style="width: 960px;margin-bottom: 5px;padding: 5px;border: 2px solid #1565a9;">';
             $html .= '<div style="display: block;width: 100%; margin-bottom: 10px;">';
                 $html .= '<div style="display: block;width: 50%;float: left;">';
@@ -1177,23 +1177,23 @@ function pmsafe_warranty_card_pdf($user_id,$member_code){
             $html .= '</div>';
             $html .= '<div style="display: block;width: 100%; margin-bottom: 15px;">';
                 $html .= '<div style="display: block;width: 50%;float: left;">';
-                    $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 60%;text-align: right;">Registration Date: </div><div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 30%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;">'.date('Y-m-d', strtotime($vehicle_info['pmsafe_registration_date'] )).'</div>';
+                    $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 60%;text-align: right;">Registration Date: </div><div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 30%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 16px;color: #555;padding: 5px;">'.date('Y-m-d', strtotime($vehicle_info['pmsafe_registration_date'] )).'</div>';
                 $html .= '</div>';
                 $html .= '<div style="display: block;width: 50%;float: left;">';
-                    $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 60%;text-align: right;">Expiration Date: </div><div style="margin-left:10px; font-family: Libre Franklin;float:left; width: 30%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;" >'.date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info['pmsafe_registration_date']))).'</div>';
+                    $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 60%;text-align: right;">Expiration Date: </div><div style="margin-left:10px; font-family: Libre Franklin;float:left; width: 30%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 16px;color: #555;padding: 5px;" >'.date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info['pmsafe_registration_date']))).'</div>';
                 $html .= '</div>';
             $html .= '</div>';
-            $html .= '<div style="font-family: Libre Franklin;color: #000;font-size: 16px;text-align: center;font-weight: bold;">IF YOU HAVE ANY QUESTIONS REGARDING THIS WARRANTY OR FILING<br/>A CLAIM CONTACT WARRANTOR AT: (866) 372-9622</div>';
+            $html .= '<div style="font-family: Libre Franklin;color: #000;font-size: 12px;text-align: center;font-weight: bold;">IF YOU HAVE ANY QUESTIONS REGARDING THIS WARRANTY OR FILING<br/>A CLAIM CONTACT WARRANTOR AT: (866) 372-9622</div>';
             $html .= '<div style="font-family: Libre Franklin;background: #000;width: 100%;display: block;text-align: center;color: #fff;font-size: 13px;">I. DEFINITIONS</div>';
-            $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;"><b style="font-size: 12px;color: #000;"><u style="font-size: 12px;color: #000;">WARRANTOR ("WE," "US," "OUR"):</u> PERMASAFE PROTECTIVE COATINGS ("PPC"), 4613 North University Drive #470, Coral Springs, FL 33067, 866-372-9622,</b> who is the <b style="font-size: 12px;color: #000;">Warrantor</b> to this <b style="font-size: 12px;color: #000;">Warranty</b>, or any successor Warrantor designated by <b style="font-size: 12px;color: #000;">PPC</b> from time to time.</div>';
+            $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;"><b style="font-size: 12px;color: #000;"><u style="font-size: 12px;color: #000;">ADMINISTRATOR/WARRANTOR ("WE," "US," "OUR"):</u> PERMASAFE PROTECTIVE COATINGS ("PPC"), 4613 North University Drive #470, Coral Springs, FL 33067, 866-372-9622,</b> who is the <b style="font-size: 12px;color: #000;">Warrantor</b> to this <b style="font-size: 12px;color: #000;">Warranty</b>, or any successor Warrantor designated by <b style="font-size: 12px;color: #000;">PPC</b> from time to time.</div>';
             $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;"><b style="font-size: 12px;color: #000;"><u style="font-size: 12px;color: #000;">DEALER:</u></b> the dealership identified above under <b style="font-size: 12px;color: #000;">Dealership Information.</b></div>';
             $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;"><b style="font-size: 12px;color: #000;"><u style="font-size: 12px;color: #000;">YOU OR YOUR:</u></b>the customer identified above under <b style="font-size: 12px;color: #000;">Customer Information.</b></div>';
 
         $html .= '</div>';
-        
+
 
     $html .= '</div>';
-    
+
 
 
     return $html;
@@ -1201,25 +1201,25 @@ function pmsafe_warranty_card_pdf($user_id,$member_code){
 
 // add_action('init','test_pdf');
 function test_pdf(){
-    
+
     include_once(plugin_dir_path( __DIR__ ).'includes/MPDF/mpdf.php');
 
     ob_start();  // start output buffering
     $mpdf = new mPDF();
-    
+
     $dir = plugin_dir_path( __DIR__ ). '/upload-pdf/';
-    
+
     if (is_dir($dir) === false) {
             mkdir($dir);
     }
-    
+
     $pdf_name = 'perma_warranty_'.$user_id.'_'.time();
     $dir = plugin_dir_path( __DIR__ ). '/upload-pdf/' . $pdf_name . '.pdf';
-    
+
 //    $user_id = get_current_user_id();
     $me_data = "";
     $me_data .= pmsafe_warranty_card_pdf(581,118);
-    
+
     $mpdf->debug = true;
     $mpdf->SetDisplayMode('fullpage');
 //    $stylesheet = file_get_contents('https://permasafe.net/wp-content/plugins/permasafe-user-pro/public/css/permasafe-user-pro-public.css?ver=1528874605');
@@ -1228,29 +1228,29 @@ function test_pdf(){
 
     $vehicle_info = get_the_author_meta( 'pmsafe_vehicle_info', $user_id );
     $vehicle_info = $vehicle_info[$member_code];
-    
+
     $prefix = get_post_meta($vehicle_info['pmsafe_member_code_id'],'_pmsafe_code_prefix',true);
 //    $new_pdf = plugin_dir_path( __DIR__ ). 'upload-pdf/example_4.pdf';
     $new_pdf = get_benefit_pdf_url($prefix);
-    
+
     // Apend another PDF
-    if(!empty($new_pdf)){        
+    if(!empty($new_pdf)){
         $mpdf->SetImportUse();
         $pagecount = $mpdf->SetSourceFile($new_pdf);
-        
+
         for ($i=1; $i<=($pagecount); $i++) {
             $mpdf->AddPage();
             $import_page = $mpdf->ImportPage($i);
             $mpdf->UseTemplate($import_page);
         }
     }
-    
+
     $mpdf->Output();
     ob_end_flush();
 
     $pdf_link = plugins_url('permasafe-user-pro'). '/upload-pdf/' . $pdf_name . '.pdf';
     echo $pdf_link;
-   
+
     die;
 }
 
@@ -1278,7 +1278,7 @@ if ( $user && wp_check_password( $pass, $user->data->user_pass, $user->ID ) ) {
 } else {
     echo "Nope";
 }
-     
+
 }
 
 // add_action('init','xml_test');
@@ -1296,13 +1296,13 @@ function xml_test(){
     $login = $current_user->user_login;
 
     $member_code = $arrXml['member_number'];
-    
+
     $member_code_id = pmsafe_if_code_exist($member_code);
     // $password = wp_generate_password();
     $password = $arrXml['pmsafe_zip_code'];
     if($member_code_id){
-                    
-                    
+
+
         $user_data = pmsafe_create_user( $arrXml['pmsafe_email'], $password,$member_code );
         if( $user_data ) {
             if( $user_data['user_type'] == "New" ){
@@ -1315,7 +1315,7 @@ function xml_test(){
                 $_SESSION['registerd_username'] = $name;
                 update_post_meta( $member_code_id, '_pmsafe_used_code_user_name', $name );
                 update_post_meta( $member_code_id, '_pmsafe_used_code_date', current_time( 'mysql' ) );
-                
+
                 update_user_meta( $user_id, 'first_name', $arrXml['first_name'] );
                 update_user_meta( $user_id, 'edit_first_name', $arrXml['first_name'] );
                 update_user_meta( $user_id, 'last_name', $arrXml['last_name'] );
@@ -1339,9 +1339,9 @@ function xml_test(){
                 update_user_meta( $user_id, 'pmsafe_zip_code', $arrXml['pmsafe_zip_code'] );
                 update_user_meta( $user_id, 'edit_pmsafe_zip_code', $arrXml['pmsafe_zip_code'] );
                 update_user_meta( $user_id, 'pmsafe_email', $arrXml['pmsafe_email'] );
-                
+
                 $vehicle_info = array();
-    
+
                 $vehicle_info[$member_code] = array(
                     'pmsafe_vehicle_year' => $arrXml['vehicle_info']['pmsafe_vehicle_year'],
                     'pmsafe_vehicle_make' => $arrXml['vehicle_info']['pmsafe_vehicle_make'],
@@ -1351,7 +1351,7 @@ function xml_test(){
                     'pmsafe_registration_date' => current_time( 'mysql' ),
                     'pmsafe_member_number' => $member_code,
                     'pmsafe_member_code_id' => $member_code_id
-                    
+
                 );
                 update_user_meta( $user_id, 'pmsafe_vehicle_info', $vehicle_info );
 
@@ -1362,7 +1362,7 @@ function xml_test(){
                 $vehicle_info_pdf[$member_code]['pmsafe_pdf_link'] = $pdf_link;
                 update_user_meta( $user_id, 'pmsafe_vehicle_info', $vehicle_info_pdf );
 
-                
+
                 $to = $_POST['email'];
                 $subject = 'Perma safe : Your password';
                 $message = 'Hello '.$arrXml["first_name"].',<br/><br/>';
@@ -1374,7 +1374,7 @@ function xml_test(){
                 $headers = array('Content-Type: text/html; charset=UTF-8');
                 $mail = wp_mail( $to, $subject, $message, $headers );
 
-                
+
                 $response = $pdf_link;
                 echo $response;
             }
@@ -1388,7 +1388,7 @@ function xml_test(){
 
                     $email = $arrXml['pmsafe_email'];
                     $old_email = $arrXml['pmsafe_email'];
-                    
+
                     for ( $i = 0; email_exists( $email ); $i++ ) {
                          $email = str_replace( '@', "+ama{$i}@", $old_email );
                     }
@@ -1410,10 +1410,10 @@ function xml_test(){
                         update_post_meta( $member_code_id, '_pmsafe_code_status', 'used' );
                         update_post_meta( $member_code_id, '_pmsafe_used_code_user_id', $user_id );
                         $name = $arrXml['first_name'].' '.$arrXml['last_name'];
-                        
+
                         update_post_meta( $member_code_id, '_pmsafe_used_code_user_name', $name );
                         update_post_meta( $member_code_id, '_pmsafe_used_code_date', current_time( 'mysql' ) );
-                        
+
                         update_user_meta( $user_id, 'first_name', $arrXml['first_name'] );
                         update_user_meta( $user_id, 'edit_first_name', $arrXml['first_name'] );
                         update_user_meta( $user_id, 'last_name', $arrXml['last_name'] );
@@ -1437,9 +1437,9 @@ function xml_test(){
                         update_user_meta( $user_id, 'pmsafe_zip_code', $arrXml['pmsafe_zip_code'] );
                         update_user_meta( $user_id, 'edit_pmsafe_zip_code', $arrXml['pmsafe_zip_code'] );
                         update_user_meta( $user_id, 'pmsafe_email', $arrXml['pmsafe_email'] );
-                        
+
                         $vehicle_info = array();
-            
+
                         $vehicle_info[$member_code] = array(
                             'pmsafe_vehicle_year' => $arrXml['vehicle_info']['pmsafe_vehicle_year'],
                             'pmsafe_vehicle_make' => $arrXml['vehicle_info']['pmsafe_vehicle_make'],
@@ -1449,7 +1449,7 @@ function xml_test(){
                             'pmsafe_registration_date' => current_time( 'mysql' ),
                             'pmsafe_member_number' => $member_code,
                             'pmsafe_member_code_id' => $member_code_id
-                            
+
                         );
                         update_user_meta( $user_id, 'pmsafe_vehicle_info', $vehicle_info );
 
@@ -1460,7 +1460,7 @@ function xml_test(){
                         $vehicle_info_pdf[$member_code]['pmsafe_pdf_link'] = $pdf_link;
                         update_user_meta( $user_id, 'pmsafe_vehicle_info', $vehicle_info_pdf );
 
-                        
+
                         $to = $_POST['email'];
                         $subject = 'Perma safe : Your password';
                         $message = 'Hello '.$arrXml["first_name"].',<br/><br/>';
@@ -1471,18 +1471,18 @@ function xml_test(){
                         $message .= 'Thank you for choosing PermaSafe.';
                         $headers = array('Content-Type: text/html; charset=UTF-8');
                         $mail = wp_mail( $to, $subject, $message, $headers );
-                        
-                        
+
+
                         // $response = $pdf_link;
 
                         $dom = new DOMDocument();
                         $dom->encoding = 'utf-8';
                         $dom->xmlVersion = '1.0';
                         $dom->formatOutput = true;
-                        
+
                         $root = $dom->createElement('user');
                         $user_node = $dom->createElement('response');
-                        
+
                         // $member_code = new DOMAttr('member_code', $member_code);
                         // $user_node->setAttributeNode($attr_movie_id);
                         $child_node_code = $dom->createElement('code', $member_code);
@@ -1497,13 +1497,13 @@ function xml_test(){
                         $root->appendChild($user_node);
                 		$dom->appendChild($root);
                         $response = $dom->saveXML();
-                        echo $response;    
+                        echo $response;
 
                     }//if userdata
-                } // if member code id  
-                
+                } // if member code id
+
             } //else exist
-        }// if $user_data 
+        }// if $user_data
     } // if member code
     else{
 
@@ -1512,10 +1512,10 @@ function xml_test(){
         $dom->encoding = 'utf-8';
         $dom->xmlVersion = '1.0';
         $dom->formatOutput = true;
-        
+
         $root = $dom->createElement('user');
         $user_node = $dom->createElement('response');
-        
+
         // $member_code = new DOMAttr('member_code', $member_code);
         // $user_node->setAttributeNode($attr_movie_id);
         $child_node_code = $dom->createElement('code', $member_code);
@@ -1530,8 +1530,8 @@ function xml_test(){
         $root->appendChild($user_node);
         $dom->appendChild($root);
         $response = $dom->saveXML();
-        echo $response;   
-        
+        echo $response;
+
     }
 
     // echo "<pre>";print_r($arrXml);echo "</pre>";
@@ -1540,19 +1540,19 @@ function xml_test(){
     //         echo $val['code'];
     //     }
     // }
-    
-    
+
+
 }
 
 function objectsIntoArray($arrObjData, $arrSkipIndices = array())
 {
     $arrData = array();
-    
+
     // if input is object, convert into array
     if (is_object($arrObjData)) {
         $arrObjData = get_object_vars($arrObjData);
     }
-    
+
     if (is_array($arrObjData)) {
         foreach ($arrObjData as $index => $value) {
             if (is_object($value) || is_array($value)) {
