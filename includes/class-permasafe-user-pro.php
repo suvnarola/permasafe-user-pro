@@ -205,6 +205,9 @@ class Permasafe_User_Pro {
 
         $this->loader->add_action( 'wp_ajax_search_batch_code', $plugin_admin, 'search_batch_code_function' );
         $this->loader->add_action( 'wp_ajax_nopriv_search_batch_code', $plugin_admin, 'search_batch_code_function' );
+		
+		$this->loader->add_action( 'wp_ajax_search_individual_code', $plugin_admin, 'search_individual_code_function' );
+        $this->loader->add_action( 'wp_ajax_nopriv_search_individual_code', $plugin_admin, 'search_individual_code_function' );
 
         $this->loader->add_action( 'admin_footer',$plugin_admin,'perma_admin_footer_load_html' );
 		$this->loader->add_action( 'admin_footer',$plugin_admin,'add_search_box' );

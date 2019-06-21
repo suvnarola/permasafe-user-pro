@@ -477,7 +477,7 @@ class PMSafe_Bulk_Invitation{
                 }
                 //  }
 
-                echo '<tr>';
+                echo '<tr style="display:none;">';
                     echo '<th>';
                         echo '<label><strong>Code Access Level</strong><span>This determines the website access for the new user. If you are unsure, leave this set to Customer.</span></label>';
                     echo '</th>';
@@ -704,10 +704,24 @@ class PMSafe_Bulk_Invitation{
         $meta = $wpdb->get_results("SELECT * FROM `".$wpdb->postmeta."` WHERE meta_key='".$key."' AND meta_value='".$post_id."'");
         foreach ($meta as $key => $value) {
             $invitation_id = $value->post_id;
-            
+            $user_login = get_post_meta($invitation_id,'_pmsafe_invitation_code',true);
+            $users = get_user_by('login',$user_login);
+            $user_id = $users->ID;
+        
+            wp_delete_user( $user_id );
+        
             wp_delete_post($invitation_id,true);
-        }
+            delete_post_meta( $invitation_id, '_pmsafe_used_code_user_name' );
+            delete_post_meta( $invitation_id, '_pmsafe_used_code_date' );
+            delete_post_meta( $invitation_id, 'pmsafe_pdf_link' );
+            delete_post_meta( $invitation_id, 'is_upgraded' );
+            delete_post_meta( $invitation_id, 'upgraded_date' );
+            delete_post_meta( $invitation_id, 'upgraded_by' );
+            delete_post_meta( $invitation_id, 'updated_selling_price' );
+            delete_post_meta( $invitation_id, 'updated_selling_price_by' );
 
+        }
+        
         $url = admin_url('edit.php?post_type=pmsafe_bulk_invi');
         $response = array('status'=>true,'redirect'=>$url);
         echo json_encode($response);

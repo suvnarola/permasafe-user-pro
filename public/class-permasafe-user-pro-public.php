@@ -64,6 +64,9 @@ class Permasafe_User_Pro_Public {
                 add_action( 'wp_ajax_get_benefit_package_price', array($this,'get_benefit_package_price') );
                 add_action( 'wp_ajax_nopriv_get_benefit_package_price', array($this,'get_benefit_package_price') );
                 
+                add_action( 'wp_ajax_check_no_coverage_policy', array($this,'check_no_coverage_policy') );
+                add_action( 'wp_ajax_nopriv_check_no_coverage_policy', array($this,'check_no_coverage_policy') );
+                
                 add_action( 'wp_ajax_update_benefit_package_price', array($this,'update_benefit_package_price') );
                 add_action( 'wp_ajax_nopriv_update_benefit_package_price', array($this,'update_benefit_package_price') );
 
@@ -3357,31 +3360,25 @@ class Permasafe_User_Pro_Public {
                 $login = $current_user->user_login;
             }
             if($member_code === '00000' || $member_code === '0000' || $member_code === '000' || $member_code === '00' || $member_code === '0'){
-                // echo 'in';die;    
-                $sales_person = array(
-                    'first_name'                        => $_POST['first_name'],
-                    'last_name'                         => $_POST['last_name'],
-                    'pmsafe_address_1'                  => $_POST['address1'],
-                    'pmsafe_address_2'                  => $_POST['address2'],
-                    'pmsafe_city'                       => $_POST['city'],
-                    'pmsafe_state'                      => $_POST['state'],
-                    'pmsafe_zip_code'                   => $_POST['zip_code'],
-                    'pmsafe_phone_number'               => $_POST['phone_number'],
-                    'pmsafe_email'                      => $_POST['email'],
-                    'pmsafe_registration_date'          => current_time( 'mysql' ),
-                    'pmsafe_vehicle_year'               => $_POST['vehicle_year'],
-                    'pmsafe_vehicle_make'               => $_POST['vehicle_make'],
-                    'pmsafe_vehicle_model'              => $_POST['vehicle_model'],
-                    'pmsafe_vehicle_mileage'            => $_POST['vehicle_mileage'],
-                    'pmsafe_vin'                        => $_POST['vin'],
-                    'pmsafe_warranty_registration'      => $member_code,
-                    'pmsafe_plan_id'                    => 'sales-person',
-                );
+               
+                if($role['contributor'] == 1) {
 
-                $pdf_link = sales_person_generate_pdf($sales_person);
-                $warranty_card = pmsafe_sales_person_warranty_card($sales_person,$pdf_link);
-
-                $response = array('status' => true,'code'=>$member_code);
+                    $benefit_prefix = pmsafe_get_meta_values( '_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish' );
+                    $html .= '<div id="salesperson_benefits_package_div">';
+                    $html .= '<div class="content-column one_half">';
+                        $html .= '<label>Upgradable Packages: ';
+                            $html .= '<select id="salesperson_benefits_package">';
+                            foreach ($benefit_prefix as $prefix) {
+                                $html .= '<option value="'.$prefix.'">'.$prefix.'</option>';
+                            }
+                            $html .= '</select>';
+                        $html .= '</label>';
+                        $html .= '<input type="button" id="salesperson_update_prefix" value="Update" style="margin-top:10px;">';
+                    $html .= '</div>';
+                $html .= '</div>';
+                }
+                
+                $response = array('status' => true,'code'=>$member_code,'html'=>$html);
                 echo json_encode($response);
             }else{
                 if($role['author'] == 1) 
@@ -3533,7 +3530,13 @@ class Permasafe_User_Pro_Public {
                     $member_code_id = pmsafe_if_code_exist($member_code);
                     $bulk_id =  get_post_meta($member_code_id,'_pmsafe_bulk_invitation_id',true);
                     $is_allow_dealer = get_post_meta($bulk_id,'pmsafe_code_allow_dealer',true);
-                    if($is_allow_dealer == 1){
+                    $invitation_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
+                    $package_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$invitation_prefix);
+                    $no_coverage = get_post_meta($package_id, '_pmsafe_no_coverage_benefit', true);
+                    if($no_coverage == 1){
+                        $response = array('status' => false,'message'=>'<span class="perma-error"><strong>Error!</strong> This Registration Number does not come with a Warranty and does not require registration. If you believe this is an error, please contact us <a href="'.get_site_url().'/contact">here</a>.</span>');
+                        echo json_encode($response);
+                    }else if($is_allow_dealer == 1){
                         $response = array('status' => false,'message'=>'<span class="perma-error"><strong>Error!</strong> You do not have permission to register this code. If you believe this is an error, please contact us <a href="'.get_site_url().'/contact">here</a>.</span>');
                         echo json_encode($response);
                     }else{
@@ -3828,19 +3831,40 @@ class Permasafe_User_Pro_Public {
             $html = '';
             $html .= '<div id="update_package_price">';
             if($selling_price != ''){
-                $html .= '<h3>Do you want to change selling price for benefit package: '.$package.' ?</h3>';
+                $value = "Update";
+            }else{
+                $value = "Add";
+            }
+                $html .= '<h3>Please Enter The Retail Selling Price (Cost to Customer):</h3>';
                 $html .= '<input type="hidden" value="'.$package.'" id="get_package">';
                 $html .= '<input type="hidden" value="'.$code_id.'" id="get_code_id">';
                 $html .= '<div class="content-column one_half">';
                     $html .= '<label>Selling Price($) : <input type="number" name="selling_price" id="selling_price" min="1" value="'.$selling_price.'"/></label>';
                 $html .= '</div>';
-                $html .= '<input type="button" id="pmsafe_update_price" value="Update" style="margin-top:10px;clear:both;float:left;">';
+                $html .= '<input type="button" id="pmsafe_update_price" value="'.$value.'" style="margin-top:10px;clear:both;float:left;">';
                 $html .= '<input type="button" id="pmsafe_skip_price" value="Skip" style="margin-top:10px;margin-left:10px;float:left;">';
-            }else{
+            /* }else{
                 $html .= '<h3>Admin hasn\'t assigned selling price yet for benefit package: '.$package.'</h3>';
                 $html .= '<input type="button" id="pmsafe_skip_price" value="Skip" style="margin-top:10px;float:left;">';
-            }
+            } */
             $html .= '</div>';
+            echo $html;
+            die;
+        }
+
+        public function check_no_coverage_policy(){
+            $package = $_POST['package'];
+            $code_id = $_POST['code_id'];
+            $bulk_id = get_post_meta($code_id,'_pmsafe_bulk_invitation_id',true);
+            $invitation_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
+            $package_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$invitation_prefix);
+
+            $no_coverage = get_post_meta($package_id, '_pmsafe_no_coverage_benefit', true);
+            if($no_coverage == 1){
+                $html .='<span style="color: #a94442;background-color: #f2dede;border-color: #f2dede;padding: 15px;margin-bottom: 20px;border: 1px solid transparent;border-radius: 4px;"><strong>Error!</strong>  No Product Warranty has been selected; Registration for your selection is not required. If you believe this is an error, please contact us <a href="'.get_site_url().'/contact">here</a>.</span>';
+            }else{
+                $html .= 1;
+            }
             echo $html;
             die;
         }

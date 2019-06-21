@@ -970,12 +970,13 @@ jQuery( document ).ready(function() {
         if(!validflag){
             return validflag;
         }else{
+            jQuery('.perma-admin-loader').show();
             jQuery.ajax({
                 type: 'POST',
                 url: pmAjax.ajaxurl,
                 data: data,
                 success: function (response) {
-            
+                    jQuery('.perma-admin-loader').hide();
                     // console.log(response);
                     jQuery('#the-list').html('');
                     jQuery('#the-list').html(response);
@@ -986,7 +987,45 @@ jQuery( document ).ready(function() {
         }
     });
 
-    jQuery(document).on("focus","#search-input", function(e) {
+    jQuery(document).on("click","#search-individual-code", function(e) {
+        e.preventDefault();
+        jQuery('.error').remove();
+        var validflag = true;
+        var search_val = jQuery('#individual-search-input').val();
+        
+        if(jQuery('#individual-search-input').val().trim()=="" ){
+            jQuery('#individual-search-input').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#individual-search-input' ).after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#individual-search-input').css({'color':'#333333'});
+        }
+
+        var data = {
+            action: 'search_individual_code',
+            search_val : search_val
+        };
+        if(!validflag){
+            return validflag;
+        }else{
+            jQuery('.perma-admin-loader').show();
+            jQuery.ajax({
+                type: 'POST',
+                url: pmAjax.ajaxurl,
+                data: data,
+                success: function (response) {
+                    jQuery('.perma-admin-loader').hide();
+                    // console.log(response);
+                    jQuery('#the-list').html('');
+                    jQuery('#the-list').html(response);
+                },
+                dataType: 'html'
+            });
+        return false;
+        }
+    });
+
+    jQuery(document).on("focus","#search-input,#individual-search-input", function(e) {
         jQuery(this).css({'border-color':'#cccccc'});
         jQuery(this).css({'color':'#555'});
         jQuery(this).siblings('.error').remove();
@@ -1017,12 +1056,13 @@ jQuery( document ).ready(function() {
         if(!validflag){
             return validflag;
         }else{
+            jQuery('.perma-admin-loader').show();
             jQuery.ajax({
                 type: 'POST',
                 url: pmAjax.ajaxurl,
                 data: data,
                 success: function (response) {
-            
+                    jQuery('.perma-admin-loader').hide();
                     // console.log(response);
                     jQuery('#the-list').html('');
                     jQuery('#the-list').html(response);
@@ -1031,6 +1071,47 @@ jQuery( document ).ready(function() {
             });
         return false;
         }
+        }
+    });
+
+    jQuery(document).on("keypress","#individual-search-input", function(e) {
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13'){
+            e.preventDefault();
+            jQuery('.error').remove();
+            var validflag = true;
+            var search_val = jQuery('#individual-search-input').val();
+            
+            if(jQuery('#individual-search-input').val().trim()=="" ){
+                jQuery('#individual-search-input').css({'border':'1px solid #ff0000','color':'#ff0000'});
+                jQuery( '#individual-search-input' ).after( "<span class='error'>This field is required.</span>" );
+                validflag = false;
+            }else{
+                jQuery('#individual-search-input').css({'color':'#333333'});
+            }
+    
+            var data = {
+                action: 'search_individual_code',
+                search_val : search_val
+            };
+            if(!validflag){
+                return validflag;
+            }else{
+                jQuery('.perma-admin-loader').show();
+                jQuery.ajax({
+                    type: 'POST',
+                    url: pmAjax.ajaxurl,
+                    data: data,
+                    success: function (response) {
+                        jQuery('.perma-admin-loader').hide();
+                        // console.log(response);
+                        jQuery('#the-list').html('');
+                        jQuery('#the-list').html(response);
+                    },
+                    dataType: 'html'
+                });
+            return false;
+            }
         }
     });
 

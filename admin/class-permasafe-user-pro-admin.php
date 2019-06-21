@@ -939,7 +939,7 @@ class Permasafe_User_Pro_Admin {
 	        			$html .= '<label class="screen-reader-text" for="cb-select-'.$post_id.'">Select '.$start.'-'.$end.'</label>';
 	        			$html .= '<input id="cb-select-'.$post_id.'" type="checkbox" name="post[]" value="'.$post_id.'">';
 	        			$html .= '<div class="locked-indicator"><span class="locked-indicator-icon" aria-hidden="true"></span>
-					<span class="screen-reader-text">\"'.$start.'-'.$end.'\" is locked</span></div>';
+					<span class="screen-reader-text">"'.$start.'-'.$end.'" is locked</span></div>';
 	        			$html .= '</th>';
 		
 		        		$html .= '<td class="invitation_code column-invitation_code has-row-actions column-primary" data-colname="Member code">';
@@ -995,7 +995,104 @@ class Permasafe_User_Pro_Admin {
 	        	echo $html;
         	
         	die;
-        }
+		}
+		
+		public function search_individual_code_function(){
+        	
+			$search_val = $_POST['search_val'];
+			global $wpdb;
+			$html = '';
+			
+			$sql = "SELECT post_id FROM wp_postmeta WHERE meta_key = '_pmsafe_invitation_code' AND meta_value = '".$search_val."'";
+			$result = $wpdb->get_row($sql);
+
+			$post_id = $result->post_id;
+			$posts = get_post( $post_id ); 
+			
+			$bulk_id = get_post_meta($post_id,'_pmsafe_bulk_invitation_id',true);
+			$start = get_post_meta($bulk_id,'_pmsafe_invitation_code_start',true);
+			$end = get_post_meta($bulk_id,'_pmsafe_invitation_code_end',true);
+
+			if( $post_id){
+				$html .= '<tr id="post-'.$post_id.'" class="iedit author-self level-0 post-'.$post_id.' type-pmsafe_invitecode status-publish hentry">';
+					$html .= '<th scope="row" class="check-column">';
+					$html .= '<label class="screen-reader-text" for="cb-select-'.$post_id.'">Select '.$posts->post_title.'</label>';
+					$html .= '<input id="cb-select-'.$post_id.'" type="checkbox" name="post[]" value="'.$post_id.'">';
+					$html .= '<div class="locked-indicator"><span class="locked-indicator-icon" aria-hidden="true"></span>
+				<span class="screen-reader-text">"'.$posts->post_title.'" is locked</span></div>';
+					$html .= '</th>';
+
+					$html .= '<td class="invitation_code column-invitation_code has-row-actions column-primary" data-colname="Member code">';
+						$html .= '<code>'.get_post_meta($post_id,'_pmsafe_invitation_code',true).'</code>';
+					$html .= '</td>';
+
+					$html .= '<td class="benefits_package column-benefits_package" data-colname="Benefits Package">';
+						$html .= '<code>'.get_post_meta($post_id,'_pmsafe_code_prefix',true).'</code>';
+					$html .= '</td>';
+
+					$html .= '<td class="bulk_invitation column-bulk_invitation" data-colname="Bulk Member">';
+						$html .= $start.'-'.$end; 
+					$html .= '</td>';
+
+					echo $status = get_post_meta($post_id,'_pmsafe_code_status',true);
+					$html .= '<td class="code_status column-code_status" data-colname="Code status">';
+					if($status == "available"){
+						$html .= '<span style="color:green;"><b>Available</b></span>'; 
+					}
+					if($status == "used"){
+						$html .= '<span style="color:red;"><b>Used</b></span>'; 
+					}
+					$html .= '</td>';
+
+					$html .= '<td class="member_name column-member_name" data-colname="Member Name">';
+						$html .= get_post_meta( $post_id, '_pmsafe_used_code_user_name', true ); 
+					$html .= '</td>';
+
+					$html .= '<td class="dealer column-dealer" data-colname="Dealer">';
+						$dealer_login = get_post_meta( $post_id, '_pmsafe_dealer', true ); 
+							
+						$dealers = get_user_by('login', $dealer_login);
+						$dealer_id = $dealers->data->ID;
+						$dealer_name = get_user_meta( $dealer_id, 'dealer_name', true);
+						$html .= $dealer_name; 
+					$html .= '</td>';
+
+					$html .= '<td class="distributor column-distributor" data-colname="Distributor">';
+						$distributor_login = get_post_meta( $post_id, '_pmsafe_distributor', true ); 
+						$distributors = get_user_by('login', $distributor_login);
+						$distributor_id = $distributors->data->ID;
+						$distributor_name = get_user_meta( $distributor_id, 'distributor_name', true);
+						$html .= $distributor_name; 
+					$html .= '</td>';
+
+					$html .= '<td class="date_create column-date_create" data-colname="Date created">';
+						$html .= get_post_meta( $post_id, '_pmsafe_code_create_date', true ); 
+					$html .= '</td>';
+
+					$html .= '<td class="date_used column-date_used" data-colname="Date Used">';
+						$html .= get_post_meta( $post_id, '_pmsafe_used_code_date', true ); 
+					$html .= '</td>';
+
+					$html .= '<td class="pdf column-pdf" data-colname="PDF">';
+					$pdf_link = get_post_meta($post_id, 'pmsafe_pdf_link', true);
+					if(!empty($pdf_link)){
+						$html .= '<a href="'. $pdf_link .'" target="_blank"><img src="'. includes_url() .'images/media/document.png" class="attachment-thumbnail" width="20" height="25" /></a>';
+					}
+					$html .= '</td>';
+
+					$html .= '<td class="reset column-reset" data-colname="Reset Code">';
+						$html .= '<i class="fa fa-undo" style="font-size:20px;cursor:pointer" title="reset" id="reset-code" data-id="'.$post_id.'"></i>';
+					$html .= '</td>';
+	
+				$html .= '</tr>';
+				
+			}else{
+				$html .= '<tr class="no-items"><td class="colspanchange" colspan="9">No Batch Member Codes found.</td></tr>';
+			}
+			echo $html;
+		
+		die;
+	}
 
         public function add_search_box(){
         	if(get_post_type( get_the_ID() ) == 'pmsafe_bulk_invi'){
@@ -1008,7 +1105,18 @@ class Permasafe_User_Pro_Admin {
         		});
         	</script>
         	<?php
-        	}
+			}
+			if(get_post_type( get_the_ID() ) == 'pmsafe_invitecode'){
+				?>
+				<script type="text/javascript">
+        			jQuery(document).ready(function(){
+						jQuery('#search-submit').css('display','none');
+						jQuery('#post-search-input').css('display','none');
+						jQuery(".search-box").append("<input type='search' id='individual-search-input' value=''><input type='button' id='search-individual-code' class='button' value='Search Member Codes'>");
+					});
+				</script>
+			<?php
+			}
         }
 
 		public function admin_reports(){

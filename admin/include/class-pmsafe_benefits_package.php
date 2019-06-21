@@ -97,6 +97,15 @@ class PMSafe_Benefits_Package{
                         echo '<input type="number" name="pmsafe_benefit_term_length" value="' . get_post_meta($post_id, '_pmsafe_benefit_term_length', true)  . '" class="widefat" min="1"/>';
                     echo '</td>';
                 echo '</tr>';
+                echo '<tr>';
+                echo '<th>';
+                    echo '<label><strong>Is this a "No Coverage" Policy?</strong></label>';
+                echo '</th>';
+                echo '<td>';
+                $no_coverage = get_post_meta($post_id, '_pmsafe_no_coverage_benefit', true);
+                echo '<input type="checkbox" name="pmsafe_no_coverage_benefit" id="pmsafe_no_coverage_benefit" '.(($no_coverage==1)?'checked="checked"':"").'>';
+                echo '</td>';
+            echo '</tr>';
             echo '</table>';                
 
     }
@@ -120,7 +129,12 @@ class PMSafe_Benefits_Package{
             $benefit_meta['_pmsafe_benefit_prefix'] = $_POST['pmsafe_benefit_prefix'];
             $benefit_meta['_pmsafe_benefit_pdf'] = $_POST['pmsafe_benefit_pdf'];
             $benefit_meta['_pmsafe_benefit_term_length'] = $_POST['pmsafe_benefit_term_length'];
-
+            if(isset($_POST['pmsafe_no_coverage_benefit'])){
+                $benefit_meta['_pmsafe_no_coverage_benefit'] = 1;
+            }
+            if(!isset($_POST['pmsafe_no_coverage_benefit'])){
+                $benefit_meta['_pmsafe_no_coverage_benefit'] = 0;
+            }
             // Add values of $benefit_meta as custom fields
 
             foreach ($benefit_meta as $key => $value) { // Cycle through the $invitation_meta array!
