@@ -7,7 +7,7 @@ jQuery( document ).ready(function() {
     if(pop_val == 1){
 
         setTimeout(function(){ 
-        jQuery('#popmake-3202').css('display','none');
+        jQuery('.pum-container').css('display','none');
 
     }, 700);
             
