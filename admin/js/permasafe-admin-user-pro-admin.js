@@ -1974,7 +1974,7 @@ jQuery( document ).ready(function() {
                 //Name the CSV
                 filename: 'mebership_info',
                exportOptions: {
-                columns: [0, 1, 2, 3 ]
+                columns: [0, 1, 2, 3, 4, 5, 6, 7 ]
                 },
             },
             {
@@ -1984,7 +1984,7 @@ jQuery( document ).ready(function() {
                 orientation : 'landscape',
                 pageSize : 'LEGAL',
                 exportOptions: {
-                     columns: [0, 1, 2, 3 ]
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7 ]
                 },
             },
             {
@@ -1992,7 +1992,7 @@ jQuery( document ).ready(function() {
                 text: 'EXCEL',
                 filename: 'mebership_info',
                 exportOptions: {
-                    columns: [0, 1, 2, 3 ]
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7 ]
                 },
             },
             {
@@ -2001,7 +2001,7 @@ jQuery( document ).ready(function() {
                 filename: 'mebership_info',
                 
                 exportOptions: {
-                    columns: [0, 1, 2, 3 ]
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7 ]
                 },
                 customize: function (win) {
                     jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
@@ -2024,6 +2024,9 @@ jQuery( document ).ready(function() {
         var datepicker2 = jQuery('#membership_datepicker2').val();
         var dealer     = jQuery('#pmsafe_dealer').val();
         var distributor     = jQuery('#pmsafe_distributor').val();
+        var policy     = jQuery('#policy').val();
+        var package     = jQuery('#benefit_packages').val();
+      
         // alert(dealer + distributor);
             var data = {
                 action : 'admin_membership_date_filter',
@@ -2031,7 +2034,9 @@ jQuery( document ).ready(function() {
                 datepicker1 : datepicker1,
                 datepicker2 : datepicker2,
                 dealer : dealer,
-                distributor : distributor
+                distributor : distributor,
+                policy : policy,
+                package : package
             }
         
         if(jQuery('#membership_datepicker1').val().trim()=="" ){
@@ -2048,6 +2053,14 @@ jQuery( document ).ready(function() {
             validflag = false;
         }else{
             jQuery('#membership_datepicker2').css({'color':'#333333'});
+        }
+        
+        if(policy != '' && package == ''){
+                jQuery('#benefit_packages').css({'border':'1px solid #ff0000','color':'#ff0000'});
+                jQuery( '#benefit_packages' ).after( "<span class='error'>This field is required.</span>" );
+                validflag = false;
+        }else{
+            jQuery('#benefit_packages').css({'color':'#333333'});
         }
 
         jQuery('.perma-admin-loader').show();
@@ -2076,7 +2089,7 @@ jQuery( document ).ready(function() {
                                 //Name the CSV
                                 filename: 'mebership_info',
                                 exportOptions: {
-                                        columns: [0, 1, 2,3]
+                                        columns: [0, 1, 2,3, 4, 5, 6, 7 ]
                                 },
                             },
                             {
@@ -2086,7 +2099,7 @@ jQuery( document ).ready(function() {
                                 orientation : 'landscape',
                                 pageSize : 'LEGAL',
                                 exportOptions: {
-                                    columns: [0, 1, 2,3]
+                                    columns: [0, 1, 2,3, 4, 5, 6, 7 ]
                                 },
                             },
                             {
@@ -2094,7 +2107,7 @@ jQuery( document ).ready(function() {
                                 text: 'EXCEL',
                                 filename: 'mebership_info',
                                 exportOptions: {
-                                    columns: [0, 1, 2,3]
+                                    columns: [0, 1, 2,3, 4, 5, 6, 7 ]
                                 },
                             },
                             {
@@ -2103,7 +2116,7 @@ jQuery( document ).ready(function() {
                                 filename: 'mebership_info',
                                 
                                 exportOptions: {
-                                    columns: [0, 1, 2,3]
+                                    columns: [0, 1, 2,3, 4, 5, 6, 7 ]
                                 },
                                 customize: function (win) {
                                     jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
@@ -2138,6 +2151,7 @@ jQuery( document ).ready(function() {
         var validflag = true;
         var selected_package = jQuery('#pmsafe_invitation_prefix' ).val();
         var dealer_cost = jQuery('#dealer_cost' ).val();
+        var distributor_cost = jQuery('#distributor_cost' ).val();
         var selling_price = jQuery('#selling_price' ).val();
         var dealer_id = jQuery('#pricing_dealer_id' ).val();
 
@@ -2158,6 +2172,14 @@ jQuery( document ).ready(function() {
             jQuery('#dealer_cost').css({'color':'#333333'});
         }
         
+        if(jQuery('#distributor_cost' ).val().trim()=="" ){
+            jQuery('#distributor_cost' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#distributor_cost').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#distributor_cost').css({'color':'#333333'});
+        }
+        
         if(jQuery('#selling_price' ).val().trim()=="" ){
             jQuery('#selling_price' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
             jQuery( '#selling_price').after( "<span class='error'>This field is required.</span>" );
@@ -2170,6 +2192,7 @@ jQuery( document ).ready(function() {
             action: 'add_dealer_benifits_package_price',
             selected_package:selected_package,
             dealer_cost:dealer_cost,
+            distributor_cost:distributor_cost,
             selling_price:selling_price,
             dealer_id:dealer_id
 
@@ -2250,6 +2273,7 @@ jQuery( document ).ready(function() {
         var validflag = true;
         var selected_package = jQuery('#edit_pmsafe_invitation_prefix' ).val();
         var dealer_cost = jQuery('#edit_dealer_cost' ).val();
+        var distributor_cost = jQuery('#edit_distributor_cost' ).val();
         var selling_price = jQuery('#edit_selling_price' ).val();
         var dealer_id = jQuery('#pricing_dealer_id' ).val();
               
@@ -2259,6 +2283,14 @@ jQuery( document ).ready(function() {
             validflag = false;
         }else{
             jQuery('#edit_dealer_cost').css({'color':'#333333'});
+        }
+        
+        if(jQuery('#edit_distributor_cost' ).val().trim()=="" ){
+            jQuery('#edit_distributor_cost' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#edit_distributor_cost').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#edit_distributor_cost').css({'color':'#333333'});
         }
         
         if(jQuery('#edit_selling_price' ).val().trim()=="" ){
@@ -2272,6 +2304,7 @@ jQuery( document ).ready(function() {
             action: 'edit_dealer_benifits_package_price',
             selected_package:selected_package,
             dealer_cost:dealer_cost,
+            distributor_cost:distributor_cost,
             selling_price:selling_price,
             dealer_id:dealer_id
         };
@@ -2292,10 +2325,22 @@ jQuery( document ).ready(function() {
         }
     });
 
-    jQuery(document).on("focus","#dealer_cost,#selling_price,#pmsafe_invitation_prefix,#edit_dealer_cost,#edit_selling_price", function(e) {
+    jQuery(document).on("focus","#benefit_packages,#distributor_cost,#dealer_cost,#selling_price,#pmsafe_invitation_prefix,#edit_distributor_cost,#edit_dealer_cost,#edit_selling_price", function(e) {
         jQuery(this).css({'border-color':'#cccccc'});
         jQuery(this).css({'color':'#555'});
         jQuery(this).siblings('.error').remove();
     });
+
+    jQuery(document).on("change","#policy", function(e) {
+        var select_val = jQuery(this).val();
+        if(select_val == ''){
+            jQuery('.filter-package').css('display','none');
+        }else{
+            jQuery('.filter-package').removeAttr('style')
+        }
+    });
+
+    
+
 });// ready
 

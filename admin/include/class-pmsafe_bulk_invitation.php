@@ -619,7 +619,7 @@ class PMSafe_Bulk_Invitation{
         global $wpdb;
         $dealers = $wpdb->get_results("SELECT * FROM `".$wpdb->usermeta."` WHERE meta_key='".$key."' AND meta_value='".$distributor_id."'");
         if($dealers){
-            echo '<option value="">-Select Dealers-</option>';
+            echo '<option value="">Select Dealers</option>';
             foreach ($dealers as $key => $dealer) {
                 $dealer_id = $dealer->user_id;
                 $dealer_name = get_user_meta( $dealer_id, 'dealer_name' , true );

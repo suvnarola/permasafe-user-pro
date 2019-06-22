@@ -263,7 +263,7 @@ div#search_tbl_wrapper {margin-top: 30px;}
 .filter-wrap .input-filter-wrap {width: 30%;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;padding:0 15px;}
 .filter-wrap .filter-up{width: 20%;}
 .filter-wrap .filter-mid{width: 17%;}
-.filter-wrap .filter-down{width: 16%;padding: 0 15px;}
+.filter-wrap .filter-down{width: 17%;padding: 0 15px;}
 .filter-wrap select {width: 100%}
 .filter-wrap .btn-filter-wrap {width: 10%;margin-right: 15px;}
 .filter-wrap .input-filter-wrap input {width: 40% !important;margin: 0 10px;}

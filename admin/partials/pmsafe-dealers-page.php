@@ -181,8 +181,9 @@ if($action == 'view'){
                 echo '<thead>';
                     echo '<th>Benifits Package</th>';
                     echo '<th>Price
-                    <p>Dealer cost</p>
+                    <p>Dealer Cost</p>
                     </th>';
+                    echo '<th> </br> <p>Distributor Cost </p></th>';
                     echo '<th> </br> <p>Selling Price </p></th>';
                     echo '<th></th>';
                 echo '</thead>';
@@ -240,12 +241,21 @@ if($action == 'view'){
                 echo '</td>';
             echo '</tr>';
 
-            echo '<tr>';
+        echo '<tr>';
                 echo '<td>';
                     echo '<label><strong>Dealer Cost($):</strong></label>';
                 echo '</td>';
                 echo '<td>';
                     echo '<input type="number" min="1" id="dealer_cost">';
+                echo '</td>';
+        echo '</tr>';
+
+        echo '<tr>';
+                echo '<td>';
+                    echo '<label><strong>Distributor Cost($):</strong></label>';
+                echo '</td>';
+                echo '<td>';
+                    echo '<input type="number" min="1" id="distributor_cost">';
                 echo '</td>';
         echo '</tr>';
 
@@ -280,12 +290,21 @@ if($action == 'view'){
                 echo '</td>';
             echo '</tr>';
 
-            echo '<tr>';
+        echo '<tr>';
                 echo '<td>';
                     echo '<label><strong>Dealer Cost($):</strong></label>';
                 echo '</td>';
                 echo '<td>';
                     echo '<input type="number" min="1" id="edit_dealer_cost">';
+                echo '</td>';
+        echo '</tr>';
+
+        echo '<tr>';
+                echo '<td>';
+                    echo '<label><strong>Distributor Cost($):</strong></label>';
+                echo '</td>';
+                echo '<td>';
+                    echo '<input type="number" min="1" id="edit_distributor_cost">';
                 echo '</td>';
         echo '</tr>';
 
