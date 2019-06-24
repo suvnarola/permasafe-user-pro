@@ -105,7 +105,7 @@ table.distributors, table.dealers {
     border: 1px solid #e5e5e5 !important;
     box-shadow: 0 1px 1px rgba(0,0,0,.04) !important;
 }
-.toplevel_page_distributors-lists div#wpcontent, .toplevel_page_dealers-lists div#wpcontent, .toplevel_page_customers-lists div#wpcontent, .toplevel_page_permasafe-upgraded-membership div#wpcontent  {
+.customers_page_customer-filter div#wpcontent, .customers_page_customer-search div#wpcontent, .toplevel_page_distributors-lists div#wpcontent, .toplevel_page_dealers-lists div#wpcontent, .toplevel_page_customers-lists div#wpcontent, .toplevel_page_permasafe-upgraded-membership div#wpcontent  {
     padding-right: 60px;
 }
 table.distributors td, table.dealers td {

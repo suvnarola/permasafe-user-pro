@@ -150,6 +150,24 @@ class Permasafe_User_Pro_Admin {
                         8
 		);
 
+		$this->plugin_screen_hook_suffix = add_submenu_page(
+        	'customers-lists',
+			__( 'Customer Search', '' ),
+			__( 'Customer Search', '' ),
+			'manage_options',
+			'customer-search',
+			array( $this, 'display_permasafe_customer_search_page' )
+		);
+
+		$this->plugin_screen_hook_suffix = add_submenu_page(
+        	'customers-lists',
+			__( 'Coverage Reports', '' ),
+			__( 'Coverage Reports', '' ),
+			'manage_options',
+			'customer-filter',
+			array( $this, 'display_permasafe_customer_filter_page' )
+		);
+
 		/**
          * Create admin side Dealers Page
          * 
@@ -327,6 +345,15 @@ class Permasafe_User_Pro_Admin {
 		public function display_permasafe_customers_page(){
 			include_once 'partials/pmsafe-customers-page.php';
 		}
+
+		public function display_permasafe_customer_search_page(){
+			include_once 'partials/pmsafe-customers-search-page.php';
+		}
+		
+		public function display_permasafe_customer_filter_page(){
+			include_once 'partials/pmsafe-customers-filter-page.php';
+		}
+
         public function permasafe_setting_page(){
                 include_once 'partials/permasafe-setting-page.php';
 		}
