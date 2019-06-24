@@ -465,6 +465,7 @@ jQuery( document ).ready(function() {
                         if(obj.sales == true){
                             jQuery("#perma_register_form").html(obj.html);
                         }else{
+                            // window.location = obj.redirect + '?success=true';
                             window.location.replace(obj.redirect);
                         }
 //                        jQuery("#response").html(obj.redirect);

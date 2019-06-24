@@ -91,7 +91,7 @@
 					echo '</div>';
 					
 					echo '<div class="nisl-wrap">';
-						echo '<label><strong>Password</strong></label>';
+						echo '<label><strong>Password:</strong></label>';
 						echo '<input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat" style="width:35%"/>';
 						echo '<input type="button" value="Generate Password" class="generate_dealer_contact_password" />';
 						// echo '<input type="button" value="Hide" id="hide_dealer_contact_password" style="display:none;"/>';

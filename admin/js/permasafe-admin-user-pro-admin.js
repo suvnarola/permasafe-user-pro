@@ -358,7 +358,7 @@ jQuery( document ).ready(function() {
         var newTextBoxDiv = jQuery(document.createElement('div'))
          .attr("id", 'fname_div' + counter);
 
-        newTextBoxDiv.after().html( '<h3>Contact Person Information:<i class="fa fa-trash" id="removeButton_dealer" style="cursor:pointer;color: #fff;float: right;background: #0065a7;padding: 5px;border-radius: 50%;"></i></h3><div class="nisl-wrap"><label><strong>First Name:</strong></label><input type="text" id="pmsafe_dealer_contact_fname'+ counter +'" name="pmsafe_dealer_contact_fname[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Last Name:</strong></label><input type="text" id="pmsafe_dealer_contact_lname'+ counter +'" name="pmsafe_dealer_contact_lname[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Phone Number:</strong></label><input type="text" id="pmsafe_dealer_contact_phone'+ counter +'" name="pmsafe_dealer_contact_phone[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Email:</strong></label><input type="text" id="pmsafe_dealer_contact_email'+ counter +'" name="pmsafe_dealer_contact_email[]" value="" class="widefat" style="width:35%"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;">Please enter unique email-id.</span></div><div class="nisl-wrap"><label><strong>Password</strong></label><input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat" style="width:35%"/><input type="button" value="Generate Password" class="generate_dealer_contact_password" /></div>');
+        newTextBoxDiv.after().html( '<h3>Contact Person Information:<i class="fa fa-trash" id="removeButton_dealer" style="cursor:pointer;color: #fff;float: right;background: #0065a7;padding: 5px;border-radius: 50%;"></i></h3><div class="nisl-wrap"><label><strong>First Name:</strong></label><input type="text" id="pmsafe_dealer_contact_fname'+ counter +'" name="pmsafe_dealer_contact_fname[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Last Name:</strong></label><input type="text" id="pmsafe_dealer_contact_lname'+ counter +'" name="pmsafe_dealer_contact_lname[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Phone Number:</strong></label><input type="text" id="pmsafe_dealer_contact_phone'+ counter +'" name="pmsafe_dealer_contact_phone[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Email:</strong></label><input type="text" id="pmsafe_dealer_contact_email'+ counter +'" name="pmsafe_dealer_contact_email[]" value="" class="widefat" style="width:35%"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;">Please enter unique email-id.</span></div><div class="nisl-wrap"><label><strong>Password:</strong></label><input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat" style="width:35%"/><input type="button" value="Generate Password" class="generate_dealer_contact_password" /></div>');
         newTextBoxDiv.appendTo("#fname_divgroup");
         counter++;
     });
@@ -2325,7 +2325,7 @@ jQuery( document ).ready(function() {
         }
     });
 
-    jQuery(document).on("focus","#benefit_packages,#distributor_cost,#dealer_cost,#selling_price,#pmsafe_invitation_prefix,#edit_distributor_cost,#edit_dealer_cost,#edit_selling_price", function(e) {
+    jQuery(document).on("focus","#pmsafe_dealer_contact_fname,#pmsafe_dealer_contact_lname,#pmsafe_dealer_contact_phone,#pmsafe_dealer_contact_email,#pmsafe_dealer_contact_password,#benefit_packages,#distributor_cost,#dealer_cost,#selling_price,#pmsafe_invitation_prefix,#edit_distributor_cost,#edit_dealer_cost,#edit_selling_price", function(e) {
         jQuery(this).css({'border-color':'#cccccc'});
         jQuery(this).css({'color':'#555'});
         jQuery(this).siblings('.error').remove();
@@ -2341,6 +2341,97 @@ jQuery( document ).ready(function() {
     });
 
     
+    jQuery(document).on("click","#add_contact_person", function(e) {
+        jQuery("#contact-person-modal").modal({
+            escapeClose: false,
+            clickClose: false,
+            // showClose: false
+        });
+    });
+
+    jQuery(document).on("click","#add_new_contact_person", function(e) {
+        e.preventDefault();
+        jQuery('.error').remove();
+        
+        var validflag = true;
+        var fname = jQuery('#pmsafe_dealer_contact_fname' ).val();
+        var lname = jQuery('#pmsafe_dealer_contact_lname' ).val();
+        var phone = jQuery('#pmsafe_dealer_contact_phone' ).val();
+        var email = jQuery('#pmsafe_dealer_contact_email' ).val();
+        var password = jQuery('#pmsafe_dealer_contact_password' ).val();
+        var dealer_id = jQuery('#pricing_dealer_id' ).val();
+              
+        if(jQuery('#pmsafe_dealer_contact_fname' ).val().trim()=="" ){
+            jQuery('#pmsafe_dealer_contact_fname' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#pmsafe_dealer_contact_fname').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#pmsafe_dealer_contact_fname').css({'color':'#333333'});
+        }
+        
+        if(jQuery('#pmsafe_dealer_contact_lname' ).val().trim()=="" ){
+            jQuery('#pmsafe_dealer_contact_lname' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#pmsafe_dealer_contact_lname').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#pmsafe_dealer_contact_lname').css({'color':'#333333'});
+        }
+        
+        //Phone
+        var numbers = /^[0-9]+$/;
+        if(jQuery('#pmsafe_dealer_contact_phone').val().trim() == ''){
+            jQuery('#pmsafe_dealer_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#pmsafe_dealer_contact_phone' ).after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else if(!(jQuery('#pmsafe_dealer_contact_phone').val().match(numbers))){
+            jQuery('#pmsafe_dealer_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#pmsafe_dealer_contact_phone' ).after( "<span class='error'>Please enter valid phone number.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#pmsafe_dealer_contact_phone').css({'border-color':'#cccccc'});
+        }
+        
+        if(jQuery('#pmsafe_dealer_contact_email' ).val().trim()=="" ){
+            jQuery('#pmsafe_dealer_contact_email' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#pmsafe_dealer_contact_email').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#pmsafe_dealer_contact_email').css({'color':'#333333'});
+        }
+        
+        if(jQuery('#pmsafe_dealer_contact_password' ).val().trim()=="" ){
+            jQuery('#pmsafe_dealer_contact_password' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#pmsafe_dealer_contact_password').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#pmsafe_dealer_contact_password').css({'color':'#333333'});
+        }
+
+         var data = {
+            action: 'add_dealer_contact_information',
+            fname:fname,
+            lname:lname,
+            phone:phone,
+            email:email,
+            password:password,
+            dealer_id:dealer_id
+        };
+        if(!validflag){
+            return validflag;
+        }else{
+            jQuery('.perma-admin-loader').show();
+            jQuery.ajax({
+                type: 'POST',
+                url: pmAjax.ajaxurl,
+                data: data,
+                dataType: 'html',
+                success: function(response) {
+                    jQuery('.perma-admin-loader').hide();
+                        location.reload();
+                }
+            });// ajax
+        }
+    });
 
 });// ready
 

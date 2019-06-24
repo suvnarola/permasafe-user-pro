@@ -569,7 +569,27 @@ class Permasafe_User_Pro_Admin {
 			$response = array('status' => true,'redirect'=>$redirect_url);
             echo json_encode($response);
         	die;
-        }	
+		}	
+		//add dealer contact information
+		public function add_dealer_contact_information(){
+
+			$fname = $_POST['fname'];
+			$lname = $_POST['lname'];
+			$phone = $_POST['phone'];
+			$email = $_POST['email'];
+			$password = $_POST['password'];
+			$dealer_id = $_POST['dealer_id'];
+			
+			$contact_id = wp_create_user( $email, $password, $email );
+			$set_user_role = new WP_User( $contact_id );
+			$set_user_role->set_role( 'dealer-user' );
+			update_user_meta( $contact_id, 'contact_fname', $fname );	
+			update_user_meta( $contact_id, 'contact_lname', $lname );	
+			update_user_meta( $contact_id, 'contact_phone', $phone );	
+			update_user_meta( $contact_id, 'contact_dealer_id', $dealer_id );
+
+			die;
+		}
         
         //edit dealer
         public function pmsafe_edit_dealer_form_function(){
@@ -1553,11 +1573,11 @@ class Permasafe_User_Pro_Admin {
 									$html .= '</th>';
 
 									$html .= '<th>';
-									$html .= 'Edit Detail';
+									$html .= 'Edit';
 									$html .= '</th>';
 
 									$html .= '<th>';
-									$html .= 'Delete Detail';
+									$html .= 'Delete';
 									$html .= '</th>';
 									
 
@@ -2037,11 +2057,11 @@ class Permasafe_User_Pro_Admin {
 							$html .= '</th>';
 
 							$html .= '<th>';
-							$html .= 'Edit Detail';
+							$html .= 'Edit';
 							$html .= '</th>';
 
 							$html .= '<th>';
-							$html .= 'Delete Detail';
+							$html .= 'Delete';
 							$html .= '</th>';
 
 						$html .= '</tr>';

@@ -171,6 +171,9 @@ class Permasafe_User_Pro {
         //add dealer
         $this->loader->add_action( 'wp_ajax_pmsafe_register_dealer_form', $plugin_admin, 'pmsafe_register_dealer_form_function' );
     	$this->loader->add_action( 'wp_ajax_nopriv_pmsafe_register_dealer_form', $plugin_admin, 'pmsafe_register_dealer_form_function' );
+        //add dealer contact information
+        $this->loader->add_action( 'wp_ajax_add_dealer_contact_information', $plugin_admin, 'add_dealer_contact_information' );
+    	$this->loader->add_action( 'wp_ajax_nopriv_add_dealer_contact_information', $plugin_admin, 'add_dealer_contact_information' );
 		//edit dealer
         $this->loader->add_action( 'wp_ajax_pmsafe_edit_dealer_form', $plugin_admin, 'pmsafe_edit_dealer_form_function' );
 		$this->loader->add_action( 'wp_ajax_nopriv_pmsafe_edit_dealer_form', $plugin_admin, 'pmsafe_edit_dealer_form_function' );

@@ -264,11 +264,11 @@ $dealer_name = get_user_meta( $dealer_id, 'dealer_name', true);
                                     $html .= '</th>';
                                     
                                     $html .= '<th>';
-                                    $html .= 'Edit Detail';
+                                    $html .= 'Edit';
                                     $html .= '</th>';
                                     
                                     $html .= '<th>';
-                                    $html .= 'Delete Detail';
+                                    $html .= 'Delete';
                                     $html .= '</th>';
 
                                     
@@ -662,11 +662,11 @@ $html .= '<div id="perma-warranty-wrapper">';
                         $html .= '</th>';
 
                         $html .= '<th>';
-                        $html .= 'Edit Detail';
+                        $html .= 'Edit';
                         $html .= '</th>';
 
                         $html .= '<th>';
-                        $html .= 'Delete Detail';
+                        $html .= 'Delete';
                         $html .= '</th>';
 
 

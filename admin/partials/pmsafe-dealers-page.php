@@ -167,11 +167,45 @@ if($action == 'view'){
     	                echo '<td>'.$value->user_email.'</td>';
     	            echo '</tr>';
 
-    	        echo '</table>';  
+                echo '</table>';  
+               
     	       echo '<div class="blank-space"/></div>';
-    	    }
+            }
+            echo '<a href="#contact-person-modal" rel="modal:open" id="add_contact_person">Add New Contact Person</a>';
+            /*********************** Add Contact Person Modal ******************************************** */
+            echo '<div id="contact-person-modal" class="modal">';   
+            echo '<h3>Add Contact Person:'.$dealer_id.'<h3>';
+                    echo '<div class="nisl-wrap">';
+                        echo '<label><strong>First Name:</strong></label>';
+                        echo '<input type="text" id="pmsafe_dealer_contact_fname" name="pmsafe_dealer_contact_fname" value="" class="widefat" />';
+				    echo '</div>';
+
+				    echo '<div class="nisl-wrap">';
+                        echo '<label><strong>Last Name:</strong></label>';
+                        echo '<input type="text" id="pmsafe_dealer_contact_lname" name="pmsafe_dealer_contact_lname" value="" class="widefat" />';
+				    echo '</div>';
+
+				    echo '<div class="nisl-wrap">';
+                        echo '<label><strong>Phone Number:</strong></label>';
+                        echo '<input type="text" id="pmsafe_dealer_contact_phone" name="pmsafe_dealer_contact_phone" value="" class="widefat" />';
+				    echo '</div>';
+
+				    echo '<div class="nisl-wrap">';
+                        echo '<label><strong>Email:</strong></label>';
+                        echo '<input type="email" id="pmsafe_dealer_contact_email" name="pmsafe_dealer_contact_email" value="" class="widefat" />';
+					echo '</div>';
+					
+					echo '<div class="nisl-wrap">';
+						echo '<label><strong>Password:</strong></label>';
+						echo '<input type="text" rel="gp" name="pmsafe_dealer_contact_password" id="pmsafe_dealer_contact_password" value="" class="widefat" style="width:35%"/>';
+						echo '<input type="button" value="Generate Password" class="generate_dealer_contact_password" />';
+                    echo '</div>';
+                    echo '<input type="button" value="Add" id="add_new_contact_person" />';
+			echo '</div>';
+			
+            
        }else{
-        echo '<p>No contact persons are added.</p>';
+            echo '<p>No contact persons are added.</p>';
        }
        echo '</div>';
        echo '<div class="right-wrapper">';
@@ -423,7 +457,7 @@ if($action == 'view'){
                             echo '</div>';
 
                             echo '<div class="nisl-wrap">';
-                                echo '<label><strong>Password</strong></label>';
+                                echo '<label><strong>Password:</strong></label>';
                                 echo '<input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat" style="width:35%"/>';
                                 echo '<input type="button" value="Change Password" class="generate_dealer_contact_password" />';
                               
