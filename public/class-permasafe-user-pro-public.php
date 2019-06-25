@@ -310,8 +310,8 @@ class Permasafe_User_Pro_Public {
 
         wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/permasafe-user-pro-public.css', array(), time(), 'all' );
         wp_enqueue_style( 'pmsafe_ui_css', 'https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css', array(), time(), 'all' );
-        wp_enqueue_style( 'pmsafe_dt_css', 'https://cdn.datatables.net/1.10.19/css/dataTables.jqueryui.min.css', array(), time(), 'all' );
-        wp_enqueue_style( 'pmsafe_dt_fixedHeader', 'https://cdn.datatables.net/fixedheader/3.1.5/css/fixedHeader.dataTables.min.css', array(), time(), 'all' );
+        wp_enqueue_style( 'pmsafe_dt_css', plugin_dir_url( __FILE__ ) . 'css/dataTables.jqueryui.min.css', array(), time(), 'all' );
+        wp_enqueue_style( 'pmsafe_dt_fixedHeader', plugin_dir_url( __FILE__ ) . 'css/fixedHeader.dataTables.min.css', array(), time(), 'all' );
         // wp_enqueue_style( 'tbl_pagination_css', plugin_dir_url( __FILE__ ) . 'css/smpSortableTable.css', array(), time(), 'all' );
         
 
@@ -340,18 +340,17 @@ class Permasafe_User_Pro_Public {
         wp_enqueue_script( 'tbl_pagination_js', plugin_dir_url( __FILE__ ) . 'js/jquery-paginate.js', array( 'jquery' ), time(), false );
         wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/permasafe-user-pro-public.js', array( 'jquery' ), time(), false );
         // wp_enqueue_script( 'csv_file_js', plugin_dir_url( __FILE__ ) . 'js/table2csv.js', array( 'jquery' ), time(), false );
-        wp_enqueue_script( 'jquery_ui_js', 'https://code.jquery.com/ui/1.12.1/jquery-ui.js', array( 'jquery' ), time(), false );
-        wp_enqueue_script( 'dt_table_js', 'https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js', array( 'jquery' ), time(), false );
-        wp_enqueue_script( 'dt_table_ui_js', 'https://cdn.datatables.net/1.10.19/js/dataTables.jqueryui.min.js', array( 'jquery' ), time(), false );
-        wp_enqueue_script( 'dt_table_ui_btn', 'https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js', array( 'jquery' ), time(), false );
-        wp_enqueue_script( 'dt_table_ui_flash', 'https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js', array( 'jquery' ), time(), false );
-        wp_enqueue_script( 'dt_table_ui_jszip', 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js', array( 'jquery' ), time(), false );
-        wp_enqueue_script( 'dt_table_ui_btnhtml', 'https://cdn.datatables.net/buttons/1.5.4/js/buttons.html5.min.js', array( 'jquery' ), time(), false );
-        wp_enqueue_script( 'dt_table_ui_btnpdf', 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js', array( 'jquery' ), time(), false );
-        wp_enqueue_script( 'dt_table_ui_vfs_fonts', 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js', array( 'jquery' ), time(), false );
-        wp_enqueue_script( 'dt_table_ui_btnprint', 'https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js', array( 'jquery' ), time(), false );
-        wp_enqueue_script( 'dt_table_fixedHeader', 'https://cdn.datatables.net/fixedheader/3.1.5/js/dataTables.fixedHeader.min.js', array( 'jquery' ), time(), false );
-        // wp_enqueue_script( 'sort_js', plugin_dir_url( __FILE__ ) . 'js/jsRapTable.js', array( 'jquery' ), time(), false );
+        wp_enqueue_script( 'jquery_ui_js', plugin_dir_url( __FILE__ ) . 'js/jquery-ui.js', array( 'jquery' ), time(), false );
+        wp_enqueue_script( 'dt_table_js', plugin_dir_url( __FILE__ ) . 'js/jquery.dataTables.min.js', array( 'jquery' ), time(), false );
+        wp_enqueue_script( 'dt_table_ui_js', plugin_dir_url( __FILE__ ) . 'js/dataTables.jqueryui.min.js', array( 'jquery' ), time(), false );
+        wp_enqueue_script( 'dt_table_ui_btn', plugin_dir_url( __FILE__ ) . 'js/dataTables.buttons.min.js', array( 'jquery' ), time(), false );
+        wp_enqueue_script( 'dt_table_ui_flash', plugin_dir_url( __FILE__ ) . 'js/buttons.flash.min.js', array( 'jquery' ), time(), false );
+        wp_enqueue_script( 'dt_table_ui_jszip', plugin_dir_url( __FILE__ ) . 'js/jszip.min.js', array( 'jquery' ), time(), false );
+        wp_enqueue_script( 'dt_table_ui_btnhtml', plugin_dir_url( __FILE__ ) . 'js/buttons.html5.min.js', array( 'jquery' ), time(), false );
+        wp_enqueue_script( 'dt_table_ui_btnpdf', plugin_dir_url( __FILE__ ) . 'js/pdfmake.min.js', array( 'jquery' ), time(), false );
+        wp_enqueue_script( 'dt_table_ui_vfs_fonts', plugin_dir_url( __FILE__ ) . 'js/vfs_fonts.js', array( 'jquery' ), time(), false );
+        wp_enqueue_script( 'dt_table_ui_btnprint', plugin_dir_url( __FILE__ ) . 'js/buttons.print.min.js', array( 'jquery' ), time(), false );
+		wp_enqueue_script( 'dt_table_fixedHeader', plugin_dir_url( __FILE__ ) . 'js/dataTables.fixedHeader.min.js', array( 'jquery' ), time(), false );
        
          wp_localize_script( $this->plugin_name, 'pmAjax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
 
@@ -453,6 +452,8 @@ class Permasafe_User_Pro_Public {
             // echo $month;
             $dealer_id = get_current_user_id();
             $role = (array) $current_user->caps;
+            $success = $_GET['success'];
+            $code = $_GET['code'];
             if($role['contributor'] == 1 || $role['dealer-user'] == 1) 
             {
                 if($role['dealer-user'] == 1){
@@ -496,8 +497,41 @@ class Permasafe_User_Pro_Public {
                     // $code = get_post_meta( $post_id, '_pmsafe_invitation_code', true );
                     // $invitation_id = get_post_meta($post_id, '_pmsafe_invitation_ids', true);
                     // $invitation_id = explode(',',$invitation_id);
-                
+               
                     $html = '';
+                    if($success == "true"){
+                        $code_id = get_post_id_by_meta_key_and_value('_pmsafe_invitation_code',$code);
+                        $pdf_link = get_post_meta( $code_id, 'pmsafe_pdf_link', true );
+                        
+                        ?>
+                        <div class='message'>
+                            <div class='check'>
+                                &#10004;
+                            </div>
+                            <p>
+                                Success
+                            </p>
+                            <p>
+                                <?php echo 'Registration of Code <span style="color:#71c341">'.$code.'</span> was Successful.'?>
+                            </p>
+                            <p>
+                                <a href="<?php echo $pdf_link;?>" target="_blank" id="view-pdf">View PDF</a>
+                                <iframe src="<?php echo $pdf_link;?>" id="myFrame" frameborder="0" style="border:0;display:none;" width="300" height="300"></iframe>
+                                <input type="button" id="print-pdf" onclick="print()" value="Print PDF"  />
+                                <script>
+                                    function print() {
+                                        var objFra = document.getElementById('myFrame');
+                                        objFra.contentWindow.focus();
+                                        objFra.contentWindow.print();
+                                    }
+                            </script>
+                            </p>
+                            <a href="<?php echo get_site_url();?>/dealer-account/" id='ok'>
+                                OK
+                            </button>
+                        </div>
+                    <?php
+                    }
                     $html .= '<div id="perma-warranty-wrapper">';
                         // $html .= '<input id="myInput" type="text" placeholder="Search..">';
                     $html .= '<div class="filter-wrapper">';
@@ -1367,7 +1401,7 @@ class Permasafe_User_Pro_Public {
             			// Last Name
                         $html .= '<div class="reports-wrap-inner">';
                 			$html .= '<div class="label-input">';	    	
-        	        			$html .= '<label>Customer last Name : </label>';
+        	        			$html .= '<label>Customer Last Name : </label>';
                 			$html .= '</div>';	    	
                 			$html .= '<div class="input-div">';	    	
         	        			$html .= '<input type="text" name="last_name" id="last_name"/>';
@@ -1434,31 +1468,13 @@ class Permasafe_User_Pro_Public {
                 			$html .= '</div>';     
                         $html .= '</div>';     
 
-            			// Plan
-               //          $html .= '<div class="reports-wrap-inner">';
-               //  			$html .= '<div class="label-input">';	    	
-        	      //   			$html .= '<label>Plan ID : </label>';
-               //  			$html .= '</div>';	    	
-               //  			$html .= '<div class="input-div">';	    	
-        	      //   			$html .= '<input type="text" name="plan_id" id="plan_id"/>';
-               //  			$html .= '</div>';  
-               //          $html .= '</div>';  
-
-            			// // Dealer Name
-               //          $html .= '<div class="reports-wrap-inner">';
-               //  			$html .= '<div class="label-input">';	    	
-        	      //   			$html .= '<label>Dealer Name : </label>';
-               //  			$html .= '</div>';	    	
-               //  			$html .= '<div class="input-div">';	    	
-        	      //   			$html .= '<input type="text" name="dealer_name" id="dealer_name"/>';
-               //  			$html .= '</div>';  
-               //          $html .= '</div>';  
+            		
 
 
             			// Vehicle year
                         $html .= '<div class="reports-wrap-inner">';
                 			$html .= '<div class="label-input">';	    	
-        	        			$html .= '<label>Vehicle year : </label>';
+        	        			$html .= '<label>Vehicle Year : </label>';
                 			$html .= '</div>';	    	
                 			$html .= '<div class="input-div">';	    	
         	        			$html .= '<input type="text" name="vehicle_year" id="vehicle_year"/>';
@@ -2479,6 +2495,41 @@ class Permasafe_User_Pro_Public {
 
                 }
                 else{
+                    $success = $_GET['success'];
+                    $code = $_GET['code'];
+                    if($success == "true"){
+                        $code_id = get_post_id_by_meta_key_and_value('_pmsafe_invitation_code',$code);
+                        $pdf_link = get_post_meta( $code_id, 'pmsafe_pdf_link', true );
+                        
+                        ?>
+                        <div class='message'>
+                            <div class='check'>
+                                &#10004;
+                            </div>
+                            <p>
+                                Success
+                            </p>
+                            <p>
+                                <?php echo 'Registration of Code <span style="color:#71c341">'.$code.'</span> was Successful.'?>
+                            </p>
+                            <p>
+                                <a href="<?php echo $pdf_link;?>" target="_blank" id="view-pdf">View PDF</a>
+                                <iframe src="<?php echo $pdf_link;?>" id="myFrame" frameborder="0" style="border:0;display:none;" width="300" height="300"></iframe>
+                                <input type="button" id="print-pdf" onclick="print()" value="Print PDF"  />
+                                <script>
+                                    function print() {
+                                        var objFra = document.getElementById('myFrame');
+                                        objFra.contentWindow.focus();
+                                        objFra.contentWindow.print();
+                                    }
+                            </script>
+                            </p>
+                            <a href="<?php echo get_site_url();?>/distributor-account/" id='ok'>
+                                OK
+                            </button>
+                        </div>
+                    <?php
+                    }                    
                 $distributor_username = $current_user->user_login;
                 $user = get_user_by('login',$distributor_username);
                 
@@ -4062,7 +4113,7 @@ class Permasafe_User_Pro_Public {
                                 wp_set_auth_cookie($user->ID, true);
                                 $url = get_site_url().'/perma-warranty/';
                             } 
-                            $response = array('status' => true,'redirect'=>$url);
+                            $response = array('status' => true,'redirect'=>$url,'code'=>$member_code);
                             echo json_encode($response);
                         }
                         elseif( $user_data['user_type'] == "Exist" )
@@ -4187,7 +4238,7 @@ class Permasafe_User_Pro_Public {
                                         wp_set_auth_cookie($user->ID, true);
                                         $url = get_site_url().'/perma-warranty/';
                                     }
-                                    $response = array('status' => true,'redirect'=>$url);
+                                    $response = array('status' => true,'redirect'=>$url,'code'=>$member_code);
                                     echo json_encode($response);    
 
                                 }//if userdata

@@ -75,10 +75,10 @@ class Permasafe_User_Pro_Admin {
 
 		wp_enqueue_style( 'pmsafe-datepicker-css', '//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css', array(), $this->version, 'all' );
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/permasafe-user-pro-admin.css', array(), time(), 'all' );
-		wp_enqueue_style( 'jquery-modal', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css', array(), time(), 'all' );
+		wp_enqueue_style( 'jquery-modal', plugin_dir_url( __FILE__ ) . 'css/jquery.modal.min.css', array(), time(), 'all' );
 		wp_enqueue_style( 'font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css', array(), time(), 'all' );
-		  wp_enqueue_style( 'pmsafe_dt_css', 'https://cdn.datatables.net/1.10.19/css/dataTables.jqueryui.min.css', array(), time(), 'all' );
-		wp_enqueue_style( 'pmsafe_dt_fixedHeader', 'https://cdn.datatables.net/fixedheader/3.1.5/css/fixedHeader.dataTables.min.css', array(), time(), 'all' );
+		wp_enqueue_style( 'pmsafe_dt_css', plugin_dir_url( __FILE__ ) . 'css/dataTables.jqueryui.min.css', array(), time(), 'all' );
+		wp_enqueue_style( 'pmsafe_dt_fixedHeader', plugin_dir_url( __FILE__ ) . 'css/fixedHeader.dataTables.min.css', array(), time(), 'all' );
 		wp_enqueue_style( 'select2-css', plugin_dir_url( __FILE__ ) . 'css/select2.min.css', array(), time(), 'all' );
 	}
 
@@ -101,19 +101,19 @@ class Permasafe_User_Pro_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( 'pmsafe-datepicker', 'https://code.jquery.com/ui/1.12.1/jquery-ui.js', array( 'jquery' ), $this->version, false );
-		wp_enqueue_script( 'jspdf', 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js', array( 'jquery' ), $this->version, false );
+		wp_enqueue_script( 'pmsafe-datepicker',  plugin_dir_url( __FILE__ ) . 'js/jquery-ui.js', array( 'jquery' ), $this->version, false );
+		// wp_enqueue_script( 'jspdf', 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.debug.js', array( 'jquery' ), $this->version, false );
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/permasafe-user-pro-admin.js', array( 'jquery' ), '1.0.6', false );
-		wp_enqueue_script( 'dt_table_js', 'https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js', array( 'jquery' ), time(), false );
-        wp_enqueue_script( 'dt_table_ui_js', 'https://cdn.datatables.net/1.10.19/js/dataTables.jqueryui.min.js', array( 'jquery' ), time(), false );
-        wp_enqueue_script( 'dt_table_ui_btn', 'https://cdn.datatables.net/buttons/1.5.4/js/dataTables.buttons.min.js', array( 'jquery' ), time(), false );
-        wp_enqueue_script( 'dt_table_ui_flash', 'https://cdn.datatables.net/buttons/1.5.6/js/buttons.flash.min.js', array( 'jquery' ), time(), false );
-        wp_enqueue_script( 'dt_table_ui_jszip', 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js', array( 'jquery' ), time(), false );
-        wp_enqueue_script( 'dt_table_ui_btnhtml', 'https://cdn.datatables.net/buttons/1.5.4/js/buttons.html5.min.js', array( 'jquery' ), time(), false );
-        wp_enqueue_script( 'dt_table_ui_btnpdf', 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js', array( 'jquery' ), time(), false );
-        wp_enqueue_script( 'dt_table_ui_vfs_fonts', 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js', array( 'jquery' ), time(), false );
-        wp_enqueue_script( 'dt_table_ui_btnprint', 'https://cdn.datatables.net/buttons/1.5.6/js/buttons.print.min.js', array( 'jquery' ), time(), false );
-		wp_enqueue_script( 'dt_table_fixedHeader', 'https://cdn.datatables.net/fixedheader/3.1.5/js/dataTables.fixedHeader.min.js', array( 'jquery' ), time(), false );
+		wp_enqueue_script( 'dt_table_js', plugin_dir_url( __FILE__ ) . 'js/jquery.dataTables.min.js', array( 'jquery' ), time(), false );
+        wp_enqueue_script( 'dt_table_ui_js', plugin_dir_url( __FILE__ ) . 'js/dataTables.jqueryui.min.js', array( 'jquery' ), time(), false );
+        wp_enqueue_script( 'dt_table_ui_btn', plugin_dir_url( __FILE__ ) . 'js/dataTables.buttons.min.js', array( 'jquery' ), time(), false );
+        wp_enqueue_script( 'dt_table_ui_flash', plugin_dir_url( __FILE__ ) . 'js/buttons.flash.min.js', array( 'jquery' ), time(), false );
+        wp_enqueue_script( 'dt_table_ui_jszip', plugin_dir_url( __FILE__ ) . 'js/jszip.min.js', array( 'jquery' ), time(), false );
+        wp_enqueue_script( 'dt_table_ui_btnhtml', plugin_dir_url( __FILE__ ) . 'js/buttons.html5.min.js', array( 'jquery' ), time(), false );
+        wp_enqueue_script( 'dt_table_ui_btnpdf', plugin_dir_url( __FILE__ ) . 'js/pdfmake.min.js', array( 'jquery' ), time(), false );
+        wp_enqueue_script( 'dt_table_ui_vfs_fonts', plugin_dir_url( __FILE__ ) . 'js/vfs_fonts.js', array( 'jquery' ), time(), false );
+        wp_enqueue_script( 'dt_table_ui_btnprint', plugin_dir_url( __FILE__ ) . 'js/buttons.print.min.js', array( 'jquery' ), time(), false );
+		wp_enqueue_script( 'dt_table_fixedHeader', plugin_dir_url( __FILE__ ) . 'js/dataTables.fixedHeader.min.js', array( 'jquery' ), time(), false );
 		
 
 	}
@@ -122,7 +122,7 @@ class Permasafe_User_Pro_Admin {
 		wp_enqueue_script('dealers_distributor_js', plugin_dir_url( __FILE__ ) .'js/permasafe-admin-user-pro-admin.js', array( 'jquery' ), time(), false);
 		wp_enqueue_script('select2', plugin_dir_url( __FILE__ ) .'js/select2.js', array( 'jquery' ), time(), false);
 		wp_enqueue_script( 'tbl_pagination_admin_js', plugin_dir_url( __FILE__ ) . 'js/jquery-paginate.js', array( 'jquery' ), time(), false );
-		wp_enqueue_script( 'jquery-modal', 'https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js', array( 'jquery' ), time(), false );
+		wp_enqueue_script( 'jquery-modal',  plugin_dir_url( __FILE__ ) . 'js/jquery.modal.min.js', array( 'jquery' ), time(), false );
 		wp_localize_script( $this->plugin_name, 'pmAjax', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ) ) );
 	}
         

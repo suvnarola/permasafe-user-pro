@@ -1,7 +1,12 @@
 // A $( document ).ready() block.
 jQuery( document ).ready(function() {    
     // console.log( "Ajax "+pmAjax.ajaxurl );
-    
+    jQuery('.message').toggleClass('comein');
+    jQuery('.check').toggleClass('scaledown');
+    jQuery(document).on("click","#ok", function(e) {
+        jQuery('.message').css('display','none');
+        location.reload();
+    });
     
     var pop_val = jQuery('#reset_pass_popup').val();
     if(pop_val == 1){
@@ -465,8 +470,8 @@ jQuery( document ).ready(function() {
                         if(obj.sales == true){
                             jQuery("#perma_register_form").html(obj.html);
                         }else{
-                            // window.location = obj.redirect + '?success=true';
-                            window.location.replace(obj.redirect);
+                            window.location = obj.redirect + '?success=true&code='+obj.code;
+                            
                         }
 //                        jQuery("#response").html(obj.redirect);
                     }else{
@@ -1959,6 +1964,7 @@ jQuery(document).ready(function() {
         });
         
     });
+
 
    
 });
