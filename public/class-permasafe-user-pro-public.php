@@ -512,7 +512,7 @@ class Permasafe_User_Pro_Public {
                             </p>
                             <a href="<?php echo get_site_url();?>/dealer-account/" id='ok'>
                                 OK
-                            </button>
+                                </a>
                         </div>
                     <?php
                     }
@@ -2537,7 +2537,7 @@ class Permasafe_User_Pro_Public {
                             </p>
                             <a href="<?php echo get_site_url();?>/distributor-account/" id='ok'>
                                 OK
-                            </button>
+                                </a>
                         </div>
                     <?php
                     }                    
