@@ -81,7 +81,8 @@ div#perma-warranty-wrapper .filter-wrapper .fancy-select-wrap + .fancy-select-wr
 .range-count span{    display: inline-block;width: 30px;height: 30px;background: #2a6dba;line-height: 30px;text-align: center;color: #fff;border-radius: 60px;font-size: 13px;margin-right: 30px;margin-left: 5px;}
 #search_tbl_filter{display: none;}
 .search-result-wrap {padding-top: 100px;}
-table#customertable.dataTable.nowrap th, table#customertable.dataTable.nowrap td {white-space: normal;}
+table#customertable.dataTable.nowrap th, table#customertable.dataTable.nowrap td {white-space: normal;
+    vertical-align: middle;}
 table#view_customer_table.dataTable.nowrap th, table#view_customer_table.dataTable.nowrap td {white-space: normal;}
 a.ui-state-default:hover {background-color: #007fff !important;color: #ffffff !important;}
 /*datatable-head-over*/
@@ -123,7 +124,7 @@ table#search_tbl  td a{
     transform: translate(-50%, -50%) scale(4);
     width: 120px;
     height: 110px;
-    background: #71c341;
+    background: #357aba;
     color: white;
     font-size: 3.8rem;
     padding-top: 10px;
@@ -137,7 +138,7 @@ table#search_tbl  td a{
   .message .scaledown {
     transform: translate(-50%, -50%) scale(1);
     opacity: 1;
-    
+    border: 2px solid #ffff;
   }
   .message p {
     font-size: 1.1rem;
@@ -152,7 +153,7 @@ table#search_tbl  td a{
     position: relative;
     color: white;
     border: 0;
-    background: #71c341;
+    background: #357aba;
     width: 100%;
     height: 50px;
     border-radius: 6px;
@@ -162,18 +163,27 @@ table#search_tbl  td a{
     padding: 10px 60px;
   }
   .message #ok:hover {
-    background: #8ecf68;
+    background: #357aba;
   }
   .message #ok:active {
-    background: #5a9f32;
+    background: #357aba;
   }
-  
   .comein {
-    
     opacity: 1;
     z-index: 999;
   }
-  
+  table#customertable tbody tr td{
+    position: relative;
+  }
+  table#customertable tbody tr td a.view-data {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    padding: 15px;
+    color:#333333;
+}
 
 @media(max-width:1200px){
   .distributor-account-wrap .vc_col-sm-9,

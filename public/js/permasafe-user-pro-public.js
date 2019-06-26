@@ -1318,28 +1318,13 @@ jQuery(document).ready(function() {
         view_code_table.columns().search('').draw();
     }); 
 
-    /*jQuery('#view_customer_table thead tr').clone(true).appendTo( '#view_customer_table thead' );
-    jQuery('#view_customer_table thead tr:eq(1) th').each( function (i) {
-        var title = jQuery(this).text();
-        jQuery(this).html( '<input type="text" title="Search '+ title +'"/>' );
- 
-        jQuery( 'input', this ).on( 'keyup change', function () {
-            if ( view_customer_table.column(i).search() !== this.value ) {
-                view_customer_table
-                    .column(i)
-                    .search( this.value )
-                    .draw();
-            }
-        } );
-    } );*/
-
-   
 
     var view_customer_table = jQuery('#view_customer_table').DataTable( {
         dom: 'Bfrtip',
         responsive: true,
         orderCellsTop: true,
         fixedHeader: true,
+        "order": [[ 0, "desc" ]],
         buttons: [
             {
                 extend: 'csv',
@@ -1395,25 +1380,13 @@ jQuery(document).ready(function() {
         view_customer_table.columns().search('').draw();
     }); 
 
- /*jQuery('#customertable thead tr').clone(true).appendTo( '#customertable thead' );
-    jQuery('#customertable thead tr:eq(1) th').each( function (i) {
-        var title = jQuery(this).text();
-        jQuery(this).html( '<input type="text" title="Search '+ title +'"/>' );
- 
-        jQuery( 'input', this ).on( 'keyup change', function () {
-            if ( customertable.column(i).search() !== this.value ) {
-                customertable
-                    .column(i)
-                    .search( this.value )
-                    .draw();
-            }
-        } );
-    } );*/
+
     
     var customertable = jQuery('#customertable').DataTable( {
         dom: 'Bfrtip',
         responsive: true,
         orderCellsTop: true,
+        "order": [[ 0, "desc" ]],
         fixedHeader: true,
         buttons: [
             {
@@ -1422,7 +1395,7 @@ jQuery(document).ready(function() {
                 //Name the CSV
                 filename: 'dealer_customer_list',
                exportOptions: {
-                        columns: [0, 1, 2, 4, 5, 6, 7,8, 9, 11 ]
+                columns: [0, 1, 2,3, 5, 6, 7,8, 9,10, 11, 12 ]
                 },
             },
             {
@@ -1432,7 +1405,7 @@ jQuery(document).ready(function() {
                 orientation : 'landscape',
                 pageSize : 'LEGAL',
                 exportOptions: {
-                     columns: [0, 1, 2, 4, 5, 6, 7,8, 9, 11 ]
+                    columns: [0, 1, 2,3, 5, 6, 7,8, 9,10, 11, 12 ]
                 },
             },
             {
@@ -1440,7 +1413,7 @@ jQuery(document).ready(function() {
                 text: 'EXCEL',
                 filename: 'dealer_customer_list',
                 exportOptions: {
-                     columns: [0, 1, 2, 4, 5, 6, 7,8, 9, 11 ]
+                    columns: [0, 1, 2,3, 5, 6, 7,8, 9,10, 11, 12 ]
                 },
             },
             {
@@ -1449,7 +1422,7 @@ jQuery(document).ready(function() {
                 filename: 'dealer_customer_list',
                 
                 exportOptions: {
-                     columns: [0, 1, 2, 4, 5, 6, 7,8, 9, 11 ]
+                    columns: [0, 1, 2,3, 5, 6, 7,8, 9,10, 11, 12 ]
                 },
                 customize: function (win) {
                     jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
@@ -1811,16 +1784,16 @@ jQuery(document).ready(function() {
         }
     });
 
-    jQuery(document).on("focus","#datepicker1", function(e) {
+    jQuery(document).on("focus","#datepicker1,#datepicker2,#membership_datepicker1, #membership_datepicker2", function(e) {
         jQuery(this).css({'border-color':'#cccccc'});
         jQuery(this).css({'color':'#555'});
         jQuery(this).siblings('.error').remove();
     });
-    jQuery(document).on("focus","#datepicker2", function(e) {
-        jQuery(this).css({'border-color':'#cccccc'});
-        jQuery(this).css({'color':'#555'});
-        jQuery(this).siblings('.error').remove();
+
+    jQuery(document).on("focus",".filter-package", function(e) {
+        jQuery(this).find('.error').remove();
     });
+    
 
     var mebership_info_table = jQuery('#mebership_info_table').DataTable( {
         dom: 'Bfrtip',
@@ -1834,7 +1807,7 @@ jQuery(document).ready(function() {
                 //Name the CSV
                 filename: 'mebership_info',
                exportOptions: {
-                columns: [0, 1, 2, 3 ]
+                columns: [0, 1, 2, 3, 4, 5 ]
                 },
             },
             {
@@ -1844,7 +1817,7 @@ jQuery(document).ready(function() {
                 orientation : 'landscape',
                 pageSize : 'LEGAL',
                 exportOptions: {
-                     columns: [0, 1, 2, 3 ]
+                    columns: [0, 1, 2, 3, 4, 5 ]
                 },
             },
             {
@@ -1852,7 +1825,7 @@ jQuery(document).ready(function() {
                 text: 'EXCEL',
                 filename: 'mebership_info',
                 exportOptions: {
-                    columns: [0, 1, 2, 3 ]
+                    columns: [0, 1, 2, 3, 4, 5 ]
                 },
             },
             {
@@ -1861,7 +1834,7 @@ jQuery(document).ready(function() {
                 filename: 'mebership_info',
                 
                 exportOptions: {
-                    columns: [0, 1, 2, 3 ]
+                    columns: [0, 1, 2, 3, 4, 5 ]
                 },
                 customize: function (win) {
                     jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
@@ -1878,25 +1851,61 @@ jQuery(document).ready(function() {
     jQuery( "#membership_datepicker2" ).datepicker({ dateFormat: 'yy-mm-dd' });
     
     jQuery(document).on("click","#membership_date_submit", function(e) {
+        jQuery('.error').remove();
+        var validflag = true;
 
         var datepicker1 = jQuery('#membership_datepicker1').val();
         var datepicker2 = jQuery('#membership_datepicker2').val();
         var view_membership = jQuery('#view_membership').val();
+        var policy     = jQuery('#policy').val();
+        var package     = jQuery('#benefit_packages').val();
+        
         if(view_membership != undefined){
             var data = {
                 action : 'membership_date_filter',
                 view_membership : view_membership,
                 datepicker1 : datepicker1,
-                datepicker2 : datepicker2
+                datepicker2 : datepicker2,
+                policy : policy,
+                package : package
             }
         }else{
             var data = {
                 action : 'membership_date_filter',
                 // membership_login_id : membership_login_id,
                 datepicker1 : datepicker1,
-                datepicker2 : datepicker2
+                datepicker2 : datepicker2,
+                policy : policy,
+                package : package
             }
         }
+        if(jQuery('#membership_datepicker1').val().trim()=="" ){
+            jQuery('#membership_datepicker1').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#membership_datepicker1' ).after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#membership_datepicker1').css({'color':'#333333'});
+        }
+
+        if(jQuery('#membership_datepicker2').val().trim()=="" ){
+            jQuery('#membership_datepicker2').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#membership_datepicker2' ).after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#membership_datepicker2').css({'color':'#333333'});
+        }
+        
+        if(policy != '' && package == ''){
+                jQuery('#benefit_packages').css({'border':'1px solid #ff0000','color':'#ff0000'});
+                jQuery( '#benefit_packages' ).after( "<span class='error'>This field is required.</span>" );
+                validflag = false;
+        }else{
+            jQuery('#benefit_packages').css({'color':'#333333'});
+        }
+        if(!validflag){
+            jQuery('.perma-admin-loader').hide();
+            return validflag;
+        }else{
         jQuery('.perma-loader').show();
         jQuery.ajax({
             type: 'POST',
@@ -1919,7 +1928,7 @@ jQuery(document).ready(function() {
                             //Name the CSV
                             filename: 'mebership_info',
                         exportOptions: {
-                                    columns: [0, 1, 2,3]
+                                    columns: [0, 1, 2,3,4, 5]
                             },
                         },
                         {
@@ -1929,7 +1938,7 @@ jQuery(document).ready(function() {
                             orientation : 'landscape',
                             pageSize : 'LEGAL',
                             exportOptions: {
-                                columns: [0, 1, 2,3]
+                                columns: [0, 1, 2,3,4, 5]
                             },
                         },
                         {
@@ -1937,7 +1946,7 @@ jQuery(document).ready(function() {
                             text: 'EXCEL',
                             filename: 'mebership_info',
                             exportOptions: {
-                                columns: [0, 1, 2,3]
+                                columns: [0, 1, 2,3,4, 5]
                             },
                         },
                         {
@@ -1946,7 +1955,7 @@ jQuery(document).ready(function() {
                             filename: 'mebership_info',
                             
                             exportOptions: {
-                                columns: [0, 1, 2,3]
+                                columns: [0, 1, 2,3,4, 5]
                             },
                             customize: function (win) {
                                 jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
@@ -1962,10 +1971,17 @@ jQuery(document).ready(function() {
             },
             
         });
-        
+        }
     });
 
-
+    jQuery(document).on("change","#policy", function(e) {
+        var select_val = jQuery(this).val();
+        if(select_val == ''){
+            jQuery('.filter-package').css('display','none');
+        }else{
+            jQuery('.filter-package').removeAttr('style')
+        }
+    });
    
 });
 
