@@ -172,10 +172,10 @@ table#search_tbl  td a{
     opacity: 1;
     z-index: 999;
   }
-  table#customertable tbody tr td{
+  table#view_customer_table tbody tr td, table#customertable tbody tr td{
     position: relative;
   }
-  table#customertable tbody tr td a.view-data {
+  table#view_customer_table tbody tr td a.view-data, table#customertable tbody tr td a.view-data {
     position: absolute;
     left: 0;
     top: 0;

@@ -50,7 +50,7 @@ jQuery( document ).ready(function() {
                 data: fd,
                 success: function(response) {
 //                    console.log(response);
-                    jQuery('.perma-loader').hide();
+                    
                     
                     var obj = jQuery.parseJSON(response);
                     // console.log('yes'+obj.option);
@@ -69,13 +69,57 @@ jQuery( document ).ready(function() {
                            
                         }else{
                             if(obj.html){
+                                jQuery('.perma-loader').hide();
                                 jQuery('#hidden_form').before(obj.html);
                             }else{
-                                jQuery('#hidden_form').html('<h3>Customer Contact Information</h3><div class="content-column one_half"><label>First Name<input type="text" name="first_name" id="first_name" /></label></div><div class="content-column one_half last_column"><label>Last Name<input type="text" name="last_name" id="last_name" /></label></div><div class="clear_column"></div><div class="content-column"><label>Address<input type="text" name="address1" id="address1" placeholder="Address line 1" /></label></div><div class="content-column"><input type="text" name="address2" id="address2" placeholder="Address line 2" /></div><div class="content-column one_third"><label>City<input type="text" name="city" id="city" /></label></div><div class="content-column one_third"><label>State<input type="text" name="state" id="state" /></label></div><div class="content-column one_third last_column"><label>Zip Code<input type="text" name="zip_code" id="zip_code" /></label></div><div class="clear_column"></div><div class="content-column one_half"><label>Phone Number <span style="font-size:small; color: #676767!important">(No "Dashes." Example: 3334445555)</span><input type="text" name="phone_number" id="phone_number" /></label></div><div class="content-column one_half last_column"><label>Email<input type="text" name="email" id="email" /><p style="font-size:x-small; color: #676767">Note: An accurate email address is required to deliver and receive benefit information.</p></label></div><div class="clear_column"></div><hr><h3>Vehicle Information</h3><div class="content-column one_third"><label>Vehicle Year<input type="text" name="vehicle_year" id="vehicle_year" /></label></div><div class="content-column one_third"><label>Vehicle Make<input type="text" name="vehicle_make" id="vehicle_make" /></label></div><div class="content-column one_third last_column"><label>Vehicle Model<input type="text" name="vehicle_model" id="vehicle_model" /></label></div><div class="content-column one_third"><label>VIN<input type="text" name="vin" id="vin" /></label></div><div class="content-column one_third"><label>Vehicle Mileage<input type="text" name="vehicle_mileage" id="vehicle_mileage" /></label></div><div class="content-column one_third last_column"><label>Vehicle Type<select name="vehicle_type" id="vehicle_type" style="background:#efefef;"><option value="">Select Type</option><option value="new">New</option><option value="preowned">Preowned</option></select></label></div><div class="clear_column"></div><hr><h3>Electronic Consent</h3><p>By electronically signing below, I hereby certify the above information to be true and correct to the best of my knowledge. I further certify that my electronic signature shall have the same legal effect as an originally signed document under applicable Federal and Florida electronic signature laws. </p><p>Any person who knowingly files a statement of claim containing any false or misleading information is subject to criminal and civil penalties. </p><input type="submit" id="pmsafe_submit" value="Send">');
+
+                                var package = obj.package;
+                                var code_id = obj.code_id
+
+                                var data ={
+                                    action : 'check_no_coverage_policy',
+                                    package : package,
+                                    code_id : code_id
+                                    
+                                }
+                                jQuery('.perma-loader').show();
+                                jQuery.ajax({
+                                    type: 'POST',
+                                    url: pmAjax.ajaxurl,
+                                    data: data,
+                                    dataType: 'html',
+                                    success: function (response) {
+                                        jQuery('.perma-loader').hide();
+                                        if(response != 1){
+                                            jQuery('#hidden_form').before(response);
+                                        }
+                                        if(response == 1){
+                                            var data ={
+                                                action : 'get_benefit_package_price',
+                                                package : package,
+                                                code_id : code_id
+                                            }
+                                            jQuery('.perma-loader').show();
+                                            jQuery.ajax({
+                                                type: 'POST',
+                                                url: pmAjax.ajaxurl,
+                                                data: data,
+                                                dataType: 'html',
+                                                success: function (response) {
+                                                    jQuery('.perma-loader').hide();
+                                                    jQuery('#hidden_form').before(response);
+                                                },
+                                            });
+                                        }
+                                        
+                                    },
+                                });
+
                             }
+                            
                         }
                     }else{
-                            
+                        jQuery('.perma-loader').hide();
                         jQuery('#pmsafe-response').html(obj.message);
                     }           
                 }
@@ -1324,14 +1368,14 @@ jQuery(document).ready(function() {
         responsive: true,
         orderCellsTop: true,
         fixedHeader: true,
-        "order": [[ 0, "desc" ]],
+        "order": [[ 10, "desc" ]],
         buttons: [
             {
                 extend: 'csv',
                 //Name the CSV
                 filename: 'dealer_customer_list',
                exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 8, 9, 11 ]
+                columns: [0, 1, 2,3, 5, 6, 7,8, 9,10, 11, 12 ]
                 },
             },
             {
@@ -1341,7 +1385,7 @@ jQuery(document).ready(function() {
                 pageSize : 'LEGAL',
                 filename: 'dealer_customer_list',
                 exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 8, 9, 11 ]
+                    columns: [0, 1, 2,3, 5, 6, 7,8, 9,10, 11, 12 ]
                 },
             },
             {
@@ -1349,7 +1393,7 @@ jQuery(document).ready(function() {
                 text: 'EXCEL',
                 filename: 'dealer_customer_list',
                  exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 8, 9, 11 ]
+                    columns: [0, 1, 2,3, 5, 6, 7,8, 9,10, 11, 12 ]
                 },
             },
             {
@@ -1359,7 +1403,7 @@ jQuery(document).ready(function() {
                 orientation : 'landscape',
                 pageSize : 'LEGAL',
                  exportOptions: {
-                        columns: [0, 1, 2, 3, 4, 5, 6, 8, 9, 11 ]
+                    columns: [0, 1, 2,3, 5, 6, 7,8, 9,10, 11, 12 ]
                 },
                 customize: function (win) {
                     jQuery(win.document.body).find('table').addClass('display').css('font-size', '5px');
@@ -1386,7 +1430,7 @@ jQuery(document).ready(function() {
         dom: 'Bfrtip',
         responsive: true,
         orderCellsTop: true,
-        "order": [[ 0, "desc" ]],
+        "order": [[ 10, "desc" ]],
         fixedHeader: true,
         buttons: [
             {
