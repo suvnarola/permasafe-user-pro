@@ -518,7 +518,12 @@ jQuery( document ).ready(function() {
                         if(obj.sales == true){
                             jQuery("#perma_register_form").html(obj.html);
                         }else{
-                            window.location = obj.redirect + '?success=true&code='+obj.code;
+                            if (obj.redirect.indexOf('/perma-warranty/') > -1) {
+                                window.location = obj.redirect;    
+                            }
+                            else{
+                                window.location = obj.redirect + '?success=true&code='+obj.code;
+                            }
                             
                         }
 //                        jQuery("#response").html(obj.redirect);
