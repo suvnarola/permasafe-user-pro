@@ -61,6 +61,7 @@ jQuery( document ).ready(function() {
                         jQuery('#pmsafe_next').remove();
                         jQuery('#member_number').val(obj.code);
                         if(obj.is_upgradable == 1){
+                            jQuery('.perma-loader').hide();
                            jQuery('#dialog').removeAttr('style');
                             
                             // jQuery('#upgradable_package_div').removeAttr('style');
