@@ -209,11 +209,11 @@ if($action == 'view'){
        }
        echo '</div>';
        echo '<div class="right-wrapper">';
-            echo '<h3>Benefits Pacakage Pricing:</h3>'; 
+            echo '<h3>Benefits Package Pricing:</h3>'; 
             $price_arr = get_user_meta($dealer_id,'pricing_pacakge',true);
             echo '<table class="view-dealer-price-tbl" id="">';
                 echo '<thead>';
-                    echo '<th>Benifits Package</th>';
+                    echo '<th>Benefits Package</th>';
                     echo '<th>Price
                     <p>Dealer Cost</p>
                     </th>';
