@@ -65,11 +65,11 @@ if($action == 'view'){
                 'value'   => $user->user_login,
                 'compare' => '=',
             ),
-           
+
         ),
     );
     $posts = get_posts($args);
-    // pr($posts);    
+    // pr($posts);
 	echo '<div class="top-head">';
     echo '<h1>View Dealer Information</h1>';
     echo '<br/>';
@@ -81,10 +81,10 @@ if($action == 'view'){
         $url = admin_url('edit.php?s&post_status=all&post_type=pmsafe_bulk_invi&dealer_list='.$user->user_login.'&export=1');
         echo '<a href="'.$url.'">View Active and Used Batch Member Codes</a>';
     }
-    echo '</div>';   
-	echo '<br/>';    
+    echo '</div>';
+	echo '<br/>';
 
-	
+
 
 	    echo '<table class="view-dealer-tbl">';
 	        echo '<tr>';
@@ -131,27 +131,27 @@ if($action == 'view'){
 	            echo '<td><strong>Distributor Name</strong></td>';
 	            echo '<td>'.$actions['view'].'</td>';
 	        echo '</tr>';
-	    echo '</table>'; 
-    
+	    echo '</table>';
+
     echo '<div class="lr-wrapper">';
         echo '<div class="left-wrapper">';
-        echo '<h3>Contact Information:</h3>';   
+        echo '<h3>Contact Information:</h3>';
         if($contact_info){
 
     	    // echo '<table class="view-distributor-tbl" id="">';
-    	    
+
     	    foreach ($contact_info as $key => $value) {
                 $user_id = $value->user_id;
                 $fname = get_user_meta($user_id,'contact_fname',true);
                 $lname = get_user_meta($user_id,'contact_lname',true);
                 $phone = get_user_meta($user_id,'contact_phone',true);
-        
+
     	        echo '<table class="view-dealer-contacts-tbl" id="">';
     	            $number = $key + 1;
     	            echo '<tr>';
     	                echo '<td colspan="2" style="font-size:15px"><b>Person '.$number.'</b><i class="fa fa-trash" id="pmsafe_dealers_contact_delete" data-id="'.$user_id.'" title="click here to delete this contact" style="color: #fff;cursor:pointer;float:right;background: #0065a7;padding: 8px;border-radius: 50%;"></td>';
     	            echo '</tr>';
-    	            
+
     	            echo '<tr>';
     	                echo '<td>Name</td>';
     	                echo '<td>'.$fname.' '.$lname.'</td>';
@@ -161,32 +161,67 @@ if($action == 'view'){
     	                echo '<td>Phone Number</td>';
     	                echo '<td>'.$phone.'</td>';
     	            echo '</tr>';
-    	            
+
     	            echo '<tr>';
     	                echo '<td>Email</td>';
     	                echo '<td>'.$value->user_email.'</td>';
     	            echo '</tr>';
 
-    	        echo '</table>';  
+                echo '</table>';
+
     	       echo '<div class="blank-space"/></div>';
-    	    }
+            }
+            echo '<a href="#contact-person-modal" rel="modal:open" id="add_contact_person">Add New Contact Person</a>';
+            /*********************** Add Contact Person Modal ******************************************** */
+            echo '<div id="contact-person-modal" class="modal">';
+            echo '<h3>Add Contact Person:'.$dealer_id.'<h3>';
+                    echo '<div class="nisl-wrap">';
+                        echo '<label><strong>First Name:</strong></label>';
+                        echo '<input type="text" id="pmsafe_dealer_contact_fname" name="pmsafe_dealer_contact_fname" value="" class="widefat" />';
+				    echo '</div>';
+
+				    echo '<div class="nisl-wrap">';
+                        echo '<label><strong>Last Name:</strong></label>';
+                        echo '<input type="text" id="pmsafe_dealer_contact_lname" name="pmsafe_dealer_contact_lname" value="" class="widefat" />';
+				    echo '</div>';
+
+				    echo '<div class="nisl-wrap">';
+                        echo '<label><strong>Phone Number:</strong></label>';
+                        echo '<input type="text" id="pmsafe_dealer_contact_phone" name="pmsafe_dealer_contact_phone" value="" class="widefat" />';
+				    echo '</div>';
+
+				    echo '<div class="nisl-wrap">';
+                        echo '<label><strong>Email:</strong></label>';
+                        echo '<input type="email" id="pmsafe_dealer_contact_email" name="pmsafe_dealer_contact_email" value="" class="widefat" />';
+					echo '</div>';
+
+					echo '<div class="nisl-wrap">';
+						echo '<label><strong>Password:</strong></label>';
+						echo '<input type="text" rel="gp" name="pmsafe_dealer_contact_password" id="pmsafe_dealer_contact_password" value="" class="widefat" style="width:35%"/>';
+						echo '<input type="button" value="Generate Password" class="generate_dealer_contact_password" />';
+                    echo '</div>';
+                    echo '<input type="button" value="Add" id="add_new_contact_person" />';
+			echo '</div>';
+
+
        }else{
-        echo '<p>No contact persons are added.</p>';
+            echo '<p>No contact persons are added.</p>';
        }
        echo '</div>';
        echo '<div class="right-wrapper">';
-            echo '<h3>Benefits Pacakage Pricing:</h3>'; 
+            echo '<h3>Benefits Package Pricing:</h3>'; 
             $price_arr = get_user_meta($dealer_id,'pricing_pacakge',true);
             echo '<table class="view-dealer-price-tbl" id="">';
                 echo '<thead>';
-                    echo '<th>Benifits Package</th>';
+                    echo '<th>Benefits Package</th>';
                     echo '<th>Price
-                    <p>Dealer cost</p>
+                    <p>Dealer Cost</p>
                     </th>';
+                    echo '<th> </br> <p>Distributor Cost </p></th>';
                     echo '<th> </br> <p>Selling Price </p></th>';
                     echo '<th></th>';
                 echo '</thead>';
-                
+
                 echo '<tbody>';
                 ksort($price_arr);
                 if($price_arr){
@@ -209,9 +244,9 @@ if($action == 'view'){
                         echo '<td colspan="4">No package is added.</td>';
     	            echo '</tr>';
                 }
-    	        echo '</tbody>';  
-                echo '</table>';  
-                
+    	        echo '</tbody>';
+                echo '</table>';
+
                 echo '<a href="#price-modal" rel="modal:open" id="add_price">Add New Package Pricing</a>';
        echo '</div>';
     echo '</div>';
@@ -222,7 +257,7 @@ if($action == 'view'){
         echo '<input type="hidden" value="'.$dealer_id.'" id="pricing_dealer_id">';
         echo '<hr/>';
         $benefit_prefix = pmsafe_get_meta_values( '_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish' );
-        
+
         echo '<table>';
             echo '<tr>';
                 echo '<td>';
@@ -240,12 +275,21 @@ if($action == 'view'){
                 echo '</td>';
             echo '</tr>';
 
-            echo '<tr>';
+        echo '<tr>';
                 echo '<td>';
                     echo '<label><strong>Dealer Cost($):</strong></label>';
                 echo '</td>';
                 echo '<td>';
                     echo '<input type="number" min="1" id="dealer_cost">';
+                echo '</td>';
+        echo '</tr>';
+
+        echo '<tr>';
+                echo '<td>';
+                    echo '<label><strong>Distributor Cost($):</strong></label>';
+                echo '</td>';
+                echo '<td>';
+                    echo '<input type="number" min="1" id="distributor_cost">';
                 echo '</td>';
         echo '</tr>';
 
@@ -267,8 +311,8 @@ if($action == 'view'){
         echo '<h3>Edit Package Pricing:<h3>';
         echo '<input type="hidden" value="'.$dealer_id.'" id="pricing_dealer_id">';
         echo '<hr/>';
-      
-        
+
+
         echo '<table>';
             echo '<tr>';
                 echo '<td>';
@@ -280,12 +324,21 @@ if($action == 'view'){
                 echo '</td>';
             echo '</tr>';
 
-            echo '<tr>';
+        echo '<tr>';
                 echo '<td>';
                     echo '<label><strong>Dealer Cost($):</strong></label>';
                 echo '</td>';
                 echo '<td>';
                     echo '<input type="number" min="1" id="edit_dealer_cost">';
+                echo '</td>';
+        echo '</tr>';
+
+        echo '<tr>';
+                echo '<td>';
+                    echo '<label><strong>Distributor Cost($):</strong></label>';
+                echo '</td>';
+                echo '<td>';
+                    echo '<input type="number" min="1" id="edit_distributor_cost">';
                 echo '</td>';
         echo '</tr>';
 
@@ -302,11 +355,11 @@ if($action == 'view'){
     echo '<hr>';
     echo '<input type="button" value="Update" id="update_package_price">';
     echo '</div>';
-  
+
 
 }else if($action == 'edit'){
 	$distributors = get_users( 'role=author&orderby=ID&order=DESC' );
-	echo '<h1>Edit dealer Information</h1>'; 
+	echo '<h1>Edit dealer Information</h1>';
     echo '<div class="wrap dealer_add_form_div">';
         echo '<form name="perma_edit_dealer" id="perma_edit_dealer_form" method="POST" class="validate">';
 
@@ -321,29 +374,29 @@ if($action == 'view'){
                 echo '<label><strong>Email</strong></label>';
                 echo '<input type="email" id="pmsafe_dealer_email" name="pmsafe_dealer_email" value="'.$user->user_email.'" class="widefat" />';
             echo '</div>';
-                
+
             echo '<div id="address_div">';
                 echo '<label><strong>Store Address</strong></label>';
                 echo '<textarea id="pmsafe_dealer_store_address" name="pmsafe_dealer_store_address" class="widefat">'.$address.'</textarea>';
-            echo '</div>'; 
+            echo '</div>';
 
             echo '<div id="phone_div">';
                 echo '<label><strong>Phone Number</strong></label>';
                 echo '<input type="text" id="pmsafe_dealer_phone_number" name="pmsafe_dealer_phone_number" value="'.$phone.'" class="widefat" />';
-            echo '</div>';    
+            echo '</div>';
 
             echo '<div id="fax_div">';
                 echo '<label><strong>Fax Number</strong></label>';
                 echo '<input type="text" id="pmsafe_dealer_fax_number" name="pmsafe_dealer_fax_number" value="'.$fax.'" class="widefat" />';
-            echo '</div>'; 
+            echo '</div>';
 
             // echo '<div id="fax_div">';
             //     echo '<label><strong>Fax Number</strong></label>';
             //     echo '<input type="text" id="pmsafe_dealer_fax_number" name="pmsafe_dealer_fax_number" value="'.$fax.'" class="widefat" />';
-            // echo '</div>'; 
+            // echo '</div>';
 
             // $dealer_pwd = wp_generate_password();
-            
+
             echo '<div id="password_div">';
                 echo '<label><strong>Password</strong></label>';
                 echo '<input type="password" id="pmsafe_dealer_password" name="pmsafe_dealer_password" value="" class="widefat" style="display:none;"/>';
@@ -352,7 +405,7 @@ if($action == 'view'){
                 echo '<input type="button" value="Show" id="show_dealer_password" style="display:none;"/>';
                 echo '<input type="button" value="Cancel" id="cancel_dealer_password" style="display:none;"/>';
             echo '</div>';
-            
+
             echo '<div id="distributor_div">';
 			    echo '<label><strong>Distributors</strong></label>';
 			    echo '<select name="pmsafe_dealer_distributor">';
@@ -368,7 +421,7 @@ if($action == 'view'){
 					}
 				}
 			    echo '</select>';
-			echo '</div>'; 
+			echo '</div>';
 
             $number = 1;
             if($contact_info){
@@ -404,16 +457,16 @@ if($action == 'view'){
                             echo '</div>';
 
                             echo '<div class="nisl-wrap">';
-                                echo '<label><strong>Password</strong></label>';
+                                echo '<label><strong>Password:</strong></label>';
                                 echo '<input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat" style="width:35%"/>';
                                 echo '<input type="button" value="Change Password" class="generate_dealer_contact_password" />';
-                              
+
                             echo '</div>';
                         echo '</div>';
                     }
                     $number++;
                 }
-                echo '</div>';   
+                echo '</div>';
             }else{
                 echo '<div id="fname_divgroup">';
                 echo '<div id="fname_div1">';
@@ -437,26 +490,26 @@ if($action == 'view'){
                     echo '<label><strong>Email:</strong></label>';
                     echo '<input type="email" id="pmsafe_dealer_contact_email1" name="pmsafe_dealer_contact_email[]" value="" class="widefat" />';
                     echo '</div>';
-                    
+
                     echo '<div class="nisl-wrap">';
                     echo '<label><strong>Password</strong></label>';
                     echo '<input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat" style="width:35%"/>';
                     echo '<input type="button" value="Change Password" class="generate_dealer_contact_password" />';
                     echo '</div>';
                 echo '</div>';
-                echo '</div>';   
+                echo '</div>';
             }
             echo '<input type="button" value="Add New Contact Information" id="add_new_dealer" />';
             // echo '<input type="button" value="Remove Contact Information" id="removeButton_dealer" />';
 
             echo '<input type="submit" id="pmsafe_dealers_update" value="Update" class="button button-primary button-large">';
-    
+
         echo '</form>';
     echo '</div>';
 }else if($action == 'delete'){
     echo '<h1>Delete Dealer</h1>';
     echo '<form name="perma_delete_dealer" id="perma_delete_dealer_form" method="POST" class="validate">';
-    
+
     echo '<p>You have specified this user for deletion:</p>';
     echo 'ID #'.$dealer_id.': '.$name.' ('.$user->user_login.')';
     echo '<input type="hidden" id="pmsafe_dealer_id" name="pmsafe_dealer_id" value="'.$dealer_id.'" class="widefat" /><br/><br/>';
@@ -471,7 +524,7 @@ else if($action == 'delete_customer_details'){
     $nickname = get_user_meta($user_id,'nickname', true);
     echo '<h1>Delete Customer</h1>';
     echo '<form name="perma_delete_customer_form" id="perma_delete_customer_form" method="POST" class="validate">';
-        
+
         echo '<p>You have specified this user for deletion:</p>';
         echo 'ID #'.$user_id.': '.$fname.' '.$lname.' ('.$nickname.')';
         echo '<input type="hidden" id="pmsafe_customer_id" name="pmsafe_customer_id" value="'.$user_id.'" class="widefat" /><br/><br/>';
@@ -481,160 +534,160 @@ else if($action == 'delete_customer_details'){
 }else if($action == 'search_customer_details'){
 
     $login = $_GET['dealer_login'];
-    
-    $html .= '<h1>Search Customer Information</h1>'; 
-    $html .= '<div class="reports-wrap">';	
-    
+
+    $html .= '<h1>Search Customer Information</h1>';
+    $html .= '<div class="reports-wrap">';
+
     // member code
     $html .= '<div class="reports-wrap-inner">';
-        $html .= '<div class="label-input">';	    	
+        $html .= '<div class="label-input">';
             $html .= '<label>Member Code : </label>';
-        $html .= '</div>';	    	
-        $html .= '<div class="input-div">';	    	
+        $html .= '</div>';
+        $html .= '<div class="input-div">';
             $html .= '<input type="text" name="member_code" id="member_code"/>';
             $html .= '<input type="hidden" name="dealer_login" id="dealer_login" value="'.$login.'"/>';
-        $html .= '</div>';	
-    $html .= '</div>';  
+        $html .= '</div>';
+    $html .= '</div>';
 
     // First name
     $html .= '<div class="reports-wrap-inner">';
-        $html .= '<div class="label-input">';	    	
+        $html .= '<div class="label-input">';
             $html .= '<label>Customer First Name : </label>';
-        $html .= '</div>';	    	
-        $html .= '<div class="input-div">';	    	
+        $html .= '</div>';
+        $html .= '<div class="input-div">';
             $html .= '<input type="text" name="first_name" id="first_name"/>';
-        $html .= '</div>';	 
-    $html .= '</div>';   
+        $html .= '</div>';
+    $html .= '</div>';
 
     // Last Name
     $html .= '<div class="reports-wrap-inner">';
-        $html .= '<div class="label-input">';	    	
+        $html .= '<div class="label-input">';
             $html .= '<label>Customer last Name : </label>';
-        $html .= '</div>';	    	
-        $html .= '<div class="input-div">';	    	
+        $html .= '</div>';
+        $html .= '<div class="input-div">';
             $html .= '<input type="text" name="last_name" id="last_name"/>';
-        $html .= '</div>';	 
-    $html .= '</div>';   
+        $html .= '</div>';
+    $html .= '</div>';
 
     // Address
     $html .= '<div class="reports-wrap-inner">';
-        $html .= '<div class="label-input">';	    	
+        $html .= '<div class="label-input">';
             $html .= '<label>Address : </label>';
-        $html .= '</div>';	    	
-        $html .= '<div class="input-div">';	    	
+        $html .= '</div>';
+        $html .= '<div class="input-div">';
             $html .= '<input type="text" name="address" id="address"/>';
         $html .= '</div>';
     $html .= '</div>';
 
     // phone
     $html .= '<div class="reports-wrap-inner">';
-        $html .= '<div class="label-input">';	    	
+        $html .= '<div class="label-input">';
             $html .= '<label>Phone Number : </label>';
-        $html .= '</div>';	    	
-        $html .= '<div class="input-div">';	    	
+        $html .= '</div>';
+        $html .= '<div class="input-div">';
             $html .= '<input type="text" name="phone_number" id="phone_number"/>';
         $html .= '</div>';
     $html .= '</div>';
 
     // Email
     $html .= '<div class="reports-wrap-inner">';
-        $html .= '<div class="label-input">';	    	
+        $html .= '<div class="label-input">';
             $html .= '<label>Email : </label>';
-        $html .= '</div>';	    	
-        $html .= '<div class="input-div">';	    	
+        $html .= '</div>';
+        $html .= '<div class="input-div">';
             $html .= '<input type="text" name="email" id="email"/>';
         $html .= '</div>';
     $html .= '</div>';
 
     // City
     $html .= '<div class="reports-wrap-inner">';
-        $html .= '<div class="label-input">';	    	
+        $html .= '<div class="label-input">';
             $html .= '<label>City : </label>';
-        $html .= '</div>';	    	
-        $html .= '<div class="input-div">';	    	
+        $html .= '</div>';
+        $html .= '<div class="input-div">';
             $html .= '<input type="text" name="city" id="city"/>';
         $html .= '</div>';
     $html .= '</div>';
 
     //state
     $html .= '<div class="reports-wrap-inner">';
-        $html .= '<div class="label-input">';	    	
+        $html .= '<div class="label-input">';
             $html .= '<label>State : </label>';
-        $html .= '</div>';	    	
-        $html .= '<div class="input-div">';	    	
+        $html .= '</div>';
+        $html .= '<div class="input-div">';
             $html .= '<input type="text" name="state" id="state"/>';
         $html .= '</div>';
     $html .= '</div>';
 
     //Zip Code
     $html .= '<div class="reports-wrap-inner">';
-        $html .= '<div class="label-input">';	    	
+        $html .= '<div class="label-input">';
             $html .= '<label>Zip Code : </label>';
-        $html .= '</div>';	    	
-        $html .= '<div class="input-div">';	    	
+        $html .= '</div>';
+        $html .= '<div class="input-div">';
             $html .= '<input type="text" name="zip_code" id="zip_code"/>';
-        $html .= '</div>';     
-    $html .= '</div>';     
+        $html .= '</div>';
+    $html .= '</div>';
 
     // Vehicle year
     $html .= '<div class="reports-wrap-inner">';
-        $html .= '<div class="label-input">';	    	
+        $html .= '<div class="label-input">';
             $html .= '<label>Vehicle year : </label>';
-        $html .= '</div>';	    	
-        $html .= '<div class="input-div">';	    	
+        $html .= '</div>';
+        $html .= '<div class="input-div">';
             $html .= '<input type="text" name="vehicle_year" id="vehicle_year"/>';
-        $html .= '</div>';   
-    $html .= '</div>';   
+        $html .= '</div>';
+    $html .= '</div>';
 
     // Vehicle Make
     $html .= '<div class="reports-wrap-inner">';
-        $html .= '<div class="label-input">';	    	
+        $html .= '<div class="label-input">';
             $html .= '<label>Vehicle Make : </label>';
-        $html .= '</div>';	    	
-        $html .= '<div class="input-div">';	    	
+        $html .= '</div>';
+        $html .= '<div class="input-div">';
             $html .= '<input type="text" name="vehicle_make" id="vehicle_make"/>';
-        $html .= '</div>';   
-    $html .= '</div>';   
+        $html .= '</div>';
+    $html .= '</div>';
 
     // Vehicle Model
     $html .= '<div class="reports-wrap-inner">';
-        $html .= '<div class="label-input">';	    	
+        $html .= '<div class="label-input">';
             $html .= '<label>Vehicle Model : </label>';
-        $html .= '</div>';	    	
-        $html .= '<div class="input-div">';	    	
+        $html .= '</div>';
+        $html .= '<div class="input-div">';
             $html .= '<input type="text" name="vehicle_model" id="vehicle_model"/>';
-        $html .= '</div>';   
-    $html .= '</div>';   
+        $html .= '</div>';
+    $html .= '</div>';
 
     // Vehicle VIN
     $html .= '<div class="reports-wrap-inner">';
-        $html .= '<div class="label-input">';	    	
+        $html .= '<div class="label-input">';
             $html .= '<label>Vehicle VIN : </label>';
-        $html .= '</div>';	    	
-        $html .= '<div class="input-div">';	    	
+        $html .= '</div>';
+        $html .= '<div class="input-div">';
             $html .= '<input type="text" name="vehicle_vin" id="vehicle_vin"/>';
-        $html .= '</div>';   
-    $html .= '</div>';   
+        $html .= '</div>';
+    $html .= '</div>';
 
     // Submit
 
-    $html .= '<div class="input-btn">';	    	
+    $html .= '<div class="input-btn">';
         $html .= '<input type="button" name="search_submit" id="search_submit" value="Search" data-scroll-to="#id1" data-scroll-focus="#id1" data-scroll-speed="700" data-scroll-offset="5"/>';
         $html .= '<input type="button" name="reset" id="search_reset" value="Reset"/>';
-    $html .= '</div>';          			
+    $html .= '</div>';
 
 
 
-    $html .= '</div>';	    	
+    $html .= '</div>';
     $html .= '<section id="id1"></section>';
-    $html .= '<div class="search-result-wrap">';	
-    $html .= '<div class="tbl-result-wrap">'; 
+    $html .= '<div class="search-result-wrap">';
+    $html .= '<div class="tbl-result-wrap">';
 
-    $html .= '</div>';	    	
-    $html .= '<div class="data-result-wrap">'; 
+    $html .= '</div>';
+    $html .= '<div class="data-result-wrap">';
 
-    $html .= '</div>';          
-    $html .= '</div>';       
+    $html .= '</div>';
+    $html .= '</div>';
 
     echo $html;
 }
@@ -646,7 +699,7 @@ echo '<a class="dealer_add" href="'.$url.'">Add New Dealer</a>';
 echo '</div>';
 class User_List_Table extends WP_List_Table
 {
-   
+
 
     /**
      * ***********************************************************************
@@ -733,12 +786,12 @@ class User_List_Table extends WP_List_Table
         else{
             $dealers = get_users( 'role=contributor' );
 
-            
+
 
             foreach ( $dealers as $user ) {
                 // echo '<span>' . esc_html( $user->user_login ) . '</span>';
                 $user_id = $user->ID;
-              
+
                 $add_code_query_args = array(
                 'post_type'   => 'pmsafe_bulk_invi',
                 'action' => 'addcode',
@@ -790,7 +843,7 @@ class User_List_Table extends WP_List_Table
         }
         return $data;
     }
-    
+
 
     /**
      * TT_Example_List_Table constructor.
@@ -1098,16 +1151,16 @@ class User_List_Table extends WP_List_Table
 
         /*
          * GET THE DATA!
-         * 
+         *
          * Instead of querying a database, we're going to fetch the example data
          * property we created for use in this plugin. This makes this example
          * package slightly different than one you might build on your own. In
          * this example, we'll be using array manipulation to sort and paginate
          * our dummy data.
-         * 
-         * In a real-world situation, this is probably where you would want to 
+         *
+         * In a real-world situation, this is probably where you would want to
          * make your actual database query. Likewise, you will probably want to
-         * use any posted sort or pagination data to build a custom query instead, 
+         * use any posted sort or pagination data to build a custom query instead,
          * as you'll then be able to use the returned query data immediately.
          *
          * For information on making queries in WordPress, see this Codex entry:
@@ -1117,7 +1170,7 @@ class User_List_Table extends WP_List_Table
 
         /*
          * This checks for sorting input and sorts the data in our array of dummy
-         * data accordingly (using a custom usort_reorder() function). It's for 
+         * data accordingly (using a custom usort_reorder() function). It's for
          * example purposes only.
          *
          * In a real-world situation involving a database, you would probably want
@@ -1190,5 +1243,5 @@ class User_List_Table extends WP_List_Table
 
 $userListTable = new User_List_Table();
 $userListTable->prepare_items();
-$userListTable->display(); 
+$userListTable->display();
 }
