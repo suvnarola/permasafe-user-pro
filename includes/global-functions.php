@@ -1281,268 +1281,202 @@ if ( $user && wp_check_password( $pass, $user->data->user_pass, $user->ID ) ) {
      
 }
 
-// add_action('init','xml_test');
-function xml_test(){
-    // Turn off error reporting
+function get_user_by_dealer($dealer){
 
-    $uri = plugin_dir_path( __DIR__ ).'includes/test.xml';
-    $response_data = file_get_contents($uri);
-    $xmlObj = simplexml_load_string($response_data);
-    $arrXml = objectsIntoArray($xmlObj);
-    // echo $arrXml['code'];
-    global $wpdb;
-    $current_user = wp_get_current_user();
-    $role = (array) $current_user->caps;
-    $login = $current_user->user_login;
-
-    $member_code = $arrXml['member_number'];
-    
-    $member_code_id = pmsafe_if_code_exist($member_code);
-    // $password = wp_generate_password();
-    $password = $arrXml['pmsafe_zip_code'];
-    if($member_code_id){
+    $user = get_user_by('login',$dealer);
+    $dealer_id = $user->ID;
                     
+    $args = array(
+        'post_type' => 'pmsafe_bulk_invi',
+        'post_status' => 'publish',
+        'posts_per_page' => -1,
+        'orderby'=> 'date',
+        'order' => 'DESC',
+        'meta_query' => array(
+            // 'relation' => 'AND',
+            array(
+                'key'     => '_pmsafe_dealer',
+                'value'   => $dealer,
+                'compare' => '=',
+            ),
+
+        ),
+    );
+    $posts = get_posts($args);
+
+    foreach ($posts as $key => $value) {
+        $post_id = $value->ID;
+        $bulk_member = $value->post_title;
+        $invitation_ids = get_post_meta($post_id, '_pmsafe_invitation_ids', true);
+      
+        $invitation_id = explode(',',$invitation_ids);
+        $data = pmsafe_unused_code_count($post_id);
+        $available = $data['total'] - $data['used'];
+        
+        if($data['used'] != 0){
+            foreach ($invitation_id as $id) {
+                
+                $code_status = get_post_meta($id, '_pmsafe_code_status', true);
+              
+                if($code_status == 'used'){
                     
-        $user_data = pmsafe_create_user( $arrXml['pmsafe_email'], $password,$member_code );
-        if( $user_data ) {
-            if( $user_data['user_type'] == "New" ){
-                $_SESSION['first_userpwd'] = $password;
-                $user_id = $user_data['user_id'];
-                // $_SESSION['first_userid'] = $user_id;
-                update_post_meta( $member_code_id, '_pmsafe_code_status', 'used' );
-                update_post_meta( $member_code_id, '_pmsafe_used_code_user_id', $user_id );
-                $name = $arrXml['first_name'].' '.$arrXml['last_name'];
-                $_SESSION['registerd_username'] = $name;
-                update_post_meta( $member_code_id, '_pmsafe_used_code_user_name', $name );
-                update_post_meta( $member_code_id, '_pmsafe_used_code_date', current_time( 'mysql' ) );
-                
-                update_user_meta( $user_id, 'first_name', $arrXml['first_name'] );
-                update_user_meta( $user_id, 'edit_first_name', $arrXml['first_name'] );
-                update_user_meta( $user_id, 'last_name', $arrXml['last_name'] );
-                update_user_meta( $user_id, 'edit_last_name', $arrXml['last_name'] );
-                //update_user_meta( $user_id, 'pmsafe_member_number', $_POST['member_number'] );
-                update_user_meta( $user_id, 'pmsafe_phone_number', $arrXml['pmsafe_phone_number'] );
-                update_user_meta( $user_id, 'edit_pmsafe_phone_number', $arrXml['pmsafe_phone_number'] );
-
-                update_user_meta( $user_id, 'pmsafe_address_1', $arrXml['pmsafe_address_1'] );
-                update_user_meta( $user_id, 'edit_pmsafe_address_1', $arrXml['pmsafe_address_1'] );
-
-                update_user_meta( $user_id, 'pmsafe_address_2', $arrXml['pmsafe_address_2'] );
-                update_user_meta( $user_id, 'edit_pmsafe_address_2', $arrXml['pmsafe_address_2'] );
-
-                update_user_meta( $user_id, 'pmsafe_city', $arrXml['pmsafe_city'] );
-                update_user_meta( $user_id, 'edit_pmsafe_city', $arrXml['pmsafe_city'] );
-
-                update_user_meta( $user_id, 'pmsafe_state', $arrXml['pmsafe_state'] );
-                update_user_meta( $user_id, 'edit_pmsafe_state', $arrXml['pmsafe_state'] );
-
-                update_user_meta( $user_id, 'pmsafe_zip_code', $arrXml['pmsafe_zip_code'] );
-                update_user_meta( $user_id, 'edit_pmsafe_zip_code', $arrXml['pmsafe_zip_code'] );
-                update_user_meta( $user_id, 'pmsafe_email', $arrXml['pmsafe_email'] );
-                
-                $vehicle_info = array();
-    
-                $vehicle_info[$member_code] = array(
-                    'pmsafe_vehicle_year' => $arrXml['vehicle_info']['pmsafe_vehicle_year'],
-                    'pmsafe_vehicle_make' => $arrXml['vehicle_info']['pmsafe_vehicle_make'],
-                    'pmsafe_vehicle_model' => $arrXml['vehicle_info']['pmsafe_vehicle_model'],
-                    'pmsafe_vin' => $arrXml['vehicle_info']['pmsafe_vin'],
-                    'pmsafe_vehicle_mileage' => $arrXml['vehicle_info']['pmsafe_vehicle_mileage'],
-                    'pmsafe_registration_date' => current_time( 'mysql' ),
-                    'pmsafe_member_number' => $member_code,
-                    'pmsafe_member_code_id' => $member_code_id
+                    $benefits_package = get_post_meta( $id, '_pmsafe_code_prefix', true );
+                    $term_length_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$benefits_package);
+                    $term_length = get_post_meta( $term_length_id, '_pmsafe_benefit_term_length', true );
                     
-                );
-                update_user_meta( $user_id, 'pmsafe_vehicle_info', $vehicle_info );
+                    $code = get_post_meta( $id, '_pmsafe_invitation_code', true );
+                    
+                    $pdf_link = get_post_meta( $id, 'pmsafe_pdf_link', true );
+                    
+                    $user = get_user_by('login',$code);
+                   
+                    $user_id = $user->ID;
 
-                $pdf_link = generate_pdf($user_id,$member_code);
-                update_post_meta( $member_code_id, 'pmsafe_pdf_link', $pdf_link );
+                    $address1 = get_the_author_meta( 'pmsafe_address_1', $user_id );
+                    $address2 = get_the_author_meta( 'pmsafe_address_2', $user_id );
+                    if(!empty($address1) || $address2){
+                        $address = $address1.', '.$address2;
+                    }
+                    $city = get_the_author_meta( 'pmsafe_city', $user_id );
+                    $state = get_the_author_meta( 'pmsafe_state', $user_id );
+                    $zip_code = get_the_author_meta( 'pmsafe_zip_code', $user_id );
+                    
+                    $phone_number = get_user_meta( $user_id, 'pmsafe_phone_number',true );
+                    $vehicle_information = get_the_author_meta('pmsafe_vehicle_info' ,$user_id);
 
-                $vehicle_info_pdf = get_the_author_meta( 'pmsafe_vehicle_info', $user_id );
-                $vehicle_info_pdf[$member_code]['pmsafe_pdf_link'] = $pdf_link;
-                update_user_meta( $user_id, 'pmsafe_vehicle_info', $vehicle_info_pdf );
+                    $dealers = get_user_by('login', $dealer);
+                    $dealer_id = $dealers->data->ID;
+                    $dealer_name = get_user_meta( $dealer_id, 'dealer_name', true);
+                    $distributor_login = get_post_meta( $post_id, '_pmsafe_distributor', true ); 
+                    $distributors = get_user_by('login', $distributor_login);
+                    $distributor_id = $distributors->data->ID;
+                    $distributor_name = get_user_meta( $distributor_id, 'distributor_name', true);
 
-                
-                $to = $_POST['email'];
-                $subject = 'Perma safe : Your password';
-                $message = 'Hello '.$arrXml["first_name"].',<br/><br/>';
-                $message .= 'Thank you for registering with PermaSafe! <br/><br/>';
-                $message .= 'Here is your Password : <b>'.$password.'</b><br/><br/>';
-                $message .= 'To access your PermaSafe account in the future, use this link below to set your account password. <br/><br/>';
-                $message .= '<a href="'.get_site_url().'/perma-change-password" target="_blank">'.get_site_url().'/perma-change-password</a><br/><br/>';
-                $message .= 'Thank you for choosing PermaSafe.';
-                $headers = array('Content-Type: text/html; charset=UTF-8');
-                $mail = wp_mail( $to, $subject, $message, $headers );
+                    $plan_id = get_post_meta($id,'_pmsafe_code_prefix',true);
+                   
 
-                
-                $response = $pdf_link;
-                echo $response;
+                    $customer_name = $user->first_name.' '.$user->last_name;
+                   
+                  
+                    $bulk_arr[] = array(
+                        'user_id' => $user->ID,
+                        'code' => $code,
+                        'code_id' => $id,
+                        'dealer_id' => $dealer_id,
+                        'fname' => $user->first_name,
+                        'bulk_member' => $bulk_member,
+                        'lname' => $user->last_name,
+                        'address' => $address.' '.$city.', '.$state.', '.$zip_code,
+                        'pdf_link' => $pdf_link,
+                        'email' => $user->user_email,
+                        'phone' => $phone_number,
+                        'dealer_name' => $dealer_name,
+                        'distributor_name' => $distributor_name,
+                        'vehicle_information' => $vehicle_information[$user->user_login]['pmsafe_vehicle_year'] . ' ' . $vehicle_information[$user->user_login]['pmsafe_vehicle_make'] . ' ' . $vehicle_information[$user->user_login]['pmsafe_vehicle_model'],
+                        'vin' => $vehicle_information[$user->user_login]['pmsafe_vin'],
+                        'package' => $plan_id,
+                        'registration_date' => date('Y-m-d', strtotime($vehicle_information[$user->user_login]['pmsafe_registration_date'])),
+                        'expiration_date' => date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_information[$user->user_login]['pmsafe_registration_date']))),
+                        'date_time' => $vehicle_information[$user->user_login]['pmsafe_registration_date']
+                    );
+                }
             }
-            elseif( $user_data['user_type'] == "Exist" )
-            {
-                $member_code = $arrXml['member_number'];
-                $member_code_id = pmsafe_if_code_exist($member_code);
-                $password = $arrXml['pmsafe_zip_code'];
-                if($member_code_id)
-                {
-
-                    $email = $arrXml['pmsafe_email'];
-                    $old_email = $arrXml['pmsafe_email'];
-                    
-                    for ( $i = 0; email_exists( $email ); $i++ ) {
-                         $email = str_replace( '@', "+ama{$i}@", $old_email );
-                    }
-
-                    if ( $email !== $old_email ) {
-                        $hack_remapped_emails[ $email ] = $old_email;
-                    }
-                    $user_data = pmsafe_create_user( $email, $password,$member_code );
-                    if( $user_data )
-                    {
-                        $user_id = $user_data['user_id'];
-                        global $wpdb;
-                        $wpdb->update(
-                            $wpdb->users,
-                            array( 'user_email' => $hack_remapped_emails[ $email ] ),
-                            array( 'ID' => $user_id )
-                        );
-                        unset( $hack_remapped_emails[ $email ] );
-                        update_post_meta( $member_code_id, '_pmsafe_code_status', 'used' );
-                        update_post_meta( $member_code_id, '_pmsafe_used_code_user_id', $user_id );
-                        $name = $arrXml['first_name'].' '.$arrXml['last_name'];
-                        
-                        update_post_meta( $member_code_id, '_pmsafe_used_code_user_name', $name );
-                        update_post_meta( $member_code_id, '_pmsafe_used_code_date', current_time( 'mysql' ) );
-                        
-                        update_user_meta( $user_id, 'first_name', $arrXml['first_name'] );
-                        update_user_meta( $user_id, 'edit_first_name', $arrXml['first_name'] );
-                        update_user_meta( $user_id, 'last_name', $arrXml['last_name'] );
-                        update_user_meta( $user_id, 'edit_last_name', $arrXml['last_name'] );
-                        //update_user_meta( $user_id, 'pmsafe_member_number', $_POST['member_number'] );
-                        update_user_meta( $user_id, 'pmsafe_phone_number', $arrXml['pmsafe_phone_number'] );
-                        update_user_meta( $user_id, 'edit_pmsafe_phone_number', $arrXml['pmsafe_phone_number'] );
-
-                        update_user_meta( $user_id, 'pmsafe_address_1', $arrXml['pmsafe_address_1'] );
-                        update_user_meta( $user_id, 'edit_pmsafe_address_1', $arrXml['pmsafe_address_1'] );
-
-                        update_user_meta( $user_id, 'pmsafe_address_2', $arrXml['pmsafe_address_2'] );
-                        update_user_meta( $user_id, 'edit_pmsafe_address_2', $arrXml['pmsafe_address_2'] );
-
-                        update_user_meta( $user_id, 'pmsafe_city', $arrXml['pmsafe_city'] );
-                        update_user_meta( $user_id, 'edit_pmsafe_city', $arrXml['pmsafe_city'] );
-
-                        update_user_meta( $user_id, 'pmsafe_state', $arrXml['pmsafe_state'] );
-                        update_user_meta( $user_id, 'edit_pmsafe_state', $arrXml['pmsafe_state'] );
-
-                        update_user_meta( $user_id, 'pmsafe_zip_code', $arrXml['pmsafe_zip_code'] );
-                        update_user_meta( $user_id, 'edit_pmsafe_zip_code', $arrXml['pmsafe_zip_code'] );
-                        update_user_meta( $user_id, 'pmsafe_email', $arrXml['pmsafe_email'] );
-                        
-                        $vehicle_info = array();
-            
-                        $vehicle_info[$member_code] = array(
-                            'pmsafe_vehicle_year' => $arrXml['vehicle_info']['pmsafe_vehicle_year'],
-                            'pmsafe_vehicle_make' => $arrXml['vehicle_info']['pmsafe_vehicle_make'],
-                            'pmsafe_vehicle_model' => $arrXml['vehicle_info']['pmsafe_vehicle_model'],
-                            'pmsafe_vin' => $arrXml['vehicle_info']['pmsafe_vin'],
-                            'pmsafe_vehicle_mileage' => $arrXml['vehicle_info']['pmsafe_vehicle_mileage'],
-                            'pmsafe_registration_date' => current_time( 'mysql' ),
-                            'pmsafe_member_number' => $member_code,
-                            'pmsafe_member_code_id' => $member_code_id
-                            
-                        );
-                        update_user_meta( $user_id, 'pmsafe_vehicle_info', $vehicle_info );
-
-                        $pdf_link = generate_pdf($user_id,$member_code);
-                        update_post_meta( $member_code_id, 'pmsafe_pdf_link', $pdf_link );
-
-                        $vehicle_info_pdf = get_the_author_meta( 'pmsafe_vehicle_info', $user_id );
-                        $vehicle_info_pdf[$member_code]['pmsafe_pdf_link'] = $pdf_link;
-                        update_user_meta( $user_id, 'pmsafe_vehicle_info', $vehicle_info_pdf );
-
-                        
-                        $to = $_POST['email'];
-                        $subject = 'Perma safe : Your password';
-                        $message = 'Hello '.$arrXml["first_name"].',<br/><br/>';
-                        $message .= 'Thank you for registering with PermaSafe! <br/><br/>';
-                        $message .= 'Here is your Password : <b>'.$password.'</b><br/><br/>';
-                        $message .= 'To access your PermaSafe account in the future, use this link below to set your account password. <br/><br/>';
-                        $message .= '<a href="'.get_site_url().'/perma-change-password" target="_blank">'.get_site_url().'/perma-change-password</a><br/><br/>';
-                        $message .= 'Thank you for choosing PermaSafe.';
-                        $headers = array('Content-Type: text/html; charset=UTF-8');
-                        $mail = wp_mail( $to, $subject, $message, $headers );
-                        
-                        
-                        // $response = $pdf_link;
-
-                        $dom = new DOMDocument();
-                        $dom->encoding = 'utf-8';
-                        $dom->xmlVersion = '1.0';
-                        $dom->formatOutput = true;
-                        
-                        $root = $dom->createElement('user');
-                        $user_node = $dom->createElement('response');
-                        
-                        // $member_code = new DOMAttr('member_code', $member_code);
-                        // $user_node->setAttributeNode($attr_movie_id);
-                        $child_node_code = $dom->createElement('code', $member_code);
-                        $user_node->appendChild($child_node_code);
-
-                        $child_node_success = $dom->createElement('success', 'true');
-                        $user_node->appendChild($child_node_success);
-
-                        $child_node_pdf = $dom->createElement('pdf_link', $pdf_link);
-                        $user_node->appendChild($child_node_pdf);
-
-                        $root->appendChild($user_node);
-                		$dom->appendChild($root);
-                        $response = $dom->saveXML();
-                        echo $response;    
-
-                    }//if userdata
-                } // if member code id  
-                
-            } //else exist
-        }// if $user_data 
-    } // if member code
-    else{
-
-        $error = 'The member code you have provided is not valid. Please check your code and try again. If you believe this is an error';
-        $dom = new DOMDocument();
-        $dom->encoding = 'utf-8';
-        $dom->xmlVersion = '1.0';
-        $dom->formatOutput = true;
-        
-        $root = $dom->createElement('user');
-        $user_node = $dom->createElement('response');
-        
-        // $member_code = new DOMAttr('member_code', $member_code);
-        // $user_node->setAttributeNode($attr_movie_id);
-        $child_node_code = $dom->createElement('code', $member_code);
-        $user_node->appendChild($child_node_code);
-
-        $child_node_success = $dom->createElement('success', 'false');
-        $user_node->appendChild($child_node_success);
-
-        $child_node_pdf = $dom->createElement('error', $error);
-        $user_node->appendChild($child_node_pdf);
-
-        $root->appendChild($user_node);
-        $dom->appendChild($root);
-        $response = $dom->saveXML();
-        echo $response;   
-        
+        }
     }
+    // pr($bulk_arr);
+    $invite_args = array(
+        'post_type' => 'pmsafe_invitecode',
+        'post_status' => 'publish',
+        'posts_per_page' => -1,
+        'orderby'=> 'date',
+        'order' => 'DESC',
+        'meta_query' => array(
+            // 'relation' => 'AND',
+            array(
+                'key'     => '_pmsafe_dealer',
+                'value'   => $dealer,
+                'compare' => '=',
+            ),
 
-    // echo "<pre>";print_r($arrXml);echo "</pre>";
-    // foreach ($arrXml as $key => $value) {
-    //     foreach($value as $val){
-    //         echo $val['code'];
-    //     }
-    // }
-    
-    
+        ),
+    );
+    $invite_posts = get_posts($invite_args);
+
+    foreach($invite_posts as $key => $value){
+        $id = $value->ID;
+        $is_invite_code = get_post_meta($id, '_pmsafe_is_invite_code', true);
+        $code_status = get_post_meta($id, '_pmsafe_code_status', true);
+        if($is_invite_code == 1 && $code_status == 'used'){
+
+            $benefits_package = get_post_meta( $id, '_pmsafe_code_prefix', true );
+        $term_length_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$benefits_package);
+        $term_length = get_post_meta( $term_length_id, '_pmsafe_benefit_term_length', true );
+            $code = get_post_meta( $id, '_pmsafe_invitation_code', true );
+                    
+            $pdf_link = get_post_meta( $id, 'pmsafe_pdf_link', true );
+            
+            $user = get_user_by('login',$code);
+           
+            $user_id = $user->ID;
+
+            $address1 = get_the_author_meta( 'pmsafe_address_1', $user_id );
+            $address2 = get_the_author_meta( 'pmsafe_address_2', $user_id );
+            if(!empty($address1) || $address2){
+                $address = $address1.', '.$address2;
+            }
+            $city = get_the_author_meta( 'pmsafe_city', $user_id );
+            $state = get_the_author_meta( 'pmsafe_state', $user_id );
+            $zip_code = get_the_author_meta( 'pmsafe_zip_code', $user_id );
+            
+            $phone_number = get_user_meta( $user_id, 'pmsafe_phone_number',true );
+            $vehicle_information = get_the_author_meta('pmsafe_vehicle_info' ,$user_id);
+
+            
+            $plan_id = get_post_meta($id,'_pmsafe_code_prefix',true);
+           
+            $dealers = get_user_by('login', $dealer);
+            $dealer_id = $dealers->data->ID;
+            $dealer_name = get_user_meta( $dealer_id, 'dealer_name', true);
+            $distributor_login = get_post_meta( $post_id, '_pmsafe_distributor', true ); 
+            $distributors = get_user_by('login', $distributor_login);
+            $distributor_id = $distributors->data->ID;
+            $distributor_name = get_user_meta( $distributor_id, 'distributor_name', true);
+
+            $customer_name = $user->first_name.' '.$user->last_name;
+            $url = get_site_url().'/wp-includes/images/media/document.png';
+          
+            $invite_arr[] = array(
+                'user_id' => $user->ID,
+                'code' => $code,
+                'code_id' => $id,
+                'dealer_id' => $dealer_id,
+                'fname' => $user->first_name,
+                'lname' => $user->last_name,
+                'address' => $address.' '.$city.', '.$state.', '.$zip_code,
+                'pdf_link' => $pdf_link,
+                'email' => $user->user_email,
+                'phone' => $phone_number,
+                'dealer_name' => $dealer_name,
+                'distributor_name' => $distributor_name,
+                'vehicle_information' => $vehicle_information[$user->user_login]['pmsafe_vehicle_year'] . ' ' . $vehicle_information[$user->user_login]['pmsafe_vehicle_make'] . ' ' . $vehicle_information[$user->user_login]['pmsafe_vehicle_model'],
+                'vin' => $vehicle_information[$user->user_login]['pmsafe_vin'],
+                'package' => $plan_id,
+                'registration_date' => date('Y-m-d', strtotime($vehicle_information[$user->user_login]['pmsafe_registration_date'])),
+                'expiration_date' => date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_information[$user->user_login]['pmsafe_registration_date']))),
+                'date_time' => $vehicle_information[$user->user_login]['pmsafe_registration_date']
+            ); 
+        }
+    }
+    if(empty($invite_arr)){
+        $customer_arr = $bulk_arr;
+    }else{
+        $customer_arr = array_merge($bulk_arr, $invite_arr);
+    }
+    // pr($customer_arr);
+    return $customer_arr;
 }
+
+
 
 function objectsIntoArray($arrObjData, $arrSkipIndices = array())
 {

@@ -233,14 +233,14 @@ class Permasafe_User_Pro {
 		$this->loader->add_action( 'wp_ajax_admin_membership_date_filter', $plugin_admin, 'admin_membership_date_filter' );
         $this->loader->add_action( 'wp_ajax_nopriv_admin_membership_date_filter', $plugin_admin, 'admin_membership_date_filter' );
 		
-		$this->loader->add_action( 'wp_ajax_add_dealer_benifits_package_price', $plugin_admin, 'add_dealer_benifits_package_price_function' );
-        $this->loader->add_action( 'wp_ajax_nopriv_add_dealer_benifits_package_price', $plugin_admin, 'add_dealer_benifits_package_price_function' );
+		$this->loader->add_action( 'wp_ajax_add_dealer_benefits_package_price', $plugin_admin, 'add_dealer_benefits_package_price_function' );
+        $this->loader->add_action( 'wp_ajax_nopriv_add_dealer_benefits_package_price', $plugin_admin, 'add_dealer_benefits_package_price_function' );
 		
-		$this->loader->add_action( 'wp_ajax_delete_dealer_benifits_package_price', $plugin_admin, 'delete_dealer_benifits_package_price_function' );
-		$this->loader->add_action( 'wp_ajax_nopriv_delete_dealer_benifits_package_price', $plugin_admin, 'delete_dealer_benifits_package_price_function' );
+		$this->loader->add_action( 'wp_ajax_delete_dealer_benefits_package_price', $plugin_admin, 'delete_dealer_benefits_package_price_function' );
+		$this->loader->add_action( 'wp_ajax_nopriv_delete_dealer_benefits_package_price', $plugin_admin, 'delete_dealer_benefits_package_price_function' );
 		
-		$this->loader->add_action( 'wp_ajax_edit_dealer_benifits_package_price', $plugin_admin, 'edit_dealer_benifits_package_price_function' );
-        $this->loader->add_action( 'wp_ajax_nopriv_edit_dealer_benifits_package_price', $plugin_admin, 'edit_dealer_benifits_package_price_function' );
+		$this->loader->add_action( 'wp_ajax_edit_dealer_benefits_package_price', $plugin_admin, 'edit_dealer_benefits_package_price_function' );
+        $this->loader->add_action( 'wp_ajax_nopriv_edit_dealer_benefits_package_price', $plugin_admin, 'edit_dealer_benefits_package_price_function' );
 		
 	
 	}

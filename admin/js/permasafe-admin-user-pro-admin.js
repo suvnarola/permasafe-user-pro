@@ -811,6 +811,54 @@ jQuery( document ).ready(function() {
         return false;
 
     });
+
+    jQuery("#pmsafe_invitation_code").focusout(function(){
+        var code = jQuery('#pmsafe_invitation_code').val();
+        
+        if(code ){
+            var data = {
+                action: 'check_invite_code_exist',
+                code : code
+                
+            };
+            jQuery.ajax({
+                type: 'POST',
+                url: pmAjax.ajaxurl,
+                data: data,
+                success: function (response) {
+                    var obj = jQuery.parseJSON(response);
+                        // var obj = jQuery.parseJSON(response);
+                        // console.log(obj);
+                        if( obj.status == true ){
+                            jQuery(".code-exist").css("display","block");
+                            jQuery("#publish").attr("disabled","disabled");   
+                            
+                            
+                        }
+                        if( obj.status == false ){
+                            if(code == ''){
+                                jQuery(".code-exist").css("display","none");
+                                jQuery("#publish").attr("disabled","disabled");
+                            }
+                            else{
+
+                                
+                                    jQuery("#publish").removeAttr("disabled","disabled");
+                                    jQuery(".code-exist").css("display","none");
+                                
+                             }
+                        }
+                    
+                },
+                dataType: 'html'
+            });
+        }
+        else{
+            jQuery("#publish").attr("disabled","disabled");
+        }
+        return false;
+
+    });
     
     jQuery("#pmsafe_invitation_code_start").focus(function(){
         jQuery(".code-exist").css("display","none");
@@ -869,6 +917,57 @@ jQuery( document ).ready(function() {
                 var obj = jQuery.parseJSON(response);
                 if(obj.status == true){
                         window.location.replace(obj.redirect);
+                }
+            },
+            dataType: 'html'
+        });
+        return false;
+     });
+
+     jQuery(document).on("click","#update_invite_code_button", function(e) {
+        
+        var post_id = jQuery.urlParam('post');
+        
+        var benifit_package =  jQuery('select[name="pmsafe_invitation_prefix"]').find(":selected").val();
+        var dealer =  jQuery('select[name="pmsafe_dealer"]').find(":selected").val();
+        var distributor =  jQuery('select[name="pmsafe_distributor"]').find(":selected").val();
+        var select =  jQuery('#pmsafe_invitation_upgradable_prefix').select2('val');
+        
+        var chk = jQuery('#pmsafe_invitation_code_upgradable'). prop("checked");
+        var allow_dealer = jQuery('#pmsafe_code_allow_dealer'). prop("checked");
+        if(chk == true){
+            chk = 1;
+        }
+        if(chk == false){
+            chk = 0;
+        }
+        
+        if(allow_dealer == true){
+            allow_dealer = 1;
+        }
+        if(allow_dealer == false){
+            allow_dealer = 0;
+        }
+        var data = {
+            action: 'update_invite_codes',
+            post_id: post_id,
+            benifit_package:benifit_package,
+            dealer: dealer,
+            distributor: distributor,
+            select : select,
+            chk : chk,    
+            allow_dealer : allow_dealer    
+        };
+        jQuery('.perma-admin-loader').show();
+        jQuery.ajax({
+            type: 'POST',
+            url: pmAjax.ajaxurl,
+            data: data,
+            success: function (response) {
+                jQuery('.perma-admin-loader').hide();
+                var obj = jQuery.parseJSON(response);
+                if(obj.status == true){
+                      location.reload();
                 }
             },
             dataType: 'html'
@@ -1118,6 +1217,7 @@ jQuery( document ).ready(function() {
     var view_customer_table = jQuery('#view_customer_table').DataTable( {
         dom: 'Bfrtip',
         responsive: true,
+        "order": [[ 17, "desc" ]],
         orderCellsTop: true,
         fixedHeader: true,
         buttons: [
@@ -2189,7 +2289,7 @@ jQuery( document ).ready(function() {
         }
 
         var data = {
-            action: 'add_dealer_benifits_package_price',
+            action: 'add_dealer_benefits_package_price',
             selected_package:selected_package,
             dealer_cost:dealer_cost,
             distributor_cost:distributor_cost,
@@ -2210,8 +2310,9 @@ jQuery( document ).ready(function() {
                 dataType: 'html',
                 success: function(response) {
                     jQuery('.perma-admin-loader').hide();
-                        console.log(response);
+                        
                         if(response == 0){
+                            jQuery('#exist-package').remove();
                             jQuery('<p id="exist-package" style="color:red;">Already Exist.</p>').insertBefore('#add_package_price');
                         }
                         if(response == 1){
@@ -2236,7 +2337,7 @@ jQuery( document ).ready(function() {
         var dealer_id = jQuery('#pricing_dealer_id' ).val();
         
         var data = {
-            action: 'delete_dealer_benifits_package_price',
+            action: 'delete_dealer_benefits_package_price',
             package:package,
             dealer_id:dealer_id
         };
@@ -2301,7 +2402,7 @@ jQuery( document ).ready(function() {
             jQuery('#edit_selling_price').css({'color':'#333333'});
         }
          var data = {
-            action: 'edit_dealer_benifits_package_price',
+            action: 'edit_dealer_benefits_package_price',
             selected_package:selected_package,
             dealer_cost:dealer_cost,
             distributor_cost:distributor_cost,

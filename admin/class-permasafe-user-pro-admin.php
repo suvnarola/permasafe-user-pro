@@ -932,19 +932,31 @@ class Permasafe_User_Pro_Admin {
         	die;
         }
 
+		/**
+		 * ajax function for reset individual member code.
+		 */
         public function reset_code_function(){
 			$post_id = $_POST['post_id'];
 			$bulk_id = get_post_meta($post_id,'_pmsafe_bulk_invitation_id',true);
 			$bulk_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
-			
+			$code_prefix = get_post_meta($post_id,'_pmsafe_invitation_prefix',true);
         	$member_code = get_post_meta( $post_id, '_pmsafe_invitation_code', true );
         	$user = get_user_by( 'login', $member_code );
         	
 			$exist_status = get_post_meta( $post_id, '_pmsafe_code_status', true );
-			update_post_meta($post_id,'_pmsafe_code_prefix',$bulk_prefix);
+			if($bulk_prefix){
+				update_post_meta($post_id,'_pmsafe_code_prefix',$bulk_prefix);
+			}else{
+
+				update_post_meta($post_id,'_pmsafe_code_prefix',$code_prefix);
+			}
         	if($exist_status == 'used'){
 				update_post_meta($post_id,'_pmsafe_code_status','available');
-				update_post_meta($post_id,'_pmsafe_code_prefix',$bulk_prefix);
+				if($bulk_prefix){
+					update_post_meta($post_id,'_pmsafe_code_prefix',$bulk_prefix);
+				}else{
+					update_post_meta($post_id,'_pmsafe_code_prefix',$code_prefix);
+				}
         		if ( $user ) { // get_user_by can return false, if no such user exists
 			    	wp_delete_user( $user->ID );
 				}
@@ -964,7 +976,11 @@ class Permasafe_User_Pro_Admin {
         	}
         	echo $response;
         	die;
-        }
+		}
+		
+		/**
+		 * ajax function for search batch code.
+		 */
 
         public function search_batch_code_function(){
         	
@@ -1044,6 +1060,9 @@ class Permasafe_User_Pro_Admin {
         	die;
 		}
 		
+		/**
+		 * ajax function for search individual member code.
+		 */
 		public function search_individual_code_function(){
         	
 			$search_val = $_POST['search_val'];
@@ -1166,12 +1185,17 @@ class Permasafe_User_Pro_Admin {
 			}
         }
 
+
+		/**
+		 * 
+		 *  ajax function for customer search by dealer.
+		 * 
+		 */
 		public function admin_reports(){
 			global $wpdb;
         		$current_user = wp_get_current_user();
         		$role = (array) $current_user->caps;
-        		// if($role['author'] == 1) 
-          //   	{	
+        		
                     $member_code = $_POST['member_code'];
                     $first_name = $_POST['first_name'];
                     $last_name = $_POST['last_name'];
@@ -1188,14 +1212,7 @@ class Permasafe_User_Pro_Admin {
 
 					$login =$_POST['dealer_login'];
 					
-                    // if($role['author'] == 1) 
-                    // {   
-                    //     $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value in ( SELECT user_login FROM `wp_users` WHERE ID in (SELECT user_id FROM `wp_usermeta` WHERE meta_key="dealer_distributor_name" AND meta_value = (SELECT ID FROM `wp_users` WHERE user_login = "'.$login.'"))))');
-                    // }
-                    // if($role['contributor'] == 1) {
-                        
                     
-					// }
 					$user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "'.$login.'")');
                     $str = '';
                     foreach ($user_query as $value_query) {
@@ -1206,10 +1223,22 @@ class Permasafe_User_Pro_Admin {
                     // echo $str;
                     $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in ('.$str.') ');
                     // pr($str_results);
-                    $check_array = array();
+                    // $check_array = array();
                     foreach ($str_results as $str_result) {
-                        $check_array[] = $str_result->meta_value;
-                    }
+                        $bulk_array[] = $str_result->meta_value;
+					}
+					
+					$invite_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (SELECT post_id FROM wp_postmeta WHERE meta_key="_pmsafe_is_invite_code")');
+					// pr($str_results);
+					$invite_array = array();
+					foreach ($invite_results as $invite_result) {
+						$invite_array[] = $invite_result->meta_value;
+					}
+					if(empty($invite_array)){
+						$check_array = $bulk_array;
+					}else{
+						$check_array = array_merge($bulk_array, $invite_array);
+					}
                     
                             
                         $mysql = 'SELECT distinct(user_id) FROM wp_usermeta';
@@ -1365,15 +1394,17 @@ class Permasafe_User_Pro_Admin {
        		die;
 		}
 
+		/**
+		 * ajax function for customer search.
+		 */
+
 		public function admin_all_reports(){
 
 			global $wpdb;
 				$current_user = wp_get_current_user();
-				// pr($current_user);
-				// die;
+				
         		$role = (array) $current_user->caps;
-        		// if($role['author'] == 1) 
-          //   	{	
+        			
                     $member_code = $_POST['member_code'];
                     $first_name = $_POST['first_name'];
                     $last_name = $_POST['last_name'];
@@ -1389,20 +1420,10 @@ class Permasafe_User_Pro_Admin {
 					$vehicle_vin = $_POST['vehicle_vin'];
 					$dealer_name = $_POST['dealer_name'];
 					$distributor_name = $_POST['distributor_name'];
-					// $login =$_POST['dealer_login'];
+					
 
 					$var = 0;
-					// if($dealer_name != ''){
-					// 	$var = 1;
-					// }
-                    // if($role['author'] == 1) 
-                    // {   
-                    //     $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value in ( SELECT user_login FROM `wp_users` WHERE ID in (SELECT user_id FROM `wp_usermeta` WHERE meta_key="dealer_distributor_name" AND meta_value = (SELECT ID FROM `wp_users` WHERE user_login = "'.$login.'"))))');
-                    // }
-                    // if($role['contributor'] == 1) {
-                        
-                    
-					// }
+					
 					$args = array(
 						'role'         => 'subscriber',
 					);
@@ -1738,9 +1759,6 @@ class Permasafe_User_Pro_Admin {
                             //}
                             $html .= '</tbody>';
                             $html .= '</table>';
-
-
-                        
                         
                        
                         echo $html;   
@@ -1749,7 +1767,11 @@ class Permasafe_User_Pro_Admin {
 
        		die;
 		}
-		
+
+		/**
+		 * ajax function for ger customer(user) info by user_id.
+		 * 
+		 */
 		public function admin_view_data_reports(){
             $user_id = $_POST['id'];
             $nickname = get_user_meta($user_id,'nickname', true);
@@ -1937,7 +1959,10 @@ class Permasafe_User_Pro_Admin {
         	echo $html;    		
         	exit;
 		}
-		
+
+		/**
+		 * ajax function for customer coverage report (customer-filter)
+		 */
 		public function admin_quick_filters(){
 			global $wpdb;
 			$current_user = wp_get_current_user();
@@ -1959,9 +1984,24 @@ class Permasafe_User_Pro_Admin {
 				$str_results = $wpdb->get_results(' SELECT ID FROM wp_users WHERE user_login in (SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in ('.$str.')) ');
 
 				foreach ($str_results as $key => $value) {
-					$dealer_array[] = $value->ID;
+					$bulk_array[] = $value->ID;
 				}
+
+				$invite_results = $wpdb->get_results(' SELECT ID FROM wp_users WHERE user_login in (SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (SELECT post_id FROM wp_postmeta WHERE meta_key="_pmsafe_is_invite_code"))');
+				// pr($str_results);
+				$invite_array = array();
+				foreach ($invite_results as $invite_result) {
+					$invite_array[] = $invite_result->ID;
+				}
+				if(empty($invite_array)){
+					$dealer_array = $bulk_array;
+				}else{
+					$dealer_array = array_merge($bulk_array, $invite_array);
+				}
+
+
 			}
+			
 
 			if($distributor_name != ''){
 				$distributor_name = trim($distributor_name, ' ');
@@ -1975,10 +2015,23 @@ class Permasafe_User_Pro_Admin {
 
 				$str_results = $wpdb->get_results(' SELECT ID FROM wp_users WHERE user_login in (SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in ('.$str.')) ');
 				foreach ($str_results as $key => $value) {
-					$dis_array[] = $value->ID;
+					$bulk_array[] = $value->ID;
+				}
+
+				$invite_results = $wpdb->get_results(' SELECT ID FROM wp_users WHERE user_login in (SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (SELECT post_id FROM wp_postmeta WHERE meta_key="_pmsafe_is_invite_code"))');
+				// pr($str_results);
+				$invite_array = array();
+				foreach ($invite_results as $invite_result) {
+					$invite_array[] = $invite_result->ID;
+				}
+				if(empty($invite_array)){
+					$dis_array = $bulk_array;
+				}else{
+					$dis_array = array_merge($bulk_array, $invite_array);
 				}
 				
 			}
+			// pr($dis_array);
 			$args = array(
 				'role'         => 'subscriber',
 			);
@@ -1988,1623 +2041,528 @@ class Permasafe_User_Pro_Admin {
 				// $str = $value_query->ID.','.$str;
 				$check_array[] = $value_query->ID;
 			}
-
+			// pr($dis_array);
 			$sql .= "SELECT user_id FROM wp_usermeta WHERE meta_key='pmsafe_vehicle_info'"; 
-            $query = $wpdb->get_results($sql);
-                            // pr($query);
-					$html .= '<table id="search_tbl">';
-						$html .= '<thead>';
-						$html .= '<tr>';
-							
-							$html .= '<th>';
-								$html .= 'MemberCode';
-							$html .= '</th>';
+			$query = $wpdb->get_results($sql);
+			foreach ($query as $key => $value) {
+				$user_id = $value->user_id;
+				
+				if(in_array($user_id,$check_array)){
+				
+						$nickname = get_user_meta($value->user_id,'nickname', true);
+						$vehicle_info = get_user_meta($value->user_id,'pmsafe_vehicle_info',false);
+						$post_id = $vehicle_info[0][$nickname]['pmsafe_member_code_id'];
+						$benefits_package = get_post_meta($vehicle_info[0][$nickname]['pmsafe_member_code_id'],'_pmsafe_code_prefix',true);
+						$term_length_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$benefits_package);
+						$term_length = get_post_meta( $term_length_id, '_pmsafe_benefit_term_length', true );
+						$vehicle_registration_date = date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
+						$expiration_date = date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
+						$current_date = date('Y-m-d');
 
-								$html .= '<th>';
-								$html .= 'First Name';
-							$html .= '</th>';
+						$posts = get_post($post_id);
+						$post_title = $posts->post_title;
+						$post_title = substr($post_title, 0, strpos($post_title, ' '));
 
-							$html .= '<th>';
-								$html .= 'Last Name';
-							$html .= '</th>';
+						$login = get_post_meta($post_id,'_pmsafe_dealer', true);
+						$users = get_user_by('login',$login);
+						$dealer_id = $users->ID;
+						$dealername = get_user_meta($dealer_id,'dealer_name', true);
 
-							$html .= '<th>';
-								$html .= 'Address';
-							$html .= '</th>';
-
-							$html .= '<th>';
-								$html .= 'PDF';
-							$html .= '</th>';
-
-							$html .= '<th class="nisl-pdf-link">';
-							$html .= 'PDF';
-							$html .= '</th>';
-
-							$html .= '<th class="nisl-pdf-link">';
-							$html .= 'Benefits<br/> Package';
-							$html .= '</th>';
-
-							$html .= '<th class="nisl-pdf-link">';
-							$html .= 'Product Code <br/> Range';
-							$html .= '</th>';
-
-							$html .= '<th class="nisl-pdf-link">';
-							$html .= 'Dealer Name';
-							$html .= '</th>';
-
-							$html .= '<th class="nisl-pdf-link">';
-							$html .= 'Distributor Name';
-							$html .= '</th>';
-							
-							$html .= '<th class="nisl-pdf-link">';
-							$html .= 'Vehicle <br/> Information';
-							$html .= '</th>';
-	
-							$html .= '<th class="nisl-pdf-link">';
-							$html .= 'VIN';
-							$html .= '</th>';
-	
-							$html .= '<th class="nisl-pdf-link">';
-							$html .= 'Registration <br/> Date';
-							$html .= '</th>';
-	
-							$html .= '<th class="nisl-pdf-link">';
-							$html .= 'Expiration <br/> Date';
-							$html .= '</th>';
-
-							$html .= '<th>';
-							$html .= 'View Detail';
-							$html .= '</th>';
-
-							$html .= '<th>';
-							$html .= 'Edit';
-							$html .= '</th>';
-
-							$html .= '<th>';
-							$html .= 'Delete';
-							$html .= '</th>';
-
-						$html .= '</tr>';
-						$html .= '</thead>';
-						$html .= '<tbody>';
+						$distributor_login = get_post_meta($post_id,'_pmsafe_distributor', true);
+						$dis_users = get_user_by('login',$distributor_login);
+						$distributor_id = $dis_users->ID;
+						$distributorname = get_user_meta($distributor_id,'distributor_name', true);
 						
-						
-						foreach ($query as $key => $value) {
-							$user_id = $value->user_id;
-							
-							if(in_array($user_id,$check_array)){
-							
-									$nickname = get_user_meta($value->user_id,'nickname', true);
-									$vehicle_info = get_user_meta($value->user_id,'pmsafe_vehicle_info',false);
-									$post_id = $vehicle_info[0][$nickname]['pmsafe_member_code_id'];
-									$benefits_package = get_post_meta($vehicle_info[0][$nickname]['pmsafe_member_code_id'],'_pmsafe_code_prefix',true);
-									$term_length_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$benefits_package);
-									$term_length = get_post_meta( $term_length_id, '_pmsafe_benefit_term_length', true );
-									$vehicle_registration_date = date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
-									$expiration_date = date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
-									$current_date = date('Y-m-d');
+						$address1 = get_user_meta($value->user_id,'pmsafe_address_1',true);
+						$address2 = get_user_meta($value->user_id,'pmsafe_address_2',true);
+						$city = get_user_meta($value->user_id,'pmsafe_city',true);
+						$state = get_user_meta($value->user_id,'pmsafe_state',true);
+						$zip_code = get_user_meta($value->user_id,'pmsafe_zip_code',true);
+						$vehicle_info = get_user_meta($value->user_id,'pmsafe_vehicle_info',false);
 
-									$posts = get_post($post_id);
-									$post_title = $posts->post_title;
-									$post_title = substr($post_title, 0, strpos($post_title, ' '));
-
-									$login = get_post_meta($post_id,'_pmsafe_dealer', true);
-									$users = get_user_by('login',$login);
-									$dealer_id = $users->ID;
-									$dealername = get_user_meta($dealer_id,'dealer_name', true);
-
-									$distributor_login = get_post_meta($post_id,'_pmsafe_distributor', true);
-									$dis_users = get_user_by('login',$distributor_login);
-									$distributor_id = $dis_users->ID;
-									$distributorname = get_user_meta($distributor_id,'distributor_name', true);
-
-									//expired
-									if($select == 1){
-										if($current_date > $expiration_date){
-											// echo $expiration_date.'->'.$value->user_id.'<br/>';
-											if (($expiration_date > $datepicker1) && ($expiration_date < $datepicker2)){
-												if($distributor_name != ''){
-													if($dealer_name != ''){
-														if(in_array($user_id,$dealer_array)){
-														$html .= '<tr>';
-														
-															$html .= '<td>';
-																$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'nickname', true).'</a>';
-															$html .= '</td>';
-															
-															$html .= '<td>';
-																$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'first_name', true).'</a>';
-															$html .= '</td>';
-															
-															$html .= '<td>';
-																$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'last_name',true).'</a>';
-															$html .= '</td>';
-															
-															$address1 = get_user_meta($value->user_id,'pmsafe_address_1',true);
-															$address2 = get_user_meta($value->user_id,'pmsafe_address_2',true);
-															$city = get_user_meta($value->user_id,'pmsafe_city',true);
-															$state = get_user_meta($value->user_id,'pmsafe_state',true);
-															$zip_code = get_user_meta($value->user_id,'pmsafe_zip_code',true);
-															$html .= '<td>';
-																$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.$address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code.'</a>';
-															$html .= '</td>';
-
-															$vehicle_info = get_user_meta($value->user_id,'pmsafe_vehicle_info',false);
-															
-															// pr($vehicle_info);
-																$url = get_site_url().'/wp-includes/images/media/document.png';
-																$html .= '<td>';
-																	$html .= '<a href="'.$vehicle_info[0][$nickname]['pmsafe_pdf_link'].'" target="blank"><img src="'.$url.'" class="attachment-thumbnail" style="width:20px !important"/></a>';
-																$html .= '</td>';
-																
-																$html .= '<td class="nisl-pdf-link">';
-																			$html .= $vehicle_info[0][$nickname]['pmsafe_pdf_link'];
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $benefits_package;
-																$html .= '</td>';
-																
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $post_title;
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $dealername;
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $distributorname;
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'];
-																$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																	$html .= $vehicle_info[0][$nickname]['pmsafe_vin'];
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
-																$html .= '</td>';
-
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
-																$html .= '</td>';
-																
-																$view_customer_details_query_args = array(
-																	'page'   => 'customers-lists',
-																	'action' => 'view_customer_details',
-																	'id'  => $user_id,
-																);
-									
-																$actions['view_customer_details'] = sprintf(
-																	'<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
-																	esc_url( wp_nonce_url( add_query_arg( $view_customer_details_query_args, 'admin.php' ), 'viewcustomerdetails_' . $user_id ) ),
-																	_x( 'view details', 'List table row action', 'wp-list-table-example' )
-																);
-									
-																$html .= '<td class="text-center">';
-																	$html .= $actions["view_customer_details"];
-																$html .= '</td>';
-									
-									
-																$edit_customer_details_query_args = array(
-																	'page'   => 'customers-lists',
-																	'action' => 'edit_customer_details',
-																	'id'  => $user_id,
-																);
-									
-																$actions['edit_customer_details'] = sprintf(
-																	'<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
-																	esc_url( wp_nonce_url( add_query_arg( $edit_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $user_id ) ),
-																	_x( 'edit details', 'List table row action', 'wp-list-table-example' )
-																);
-									
-																$html .= '<td class="text-center">';
-																	$html .= $actions["edit_customer_details"];
-																$html .= '</td>';
-									
-																$delete_customer_details_query_args = array(
-																	'page'   => 'customers-lists',
-																	'action' => 'delete_customer_details',
-																	'id'  => $user_id,
-																);
-									
-																$actions['delete_customer_details'] = sprintf(
-																	'<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
-																	esc_url( wp_nonce_url( add_query_arg( $delete_customer_details_query_args, 'admin.php' ), 'deletecustomerdetails_' . $user_id ) ),
-																	_x( 'delete details', 'List table row action', 'wp-list-table-example' )
-																);
-									
-																$html .= '<td class="text-center">';
-																	$html .= $actions["delete_customer_details"];
-																$html .= '</td>';
-															
-														$html .= '</tr>';
-														}
-													}else{
-														if(in_array($user_id,$dis_array)){
-															$html .= '<tr>';
-															
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'nickname', true).'</a>';
-																$html .= '</td>';
-																
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'first_name', true).'</a>';
-																$html .= '</td>';
-																
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'last_name',true).'</a>';
-																$html .= '</td>';
-																
-																$address1 = get_user_meta($value->user_id,'pmsafe_address_1',true);
-																$address2 = get_user_meta($value->user_id,'pmsafe_address_2',true);
-																$city = get_user_meta($value->user_id,'pmsafe_city',true);
-																$state = get_user_meta($value->user_id,'pmsafe_state',true);
-																$zip_code = get_user_meta($value->user_id,'pmsafe_zip_code',true);
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.$address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code.'</a>';
-																$html .= '</td>';
-	
-																$vehicle_info = get_user_meta($value->user_id,'pmsafe_vehicle_info',false);
-																
-																// pr($vehicle_info);
-																	$url = get_site_url().'/wp-includes/images/media/document.png';
-																	$html .= '<td>';
-																		$html .= '<a href="'.$vehicle_info[0][$nickname]['pmsafe_pdf_link'].'" target="blank"><img src="'.$url.'" class="attachment-thumbnail" style="width:20px !important"/></a>';
-																	$html .= '</td>';
-																	
-																	$html .= '<td class="nisl-pdf-link">';
-																				$html .= $vehicle_info[0][$nickname]['pmsafe_pdf_link'];
-																	$html .= '</td>';
-	
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $benefits_package;
-																	$html .= '</td>';
-																	
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $post_title;
-																	$html .= '</td>';
-	
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $dealername;
-																	$html .= '</td>';
-	
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $distributorname;
-																	$html .= '</td>';
-	
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'];
-																	$html .= '</td>';
-	
-																		$html .= '<td class="nisl-pdf-link">';
-																		$html .= $vehicle_info[0][$nickname]['pmsafe_vin'];
-																	$html .= '</td>';
-	
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
-																	$html .= '</td>';
-	
-	
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
-																	$html .= '</td>';
-																	
-																	$view_customer_details_query_args = array(
-																		'page'   => 'customers-lists',
-																		'action' => 'view_customer_details',
-																		'id'  => $user_id,
-																	);
-										
-																	$actions['view_customer_details'] = sprintf(
-																		'<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
-																		esc_url( wp_nonce_url( add_query_arg( $view_customer_details_query_args, 'admin.php' ), 'viewcustomerdetails_' . $user_id ) ),
-																		_x( 'view details', 'List table row action', 'wp-list-table-example' )
-																	);
-										
-																	$html .= '<td class="text-center">';
-																		$html .= $actions["view_customer_details"];
-																	$html .= '</td>';
-										
-										
-																	$edit_customer_details_query_args = array(
-																		'page'   => 'customers-lists',
-																		'action' => 'edit_customer_details',
-																		'id'  => $user_id,
-																	);
-										
-																	$actions['edit_customer_details'] = sprintf(
-																		'<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
-																		esc_url( wp_nonce_url( add_query_arg( $edit_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $user_id ) ),
-																		_x( 'edit details', 'List table row action', 'wp-list-table-example' )
-																	);
-										
-																	$html .= '<td class="text-center">';
-																		$html .= $actions["edit_customer_details"];
-																	$html .= '</td>';
-										
-																	$delete_customer_details_query_args = array(
-																		'page'   => 'customers-lists',
-																		'action' => 'delete_customer_details',
-																		'id'  => $user_id,
-																	);
-										
-																	$actions['delete_customer_details'] = sprintf(
-																		'<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
-																		esc_url( wp_nonce_url( add_query_arg( $delete_customer_details_query_args, 'admin.php' ), 'deletecustomerdetails_' . $user_id ) ),
-																		_x( 'delete details', 'List table row action', 'wp-list-table-example' )
-																	);
-										
-																	$html .= '<td class="text-center">';
-																		$html .= $actions["delete_customer_details"];
-																	$html .= '</td>';
-																//}
-															$html .= '</tr>';
-																}
-													}
-												}else if($dealer_name != ''){
-													if(in_array($user_id,$dealer_array)){
-														$html .= '<tr>';
-														
-															$html .= '<td>';
-																$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'nickname', true).'</a>';
-															$html .= '</td>';
-															
-															$html .= '<td>';
-																$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'first_name', true).'</a>';
-															$html .= '</td>';
-															
-															$html .= '<td>';
-																$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'last_name',true).'</a>';
-															$html .= '</td>';
-															
-															$address1 = get_user_meta($value->user_id,'pmsafe_address_1',true);
-															$address2 = get_user_meta($value->user_id,'pmsafe_address_2',true);
-															$city = get_user_meta($value->user_id,'pmsafe_city',true);
-															$state = get_user_meta($value->user_id,'pmsafe_state',true);
-															$zip_code = get_user_meta($value->user_id,'pmsafe_zip_code',true);
-															$html .= '<td>';
-																$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.$address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code.'</a>';
-															$html .= '</td>';
-
-															$vehicle_info = get_user_meta($value->user_id,'pmsafe_vehicle_info',false);
-															
-															// pr($vehicle_info);
-																$url = get_site_url().'/wp-includes/images/media/document.png';
-																$html .= '<td>';
-																	$html .= '<a href="'.$vehicle_info[0][$nickname]['pmsafe_pdf_link'].'" target="blank"><img src="'.$url.'" class="attachment-thumbnail" style="width:20px !important"/></a>';
-																$html .= '</td>';
-																
-																$html .= '<td class="nisl-pdf-link">';
-																			$html .= $vehicle_info[0][$nickname]['pmsafe_pdf_link'];
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $benefits_package;
-																$html .= '</td>';
-																
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $post_title;
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $dealername;
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $distributorname;
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'];
-																$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																	$html .= $vehicle_info[0][$nickname]['pmsafe_vin'];
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
-																$html .= '</td>';
-
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
-																$html .= '</td>';
-																
-																$view_customer_details_query_args = array(
-																	'page'   => 'customers-lists',
-																	'action' => 'view_customer_details',
-																	'id'  => $user_id,
-																);
-									
-																$actions['view_customer_details'] = sprintf(
-																	'<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
-																	esc_url( wp_nonce_url( add_query_arg( $view_customer_details_query_args, 'admin.php' ), 'viewcustomerdetails_' . $user_id ) ),
-																	_x( 'view details', 'List table row action', 'wp-list-table-example' )
-																);
-									
-																$html .= '<td class="text-center">';
-																	$html .= $actions["view_customer_details"];
-																$html .= '</td>';
-									
-									
-																$edit_customer_details_query_args = array(
-																	'page'   => 'customers-lists',
-																	'action' => 'edit_customer_details',
-																	'id'  => $user_id,
-																);
-									
-																$actions['edit_customer_details'] = sprintf(
-																	'<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
-																	esc_url( wp_nonce_url( add_query_arg( $edit_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $user_id ) ),
-																	_x( 'edit details', 'List table row action', 'wp-list-table-example' )
-																);
-									
-																$html .= '<td class="text-center">';
-																	$html .= $actions["edit_customer_details"];
-																$html .= '</td>';
-									
-																$delete_customer_details_query_args = array(
-																	'page'   => 'customers-lists',
-																	'action' => 'delete_customer_details',
-																	'id'  => $user_id,
-																);
-									
-																$actions['delete_customer_details'] = sprintf(
-																	'<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
-																	esc_url( wp_nonce_url( add_query_arg( $delete_customer_details_query_args, 'admin.php' ), 'deletecustomerdetails_' . $user_id ) ),
-																	_x( 'delete details', 'List table row action', 'wp-list-table-example' )
-																);
-									
-																$html .= '<td class="text-center">';
-																	$html .= $actions["delete_customer_details"];
-																$html .= '</td>';
-															//}
-														$html .= '</tr>';
-														}
-												}else{
-													
-														$html .= '<tr>';
-														
-															$html .= '<td>';
-																$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'nickname', true).'</a>';
-															$html .= '</td>';
-															
-															$html .= '<td>';
-																$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'first_name', true).'</a>';
-															$html .= '</td>';
-															
-															$html .= '<td>';
-																$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'last_name',true).'</a>';
-															$html .= '</td>';
-															
-															$address1 = get_user_meta($value->user_id,'pmsafe_address_1',true);
-															$address2 = get_user_meta($value->user_id,'pmsafe_address_2',true);
-															$city = get_user_meta($value->user_id,'pmsafe_city',true);
-															$state = get_user_meta($value->user_id,'pmsafe_state',true);
-															$zip_code = get_user_meta($value->user_id,'pmsafe_zip_code',true);
-															$html .= '<td>';
-																$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.$address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code.'</a>';
-															$html .= '</td>';
-
-															$vehicle_info = get_user_meta($value->user_id,'pmsafe_vehicle_info',false);
-															
-															// pr($vehicle_info);
-																$url = get_site_url().'/wp-includes/images/media/document.png';
-																$html .= '<td>';
-																	$html .= '<a href="'.$vehicle_info[0][$nickname]['pmsafe_pdf_link'].'" target="blank"><img src="'.$url.'" class="attachment-thumbnail" style="width:20px !important"/></a>';
-																$html .= '</td>';
-																
-																$html .= '<td class="nisl-pdf-link">';
-																			$html .= $vehicle_info[0][$nickname]['pmsafe_pdf_link'];
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $benefits_package;
-																$html .= '</td>';
-																
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $post_title;
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $dealername;
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $distributorname;
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'];
-																$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																	$html .= $vehicle_info[0][$nickname]['pmsafe_vin'];
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
-																$html .= '</td>';
-
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
-																$html .= '</td>';
-																
-																$view_customer_details_query_args = array(
-																	'page'   => 'customers-lists',
-																	'action' => 'view_customer_details',
-																	'id'  => $user_id,
-																);
-									
-																$actions['view_customer_details'] = sprintf(
-																	'<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
-																	esc_url( wp_nonce_url( add_query_arg( $view_customer_details_query_args, 'admin.php' ), 'viewcustomerdetails_' . $user_id ) ),
-																	_x( 'view details', 'List table row action', 'wp-list-table-example' )
-																);
-									
-																$html .= '<td class="text-center">';
-																	$html .= $actions["view_customer_details"];
-																$html .= '</td>';
-									
-									
-																$edit_customer_details_query_args = array(
-																	'page'   => 'customers-lists',
-																	'action' => 'edit_customer_details',
-																	'id'  => $user_id,
-																);
-									
-																$actions['edit_customer_details'] = sprintf(
-																	'<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
-																	esc_url( wp_nonce_url( add_query_arg( $edit_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $user_id ) ),
-																	_x( 'edit details', 'List table row action', 'wp-list-table-example' )
-																);
-									
-																$html .= '<td class="text-center">';
-																	$html .= $actions["edit_customer_details"];
-																$html .= '</td>';
-									
-																$delete_customer_details_query_args = array(
-																	'page'   => 'customers-lists',
-																	'action' => 'delete_customer_details',
-																	'id'  => $user_id,
-																);
-									
-																$actions['delete_customer_details'] = sprintf(
-																	'<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
-																	esc_url( wp_nonce_url( add_query_arg( $delete_customer_details_query_args, 'admin.php' ), 'deletecustomerdetails_' . $user_id ) ),
-																	_x( 'delete details', 'List table row action', 'wp-list-table-example' )
-																);
-									
-																$html .= '<td class="text-center">';
-																	$html .= $actions["delete_customer_details"];
-																$html .= '</td>';
-															//}
-														$html .= '</tr>';
-														
-												}
+						//expired
+						if($select == 1){
+							if($current_date > $expiration_date){
+								// echo $expiration_date.'->'.$value->user_id.'<br/>';
+								if (($expiration_date >= $datepicker1) && ($expiration_date <= $datepicker2)){
+									if($distributor_name != ''){
+										if($dealer_name != ''){
+											if(in_array($user_id,$dealer_array)){
 												
+
+												$filter_array[] = array(
+													'user_id' => $user_id,
+													'code' => get_user_meta($user_id,'nickname', true),
+													'fname' => get_user_meta($user_id,'first_name', true),
+													'lname' => get_user_meta($user_id,'last_name',true),
+													'address' => $address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code,
+													'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
+													'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
+													'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
+													'package' => $benefits_package,
+													'bulk_member' => $post_title,
+													'dealer_name' => $dealername,
+													'distributor_name' => $distributorname,
+													'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
+													'expiration_date' => date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
+												); 
+											
+											}
+										}else{
+											if(in_array($user_id,$dis_array)){
+												$filter_array[] = array(
+													'user_id' => $user_id,
+													'code' => get_user_meta($user_id,'nickname', true),
+													'fname' => get_user_meta($user_id,'first_name', true),
+													'lname' => get_user_meta($user_id,'last_name',true),
+													'address' => $address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code,
+													'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
+													'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
+													'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
+													'package' => $benefits_package,
+													'bulk_member' => $post_title,
+													'dealer_name' => $dealername,
+													'distributor_name' => $distributorname,
+													'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
+													'expiration_date' => date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
+												); 	
 											}
 										}
-									}else if($select == 2){ //expiring
-										$date1 = $current_date;
-										$date2 = $expiration_date;
-
-										$ts1 = strtotime($date1);
-										$ts2 = strtotime($date2);
-
-										$year1 = date('Y', $ts1);
-										$year2 = date('Y', $ts2);
-
-										$month1 = date('m', $ts1);
-										$month2 = date('m', $ts2);
-
-										$diff = (($year2 - $year1) * 12) + ($month2 - $month1);  
-										// echo $expiration_date.'->'.$diff.'->'.$value->user_id.'<br/>';
-										if($diff >= 1 && $diff <= 6 ){
-											// echo 'id'.$value->user_id.'<br/>';
-											if (($expiration_date > $datepicker1) && ($expiration_date < $datepicker2)){
-												if($distributor_name != ''){
-													if($dealer_name != ''){
-														if(in_array($user_id,$dealer_array)){
-																$html .= '<tr>';
-															
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'nickname', true).'</a>';
-																$html .= '</td>';
-																
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'first_name', true).'</a>';
-																$html .= '</td>';
-																
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'last_name',true).'</a>';
-																$html .= '</td>';
-																
-																$address1 = get_user_meta($value->user_id,'pmsafe_address_1',true);
-																$address2 = get_user_meta($value->user_id,'pmsafe_address_2',true);
-																$city = get_user_meta($value->user_id,'pmsafe_city',true);
-																$state = get_user_meta($value->user_id,'pmsafe_state',true);
-																$zip_code = get_user_meta($value->user_id,'pmsafe_zip_code',true);
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.$address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code.'</a>';
-																$html .= '</td>';
-
-																$vehicle_info = get_user_meta($value->user_id,'pmsafe_vehicle_info',false);
-																
-																// pr($vehicle_info);
-																	$url = get_site_url().'/wp-includes/images/media/document.png';
-																	$html .= '<td>';
-																		$html .= '<a href="'.$vehicle_info[0][$nickname]['pmsafe_pdf_link'].'" target="blank"><img src="'.$url.'" class="attachment-thumbnail" style="width:20px !important"/></a>';
-																	$html .= '</td>';
-																	
-																	$html .= '<td class="nisl-pdf-link">';
-																				$html .= $vehicle_info[0][$nickname]['pmsafe_pdf_link'];
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $benefits_package;
-																	$html .= '</td>';
-																	
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $post_title;
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $dealername;
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $distributorname;
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'];
-																	$html .= '</td>';
-
-																		$html .= '<td class="nisl-pdf-link">';
-																		$html .= $vehicle_info[0][$nickname]['pmsafe_vin'];
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
-																	$html .= '</td>';
-
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
-																	$html .= '</td>';
-																	
-																	$view_customer_details_query_args = array(
-																		'page'   => 'customers-lists',
-																		'action' => 'view_customer_details',
-																		'id'  => $user_id,
-																	);
-										
-																	$actions['view_customer_details'] = sprintf(
-																		'<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
-																		esc_url( wp_nonce_url( add_query_arg( $view_customer_details_query_args, 'admin.php' ), 'viewcustomerdetails_' . $user_id ) ),
-																		_x( 'view details', 'List table row action', 'wp-list-table-example' )
-																	);
-										
-																	$html .= '<td class="text-center">';
-																		$html .= $actions["view_customer_details"];
-																	$html .= '</td>';
-										
-										
-																	$edit_customer_details_query_args = array(
-																		'page'   => 'customers-lists',
-																		'action' => 'edit_customer_details',
-																		'id'  => $user_id,
-																	);
-										
-																	$actions['edit_customer_details'] = sprintf(
-																		'<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
-																		esc_url( wp_nonce_url( add_query_arg( $edit_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $user_id ) ),
-																		_x( 'edit details', 'List table row action', 'wp-list-table-example' )
-																	);
-										
-																	$html .= '<td class="text-center">';
-																		$html .= $actions["edit_customer_details"];
-																	$html .= '</td>';
-										
-																	$delete_customer_details_query_args = array(
-																		'page'   => 'customers-lists',
-																		'action' => 'delete_customer_details',
-																		'id'  => $user_id,
-																	);
-										
-																	$actions['delete_customer_details'] = sprintf(
-																		'<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
-																		esc_url( wp_nonce_url( add_query_arg( $delete_customer_details_query_args, 'admin.php' ), 'deletecustomerdetails_' . $user_id ) ),
-																		_x( 'delete details', 'List table row action', 'wp-list-table-example' )
-																	);
-										
-																	$html .= '<td class="text-center">';
-																		$html .= $actions["delete_customer_details"];
-																	$html .= '</td>';
-																//}
-															$html .= '</tr>';   
-														}
-													}else{
-														if(in_array($user_id,$dis_array)){
-																$html .= '<tr>';
-															
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'nickname', true).'</a>';
-																$html .= '</td>';
-																
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'first_name', true).'</a>';
-																$html .= '</td>';
-																
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'last_name',true).'</a>';
-																$html .= '</td>';
-																
-																$address1 = get_user_meta($value->user_id,'pmsafe_address_1',true);
-																$address2 = get_user_meta($value->user_id,'pmsafe_address_2',true);
-																$city = get_user_meta($value->user_id,'pmsafe_city',true);
-																$state = get_user_meta($value->user_id,'pmsafe_state',true);
-																$zip_code = get_user_meta($value->user_id,'pmsafe_zip_code',true);
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.$address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code.'</a>';
-																$html .= '</td>';
-
-																$vehicle_info = get_user_meta($value->user_id,'pmsafe_vehicle_info',false);
-																
-																// pr($vehicle_info);
-																	$url = get_site_url().'/wp-includes/images/media/document.png';
-																	$html .= '<td>';
-																		$html .= '<a href="'.$vehicle_info[0][$nickname]['pmsafe_pdf_link'].'" target="blank"><img src="'.$url.'" class="attachment-thumbnail" style="width:20px !important"/></a>';
-																	$html .= '</td>';
-																	
-																	$html .= '<td class="nisl-pdf-link">';
-																				$html .= $vehicle_info[0][$nickname]['pmsafe_pdf_link'];
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $benefits_package;
-																	$html .= '</td>';
-																	
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $post_title;
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $dealername;
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $distributorname;
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'];
-																	$html .= '</td>';
-
-																		$html .= '<td class="nisl-pdf-link">';
-																		$html .= $vehicle_info[0][$nickname]['pmsafe_vin'];
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
-																	$html .= '</td>';
-
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
-																	$html .= '</td>';
-																	
-																	$view_customer_details_query_args = array(
-																		'page'   => 'customers-lists',
-																		'action' => 'view_customer_details',
-																		'id'  => $user_id,
-																	);
-										
-																	$actions['view_customer_details'] = sprintf(
-																		'<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
-																		esc_url( wp_nonce_url( add_query_arg( $view_customer_details_query_args, 'admin.php' ), 'viewcustomerdetails_' . $user_id ) ),
-																		_x( 'view details', 'List table row action', 'wp-list-table-example' )
-																	);
-										
-																	$html .= '<td class="text-center">';
-																		$html .= $actions["view_customer_details"];
-																	$html .= '</td>';
-										
-										
-																	$edit_customer_details_query_args = array(
-																		'page'   => 'customers-lists',
-																		'action' => 'edit_customer_details',
-																		'id'  => $user_id,
-																	);
-										
-																	$actions['edit_customer_details'] = sprintf(
-																		'<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
-																		esc_url( wp_nonce_url( add_query_arg( $edit_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $user_id ) ),
-																		_x( 'edit details', 'List table row action', 'wp-list-table-example' )
-																	);
-										
-																	$html .= '<td class="text-center">';
-																		$html .= $actions["edit_customer_details"];
-																	$html .= '</td>';
-										
-																	$delete_customer_details_query_args = array(
-																		'page'   => 'customers-lists',
-																		'action' => 'delete_customer_details',
-																		'id'  => $user_id,
-																	);
-										
-																	$actions['delete_customer_details'] = sprintf(
-																		'<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
-																		esc_url( wp_nonce_url( add_query_arg( $delete_customer_details_query_args, 'admin.php' ), 'deletecustomerdetails_' . $user_id ) ),
-																		_x( 'delete details', 'List table row action', 'wp-list-table-example' )
-																	);
-										
-																	$html .= '<td class="text-center">';
-																		$html .= $actions["delete_customer_details"];
-																	$html .= '</td>';
-																//}
-															$html .= '</tr>';   
-														}
-													}
-												}else if($dealer_name != ''){
-													if(in_array($user_id,$dealer_array)){
-															$html .= '<tr>';
-														
-															$html .= '<td>';
-																$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'nickname', true).'</a>';
-															$html .= '</td>';
-															
-															$html .= '<td>';
-																$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'first_name', true).'</a>';
-															$html .= '</td>';
-															
-															$html .= '<td>';
-																$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'last_name',true).'</a>';
-															$html .= '</td>';
-															
-															$address1 = get_user_meta($value->user_id,'pmsafe_address_1',true);
-															$address2 = get_user_meta($value->user_id,'pmsafe_address_2',true);
-															$city = get_user_meta($value->user_id,'pmsafe_city',true);
-															$state = get_user_meta($value->user_id,'pmsafe_state',true);
-															$zip_code = get_user_meta($value->user_id,'pmsafe_zip_code',true);
-															$html .= '<td>';
-																$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.$address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code.'</a>';
-															$html .= '</td>';
-
-															$vehicle_info = get_user_meta($value->user_id,'pmsafe_vehicle_info',false);
-															
-															// pr($vehicle_info);
-																$url = get_site_url().'/wp-includes/images/media/document.png';
-																$html .= '<td>';
-																	$html .= '<a href="'.$vehicle_info[0][$nickname]['pmsafe_pdf_link'].'" target="blank"><img src="'.$url.'" class="attachment-thumbnail" style="width:20px !important"/></a>';
-																$html .= '</td>';
-																
-																$html .= '<td class="nisl-pdf-link">';
-																			$html .= $vehicle_info[0][$nickname]['pmsafe_pdf_link'];
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $benefits_package;
-																$html .= '</td>';
-																
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $post_title;
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $dealername;
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $distributorname;
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'];
-																$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																	$html .= $vehicle_info[0][$nickname]['pmsafe_vin'];
-																$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
-																$html .= '</td>';
-
-
-																$html .= '<td class="nisl-pdf-link">';
-																	$html .= date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
-																$html .= '</td>';
-																
-																$view_customer_details_query_args = array(
-																	'page'   => 'customers-lists',
-																	'action' => 'view_customer_details',
-																	'id'  => $user_id,
-																);
-									
-																$actions['view_customer_details'] = sprintf(
-																	'<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
-																	esc_url( wp_nonce_url( add_query_arg( $view_customer_details_query_args, 'admin.php' ), 'viewcustomerdetails_' . $user_id ) ),
-																	_x( 'view details', 'List table row action', 'wp-list-table-example' )
-																);
-									
-																$html .= '<td class="text-center">';
-																	$html .= $actions["view_customer_details"];
-																$html .= '</td>';
-									
-									
-																$edit_customer_details_query_args = array(
-																	'page'   => 'customers-lists',
-																	'action' => 'edit_customer_details',
-																	'id'  => $user_id,
-																);
-									
-																$actions['edit_customer_details'] = sprintf(
-																	'<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
-																	esc_url( wp_nonce_url( add_query_arg( $edit_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $user_id ) ),
-																	_x( 'edit details', 'List table row action', 'wp-list-table-example' )
-																);
-									
-																$html .= '<td class="text-center">';
-																	$html .= $actions["edit_customer_details"];
-																$html .= '</td>';
-									
-																$delete_customer_details_query_args = array(
-																	'page'   => 'customers-lists',
-																	'action' => 'delete_customer_details',
-																	'id'  => $user_id,
-																);
-									
-																$actions['delete_customer_details'] = sprintf(
-																	'<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
-																	esc_url( wp_nonce_url( add_query_arg( $delete_customer_details_query_args, 'admin.php' ), 'deletecustomerdetails_' . $user_id ) ),
-																	_x( 'delete details', 'List table row action', 'wp-list-table-example' )
-																);
-									
-																$html .= '<td class="text-center">';
-																	$html .= $actions["delete_customer_details"];
-																$html .= '</td>';
-															//}
-														$html .= '</tr>';   
-													}
-												}else{
-													
-														$html .= '<tr>';
-													
-														$html .= '<td>';
-															$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'nickname', true).'</a>';
-														$html .= '</td>';
-														
-														$html .= '<td>';
-															$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'first_name', true).'</a>';
-														$html .= '</td>';
-														
-														$html .= '<td>';
-															$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'last_name',true).'</a>';
-														$html .= '</td>';
-														
-														$address1 = get_user_meta($value->user_id,'pmsafe_address_1',true);
-														$address2 = get_user_meta($value->user_id,'pmsafe_address_2',true);
-														$city = get_user_meta($value->user_id,'pmsafe_city',true);
-														$state = get_user_meta($value->user_id,'pmsafe_state',true);
-														$zip_code = get_user_meta($value->user_id,'pmsafe_zip_code',true);
-														$html .= '<td>';
-															$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.$address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code.'</a>';
-														$html .= '</td>';
-
-														$vehicle_info = get_user_meta($value->user_id,'pmsafe_vehicle_info',false);
-														
-														// pr($vehicle_info);
-															$url = get_site_url().'/wp-includes/images/media/document.png';
-															$html .= '<td>';
-																$html .= '<a href="'.$vehicle_info[0][$nickname]['pmsafe_pdf_link'].'" target="blank"><img src="'.$url.'" class="attachment-thumbnail" style="width:20px !important"/></a>';
-															$html .= '</td>';
-															
-															$html .= '<td class="nisl-pdf-link">';
-																		$html .= $vehicle_info[0][$nickname]['pmsafe_pdf_link'];
-															$html .= '</td>';
-
-															$html .= '<td class="nisl-pdf-link">';
-																$html .= $benefits_package;
-															$html .= '</td>';
-															
-															$html .= '<td class="nisl-pdf-link">';
-																$html .= $post_title;
-															$html .= '</td>';
-
-															$html .= '<td class="nisl-pdf-link">';
-																$html .= $dealername;
-															$html .= '</td>';
-
-															$html .= '<td class="nisl-pdf-link">';
-																$html .= $distributorname;
-															$html .= '</td>';
-
-															$html .= '<td class="nisl-pdf-link">';
-																$html .= $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'];
-															$html .= '</td>';
-
-																$html .= '<td class="nisl-pdf-link">';
-																$html .= $vehicle_info[0][$nickname]['pmsafe_vin'];
-															$html .= '</td>';
-
-															$html .= '<td class="nisl-pdf-link">';
-																$html .= date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
-															$html .= '</td>';
-
-
-															$html .= '<td class="nisl-pdf-link">';
-																$html .= date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
-															$html .= '</td>';
-															
-															$view_customer_details_query_args = array(
-																'page'   => 'customers-lists',
-																'action' => 'view_customer_details',
-																'id'  => $user_id,
-															);
-								
-															$actions['view_customer_details'] = sprintf(
-																'<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
-																esc_url( wp_nonce_url( add_query_arg( $view_customer_details_query_args, 'admin.php' ), 'viewcustomerdetails_' . $user_id ) ),
-																_x( 'view details', 'List table row action', 'wp-list-table-example' )
-															);
-								
-															$html .= '<td class="text-center">';
-																$html .= $actions["view_customer_details"];
-															$html .= '</td>';
-								
-								
-															$edit_customer_details_query_args = array(
-																'page'   => 'customers-lists',
-																'action' => 'edit_customer_details',
-																'id'  => $user_id,
-															);
-								
-															$actions['edit_customer_details'] = sprintf(
-																'<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
-																esc_url( wp_nonce_url( add_query_arg( $edit_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $user_id ) ),
-																_x( 'edit details', 'List table row action', 'wp-list-table-example' )
-															);
-								
-															$html .= '<td class="text-center">';
-																$html .= $actions["edit_customer_details"];
-															$html .= '</td>';
-								
-															$delete_customer_details_query_args = array(
-																'page'   => 'customers-lists',
-																'action' => 'delete_customer_details',
-																'id'  => $user_id,
-															);
-								
-															$actions['delete_customer_details'] = sprintf(
-																'<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
-																esc_url( wp_nonce_url( add_query_arg( $delete_customer_details_query_args, 'admin.php' ), 'deletecustomerdetails_' . $user_id ) ),
-																_x( 'delete details', 'List table row action', 'wp-list-table-example' )
-															);
-								
-															$html .= '<td class="text-center">';
-																$html .= $actions["delete_customer_details"];
-															$html .= '</td>';
-														//}
-													$html .= '</tr>';   
-												
-												}
-											}
+									}else if($dealer_name != ''){
+										if(in_array($user_id,$dealer_array)){
+											$filter_array[] = array(
+												'user_id' => $user_id,
+												'code' => get_user_meta($user_id,'nickname', true),
+												'fname' => get_user_meta($user_id,'first_name', true),
+												'lname' => get_user_meta($user_id,'last_name',true),
+												'address' => $address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code,
+												'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
+												'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
+												'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
+												'package' => $benefits_package,
+												'bulk_member' => $post_title,
+												'dealer_name' => $dealername,
+												'distributor_name' => $distributorname,
+												'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
+												'expiration_date' => date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
+											); 	
 										}
-									}else if($select == 3){  // current   
-										if($current_date < $expiration_date){
-											if (($vehicle_registration_date > $datepicker1) && ($vehicle_registration_date < $datepicker2)){
-												if($distributor_name != ''){
-													if($dealer_name != ''){
-														if(in_array($user_id,$dealer_array)){
-															$html .= '<tr>';
-															
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'nickname', true).'</a>';
-																$html .= '</td>';
-																
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'first_name', true).'</a>';
-																$html .= '</td>';
-																
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'last_name',true).'</a>';
-																$html .= '</td>';
-																
-																$address1 = get_user_meta($value->user_id,'pmsafe_address_1',true);
-																$address2 = get_user_meta($value->user_id,'pmsafe_address_2',true);
-																$city = get_user_meta($value->user_id,'pmsafe_city',true);
-																$state = get_user_meta($value->user_id,'pmsafe_state',true);
-																$zip_code = get_user_meta($value->user_id,'pmsafe_zip_code',true);
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.$address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code.'</a>';
-																$html .= '</td>';
-
-																$vehicle_info = get_user_meta($value->user_id,'pmsafe_vehicle_info',false);
-																
-																// pr($vehicle_info);
-																	$url = get_site_url().'/wp-includes/images/media/document.png';
-																	$html .= '<td>';
-																		$html .= '<a href="'.$vehicle_info[0][$nickname]['pmsafe_pdf_link'].'" target="blank"><img src="'.$url.'" class="attachment-thumbnail" style="width:20px !important"/></a>';
-																	$html .= '</td>';
-																	
-																	$html .= '<td class="nisl-pdf-link">';
-																				$html .= $vehicle_info[0][$nickname]['pmsafe_pdf_link'];
-																	$html .= '</td>';
-																	
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $benefits_package;
-																	$html .= '</td>';
-																	
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $post_title;
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $dealername;
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $distributorname;
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'];
-																	$html .= '</td>';
-
-																		$html .= '<td class="nisl-pdf-link">';
-																		$html .= $vehicle_info[0][$nickname]['pmsafe_vin'];
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
-																	$html .= '</td>';
-
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
-																	$html .= '</td>';
-																	
-																	$view_customer_details_query_args = array(
-																		'page'   => 'customers-lists',
-																		'action' => 'view_customer_details',
-																		'id'  => $user_id,
-																	);
-										
-																	$actions['view_customer_details'] = sprintf(
-																		'<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
-																		esc_url( wp_nonce_url( add_query_arg( $view_customer_details_query_args, 'admin.php' ), 'viewcustomerdetails_' . $user_id ) ),
-																		_x( 'view details', 'List table row action', 'wp-list-table-example' )
-																	);
-										
-																	$html .= '<td class="text-center">';
-																		$html .= $actions["view_customer_details"];
-																	$html .= '</td>';
-										
-										
-																	$edit_customer_details_query_args = array(
-																		'page'   => 'customers-lists',
-																		'action' => 'edit_customer_details',
-																		'id'  => $user_id,
-																	);
-										
-																	$actions['edit_customer_details'] = sprintf(
-																		'<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
-																		esc_url( wp_nonce_url( add_query_arg( $edit_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $user_id ) ),
-																		_x( 'edit details', 'List table row action', 'wp-list-table-example' )
-																	);
-										
-																	$html .= '<td class="text-center">';
-																		$html .= $actions["edit_customer_details"];
-																	$html .= '</td>';
-										
-																	$delete_customer_details_query_args = array(
-																		'page'   => 'customers-lists',
-																		'action' => 'delete_customer_details',
-																		'id'  => $user_id,
-																	);
-										
-																	$actions['delete_customer_details'] = sprintf(
-																		'<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
-																		esc_url( wp_nonce_url( add_query_arg( $delete_customer_details_query_args, 'admin.php' ), 'deletecustomerdetails_' . $user_id ) ),
-																		_x( 'delete details', 'List table row action', 'wp-list-table-example' )
-																	);
-										
-																	$html .= '<td class="text-center">';
-																		$html .= $actions["delete_customer_details"];
-																	$html .= '</td>';
-																//}
-															$html .= '</tr>';
-															}
-														}else{
-															if(in_array($user_id,$dis_array)){
-																$html .= '<tr>';
-																
-																	$html .= '<td>';
-																		$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'nickname', true).'</a>';
-																	$html .= '</td>';
-																	
-																	$html .= '<td>';
-																		$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'first_name', true).'</a>';
-																	$html .= '</td>';
-																	
-																	$html .= '<td>';
-																		$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'last_name',true).'</a>';
-																	$html .= '</td>';
-																	
-																	$address1 = get_user_meta($value->user_id,'pmsafe_address_1',true);
-																	$address2 = get_user_meta($value->user_id,'pmsafe_address_2',true);
-																	$city = get_user_meta($value->user_id,'pmsafe_city',true);
-																	$state = get_user_meta($value->user_id,'pmsafe_state',true);
-																	$zip_code = get_user_meta($value->user_id,'pmsafe_zip_code',true);
-																	$html .= '<td>';
-																		$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.$address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code.'</a>';
-																	$html .= '</td>';
-	
-																	$vehicle_info = get_user_meta($value->user_id,'pmsafe_vehicle_info',false);
-																	
-																	// pr($vehicle_info);
-																		$url = get_site_url().'/wp-includes/images/media/document.png';
-																		$html .= '<td>';
-																			$html .= '<a href="'.$vehicle_info[0][$nickname]['pmsafe_pdf_link'].'" target="blank"><img src="'.$url.'" class="attachment-thumbnail" style="width:20px !important"/></a>';
-																		$html .= '</td>';
-																		
-																		$html .= '<td class="nisl-pdf-link">';
-																					$html .= $vehicle_info[0][$nickname]['pmsafe_pdf_link'];
-																		$html .= '</td>';
-																		
-																		$html .= '<td class="nisl-pdf-link">';
-																			$html .= $benefits_package;
-																		$html .= '</td>';
-																		
-																		$html .= '<td class="nisl-pdf-link">';
-																			$html .= $post_title;
-																		$html .= '</td>';
-	
-																		$html .= '<td class="nisl-pdf-link">';
-																			$html .= $dealername;
-																		$html .= '</td>';
-	
-																		$html .= '<td class="nisl-pdf-link">';
-																			$html .= $distributorname;
-																		$html .= '</td>';
-	
-																		$html .= '<td class="nisl-pdf-link">';
-																			$html .= $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'];
-																		$html .= '</td>';
-	
-																			$html .= '<td class="nisl-pdf-link">';
-																			$html .= $vehicle_info[0][$nickname]['pmsafe_vin'];
-																		$html .= '</td>';
-	
-																		$html .= '<td class="nisl-pdf-link">';
-																			$html .= date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
-																		$html .= '</td>';
-	
-	
-																		$html .= '<td class="nisl-pdf-link">';
-																			$html .= date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
-																		$html .= '</td>';
-																		
-																		$view_customer_details_query_args = array(
-																			'page'   => 'customers-lists',
-																			'action' => 'view_customer_details',
-																			'id'  => $user_id,
-																		);
-											
-																		$actions['view_customer_details'] = sprintf(
-																			'<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
-																			esc_url( wp_nonce_url( add_query_arg( $view_customer_details_query_args, 'admin.php' ), 'viewcustomerdetails_' . $user_id ) ),
-																			_x( 'view details', 'List table row action', 'wp-list-table-example' )
-																		);
-											
-																		$html .= '<td class="text-center">';
-																			$html .= $actions["view_customer_details"];
-																		$html .= '</td>';
+									}else{
+										$filter_array[] = array(
+											'user_id' => $user_id,
+											'code' => get_user_meta($user_id,'nickname', true),
+											'fname' => get_user_meta($user_id,'first_name', true),
+											'lname' => get_user_meta($user_id,'last_name',true),
+											'address' => $address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code,
+											'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
+											'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
+											'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
+											'package' => $benefits_package,
+											'bulk_member' => $post_title,
+											'dealer_name' => $dealername,
+											'distributor_name' => $distributorname,
+											'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
+											'expiration_date' => date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
+										); 
 											
 											
-																		$edit_customer_details_query_args = array(
-																			'page'   => 'customers-lists',
-																			'action' => 'edit_customer_details',
-																			'id'  => $user_id,
-																		);
-											
-																		$actions['edit_customer_details'] = sprintf(
-																			'<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
-																			esc_url( wp_nonce_url( add_query_arg( $edit_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $user_id ) ),
-																			_x( 'edit details', 'List table row action', 'wp-list-table-example' )
-																		);
-											
-																		$html .= '<td class="text-center">';
-																			$html .= $actions["edit_customer_details"];
-																		$html .= '</td>';
-											
-																		$delete_customer_details_query_args = array(
-																			'page'   => 'customers-lists',
-																			'action' => 'delete_customer_details',
-																			'id'  => $user_id,
-																		);
-											
-																		$actions['delete_customer_details'] = sprintf(
-																			'<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
-																			esc_url( wp_nonce_url( add_query_arg( $delete_customer_details_query_args, 'admin.php' ), 'deletecustomerdetails_' . $user_id ) ),
-																			_x( 'delete details', 'List table row action', 'wp-list-table-example' )
-																		);
-											
-																		$html .= '<td class="text-center">';
-																			$html .= $actions["delete_customer_details"];
-																		$html .= '</td>';
-																	//}
-																$html .= '</tr>';
-																}
-														}
-													}else if($dealer_name != ''){
-														if(in_array($user_id,$dealer_array)){
-															$html .= '<tr>';
-															
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'nickname', true).'</a>';
-																$html .= '</td>';
-																
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'first_name', true).'</a>';
-																$html .= '</td>';
-																
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'last_name',true).'</a>';
-																$html .= '</td>';
-																
-																$address1 = get_user_meta($value->user_id,'pmsafe_address_1',true);
-																$address2 = get_user_meta($value->user_id,'pmsafe_address_2',true);
-																$city = get_user_meta($value->user_id,'pmsafe_city',true);
-																$state = get_user_meta($value->user_id,'pmsafe_state',true);
-																$zip_code = get_user_meta($value->user_id,'pmsafe_zip_code',true);
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.$address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code.'</a>';
-																$html .= '</td>';
-
-																$vehicle_info = get_user_meta($value->user_id,'pmsafe_vehicle_info',false);
-																
-																// pr($vehicle_info);
-																	$url = get_site_url().'/wp-includes/images/media/document.png';
-																	$html .= '<td>';
-																		$html .= '<a href="'.$vehicle_info[0][$nickname]['pmsafe_pdf_link'].'" target="blank"><img src="'.$url.'" class="attachment-thumbnail" style="width:20px !important"/></a>';
-																	$html .= '</td>';
-																	
-																	$html .= '<td class="nisl-pdf-link">';
-																				$html .= $vehicle_info[0][$nickname]['pmsafe_pdf_link'];
-																	$html .= '</td>';
-																	
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $benefits_package;
-																	$html .= '</td>';
-																	
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $post_title;
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $dealername;
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $distributorname;
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'];
-																	$html .= '</td>';
-
-																		$html .= '<td class="nisl-pdf-link">';
-																		$html .= $vehicle_info[0][$nickname]['pmsafe_vin'];
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
-																	$html .= '</td>';
-
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
-																	$html .= '</td>';
-																	
-																	$view_customer_details_query_args = array(
-																		'page'   => 'customers-lists',
-																		'action' => 'view_customer_details',
-																		'id'  => $user_id,
-																	);
-										
-																	$actions['view_customer_details'] = sprintf(
-																		'<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
-																		esc_url( wp_nonce_url( add_query_arg( $view_customer_details_query_args, 'admin.php' ), 'viewcustomerdetails_' . $user_id ) ),
-																		_x( 'view details', 'List table row action', 'wp-list-table-example' )
-																	);
-										
-																	$html .= '<td class="text-center">';
-																		$html .= $actions["view_customer_details"];
-																	$html .= '</td>';
-										
-										
-																	$edit_customer_details_query_args = array(
-																		'page'   => 'customers-lists',
-																		'action' => 'edit_customer_details',
-																		'id'  => $user_id,
-																	);
-										
-																	$actions['edit_customer_details'] = sprintf(
-																		'<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
-																		esc_url( wp_nonce_url( add_query_arg( $edit_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $user_id ) ),
-																		_x( 'edit details', 'List table row action', 'wp-list-table-example' )
-																	);
-										
-																	$html .= '<td class="text-center">';
-																		$html .= $actions["edit_customer_details"];
-																	$html .= '</td>';
-										
-																	$delete_customer_details_query_args = array(
-																		'page'   => 'customers-lists',
-																		'action' => 'delete_customer_details',
-																		'id'  => $user_id,
-																	);
-										
-																	$actions['delete_customer_details'] = sprintf(
-																		'<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
-																		esc_url( wp_nonce_url( add_query_arg( $delete_customer_details_query_args, 'admin.php' ), 'deletecustomerdetails_' . $user_id ) ),
-																		_x( 'delete details', 'List table row action', 'wp-list-table-example' )
-																	);
-										
-																	$html .= '<td class="text-center">';
-																		$html .= $actions["delete_customer_details"];
-																	$html .= '</td>';
-																//}
-															$html .= '</tr>';
-															}
-													}else{
-														
-															$html .= '<tr>';
-															
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'nickname', true).'</a>';
-																$html .= '</td>';
-																
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'first_name', true).'</a>';
-																$html .= '</td>';
-																
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.get_user_meta($value->user_id,'last_name',true).'</a>';
-																$html .= '</td>';
-																
-																$address1 = get_user_meta($value->user_id,'pmsafe_address_1',true);
-																$address2 = get_user_meta($value->user_id,'pmsafe_address_2',true);
-																$city = get_user_meta($value->user_id,'pmsafe_city',true);
-																$state = get_user_meta($value->user_id,'pmsafe_state',true);
-																$zip_code = get_user_meta($value->user_id,'pmsafe_zip_code',true);
-																$html .= '<td>';
-																	$html .= '<a href="" class="view-data" data-id="'.$value->user_id.'">'.$address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code.'</a>';
-																$html .= '</td>';
-
-																$vehicle_info = get_user_meta($value->user_id,'pmsafe_vehicle_info',false);
-																
-																// pr($vehicle_info);
-																	$url = get_site_url().'/wp-includes/images/media/document.png';
-																	$html .= '<td>';
-																		$html .= '<a href="'.$vehicle_info[0][$nickname]['pmsafe_pdf_link'].'" target="blank"><img src="'.$url.'" class="attachment-thumbnail" style="width:20px !important"/></a>';
-																	$html .= '</td>';
-																	
-																	$html .= '<td class="nisl-pdf-link">';
-																				$html .= $vehicle_info[0][$nickname]['pmsafe_pdf_link'];
-																	$html .= '</td>';
-																	
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $benefits_package;
-																	$html .= '</td>';
-																	
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $post_title;
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $dealername;
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $distributorname;
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'];
-																	$html .= '</td>';
-
-																		$html .= '<td class="nisl-pdf-link">';
-																		$html .= $vehicle_info[0][$nickname]['pmsafe_vin'];
-																	$html .= '</td>';
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
-																	$html .= '</td>';
-
-
-																	$html .= '<td class="nisl-pdf-link">';
-																		$html .= date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
-																	$html .= '</td>';
-																	
-																	$view_customer_details_query_args = array(
-																		'page'   => 'customers-lists',
-																		'action' => 'view_customer_details',
-																		'id'  => $user_id,
-																	);
-										
-																	$actions['view_customer_details'] = sprintf(
-																		'<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
-																		esc_url( wp_nonce_url( add_query_arg( $view_customer_details_query_args, 'admin.php' ), 'viewcustomerdetails_' . $user_id ) ),
-																		_x( 'view details', 'List table row action', 'wp-list-table-example' )
-																	);
-										
-																	$html .= '<td class="text-center">';
-																		$html .= $actions["view_customer_details"];
-																	$html .= '</td>';
-										
-										
-																	$edit_customer_details_query_args = array(
-																		'page'   => 'customers-lists',
-																		'action' => 'edit_customer_details',
-																		'id'  => $user_id,
-																	);
-										
-																	$actions['edit_customer_details'] = sprintf(
-																		'<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
-																		esc_url( wp_nonce_url( add_query_arg( $edit_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $user_id ) ),
-																		_x( 'edit details', 'List table row action', 'wp-list-table-example' )
-																	);
-										
-																	$html .= '<td class="text-center">';
-																		$html .= $actions["edit_customer_details"];
-																	$html .= '</td>';
-										
-																	$delete_customer_details_query_args = array(
-																		'page'   => 'customers-lists',
-																		'action' => 'delete_customer_details',
-																		'id'  => $user_id,
-																	);
-										
-																	$actions['delete_customer_details'] = sprintf(
-																		'<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
-																		esc_url( wp_nonce_url( add_query_arg( $delete_customer_details_query_args, 'admin.php' ), 'deletecustomerdetails_' . $user_id ) ),
-																		_x( 'delete details', 'List table row action', 'wp-list-table-example' )
-																	);
-										
-																	$html .= '<td class="text-center">';
-																		$html .= $actions["delete_customer_details"];
-																	$html .= '</td>';
-																
-															$html .= '</tr>';
-															
-													}
-											}
-										}
 									}
+									
+								}
+							}
+						}else if($select == 2){ //expiring
+							$date1 = $current_date;
+							$date2 = $expiration_date;
+
+							$ts1 = strtotime($date1);
+							$ts2 = strtotime($date2);
+
+							$year1 = date('Y', $ts1);
+							$year2 = date('Y', $ts2);
+
+							$month1 = date('m', $ts1);
+							$month2 = date('m', $ts2);
+
+							$diff = (($year2 - $year1) * 12) + ($month2 - $month1);  
+							// echo $expiration_date.'->'.$diff.'->'.$value->user_id.'<br/>';
+							if($diff >= 1 && $diff <= 6 ){
+								// echo 'id'.$value->user_id.'<br/>';
+								if (($expiration_date >= $datepicker1) && ($expiration_date <= $datepicker2)){
+									if($distributor_name != ''){
+										if($dealer_name != ''){
+											if(in_array($user_id,$dealer_array)){
+												$filter_array[] = array(
+													'user_id' => $user_id,
+													'code' => get_user_meta($user_id,'nickname', true),
+													'fname' => get_user_meta($user_id,'first_name', true),
+													'lname' => get_user_meta($user_id,'last_name',true),
+													'address' => $address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code,
+													'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
+													'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
+													'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
+													'package' => $benefits_package,
+													'bulk_member' => $post_title,
+													'dealer_name' => $dealername,
+													'distributor_name' => $distributorname,
+													'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
+													'expiration_date' => date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
+												); 
+											}
+										}else{
+											if(in_array($user_id,$dis_array)){
+												$filter_array[] = array(
+													'user_id' => $user_id,
+													'code' => get_user_meta($user_id,'nickname', true),
+													'fname' => get_user_meta($user_id,'first_name', true),
+													'lname' => get_user_meta($user_id,'last_name',true),
+													'address' => $address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code,
+													'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
+													'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
+													'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
+													'package' => $benefits_package,
+													'bulk_member' => $post_title,
+													'dealer_name' => $dealername,
+													'distributor_name' => $distributorname,
+													'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
+													'expiration_date' => date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
+												); 
+											}
+										}
+									}else if($dealer_name != ''){
+										if(in_array($user_id,$dealer_array)){
+											$filter_array[] = array(
+												'user_id' => $user_id,
+												'code' => get_user_meta($user_id,'nickname', true),
+												'fname' => get_user_meta($user_id,'first_name', true),
+												'lname' => get_user_meta($user_id,'last_name',true),
+												'address' => $address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code,
+												'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
+												'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
+												'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
+												'package' => $benefits_package,
+												'bulk_member' => $post_title,
+												'dealer_name' => $dealername,
+												'distributor_name' => $distributorname,
+												'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
+												'expiration_date' => date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
+											);   
+										}
+									}else{
+										
+										$filter_array[] = array(
+											'user_id' => $user_id,
+											'code' => get_user_meta($user_id,'nickname', true),
+											'fname' => get_user_meta($user_id,'first_name', true),
+											'lname' => get_user_meta($user_id,'last_name',true),
+											'address' => $address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code,
+											'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
+											'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
+											'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
+											'package' => $benefits_package,
+											'bulk_member' => $post_title,
+											'dealer_name' => $dealername,
+											'distributor_name' => $distributorname,
+											'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
+											'expiration_date' => date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
+										); 
+									
+									}
+								}
+							}
+						}else if($select == 3){  // current   
+							if($current_date < $expiration_date){
+								if (($vehicle_registration_date >= $datepicker1) && ($vehicle_registration_date <= $datepicker2)){
+									
+									if($distributor_name != ''){
+										
+										if($dealer_name != ''){
+											
+											if(in_array($user_id,$dealer_array)){
+												$filter_array[] = array(
+													'user_id' => $user_id,
+													'code' => get_user_meta($user_id,'nickname', true),
+													'fname' => get_user_meta($user_id,'first_name', true),
+													'lname' => get_user_meta($user_id,'last_name',true),
+													'address' => $address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code,
+													'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
+													'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
+													'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
+													'package' => $benefits_package,
+													'bulk_member' => $post_title,
+													'dealer_name' => $dealername,
+													'distributor_name' => $distributorname,
+													'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
+													'expiration_date' => date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
+												); 	
+												
+											}
+										}else{
+											if(in_array($user_id,$dis_array)){
+												$filter_array[] = array(
+													'user_id' => $user_id,
+													'code' => get_user_meta($user_id,'nickname', true),
+													'fname' => get_user_meta($user_id,'first_name', true),
+													'lname' => get_user_meta($user_id,'last_name',true),
+													'address' => $address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code,
+													'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
+													'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
+													'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
+													'package' => $benefits_package,
+													'bulk_member' => $post_title,
+													'dealer_name' => $dealername,
+													'distributor_name' => $distributorname,
+													'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
+													'expiration_date' => date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
+												); 		
+											}
+										}
+									}else if($dealer_name != ''){
+										if(in_array($user_id,$dealer_array)){
+											$filter_array[] = array(
+												'user_id' => $user_id,
+												'code' => get_user_meta($user_id,'nickname', true),
+												'fname' => get_user_meta($user_id,'first_name', true),
+												'lname' => get_user_meta($user_id,'last_name',true),
+												'address' => $address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code,
+												'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
+												'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
+												'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
+												'package' => $benefits_package,
+												'bulk_member' => $post_title,
+												'dealer_name' => $dealername,
+												'distributor_name' => $distributorname,
+												'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
+												'expiration_date' => date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
+											); 			
+										}
+									}else{
+											
+										$filter_array[] = array(
+											'user_id' => $user_id,
+											'code' => get_user_meta($user_id,'nickname', true),
+											'fname' => get_user_meta($user_id,'first_name', true),
+											'lname' => get_user_meta($user_id,'last_name',true),
+											'address' => $address1.', '.$address2.', '.$city.', '.$state.', '.$zip_code,
+											'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
+											'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
+											'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
+											'package' => $benefits_package,
+											'bulk_member' => $post_title,
+											'dealer_name' => $dealername,
+											'distributor_name' => $distributorname,
+											'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
+											'expiration_date' => date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
+										); 		
+												
+									}
+								}
 							}
 						}
-
-					$html .= '</tbody>';
-					$html .= '</table>';
+				}
+			}
+                            // pr($query);
+		$html .= '<table id="search_tbl">';
+			$html .= '<thead>';
+			$html .= '<tr>';
 				
+				$html .= '<th>';
+					$html .= 'MemberCode';
+				$html .= '</th>';
+
+					$html .= '<th>';
+					$html .= 'First Name';
+				$html .= '</th>';
+
+				$html .= '<th>';
+					$html .= 'Last Name';
+				$html .= '</th>';
+
+				$html .= '<th>';
+					$html .= 'Address';
+				$html .= '</th>';
+
+				$html .= '<th>';
+					$html .= 'PDF';
+				$html .= '</th>';
+
+				$html .= '<th class="nisl-pdf-link">';
+				$html .= 'PDF';
+				$html .= '</th>';
+
+				$html .= '<th class="nisl-pdf-link">';
+				$html .= 'Benefits<br/> Package';
+				$html .= '</th>';
+
+				$html .= '<th class="nisl-pdf-link">';
+				$html .= 'Product Code <br/> Range';
+				$html .= '</th>';
+
+				$html .= '<th class="nisl-pdf-link">';
+				$html .= 'Dealer Name';
+				$html .= '</th>';
+
+				$html .= '<th class="nisl-pdf-link">';
+				$html .= 'Distributor Name';
+				$html .= '</th>';
+				
+				$html .= '<th class="nisl-pdf-link">';
+				$html .= 'Vehicle <br/> Information';
+				$html .= '</th>';
+
+				$html .= '<th class="nisl-pdf-link">';
+				$html .= 'VIN';
+				$html .= '</th>';
+
+				$html .= '<th class="nisl-pdf-link">';
+				$html .= 'Registration <br/> Date';
+				$html .= '</th>';
+
+				$html .= '<th class="nisl-pdf-link">';
+				$html .= 'Expiration <br/> Date';
+				$html .= '</th>';
+
+				$html .= '<th>';
+				$html .= 'View Detail';
+				$html .= '</th>';
+
+				$html .= '<th>';
+				$html .= 'Edit';
+				$html .= '</th>';
+
+				$html .= '<th>';
+				$html .= 'Delete';
+				$html .= '</th>';
+
+			$html .= '</tr>';
+			$html .= '</thead>';
+			$html .= '<tbody>';
+			
+				foreach ($filter_array as $key => $value) {
+					$html .= '<tr>';
+														
+						$html .= '<td>';
+							$html .= '<a href="" class="view-data" data-id="'.$value['user_id'].'">'.$value['code'].'</a>';
+						$html .= '</td>';
+						
+						$html .= '<td>';
+							$html .= '<a href="" class="view-data" data-id="'.$value['user_id'].'">'.$value['fname'].'</a>';
+						$html .= '</td>';
+						
+						$html .= '<td>';
+							$html .= '<a href="" class="view-data" data-id="'.$value['user_id'].'">'.$value['lname'].'</a>';
+						$html .= '</td>';
+						
+						$html .= '<td>';
+							$html .= '<a href="" class="view-data" data-id="'.$value['user_id'].'">'.$value['address'].'</a>';
+						$html .= '</td>';
+
+						
+						// pr($vehicle_info);
+							$url = get_site_url().'/wp-includes/images/media/document.png';
+							$html .= '<td>';
+								$html .= '<a href="'.$value['pdf_link'].'" target="blank"><img src="'.$url.'" class="attachment-thumbnail" style="width:20px !important"/></a>';
+							$html .= '</td>';
+							
+							$html .= '<td class="nisl-pdf-link">';
+										$html .= $value['pdf_link'];
+							$html .= '</td>';
+
+							$html .= '<td class="nisl-pdf-link">';
+								$html .= $value['package'];
+							$html .= '</td>';
+							
+							$html .= '<td class="nisl-pdf-link">';
+								$html .= $value['bulk_member'];
+							$html .= '</td>';
+
+							$html .= '<td class="nisl-pdf-link">';
+								$html .= $value['dealer_name'];
+							$html .= '</td>';
+
+							$html .= '<td class="nisl-pdf-link">';
+								$html .= $value['distributor_name'];;
+							$html .= '</td>';
+
+							$html .= '<td class="nisl-pdf-link">';
+								$html .= $value['vehicle_information'];
+							$html .= '</td>';
+
+								$html .= '<td class="nisl-pdf-link">';
+								$html .= $value['vin'];
+							$html .= '</td>';
+
+							$html .= '<td class="nisl-pdf-link">';
+								$html .= $value['registration_date'];
+							$html .= '</td>';
+
+
+							$html .= '<td class="nisl-pdf-link">';
+								$html .= $value['expiration_date'];
+							$html .= '</td>';
+							
+							$view_customer_details_query_args = array(
+								'page'   => 'customers-lists',
+								'action' => 'view_customer_details',
+								'id'  => $value['user_id'],
+							);
+
+							$actions['view_customer_details'] = sprintf(
+								'<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
+								esc_url( wp_nonce_url( add_query_arg( $view_customer_details_query_args, 'admin.php' ), 'viewcustomerdetails_' . $value['user_id'] ) ),
+								_x( 'view details', 'List table row action', 'wp-list-table-example' )
+							);
+
+							$html .= '<td class="text-center">';
+								$html .= $actions["view_customer_details"];
+							$html .= '</td>';
+
+
+							$edit_customer_details_query_args = array(
+								'page'   => 'customers-lists',
+								'action' => 'edit_customer_details',
+								'id'  => $value['user_id'],
+							);
+
+							$actions['edit_customer_details'] = sprintf(
+								'<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
+								esc_url( wp_nonce_url( add_query_arg( $edit_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $value['user_id'] ) ),
+								_x( 'edit details', 'List table row action', 'wp-list-table-example' )
+							);
+
+							$html .= '<td class="text-center">';
+								$html .= $actions["edit_customer_details"];
+							$html .= '</td>';
+
+							$delete_customer_details_query_args = array(
+								'page'   => 'customers-lists',
+								'action' => 'delete_customer_details',
+								'id'  => $value['user_id'],
+							);
+
+							$actions['delete_customer_details'] = sprintf(
+								'<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
+								esc_url( wp_nonce_url( add_query_arg( $delete_customer_details_query_args, 'admin.php' ), 'deletecustomerdetails_' . $value['user_id'] ) ),
+								_x( 'delete details', 'List table row action', 'wp-list-table-example' )
+							);
+
+							$html .= '<td class="text-center">';
+								$html .= $actions["delete_customer_details"];
+							$html .= '</td>';
+						
+					$html .= '</tr>';
+				}
+
+			$html .= '</tbody>';
+			$html .= '</table>';
 		
-				echo $html;   
+			echo $html;   
 
 			die;
 		}
 
+		/**
+		 * ajax function for filtering date vise upgraded membership.
+		 */
 		public function admin_membership_date_filter(){
 			global $wpdb;
             $datepicker1 = $_POST['datepicker1'];
@@ -3627,9 +2585,9 @@ class Permasafe_User_Pro_Admin {
 			}
 
 			$str = rtrim($str,",");
-			// echo $str;
+			
 			$str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in ('.$str.') ');
-			// pr($str_results);
+			
 			$check_array = array();
 			foreach ($str_results as $str_result) {
 				$check_array[] = $str_result->meta_value;
@@ -3754,13 +2712,11 @@ class Permasafe_User_Pro_Admin {
 						}
 
 					}
-					
-					// echo '<br>';
 						
 				}
 				
 			}	
-			// pr($prefix_arr);
+
 			$html .= '<div class="membership-count">';
 			foreach ($prefix_arr as $key => $value) {
 				$html .= '<p>';
@@ -4033,7 +2989,10 @@ class Permasafe_User_Pro_Admin {
             die;
 		}
 
-	public function add_dealer_benifits_package_price_function(){
+	/**
+	 * ajax function for add benefits package price for dealers.
+	 */
+	public function add_dealer_benefits_package_price_function(){
 		$dealer_id = $_POST['dealer_id'];
 		$selected_package = $_POST['selected_package'];
 		$dealer_cost = $_POST['dealer_cost'];
@@ -4067,7 +3026,11 @@ class Permasafe_User_Pro_Admin {
 		die;
 	}		
 
-	public function delete_dealer_benifits_package_price_function(){
+	/**
+	 * ajax function for delete benefits package price for dealers.
+	 */
+
+	public function delete_dealer_benefits_package_price_function(){
 		$dealer_id = $_POST['dealer_id'];
 		$package = $_POST['package'];
 		$get_price_arr = get_user_meta($dealer_id,'pricing_pacakge',true);
@@ -4076,7 +3039,10 @@ class Permasafe_User_Pro_Admin {
 		die;
 	}
 	
-	public function edit_dealer_benifits_package_price_function(){
+	/**
+	 * ajax function for edit benefits package price for dealers.
+	 */
+	public function edit_dealer_benefits_package_price_function(){
 		$dealer_id = $_POST['dealer_id'];
 		$selected_package = $_POST['selected_package'];
 		$dealer_cost = $_POST['dealer_cost'];

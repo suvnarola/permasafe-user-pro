@@ -53,8 +53,28 @@ class PMSafe_Bulk_Invitation{
             add_filter( 'views_edit-pmsafe_bulk_invi', array( $this,'total_range_codes' ));
             add_action( 'admin_head-edit.php', array ( $this, 'move_export_dealer_csv_function' ));
             // add_action( 'admin_footer', array ( $this, 'pdfscript' ));
+            add_action('admin_footer',array($this, 'disable_enter_key_event'));
     }
 
+    public function disable_enter_key_event(){
+        $post_type = $_GET['post_type']; 
+        if($post_type == 'pmsafe_bulk_invi'){
+            ?>
+                <script type="text/javascript">
+
+                jQuery(document).on("keypress",'[name="post"]', function(event) {
+                // jQuery(document).keypress(function(event){
+                    var keycode = (event.keyCode ? event.keyCode : event.which);
+                    if(keycode == '13'){
+                        event.preventDefault();
+                        return false;	
+                    }
+                });
+                </script>
+            <?php
+        }
+
+    }
     public function export_dealer_csv_function( $views )
     {   
             $export = $_GET['export'];

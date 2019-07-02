@@ -30,8 +30,36 @@ class PMSafe_Invitation_Code {
             add_filter( 'posts_orderby', array( $this,'change_orderby_filter' ), 10, 2 );
             
             add_action( 'pre_get_posts', array( $this,'extend_admin_search') );
+
+            add_action( 'wp_ajax_check_invite_code_exist', array($this, 'check_invite_code_exist' ));
+            add_action( 'wp_ajax_nopriv_check_invite_code_exist', array($this, 'check_invite_code_exist' ));
+            
+            add_action( 'wp_ajax_update_invite_codes', array($this, 'update_invite_codes' ));
+            add_action( 'wp_ajax_nopriv_update_invite_codes', array($this, 'update_invite_codes' ));
+
+            add_action('admin_footer',array($this, 'disable_enter_key_event_function'));
     }
     
+    public function disable_enter_key_event_function(){
+        $post_type = $_GET['post_type']; 
+        if($post_type == 'pmsafe_invitecode'){
+            ?>
+                <script type="text/javascript">
+
+                jQuery(document).on("keypress",'[name="post"]', function(event) {
+                // jQuery(document).keypress(function(event){
+                    var keycode = (event.keyCode ? event.keyCode : event.which);
+                    if(keycode == '13'){
+                        event.preventDefault();
+                        return false;	
+                    }
+                });
+                </script>
+            <?php
+        }
+
+    }
+
     public function pmsafe_create_invitecode_posttype(){
             $labels = array(
                 'name'               => _x( 'Member Codes', 'post type general name', '' ),
@@ -76,6 +104,7 @@ class PMSafe_Invitation_Code {
     public function pmsafe_invitation_code_information(){
             global $post;
             $post_id = $post->ID;
+            $edit_action = $_GET['action'];
 
             wp_nonce_field( basename( __FILE__ ), 'pmsafe_post_class_nonce' );
 
@@ -92,73 +121,28 @@ class PMSafe_Invitation_Code {
                 }
                 echo '<input type="hidden" name="pmsafe_code_create_date" value="'.$create_date.'" />';
         
-//                if($_GET['action'] != 'edit'){
+
                 echo '<tr>';
                     echo '<th>';
                         echo '<label><strong>Member Code to Create</strong></label>';
                     echo '</th>';
                     echo '<td>';
-//                        echo '<input type="text" name="pmsafe_invitation_code" value="' . get_post_meta($post_id, '_pmsafe_invitation_code', true)  . '" class="widefat pmsafe-code-input" /><a href="" id="pmsafe-generate-code">Generate new</a>';
-                        echo '<input type="text" name="pmsafe_invitation_code" value="' . get_post_meta($post_id, '_pmsafe_invitation_code', true)  . '" class="widefat pmsafe-code-input" />';
+                   
+                        echo '<input type="text" name="pmsafe_invitation_code" id="pmsafe_invitation_code" value="' . get_post_meta($post_id, '_pmsafe_invitation_code', true)  . '" class="widefat pmsafe-code-input" '.(($edit_action == 'edit')?'disabled':'').'/><span class="code-exist" style="display:none;">This member code already exists. Please enter valid codes.</span>';
                     echo '</td>';
                 echo '</tr>';
-//                } else {
-//                    echo '<tr>';
-//                    echo '<th>';
-//                        echo '<label><strong>Editing Member Code</strong></label>';
-//                    echo '</th>';
-//                    echo '<td>';
-//                        echo '<code>'.get_post_meta( $post_id, '_pmsafe_invitation_code', true ).'</code>';
-//                    echo '</td>';
-//                    echo '</tr>';
-//                }
-                
-//                echo '<tr>';
-//                    echo '<th>';
-//                        echo '<label><strong>Expiration date</strong><span>code will be valid until midnight</span></label>';
-//                    echo '</th>';
-//                    echo '<td>';
-//                        echo '<input type="text" name="pmsafe_expiration_date" value="' . get_post_meta($post_id, '_pmsafe_expiration_date', true)  . '" class="widefat datepicker" />';
-//                    echo '</td>';
-//                echo '</tr>';
-//                echo '<tr>';
-//                    echo '<th>';
-//                        echo '<label><strong>User Limit</strong></label>';
-//                    echo '</th>';
-//                    echo '<td>';
-//                        echo '<input type="number" name="pmsafe_user_limit" value="' . get_post_meta($post_id, '_pmsafe_user_limit', true)  . '" class="widefat" />';
-//                    echo '</td>';
-//                echo '</tr>';
-//                echo '<tr>';
-//                    echo '<th>';
-//                        echo '<label><strong>Require email verification</strong></label>';
-//                    echo '</th>';
-//                    echo '<td>';
-//                        echo '<input type="radio" name="pmsafe_email_verification" value="no" '. checked( get_post_meta($post_id,'_pmsafe_email_verification',true), 'no', false ) .'> No';
-//                        echo '<input type="radio" name="pmsafe_email_verification" value="yes" '. checked( get_post_meta($post_id,'_pmsafe_email_verification',true), 'yes', false ) .' > Yes';
-//                    echo '</td>';
-//                echo '</tr>';
-//                echo '<tr>';
-//                    echo '<th>';
-//                        echo '<label><strong>Require to use the following email address during the registration</strong><span>Using this option makes the invitation code disposable. Leave empty to disable.</span></label>';
-//                    echo '</th>';
-//                    echo '<td>';
-//                        echo '<input type="text" name="pmsafe_email_address" value="' . get_post_meta($post_id, '_pmsafe_email_address', true)  . '" class="widefat" />';
-//                    echo '</td>';
-//                echo '</tr>';
-        
                 // Start of Benefits Package on Individual Code 
                 $benefit_prefix = pmsafe_get_meta_values( '_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish' );
                 
-//                if($_GET['action'] != 'edit'){
+
                     echo '<tr>';
                         echo '<th>';
                             echo '<label><strong>Benefits Package</strong><span>Select the benefits package these member codes will assign to the customer.</span></label>';
                         echo '</th>';
                         echo '<td>';
-//                            echo '<input type="text" name="pmsafe_invitation_prefix" value="' . get_post_meta($post_id, '_pmsafe_invitation_prefix', true)  . '" class="widefat" />';
+
                             if(!empty($benefit_prefix)){
-                                echo '<select name="pmsafe_invitation_prefix">';
+                                echo '<select name="pmsafe_invitation_prefix" id="pmsafe_invitation_prefix">';
                                     foreach ($benefit_prefix as $prefix) {
                                         echo '<option value="'.$prefix.'" '. selected( get_post_meta($post_id,'_pmsafe_invitation_prefix',true), $prefix, false ) .'>'.$prefix.'</option>';
                                     }
@@ -166,10 +150,113 @@ class PMSafe_Invitation_Code {
                             }
                         echo '</td>';
                     echo '</tr>';
-//                }
+
 
         
-                echo '<tr>';
+                    echo '<tr>';
+                    echo '<th>';
+                        echo '<label><strong>Only Allow Dealers to Register</strong></label>';
+                    echo '</th>';
+                    echo '<td>';
+                    $checked = get_post_meta($post_id,'pmsafe_code_allow_dealer',true);
+                    if($edit_action == 'edit'){
+                        if($checked == 1 ){
+                            echo '<input type="checkbox" name="pmsafe_code_allow_dealer" id="pmsafe_code_allow_dealer" class="widefat" checked="true"/>';
+                        }else{
+                            echo '<input type="checkbox" name="pmsafe_code_allow_dealer" id="pmsafe_code_allow_dealer" class="widefat" />';
+                        }
+                    }else{
+                        
+                            echo '<input type="checkbox" name="pmsafe_code_allow_dealer" id="pmsafe_code_allow_dealer" class="widefat" />';
+                        
+                    }
+                    echo '</td>';
+                    echo '</tr>';
+
+                    echo '<tr>';
+                    echo '<th>';
+                        echo '<label><strong>Upgradable</strong></label>';
+                    echo '</th>';
+                    echo '<td>';
+                    $checked = get_post_meta($post_id,'pmsafe_invitation_code_upgradable',true);
+                    if($edit_action == 'edit'){
+                        if($checked == 1 ){
+                            echo '<input type="checkbox" name="pmsafe_invitation_code_upgradable" id="pmsafe_invitation_code_upgradable" class="widefat" checked="true"/>';
+                        }else{
+                            echo '<input type="checkbox" name="pmsafe_invitation_code_upgradable" id="pmsafe_invitation_code_upgradable" class="widefat" />';
+                        }
+                    }else{
+                        
+                            echo '<input type="checkbox" name="pmsafe_invitation_code_upgradable" id="pmsafe_invitation_code_upgradable" class="widefat" />';
+                        
+                    }
+                    echo '</td>';
+                    echo '</tr>';
+
+                    if($edit_action == 'edit'){
+                    if($checked == 1){
+                        echo '<tr id="upgrade_tr">';
+                            echo '<th>';
+                                echo '<label><strong>Upgradable Benefits Package</strong></label>';
+                            echo '</th>';
+                            
+                            echo '<td>';
+                            
+                            $upgradable_prefix_str = get_post_meta($post_id,'upgradable_prefix',true);
+                            $upgradable_prefix_arr = explode(",",$upgradable_prefix_str);
+                            $benefit_prefix = pmsafe_get_meta_values( '_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish' );
+                            $get_benifit_package = get_post_meta($post_id,'_pmsafe_invitation_prefix',true);
+                                echo '<select name="pmsafe_invitation_upgradable_prefix[]" id="pmsafe_invitation_upgradable_prefix" multiple="multiple" style="width: 300px">';
+                                foreach ($benefit_prefix as $prefix) {
+                                    
+                                if($prefix != $get_benifit_package){
+                                        echo '<option value="'.$prefix.'" '.( (in_array($prefix,$upgradable_prefix_arr)) ? "selected"   : "").'>'.$prefix.'</option>';
+                                }
+                                    
+                                }
+                                echo '</select>';
+                            
+                                
+                            echo '</td>';
+                        echo '</tr>';
+                        }else{
+                            echo '<tr id="upgrade_tr" style="display:none;">';
+                            echo '<th>';
+                                echo '<label><strong>Upgradable Benefits Package</strong></label>';
+                            echo '</th>';
+                            
+                            echo '<td>';
+                            
+                            
+                                
+                                    echo '<select name="pmsafe_invitation_upgradable_prefix[]" id="pmsafe_invitation_upgradable_prefix" multiple="multiple" style="width: 300px">';
+                                    echo '</select>';
+                            
+                                
+                            echo '</td>';
+                        echo '</tr>';
+                        }
+                    }
+                    else{
+                    echo '<tr id="upgrade_tr" style="display:none;">';
+                    echo '<th>';
+                        echo '<label><strong>Upgradable Benefits Package</strong></label>';
+                    echo '</th>';
+
+                    echo '<td>';
+
+
+                        
+                            echo '<select name="pmsafe_invitation_upgradable_prefix[]" id="pmsafe_invitation_upgradable_prefix" multiple="multiple" style="width: 300px">';
+                            echo '</select>';
+
+                        
+                    echo '</td>';
+                    echo '</tr>';
+                    }
+                    //  }
+
+                    echo '<tr style="display:none;">';
                     echo '<th>';
                         echo '<label><strong>Code Access Level</strong><span>This determines the website access for the new user. If you are unsure, leave this set to Customer.</span></label>';
                     echo '</th>';
@@ -188,16 +275,14 @@ class PMSafe_Invitation_Code {
                             }
                         echo '</select>';
                     echo '</td>';
-                echo '</tr>';
-                
-        
-                // Start of Individual Code Dist & Dealer Management
-                echo '<tr>';
+                    echo '</tr>';
+
+                    echo '<tr>';
                     echo '<th>';
                         echo '<label><strong>Distributor</strong></label>';
                     echo '</th>';
                     if($edit_action == 'addcode'){
-                       
+                    
                         echo '<td>';
                             
                             echo '<select name="pmsafe_distributor">';
@@ -211,22 +296,9 @@ class PMSafe_Invitation_Code {
                             
                             echo '</select>';
                         echo '</td>';
-                    }/*elseif ($edit_action == 'edit') {
-                      
-                         echo '<td>';
-                            $distributor_users = get_users( array('role' => 'author','fields' => array( 'ID','user_login' )));
-                            echo '<select name="pmsafe_distributor" id="pmsafe_distributor" disabled>';
-                                echo '<option value="" disabled selected>Select distributor</option>';
-                                foreach ( $distributor_users as $user ) {
-                                    $distributor_id = $user->ID;
-                                    $distributor_name = get_user_meta( $distributor_id, 'distributor_name' , true );
-                                    echo '<option value="'.$user->user_login.'" '. selected( get_post_meta($post_id,'_pmsafe_distributor',true), $user->user_login, false ) .'>'.$distributor_name .' ('. $user->user_login .')</option>';
-                                }
-                            echo '</select>';
-                        echo '</td>';
-                    }*/
+                    }
                     else{
-                       
+                    
                         echo '<td>';
                             $distributor_users = get_users( array('role' => 'author','fields' => array( 'ID','user_login' )));
                             echo '<select name="pmsafe_distributor" id="pmsafe_distributor">';
@@ -239,8 +311,8 @@ class PMSafe_Invitation_Code {
                             echo '</select>';
                         echo '</td>';
                     }
-                echo '</tr>';
-                echo '<tr>';
+                    echo '</tr>';
+                    echo '<tr>';
                     echo '<th>';
                         echo '<label><strong>Dealer</strong></label>';
                     echo '</th>';
@@ -264,7 +336,7 @@ class PMSafe_Invitation_Code {
                             $distributors = get_user_by('login', $distributor_login);
                             $distributor_id = $distributors->data->ID;
                             $key = 'dealer_distributor_name';
-        
+
                             global $wpdb;
                             $dealers = $wpdb->get_results("SELECT * FROM `".$wpdb->usermeta."` WHERE meta_key='".$key."' AND meta_value='".$distributor_id."'");
                             echo '<select name="pmsafe_dealer" id="pmsafe_dealer" >';
@@ -294,85 +366,99 @@ class PMSafe_Invitation_Code {
                             echo '</select>';
                         echo '</td>';
                     }
-                   
+
+                    echo '</tr>';
+                    echo '</table>';
+
+                    if($edit_action == 'edit'){
+                    echo '<input type="button" class="button button-primary button-large" id="update_invite_code_button" value="Update"/>';
+                    }
         
         
-//                Only shows on edit - this is the current original code
-//
-//                if($_GET['action'] == 'edit'){                    
-//                    echo '<tr>';
-//                        echo '<th>';
-//                            echo '<label><strong>Dealer</strong></label>';
-//                        echo '</th>';
-//                        echo '<td>';
-//                            $dealer_login = get_post_meta( $post_id, '_pmsafe_dealer', true ); 
-//                            $dealers = get_user_by('login', $dealer_login);
-//                            $dealer_id = $dealers->data->ID;
-//                            $dealer_name = get_user_meta( $dealer_id, 'dealer_name', true);
-//                            echo $dealer_name;
-//                        echo '</td>';
-//                    echo '</tr>';
-//                    echo '<tr>';
-//                        echo '<th>';
-//                            echo '<label><strong>Distributor</strong></label>';
-//                        echo '</th>';
-//                        echo '<td>';
-//                            $distributor_login = get_post_meta( $post_id, '_pmsafe_distributor', true ); 
-//                            $distributors = get_user_by('login', $distributor_login);
-//                            $distributor_id = $distributors->data->ID;
-//                            $distributor_name = get_user_meta( $distributor_id, 'distributor_name', true);
-//                            echo $distributor_name;
-//                        echo '</td>';
-//                    echo '</tr>';
-//                    echo '<tr>';
-//                        echo '<th>';
-//                            echo '<label><strong>Code Date Created</strong></label>';
-//                        echo '</th>';
-//                        echo '<td>';
-//                            echo get_post_meta($post_id, '_pmsafe_code_create_date', true);
-//                        echo '</td>';
-//                    echo '</tr>';
-//                    echo '<tr>';
-//                        echo '<th>';
-//                            echo '<label><strong>Code Used Date</strong></label>';
-//                        echo '</th>';
-//                        echo '<td>';
-//                            echo get_post_meta($post_id, '_pmsafe_used_code_date', true);
-//                        echo '</td>';
-//                    echo '</tr>';
-//                    echo '<tr>';
-//                        echo '<th>';
-//                            echo '<label><strong>Customer Name</strong></label>';
-//                        echo '</th>';
-//                        echo '<td>';
-//                            echo get_post_meta($post_id, '_pmsafe_used_code_user_name', true);
-//                        echo '</td>';
-//                    echo '</tr>';
-//                    echo '<tr>';
-//                        echo '<th>';
-//                            echo '<label><strong>PDF</strong></label>';
-//                        echo '</th>';
-//                        echo '<td>';
-//                            echo '<a href="'.get_post_meta($post_id, 'pmsafe_pdf_link', true).'" target="_blank">View PDF</a>';
-//                        echo '</td>';
-//                    echo '</tr>';
-//                }
-//        
-//              Custom Redirection URL for Code User
-//                echo '<tr>';
-//                    echo '<th>';
-//                        echo '<label><strong>Custom Redirection URL after login for users that used this code</strong><span>Leave empty to use the global options: redirection by role or the default login redirection URL.</span></label>';
-//                    echo '</th>';
-//                    echo '<td>';
-//                        echo '<input type="text" name="pmsafe_custom_redirect_url" value="' . get_post_meta($post_id, '_pmsafe_custom_redirect_url', true)  . '" class="widefat" />';
-//                    echo '</td>';
-//                echo '</tr>';
+
             echo '</table>';                
 
     }
 
-    public function pmsafe_save_invitecode_meta($post_id, $post){
+    public function check_invite_code_exist(){
+        $code = $_POST['code'];
+        $args = array(
+            'post_type' => 'pmsafe_invitecode',
+            'post_status' => 'publish',
+            'posts_per_page' => 1,
+            'meta_query' => array(
+                'relation' => 'AND',
+                array(
+                    'key'     => '_pmsafe_invitation_code',
+                    'value'   => $code,
+                    'compare' => '=',
+                ),
+                
+            ),
+        );
+        $posts = get_posts($args);
+        if($posts){
+            $response = array('status' => true);
+        }else{
+            $response = array('status' => false);
+        }
+        echo json_encode($response);
+        die;
+    }
 
+    public function update_invite_codes(){
+        global $wpdb;
+    
+        $invitation_id = $_POST['post_id'];
+        
+        $benifit_package = $_POST['benifit_package'];
+        $dealer = $_POST['dealer'];
+        $distributor = $_POST['distributor'];
+        $select = $_POST['select'];
+        $chk = $_POST['chk'];
+        $allow_dealer = $_POST['allow_dealer'];
+        $upgradable_prefix_str = implode(",",$select);
+        
+        $key = '_pmsafe_invitation_code';
+        $updated_date = current_time( 'mysql' );
+        
+       
+            
+        update_post_meta( $invitation_id, '_pmsafe_dealer', $dealer );
+        update_post_meta( $invitation_id, '_pmsafe_distributor', $distributor ); 
+        update_post_meta( $invitation_id, '_pmsafe_date_updated', $updated_date ); 
+        update_post_meta($invitation_id, '_pmsafe_code_prefix', $benifit_package );
+        if($chk == 1)
+        {
+            update_post_meta($invitation_id, 'pmsafe_invitation_code_upgradable', 1 );
+            update_post_meta($invitation_id, 'upgradable_prefix', $upgradable_prefix_str );
+        }
+        if($chk == 0)
+        {
+            delete_post_meta($invitation_id,'upgradable_prefix');
+            update_post_meta($invitation_id, 'pmsafe_invitation_code_upgradable', 0 );
+        }
+
+        if($allow_dealer == 1)
+        {
+            update_post_meta($invitation_id, 'pmsafe_code_allow_dealer', 1 );
+        }
+        if($allow_dealer == 0)
+        {
+            update_post_meta($invitation_id, 'pmsafe_code_allow_dealer', 0 );
+        }
+        
+        update_post_meta($invitation_id, '_pmsafe_invitation_prefix', $benifit_package );
+        
+
+        // $url = admin_url('edit.php?post_type=pmsafe_bulk_invi');
+        $response = array('status'=>true);
+        echo json_encode($response);
+        die;
+    }
+
+    public function pmsafe_save_invitecode_meta($post_id, $post){
+        global $wpdb;
             if($post->post_type != "pmsafe_invitecode")
                 return;
 
@@ -391,20 +477,27 @@ class PMSafe_Invitation_Code {
             $invitation_meta['_pmsafe_dealer'] = $_POST['pmsafe_dealer'];
             $invitation_meta['_pmsafe_code_prefix'] = $_POST['pmsafe_invitation_prefix'];
             $invitation_meta['_pmsafe_invitation_prefix'] = $_POST['pmsafe_invitation_prefix'];
-//            $invitation_meta['_pmsafe_expiration_date'] = $_POST['pmsafe_expiration_date'];
-//            $invitation_meta['_pmsafe_user_limit'] = $_POST['pmsafe_user_limit'];
 
-//            $invitation_meta['_pmsafe_email_verification'] = $_POST['pmsafe_email_verification'];
-//            $invitation_meta['_pmsafe_email_address'] = $_POST['pmsafe_email_address'];
             $invitation_meta['_pmsafe_user_role'] = $_POST['pmsafe_user_role'];
             $invitation_meta['_pmsafe_code_status'] = $_POST['pmsafe_code_status'];
             $invitation_meta['_pmsafe_code_create_date'] = $_POST['pmsafe_code_create_date'];
-//            $invitation_meta['_pmsafe_custom_redirect_url'] = $_POST['pmsafe_custom_redirect_url'];
-            
-//            pr($invitation_meta);
-//            die;
+            $invitation_meta['_pmsafe_dealer'] = $_POST['pmsafe_dealer'];
+            $invitation_meta['_pmsafe_distributor'] = $_POST['pmsafe_distributor'];
+            $invitation_meta['_pmsafe_is_invite_code'] = 1;
+            if(isset($_POST['pmsafe_invitation_code_upgradable'])){
+                $invitation_meta['pmsafe_invitation_code_upgradable'] = 1;
+            }
+            if(isset($_POST['pmsafe_code_allow_dealer'])){
+                $invitation_meta['pmsafe_code_allow_dealer'] = 1;
+            }
+            $upgradable_prefix = $_POST['pmsafe_invitation_upgradable_prefix'];
+            $upgradable_prefix_str = implode(",",$upgradable_prefix);
+            $invitation_meta['upgradable_prefix'] = $upgradable_prefix_str;
 
             // Add values of $invitation_meta as custom fields
+            $title = $_POST['pmsafe_invitation_code'];
+            $where = array( 'ID' => $post_id );
+            $wpdb->update( $wpdb->posts, array( 'post_title' => $title ), $where );
 
             foreach ($invitation_meta as $key => $value) { // Cycle through the $invitation_meta array!
                 if( $post->post_type == 'revision' ) return; // Don't store custom data twice
@@ -702,6 +795,7 @@ class PMSafe_Invitation_Code {
                         }
                     </style>
                 ';
+               
             }
     }
     

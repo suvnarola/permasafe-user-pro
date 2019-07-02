@@ -463,25 +463,7 @@ class Permasafe_User_Pro_Public {
                     $dealer_username = $current_user->user_login;
                 }
 
-                
-                 $args = array(
-                    'post_type' => 'pmsafe_bulk_invi',
-                    'post_status' => 'publish',
-                    'posts_per_page' => -1,
-                    'orderby'=> 'date',
-                    'order' => 'DESC',
-                    'meta_query' => array(
-                        // 'relation' => 'AND',
-                        array(
-                            'key'     => '_pmsafe_dealer',
-                            'value'   => $dealer_username,
-                            'compare' => '=',
-                        ),
-
-                    ),
-                );
-                $posts = get_posts($args);
-                    // pr($posts);
+                $customer_arr = get_user_by_dealer($dealer_username);
                     $html = '';
                     if($success == "true"){
                         $code_id = get_post_id_by_meta_key_and_value('_pmsafe_invitation_code',$code);
@@ -595,119 +577,82 @@ class Permasafe_User_Pro_Public {
                                     $html .= 'View Benefits Page';
                                     $html .= '</th>';
 
+                                    $html .= '<th class="nisl-pdf-link">';
+                                    $html .= 'date time';
+                                    $html .= '</th>';
+
 
                                 $html .= '</tr>';
                             $html .= '</thead>';
 
                             $html .= '<tbody id="">';
-
-                            foreach ($posts as $key => $value) {
-                                $post_id = $value->ID;
-                                $bulk_member = $value->post_title;
-                                $invitation_ids = get_post_meta($post_id, '_pmsafe_invitation_ids', true);
-                                $benefits_package = get_post_meta( $post_id, '_pmsafe_invitation_prefix', true );
-                                $term_length_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$benefits_package);
-                                $term_length = get_post_meta( $term_length_id, '_pmsafe_benefit_term_length', true );
-                                $invitation_id = explode(',',$invitation_ids);
-                                $data = pmsafe_unused_code_count($post_id);
-                                $available = $data['total'] - $data['used'];
+                            foreach ($customer_arr as $key => $value) {
                                 
-                                if($data['used'] != 0){
-                                    foreach ($invitation_id as $id) {
-                                        
-                                        $code_status = get_post_meta($id, '_pmsafe_code_status', true);
-                                      
-                                        if($code_status == 'used'){
-                                            
-                                            $code = get_post_meta( $id, '_pmsafe_invitation_code', true );
-                                            
-                                            $pdf_link = get_post_meta( $id, 'pmsafe_pdf_link', true );
-                                            
-                                            $user = get_user_by('login',$code);
-                                           
-                                            $user_id = $user->ID;
-        
-                                            $address1 = get_the_author_meta( 'pmsafe_address_1', $user_id );
-                                            $address2 = get_the_author_meta( 'pmsafe_address_2', $user_id );
-                                            if(!empty($address1) || $address2){
-                                                $address = $address1.', '.$address2;
-                                            }
-                                            $city = get_the_author_meta( 'pmsafe_city', $user_id );
-                                            $state = get_the_author_meta( 'pmsafe_state', $user_id );
-                                            $zip_code = get_the_author_meta( 'pmsafe_zip_code', $user_id );
-                                            
-                                            $phone_number = get_user_meta( $user_id, 'pmsafe_phone_number',true );
-                                            $vehicle_information = get_the_author_meta('pmsafe_vehicle_info' ,$user_id);
-        
-                                            
-                                            $plan_id = get_post_meta($id,'_pmsafe_code_prefix',true);
-                                           
-        
-                                            $customer_name = $user->first_name.' '.$user->last_name;
-                                            $url = get_site_url().'/wp-includes/images/media/document.png';
-                                          
-                                            $html .= '<tr>';
-                                                $html .= '<td>';
-                                                    $html .= '<a href="" class="view-data" data-id="'.$user->ID.'">'.$code.'</a>';
-                                                $html .= '</td>';
-                                               
-                                                $html .= '<td>';
-                                                    $html .= '<a href="" class="view-data" data-id="'.$user->ID.'">'.$user->first_name.'</a>';
-                                                $html .= '</td>';
+                                $html .= '<tr>';
+                                    $html .= '<td>';
+                                        $html .= '<a href="" class="view-data" data-id="'.$value['user_id'].'">'.$value['code'].'</a>';
+                                    $html .= '</td>';
+                                
+                                    $html .= '<td>';
+                                        $html .= '<a href="" class="view-data" data-id="'.$value['user_id'].'">'.$value['fname'].'</a>';
+                                    $html .= '</td>';
 
-                                                $html .= '<td>';
-                                                    $html .= '<a href="" class="view-data" data-id="'.$user->ID.'">'.$user->last_name.'</a>';
-                                                $html .= '</td>';
-                                               
-                                                $html .= '<td>';
-                                                    $html .= '<a href="" class="view-data" data-id="'.$user->ID.'">'.$address.' '.$city.', '.$state.', '.$zip_code.'</a>';
-                                                $html .= '</td>';
+                                    $html .= '<td>';
+                                        $html .= '<a href="" class="view-data" data-id="'.$value['user_id'].'">'.$value['lname'].'</a>';
+                                    $html .= '</td>';
+                                
+                                    $html .= '<td>';
+                                        $html .= '<a href="" class="view-data" data-id="'.$value['user_id'].'">'.$value['address'].'</a>';
+                                    $html .= '</td>';
+                                    $url = get_site_url().'/wp-includes/images/media/document.png';
+                                    $html .= '<td>';
+                                        $html .= '<a href="'.get_site_url().'/perma-warranty-pdf/?id='.$value['code_id'].'&dealer='.$value['dealer_id'].'" target="_blank"><img src="'.$url.'" class="attachment-thumbnail" style="width:20px !important"></a>';
+                                    $html .= '</td>';
 
-                                                $html .= '<td>';
-                                                    $html .= '<a href="'.get_site_url().'/perma-warranty-pdf/?id='.$id.'&dealer='.$dealer_id.'" target="_blank"><img src="'.$url.'" class="attachment-thumbnail" style="width:20px !important"></a>';
-                                                $html .= '</td>';
+                                    $html .= '<td class="nisl-pdf-link">';
+                                        $html .= $value['email'];
+                                    $html .= '</td>';
+                                    
+                                    $html .= '<td class="nisl-pdf-link">';
+                                        $html .= $value['phone'];
+                                    $html .= '</td>';
+                                
+                                    
+                                    $html .= '<td class="nisl-pdf-link">';
+                                        $html .= $value['vehicle_information'];
+                                    $html .= '</td>';
+                                    
+                                    $html .= '<td class="nisl-pdf-link">';
+                                        $html .= $value['vin'];
+                                    $html .= '</td>';
+                                    
+                                    $html .= '<td class="nisl-pdf-link">';
+                                        $html .= $value['package'];
+                                    $html .= '</td>';
+                                    
+                                    $html .= '<td class="nisl-pdf-link">';
+                                        $html .= $value['registration_date'];
+                                    $html .= '</td>';
+                                    
+                                    $html .= '<td class="nisl-pdf-link">';
+                                        $html .= $value['expiration_date'];
+                                    $html .= '</td>';
+                                
+                                    
+                                    $html .= '<td class="nisl-pdf-link">';
+                                        $html .= $value['pdf_link'];
+                                    $html .= '</td>';
 
-                                                $html .= '<td class="nisl-pdf-link">';
-                                                    $html .= $user->user_email;
-                                                $html .= '</td>';
-                                                
-                                                $html .= '<td class="nisl-pdf-link">';
-                                                    $html .= $phone_number;
-                                                $html .= '</td>';
-                                            
-                                                
-                                                $html .= '<td class="nisl-pdf-link">';
-                                                     $html .= $vehicle_information[$user->user_login]['pmsafe_vehicle_year'] . ' ' . $vehicle_information[$user->user_login]['pmsafe_vehicle_make'] . ' ' . $vehicle_information[$user->user_login]['pmsafe_vehicle_model'];
-                                                $html .= '</td>';
-                                                
-                                                $html .= '<td class="nisl-pdf-link">';
-                                                    $html .= $vehicle_information[$user->user_login]['pmsafe_vin'];
-                                                $html .= '</td>';
-                                                
-                                                $html .= '<td class="nisl-pdf-link">';
-                                                    $html .= $plan_id;
-                                                $html .= '</td>';
-                                                
-                                                $html .= '<td class="nisl-pdf-link">';
-                                                    $html .= date('Y-m-d', strtotime($vehicle_information[$user->user_login]['pmsafe_registration_date']));
-                                                $html .= '</td>';
-                                                
-                                                $html .= '<td class="nisl-pdf-link">';
-                                                    $html .= date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_information[$user->user_login]['pmsafe_registration_date'])));
-                                                $html .= '</td>';
-                                               
-                                                
-                                                $html .= '<td class="nisl-pdf-link">';
-                                                    $html .= $pdf_link;
-                                                $html .= '</td>';
-                                            $html .= '</tr>';
-                                        }
-                                    }
-                                }
-                            }      
-                                  
+                                    $html .= '<td class="nisl-pdf-link">';
+                                        $html .= $value['date_time'];
+                                    $html .= '</td>';
+
+                                $html .= '</tr>';
+                            }
                             $html .= '</tbody>';
                         $html .= '</table>';
+
+                        // pr($bulk_arr);
                             $html .= '</div>';          
                             $html .= '<div class="data-result-wrap">'; 
                             
@@ -757,72 +702,29 @@ class Permasafe_User_Pro_Public {
                         $dealer_username = $current_user->user_login;
                     }
                 
-                     $args = array(
-                        'post_type' => 'pmsafe_bulk_invi',
-                        'post_status' => 'publish',
-                        'posts_per_page' => -1,
-                        'meta_query' => array(
-                            // 'relation' => 'AND',
-                            array(
-                                'key'     => '_pmsafe_dealer',
-                                'value'   => $dealer_username,
-                                'compare' => '=',
-                            ),
-                        ),
-                    );
-                        $posts = get_posts($args);
-
-                        foreach ($posts as $key => $value) {
-                                    $post_id = $value->ID;
-                        $code = get_post_meta( $post_id, '_pmsafe_invitation_code', true );
-                        $invitation_id = get_post_meta($post_id, '_pmsafe_invitation_ids', true);
-                        $benefits_package = get_post_meta( $post_id, '_pmsafe_invitation_prefix', true );
-                        $term_length_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$benefits_package);
-                        $term_length = get_post_meta( $term_length_id, '_pmsafe_benefit_term_length', true );
-                        $invitation_id = explode(',',$invitation_id);
-                        // echo '<pre>';
-                        // print_r($invitation_id);
-                        // echo '</pre>';
-                        foreach ($invitation_id as $id) {
-                            $code_status = get_post_meta($id, '_pmsafe_code_status', true);
-                            if($code_status == 'used'){
-                                $code = get_post_meta( $id, '_pmsafe_invitation_code', true );
-                                $pdf_link = get_post_meta( $id, 'pmsafe_pdf_link', true );
-                                $user = get_user_by('login',$code);
-
-                                $user_id = $user->ID;
-                                $vehicle_information = get_the_author_meta('pmsafe_vehicle_info' ,$user_id);
-                                $registration_date = $vehicle_information[$user->user_login]['pmsafe_registration_date'];
-                                $vehicle_expiration_date = date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_information[$user->user_login]['pmsafe_registration_date'])));
-                                $registered_date = $user->user_registered;
-                                
-                                $time=strtotime($registration_date);
-                                $date_month=date("m",$time);
-                                $current_date = date('Y-m-d');
-                                // echo $date_month;
-                                // var_dump($date_month);
-                                // var_dump($month);
-                                if($date_month == $current_month)
-                                {
-                                    
-                                    $total_current_month += count($registered_date);
-                                    // echo $registration_date.'->month->'.$date_month.'<br/>';
-                                }
-                                if($date_month == $last_month)
-                                {
-                                    $total_last_month += count($registered_date);
-                                }
-                                if($current_date < $vehicle_expiration_date){
-                                    $active_member += count($registration_date);
-                                }
-                                // Just trying to count total registrations with the $total_count below
-                                // for use in the second card wrap box below
-                                $total_count += count($registration_date);
-                            }
-                            
-
+                    $customer_arr = get_user_by_dealer($dealer_username);
+                    foreach ($customer_arr as $key => $value) {
+                        $registration_date = $value['registration_date'];
+                        $vehicle_expiration_date = $value['expiration_date'];
+                        $registered_date = $value['registration_date'];
+                        $time=strtotime($registered_date);
+                        $date_month=date("m",$time);
+                        $current_date = date('Y-m-d');
+                        
+                        if($date_month == $current_month)
+                        {
+                            $total_current_month += count($registered_date);
                         }
+                        if($date_month == $last_month)
+                        {
+                            $total_last_month += count($registered_date);
                         }
+                        if($current_date <= $vehicle_expiration_date){
+                                $active_member += count($registration_date);
+                        }
+                        $total_count += count($registration_date);
+                    }
+                       
                         $html = ''; 
                         $html .= '<div id="easyPaginate">';
                     
@@ -839,31 +741,7 @@ class Permasafe_User_Pro_Public {
                         }
                         $html .= '<p class="member_number">'.$current_month.'</p>';
                         $html .= '</div>';      
-                    // return $html;
-                    
-                        // $html .= '<div class="card-wrap">';
-                        // $html .= '<h3>Current Active</h3>';
-                        // $html .= '<h4>Memberships:</h4>';
-                        // $html .= '<p class="member_number">'.$total_count.'</p>';
-                        // $html .= '</div>'; 
-                    
-                        //$html .= '<div class="card-wrap">';
-                          //$html .= '<h3>'.$last_month_name.'\'s </h3>';;
-                        //$html .= '<h4>Memberships:</h4>';
-                        //if($total_last_month == ''){
-                        //    $last_month = 0;
-                        //}
-                        //else{
-                        // $last_month = $total_last_month;   
-                        //}
-                        // $html .= '<p class="member_number">'.$last_month.'</p>';
-                        // $html .= '</div>'; 
-                        
-                        // $html .= '<div class="card-wrap-2">';
-                        // $html .= '<h3>Total</h3>';
-                        // $html .= '<h4>Memberships<br />To Date:</h4>';
-                        // $html .= '<p class="member_number-2">'.$total_count.'</p>';
-                        // $html .= '</div>';  
+                   
 
                       $html .= '<div class="card-wrap">';
                       $html .= '<div class="contents">';
@@ -929,78 +807,33 @@ class Permasafe_User_Pro_Public {
                         // $dealers_name = '';
                         foreach ($distributor_name as $dealername) {
                             $dealer_login = $dealername->user_login;
-                             $args = array(
-                                'post_type' => 'pmsafe_bulk_invi',
-                                'post_status' => 'publish',
-                                'order'            => 'ASC',
-                                'posts_per_page'   => -1,
-                                'meta_query' => array(
-                                    // 'relation' => 'AND',
-                                    array(
-                                        'key'     => '_pmsafe_dealer',
-                                        'value'   => $dealer_login,
-                                        'compare' => '=',
-                                    ),
-                                   
-                                ),
-                            );
-                            $posts = get_posts($args);
-                            // echo '<pre>';
-                            //     print_r($posts);
-                            // echo '</pre>';
-                            if($posts){
-                              foreach ($posts as $key => $value) {
-                                    $post_id = $value->ID;
-
-                                    $bulk_member = $value->post_title;
-                                    $invitation_ids = get_post_meta($post_id, '_pmsafe_invitation_ids', true);
-                                    $benefits_package = get_post_meta( $post_id, '_pmsafe_invitation_prefix', true );
-                                    $term_length_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$benefits_package);
-                                    $term_length = get_post_meta( $term_length_id, '_pmsafe_benefit_term_length', true );
-                                    $invitation_id = explode(',',$invitation_ids);
-                                    // echo 'testing'.$invitation_id;
-                                    
-                                    $data = pmsafe_unused_code_count($post_id);
-                                    $available = $data['total'] - $data['used'];
-
-                                     if($data['used'] != 0){
-                                        foreach ($invitation_id as $id) {
-                                            $code_status = get_post_meta($id, '_pmsafe_code_status', true);
-                                            if($code_status == 'used'){
-                                                $code = get_post_meta( $id, '_pmsafe_invitation_code', true );
-                                                $pdf_link = get_post_meta( $id, 'pmsafe_pdf_link', true );
-                                                
-                                                $customer_user = get_user_by('login',$code);
-                                                $vehicle_information = get_the_author_meta('pmsafe_vehicle_info' ,$customer_user->ID);
-
-                                                $vehicle_registration_date = $vehicle_information[$customer_user->user_login]['pmsafe_registration_date'];
-                                                $vehicle_expiration_date = date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_information[$customer_user->user_login]['pmsafe_registration_date'])));
-
-                                                $registered_date = $customer_user->user_registered;
-
-                                                $time=strtotime($registered_date);
-                                                $date_month=date("m",$time);
-                                                $current_date = date('Y-m-d');
-                                                  if($date_month == $current_month)
-                                                    {
-                                                
-                                                        $total_current_month += count($registered_date);
-
-                                                    }
-                                                    if($date_month == $last_month)
-                                                    {
-                                                        $total_last_month += count($registered_date);
-                                                    }
-                                                    if($current_date < $vehicle_expiration_date){
-                                                        
-                                                        $active_member += count($vehicle_registration_date);
-                                                    }
-                                                $total_count += count($registered_date);
-                                            }
-                                        }
-                                     }
-                              }
+                            
+                            $customer_arr = get_user_by_dealer($dealer_login);
+                            
+                            foreach ($customer_arr as $key => $value) {
+                                
+                                $registration_date = $value['registration_date'];
+                                $vehicle_expiration_date = $value['expiration_date'];
+                                $registered_date = $value['registration_date'];
+                                $time=strtotime($registered_date);
+                                $date_month=date("m",$time);
+                                $current_date = date('Y-m-d');
+                                
+                                if($date_month == $current_month)
+                                {
+                                    $total_current_month += count($registered_date);
+                                }
+                                if($date_month == $last_month)
+                                {
+                                    $total_last_month += count($registered_date);
+                                }
+                                if($current_date <= $vehicle_expiration_date){
+                                    // echo $value['code'].'<br/>';
+                                        $active_member += count($registration_date);
+                                }
+                                $total_count += count($registration_date);
                             }
+                            
                         }
                     }
 
@@ -1150,9 +983,20 @@ class Permasafe_User_Pro_Public {
                 // echo $str;
                 $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in ('.$str.') ');
                 // pr($str_results);
-                $check_array = array();
+                // $bulk_array = array();
                 foreach ($str_results as $str_result) {
-                    $check_array[] = $str_result->meta_value;
+                    $bulk_array[] = $str_result->meta_value;
+                }
+                $invite_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (SELECT post_id FROM wp_postmeta WHERE meta_key="_pmsafe_is_invite_code")');
+                // pr($str_results);
+                $invite_array = array();
+                foreach ($invite_results as $invite_result) {
+                    $invite_array[] = $invite_result->meta_value;
+                }
+                if(empty($invite_array)){
+                    $check_array = $bulk_array;
+                }else{
+                    $check_array = array_merge($bulk_array, $invite_array);
                 }
 
                 
@@ -1208,7 +1052,7 @@ class Permasafe_User_Pro_Public {
                                         if($select == 1){
                                             if($current_date > $expiration_date){
                                                 // echo $expiration_date.'->'.$value->user_id.'<br/>';
-                                                if (($expiration_date > $datepicker1) && ($expiration_date < $datepicker2)){
+                                                if (($expiration_date >= $datepicker1) && ($expiration_date <= $datepicker2)){
                                                     $html .= '<tr>';
                                                     
                                                         $html .= '<td>';
@@ -1264,7 +1108,7 @@ class Permasafe_User_Pro_Public {
                                             // echo $expiration_date.'->'.$diff.'->'.$value->user_id.'<br/>';
                                             if($diff >= 1 && $diff <= 6 ){
                                                 // echo 'id'.$value->user_id.'<br/>';
-                                                if (($expiration_date > $datepicker1) && ($expiration_date < $datepicker2)){
+                                                if (($expiration_date >= $datepicker1) && ($expiration_date <= $datepicker2)){
                                                         $html .= '<tr>';
                                                     
                                                         $html .= '<td>';
@@ -1304,8 +1148,8 @@ class Permasafe_User_Pro_Public {
                                                 }
                                             }
                                         }else if($select == 3){  // current   
-                                            if($current_date < $expiration_date){
-                                                if (($vehicle_registration_date > $datepicker1) && ($vehicle_registration_date < $datepicker2)){
+                                            if($current_date <= $expiration_date){
+                                                if (($vehicle_registration_date >= $datepicker1) && ($vehicle_registration_date <= $datepicker2)){
                                                     $html .= '<tr>';
                                                     
                                                         $html .= '<td>';
@@ -1788,9 +1632,21 @@ class Permasafe_User_Pro_Public {
                     // echo $str;
                     $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in ('.$str.') ');
                     // pr($str_results);
-                    $check_array = array();
+                    // $bulk_array = array();
                     foreach ($str_results as $str_result) {
-                        $check_array[] = $str_result->meta_value;
+                        $bulk_array[] = $str_result->meta_value;
+                    }
+
+                    $invite_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (SELECT post_id FROM wp_postmeta WHERE meta_key="_pmsafe_is_invite_code")');
+                    // pr($str_results);
+                    $invite_array = array();
+                    foreach ($invite_results as $invite_result) {
+                        $invite_array[] = $invite_result->meta_value;
+                    }
+                    if(empty($invite_array)){
+                        $check_array = $bulk_array;
+                    }else{
+                        $check_array = array_merge($bulk_array, $invite_array);
                     }
                     
                             
@@ -2259,23 +2115,8 @@ class Permasafe_User_Pro_Public {
                     return $html;
                     }else if($_GET['action'] == 'view_customer'){
                         
-                        $args = array(
-                            'post_type' => 'pmsafe_bulk_invi',
-                            'post_status' => 'publish',
-                            'order'            => 'ASC',
-                            'posts_per_page' => -1,
-                            'meta_query' => array(
-                                // 'relation' => 'AND',
-                                array(
-                                    'key'     => '_pmsafe_dealer',
-                                    'value'   => $dealer_login,
-                                    'compare' => '=',
-                                ),
-                               
-                            ),
-                        );
-                        $posts = get_posts($args);
-
+                       
+                        $customer_arr = get_user_by_dealer($dealer_login);
                     
                     $html = '';
                     $html .= '<div id="perma-warranty-wrapper">';
@@ -2360,122 +2201,81 @@ class Permasafe_User_Pro_Public {
                                 $html .= '<th class="nisl-pdf-link">';
                                 $html .= 'View Benefits Page';
                                 $html .= '</th>';
+
+                                $html .= '<th class="nisl-pdf-link">';
+                                $html .= 'date time';
+                                $html .= '</th>';
+
                                 $html .= '</tr>';
                             $html .= '</thead>';
 
                             $html .= '<tbody id="">';
-                            if($posts){
-                            foreach ($posts as $key => $value) {
-                                $post_id = $value->ID;
-                                $bulk_member = $value->post_title;
-                                $invitation_ids = get_post_meta($post_id, '_pmsafe_invitation_ids', true);
-                                $benefits_package = get_post_meta( $post_id, '_pmsafe_invitation_prefix', true );
-                                $term_length_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$benefits_package);
-                                $term_length = get_post_meta( $term_length_id, '_pmsafe_benefit_term_length', true );
-                                $invitation_id = explode(',',$invitation_ids);
-                                $data = pmsafe_unused_code_count($post_id);
-                                $available = $data['total'] - $data['used'];
-
-                            if($data['used'] != 0){
-                                    // $html .= '<input type="button" id="export-dealer-customer-csv" title="Export to CSV" value="Export to CSV" style="float:right;margin: 10px 5px;"/><input type="hidden" id="hdn_customer_dealer_login" value="'.$dealer_login.'">';
-                                foreach ($invitation_id as $id) {
-                                $code_status = get_post_meta($id, '_pmsafe_code_status', true);
-                                if($code_status == 'used'){
+                            
+                                foreach ($customer_arr as $key => $value) {
+                                
+                                    $html .= '<tr>';
+                                        $html .= '<td>';
+                                            $html .= '<a href="" class="view-data" data-id="'.$value['user_id'].'">'.$value['code'].'</a>';
+                                        $html .= '</td>';
                                     
-                                     
-                                    $code = get_post_meta( $id, '_pmsafe_invitation_code', true );
-                                            
-                                    $pdf_link = get_post_meta( $id, 'pmsafe_pdf_link', true );
+                                        $html .= '<td>';
+                                            $html .= '<a href="" class="view-data" data-id="'.$value['user_id'].'">'.$value['fname'].'</a>';
+                                        $html .= '</td>';
+    
+                                        $html .= '<td>';
+                                            $html .= '<a href="" class="view-data" data-id="'.$value['user_id'].'">'.$value['lname'].'</a>';
+                                        $html .= '</td>';
                                     
-                                    $user = get_user_by('login',$code);
-                                   
-                                    $user_id = $user->ID;
-
-                                    $address1 = get_the_author_meta( 'pmsafe_address_1', $user_id );
-                                    $address2 = get_the_author_meta( 'pmsafe_address_2', $user_id );
-                                    if(!empty($address1) || $address2){
-                                        $address = $address1.', '.$address2;
-                                    }
-                                    $city = get_the_author_meta( 'pmsafe_city', $user_id );
-                                    $state = get_the_author_meta( 'pmsafe_state', $user_id );
-                                    $zip_code = get_the_author_meta( 'pmsafe_zip_code', $user_id );
-                                    
-                                    $phone_number = get_user_meta( $user_id, 'pmsafe_phone_number',true );
-                                    $vehicle_information = get_the_author_meta('pmsafe_vehicle_info' ,$user_id);
-
-                                    
-                                    $plan_id = get_post_meta($id,'_pmsafe_code_prefix',true);
-                                   
-
-                                    $customer_name = $user->first_name.' '.$user->last_name;
-                                    $url = get_site_url().'/wp-includes/images/media/document.png';
-
-                                     $html .= '<tr>';
                                         $html .= '<td>';
-                                            $html .= '<a href="" class="view-data" data-id="'.$user->ID.'">'.$code.'</a>';
+                                            $html .= '<a href="" class="view-data" data-id="'.$value['user_id'].'">'.$value['address'].'</a>';
                                         $html .= '</td>';
-                                        
+                                        $url = get_site_url().'/wp-includes/images/media/document.png';
                                         $html .= '<td>';
-                                            $html .= '<a href="" class="view-data" data-id="'.$user->ID.'">'.$user->first_name.'</a>';
+                                            $html .= '<a href="'.get_site_url().'/perma-warranty-pdf/?id='.$value['code_id'].'&dealer='.$value['dealer_id'].'" target="_blank"><img src="'.$url.'" class="attachment-thumbnail" style="width:20px !important"></a>';
                                         $html .= '</td>';
-
-                                        $html .= '<td>';
-                                            $html .= '<a href="" class="view-data" data-id="'.$user->ID.'">'.$user->last_name.'</a>';
-                                        $html .= '</td>';
-                                        
-                                        $html .= '<td>';
-                                            $html .= '<a href="" class="view-data" data-id="'.$user->ID.'">'.$address.' '.$city.', '.$state.', '.$zip_code.'</a>';
-                                        $html .= '</td>';
-
-                                        $html .= '<td>';
-                                            $html .= '<a href="'.get_site_url().'/perma-warranty-pdf/?id='.$id.'&dealer='.$dealer_id.'" target="_blank"><img src="'.$url.'" class="attachment-thumbnail" style="width:20px !important"></a>';
-                                        $html .= '</td>';
-
+    
                                         $html .= '<td class="nisl-pdf-link">';
-                                            $html .= $user->user_email;
+                                            $html .= $value['email'];
                                         $html .= '</td>';
                                         
                                         $html .= '<td class="nisl-pdf-link">';
-                                            $html .= $phone_number;
+                                            $html .= $value['phone'];
                                         $html .= '</td>';
                                     
                                         
                                         $html .= '<td class="nisl-pdf-link">';
-                                            $html .= $vehicle_information[$user->user_login]['pmsafe_vehicle_year'] . ' ' . $vehicle_information[$user->user_login]['pmsafe_vehicle_make'] . ' ' . $vehicle_information[$user->user_login]['pmsafe_vehicle_model'];
+                                            $html .= $value['vehicle_information'];
                                         $html .= '</td>';
                                         
                                         $html .= '<td class="nisl-pdf-link">';
-                                            $html .= $vehicle_information[$user->user_login]['pmsafe_vin'];
+                                            $html .= $value['vin'];
                                         $html .= '</td>';
                                         
                                         $html .= '<td class="nisl-pdf-link">';
-                                            $html .= $plan_id;
+                                            $html .= $value['package'];
                                         $html .= '</td>';
                                         
                                         $html .= '<td class="nisl-pdf-link">';
-                                            $html .= date('Y-m-d', strtotime($vehicle_information[$user->user_login]['pmsafe_registration_date']));
+                                            $html .= $value['registration_date'];
                                         $html .= '</td>';
                                         
                                         $html .= '<td class="nisl-pdf-link">';
-                                            $html .= date('Y-m-d', strtotime("+".$term_length." months",strtotime($vehicle_information[$user->user_login]['pmsafe_registration_date'])));
+                                            $html .= $value['expiration_date'];
                                         $html .= '</td>';
-                                        
+                                    
                                         
                                         $html .= '<td class="nisl-pdf-link">';
-                                            $html .= $pdf_link;
+                                            $html .= $value['pdf_link'];
                                         $html .= '</td>';
+
+                                        $html .= '<td class="nisl-pdf-link">';
+                                            $html .= $value['date_time'];
+                                        $html .= '</td>';
+
                                     $html .= '</tr>';
                                 }
                                 
-
-                                
-                                }
-                            }
-                           
-                                
-                            }
-                                
-                        }
+                            
                             $html .= '</tbody>';
                             $html .= '</table>';
                             $html .= '</div>';          
@@ -3453,8 +3253,30 @@ class Permasafe_User_Pro_Public {
                             echo json_encode($response);
                         }
                     }else{
-                        $response = array('status' => false,'message'=>'<span class="perma-error"><strong>Error!</strong>  The member code you have provided is other distributor\'s code. If you believe this is an error, please contact us <a href="'.get_site_url().'/contact">here</a>.</span>');
-                        echo json_encode($response);
+                        $member_code_id = pmsafe_if_code_exist($member_code);
+                        // $invite_code_dealer = get_post_meta($member_code_id,'_pmsafe_dealer',true);
+                        $invite_code_distributor = get_post_meta($member_code_id,'_pmsafe_distributor',true);
+                        if($invite_code_distributor == $login){
+                            $package = get_post_meta($member_code_id,'_pmsafe_code_prefix',true);
+                            $upgradable_prefix_str = get_post_meta($member_code_id,'upgradable_prefix',true);
+                            $upgradable_prefix = explode(",",$upgradable_prefix_str);
+                            $is_upgradable = get_post_meta($member_code_id,'pmsafe_invitation_code_upgradable',true);
+                            foreach($upgradable_prefix as $prefix){
+                                $option[] = '<option value="'.$prefix.'">'.$prefix.'</option>';
+                            }
+                            if($member_code_id){
+                            
+                                $response = array('status' => true,'code'=>$member_code,'option'=>$option,'is_upgradable'=>$is_upgradable,'package'=>$package,'code_id'=>$member_code_id);
+                                
+                                echo json_encode($response);
+                            }else{
+                                $response = array('status' => false,'message'=>'<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="'.get_site_url().'/contact">here</a>.</span>');
+                                echo json_encode($response);
+                            }
+                        }else{
+                            $response = array('status' => false,'message'=>'<span class="perma-error"><strong>Error!</strong>  The member code you have provided is other distributor\'s code. If you believe this is an error, please contact us <a href="'.get_site_url().'/contact">here</a>.</span>');
+                            echo json_encode($response);
+                        }
                     }
                 }else if($role['contributor'] == 1 ) 
                 {   
@@ -3495,8 +3317,32 @@ class Permasafe_User_Pro_Public {
                             echo json_encode($response);
                         }
                     }else{
-                        $response = array('status' => false,'message'=>'<span class="perma-error"><strong>Error!</strong>  The member code you have provided is other dealer\'s code. If you believe this is an error, please contact us <a href="'.get_site_url().'/contact">here</a>.</span>');
-                        echo json_encode($response);
+                        
+                        $member_code_id = pmsafe_if_code_exist($member_code);
+                        $invite_code_dealer = get_post_meta($member_code_id,'_pmsafe_dealer',true);
+                        if($invite_code_dealer == $login){
+                            $package = get_post_meta($member_code_id,'_pmsafe_code_prefix',true);
+                            $upgradable_prefix_str = get_post_meta($member_code_id,'upgradable_prefix',true);
+                            $upgradable_prefix = explode(",",$upgradable_prefix_str);
+                            $is_upgradable = get_post_meta($member_code_id,'pmsafe_invitation_code_upgradable',true);
+                            foreach($upgradable_prefix as $prefix){
+                                $option[] = '<option value="'.$prefix.'">'.$prefix.'</option>';
+                            }
+                            if($member_code_id){
+                            
+                                $response = array('status' => true,'code'=>$member_code,'option'=>$option,'is_upgradable'=>$is_upgradable,'package'=>$package,'code_id'=>$member_code_id);
+                                
+                                echo json_encode($response);
+                            }else{
+                                $response = array('status' => false,'message'=>'<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="'.get_site_url().'/contact">here</a>.</span>');
+                                echo json_encode($response);
+                            }
+                        }else{
+                            $response = array('status' => false,'message'=>'<span class="perma-error"><strong>Error!</strong>  The member code you have provided is other dealer\'s code. If you believe this is an error, please contact us <a href="'.get_site_url().'/contact">here</a>.</span>');
+                            echo json_encode($response);
+                        }
+                        
+                      
                     }
                 }else if($role['dealer-user'] == 1 ) 
                 {   
@@ -3536,8 +3382,29 @@ class Permasafe_User_Pro_Public {
                             echo json_encode($response);
                         }
                     }else{
-                        $response = array('status' => false,'message'=>'<span class="perma-error"><strong>Error!</strong>  The member code you have provided is other dealer\'s code. If you believe this is an error, please contact us <a href="'.get_site_url().'/contact">here</a>.</span>');
-                        echo json_encode($response);
+                        $member_code_id = pmsafe_if_code_exist($member_code);
+                        $invite_code_dealer = get_post_meta($member_code_id,'_pmsafe_dealer',true);
+                        if($invite_code_dealer == $login){
+                            $package = get_post_meta($member_code_id,'_pmsafe_code_prefix',true);
+                            $upgradable_prefix_str = get_post_meta($member_code_id,'upgradable_prefix',true);
+                            $upgradable_prefix = explode(",",$upgradable_prefix_str);
+                            $is_upgradable = get_post_meta($member_code_id,'pmsafe_invitation_code_upgradable',true);
+                            foreach($upgradable_prefix as $prefix){
+                                $option[] = '<option value="'.$prefix.'">'.$prefix.'</option>';
+                            }
+                            if($member_code_id){
+                            
+                                $response = array('status' => true,'code'=>$member_code,'option'=>$option,'is_upgradable'=>$is_upgradable,'package'=>$package,'code_id'=>$member_code_id);
+                                
+                                echo json_encode($response);
+                            }else{
+                                $response = array('status' => false,'message'=>'<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="'.get_site_url().'/contact">here</a>.</span>');
+                                echo json_encode($response);
+                            }
+                        }else{
+                            $response = array('status' => false,'message'=>'<span class="perma-error"><strong>Error!</strong>  The member code you have provided is other dealer\'s code. If you believe this is an error, please contact us <a href="'.get_site_url().'/contact">here</a>.</span>');
+                            echo json_encode($response);
+                        }
                     }
                 }else if($role['administrator'] == 1 ){
                     $member_code_id = pmsafe_if_code_exist($member_code);
@@ -3635,6 +3502,21 @@ class Permasafe_User_Pro_Public {
             foreach ($str_results as $str_result) {
                 $check_array[] = $str_result->meta_value;
             }
+            // pr($check_array);
+            $invite_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (SELECT post_id FROM wp_postmeta WHERE meta_key="_pmsafe_is_invite_code")');
+            // pr($str_results);
+            $invite_array = array();
+            foreach ($invite_results as $invite_result) {
+                $invite_array[] = $invite_result->meta_value;
+            }
+            if(empty($invite_array)){
+                $dealer_array = $check_array;
+            }else{
+                $dealer_array = array_merge($check_array, $invite_array);
+            }
+            // pr($dealer_array);
+
+
             $membership_results = $wpdb->get_results('SELECT post_id FROM wp_postmeta WHERE meta_key = "is_upgraded" and meta_value ="1"');
             $html .= '<div class="filter-wrap">';
             // $html .= '<input type="hidden" id="membership_login_id" value="'.$login.'">';
@@ -3705,7 +3587,12 @@ class Permasafe_User_Pro_Public {
             foreach ($membership_results as $str) {
                 $post_id = $str->post_id;
                 $bulk_id = get_post_meta($post_id,'_pmsafe_bulk_invitation_id',true);
-                $bulk_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
+                if($bulk_id == ''){
+                    $bulk_prefix = get_post_meta($post_id,'_pmsafe_invitation_prefix',true);    
+                }else{
+                    $bulk_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
+                }
+                
                 $code = get_post_meta($post_id,'_pmsafe_invitation_code',true);
                 $upgraded_id = get_post_meta($post_id,'upgraded_by',true);
                 $dealer_name = get_user_meta($upgraded_id,'dealer_name',true);
@@ -3716,7 +3603,7 @@ class Permasafe_User_Pro_Public {
                 $user_id = $users->ID;
                 $fname = get_user_meta($user_id,'first_name',true);
                 $lname = get_user_meta($user_id,'last_name',true);
-                if(in_array($code,$check_array)){
+                if(in_array($code,$dealer_array)){
                 $html .= '<tr>';
                     
                     $html .= '<td>';
@@ -3810,14 +3697,31 @@ class Permasafe_User_Pro_Public {
             foreach ($str_results as $str_result) {
                 $check_array[] = $str_result->meta_value;
             }
+
+            $invite_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (SELECT post_id FROM wp_postmeta WHERE meta_key="_pmsafe_is_invite_code")');
+            // pr($str_results);
+            $invite_array = array();
+            foreach ($invite_results as $invite_result) {
+                $invite_array[] = $invite_result->meta_value;
+            }
+            if(empty($invite_array)){
+                $dealer_array = $check_array;
+            }else{
+                $dealer_array = array_merge($check_array, $invite_array);
+            }
+
             // pr($check_array);
             $membership_results = $wpdb->get_results('SELECT post_id FROM wp_postmeta WHERE meta_key = "is_upgraded" and meta_value ="1"');
 
             foreach ($membership_results as $str) {
                 $post_id = $str->post_id;
 				$upgraded_date = get_post_meta($post_id,'upgraded_date',true);
-				$bulk_id = get_post_meta($post_id,'_pmsafe_bulk_invitation_id',true);
-				$bulk_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
+                $bulk_id = get_post_meta($post_id,'_pmsafe_bulk_invitation_id',true);
+                if($bulk_id == ''){
+                    $bulk_prefix = get_post_meta($post_id,'_pmsafe_invitation_prefix',true);    
+                }else{
+                    $bulk_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
+                }
 				$code = get_post_meta($post_id,'_pmsafe_invitation_code',true);
 				$upgraded_id = get_post_meta($post_id,'upgraded_by',true);
 				$dealer_name = get_user_meta($upgraded_id,'dealer_name',true);
@@ -3853,7 +3757,7 @@ class Permasafe_User_Pro_Public {
                 
                 if($upgraded_date >= $datepicker1 && $upgraded_date <= $datepicker2){
                     
-                    if(in_array($code,$check_array)){
+                    if(in_array($code,$dealer_array)){
                         
                         if($policy == "upgraded"){
 								
@@ -4006,10 +3910,16 @@ class Permasafe_User_Pro_Public {
             $package = $_POST['package'];
             $code_id = $_POST['code_id'];
             $bulk_id = get_post_meta($code_id,'_pmsafe_bulk_invitation_id',true);
-            $invitation_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
-            $package_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$invitation_prefix);
+            if($bulk_id){
+                $invitation_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
+                $package_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$invitation_prefix);
+                $no_coverage = get_post_meta($package_id, '_pmsafe_no_coverage_benefit', true);
+            }else{
+                $invitation_prefix = get_post_meta($code_id,'_pmsafe_code_prefix',true);
+                $package_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$invitation_prefix);
+                $no_coverage = get_post_meta($package_id, '_pmsafe_no_coverage_benefit', true);
 
-            $no_coverage = get_post_meta($package_id, '_pmsafe_no_coverage_benefit', true);
+            }
             if($no_coverage == 1){
                 $html .='<span style="color: #a94442;background-color: #f2dede;border-color: #f2dede;padding: 15px;margin-bottom: 20px;border: 1px solid transparent;border-radius: 4px;"><strong>Error!</strong>  No Product Warranty has been selected; Registration for your selection is not required. If you believe this is an error, please contact us <a href="'.get_site_url().'/contact">here</a>.</span>';
             }else{
