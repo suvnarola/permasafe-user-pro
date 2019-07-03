@@ -505,15 +505,6 @@ class Permasafe_User_Pro_Public {
 
                         $html .= '<select id="customertable-select">';
     						$html .= '<option>Member Code</option>';
-    						$html .= '<option>Customer Name</option>';
-    						$html .= '<option>Email</option>';
-                            $html .= '<option>Phone Number</option>';
-    						$html .= '<option>Address</option>';
-                            $html .= '<option>Vehicle Information</option>';
-    						$html .= '<option>VIN</option>';
-    						$html .= '<option>Plan ID</option>';
-    						$html .= '<option>Registration Date</option>';
-    						$html .= '<option>Expiration Date</option>';
     					$html .= '</select>';
     					
 
@@ -2130,16 +2121,6 @@ class Permasafe_User_Pro_Public {
                     
                      $html .= '<select id="view-customer-table-select">';
                         $html .= '<option>Member Code</option>';
-                        $html .= '<option>Benefits Package</option>';
-                        $html .= '<option>Product Code Range</option>';
-                        // $html .= '<option>Code Status</option>';
-                        $html .= '<option>Member Name</option>';
-                        $html .= '<option>Email</option>';
-                        $html .= '<option>Address</option>';
-                        $html .= '<option>Vehicle Information</option>';
-                        $html .= '<option>VIN</option>';
-                        $html .= '<option>Registration Date</option>';
-                        $html .= '<option>Expiration Date</option>';
                     $html .= '</select>';
                     $html .= '</div>';
 
