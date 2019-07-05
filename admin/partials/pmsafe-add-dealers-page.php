@@ -1,4 +1,4 @@
-<h1>Add Dealers</h1>
+<h1 class="top-heading">Add Dealer</h1>
 <?php
 	$distributor_id = $_GET['distributor'];
 	$action = $_GET['action'];
@@ -69,7 +69,7 @@
 
 			echo '<div id="fname_divgroup">';
 				echo '<div id="fname_div1">';
-					echo '<h3>Contact Information:</h3>';
+					echo '<h3 style="color:#0065a7">Contact Person\'s Information:</h3>';
 					echo '<div class="nisl-wrap">';
  				    echo '<label><strong>First Name:</strong></label>';
 				    echo '<input type="text" id="pmsafe_dealer_contact_fname1" name="pmsafe_dealer_contact_fname[]" value="" class="widefat" />';
@@ -87,16 +87,14 @@
 
 				    echo '<div class="nisl-wrap">';
 				    echo '<label><strong>Email:</strong></label>';
-				    echo '<input type="email" id="pmsafe_dealer_contact_email1" name="pmsafe_dealer_contact_email[]" value="" class="widefat" />';
+				    echo '<input type="email" id="pmsafe_dealer_contact_email1" name="pmsafe_dealer_contact_email[]" value="" class="widefat check-mail" style="width:35%;"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;">Please enter unique email-id.</span>';
 					echo '</div>';
 					
 					echo '<div class="nisl-wrap">';
 						echo '<label><strong>Password:</strong></label>';
 						echo '<input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat" style="width:35%"/>';
 						echo '<input type="button" value="Generate Password" class="generate_dealer_contact_password" />';
-						// echo '<input type="button" value="Hide" id="hide_dealer_contact_password" style="display:none;"/>';
-						// echo '<input type="button" value="Show" id="show_dealer_contact_password" style="display:none;"/>';
-						// echo '<input type="button" value="Cancel" id="cancel_dealer_contact_password" style="display:none;"/>';
+					
 					echo '</div>';
 				echo '</div>';
 			echo '</div>';   
@@ -104,7 +102,7 @@
 			echo '<input type="button" value="Add New Contact Information" id="add_new_dealer" />';
 			// echo '<input type="button" value="Remove Contact Information" id="removeButton_dealer" />';
 
-			echo '<input type="submit" id="pmsafe_dealers_submit" value="Save" class="button button-primary button-large">';
+			echo '<input type="submit" id="pmsafe_dealers_submit" value="Save" class="button button-primary button-large btn-disabled">';
 	
 		echo '</form>';
 	echo '</div>';

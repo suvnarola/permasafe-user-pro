@@ -53,6 +53,7 @@ input#myInput {margin: 0 0 20px 0;background: transparent;border: 1px solid #eee
 .dataTables_wrapper .fg-toolbar .dataTables_filter label {display: flex;align-items: center;}
 .dataTables_wrapper thead tr th {  font-size: 13px;}
 .dataTables_wrapper thead tr th span {right: 0 !important;}
+table#dealertable thead th div.DataTables_sort_wrapper span{right:-10px !important;}
 button.dt-button.buttons-csv.buttons-html5, button.dt-button.buttons-pdf.buttons-html5, button.dt-button.buttons-excel.buttons-html5,button.dt-button.buttons-print{background-color: #333;padding: 7px 26px;border: none;color: #fff;cursor: pointer;float: left;}
 button.dt-button.buttons-pdf.buttons-html5, button.dt-button.buttons-excel.buttons-html5, button.dt-button.buttons-print{ margin-left: 10px;}
 .nisl-pdf-link{display: none;}
@@ -68,7 +69,7 @@ div#view_code_table_wrapper {  margin-top: 70px;}
 div#perma-warranty-wrapper a.back_link {float: right;}
 div#perma-warranty-wrapper a input[type="button"] {margin-right: 0 !important;}
 table#view_customer_table {  width: 100% !important;}
-table#view_customer_table  thead tr th span {right: -12px !important;}
+table#view_customer_table  thead tr th span {right: -10px !important;}
 input#s2id_autogen1_search{display: none;}
 div#perma-warranty-wrapper {position: relative;}
 div#perma-warranty-wrapper .filter-wrapper {display: flex;position: absolute;right: 23%;top: -12px;z-index: 1;}

@@ -410,6 +410,7 @@ class Permasafe_User_Pro_Admin {
 			$distributor_contact_lname = $_POST['pmsafe_distributor_contact_lname'];
 			$distributor_contact_phone = $_POST['pmsafe_distributor_contact_phone'];
 			$distributor_contact_email = $_POST['pmsafe_distributor_contact_email'];
+			$distributor_contact_password = $_POST['pmsafe_distributor_contact_password'];
 
 			
 
@@ -417,11 +418,18 @@ class Permasafe_User_Pro_Admin {
 			$set_user_role = new WP_User( $user_id );
 			$set_user_role->set_role( 'author' );
 			if($distributor_contact_fname != ''){
-				$contact_info = array();
+				
 				foreach ( $distributor_contact_fname as $key=>$name ) {
-					$contact_info[] = array( 'fname' => $name, 'lname' => $distributor_contact_lname[ $key ], 'phone' => $distributor_contact_phone[ $key ], 'email' => $distributor_contact_email[ $key ] );	
+					// $contact_info[] = array( 'fname' => $name, 'lname' => $distributor_contact_lname[ $key ], 'phone' => $distributor_contact_phone[ $key ], 'email' => $distributor_contact_email[ $key ] );	
+					$contact_id = wp_create_user( $distributor_contact_email[ $key ], $distributor_contact_password[ $key ], $distributor_contact_email[ $key ] );
+					$set_user_role = new WP_User( $contact_id );
+					$set_user_role->set_role( 'distributor-user' );
+					update_user_meta( $contact_id, 'distributor_contact_fname', $name );	
+					update_user_meta( $contact_id, 'distributor_contact_lname', $distributor_contact_lname[ $key ] );	
+					update_user_meta( $contact_id, 'distributor_contact_phone', $distributor_contact_phone[ $key ] );	
+					update_user_meta( $contact_id, 'contact_distributor_id', $user_id );	
 				}
-				update_user_meta( $user_id, 'distributor_contact_info', $contact_info );
+				
 			}
 			// $user_role[] = 'author';
 			// update_user_meta( $user_id, 'wp_capabilities', $user_role );
@@ -432,13 +440,26 @@ class Permasafe_User_Pro_Admin {
 			
 			
 
-			$redirect_url = admin_url('admin.php?page=distributors-lists');
+			$redirect_url = admin_url('admin.php?page=distributors-lists&action=view&distributor='.$user_id);
 			$response = array('status' => true,'redirect'=>$redirect_url);
             echo json_encode($response);
 
 			die;
        }
 
+	   public function check_email_exist(){
+		   $email = $_POST['email'];
+		   global $wpdb;
+		   $sql = 'SELECT * FROM wp_users WHERE user_email = "'.$email.'"';
+		   $results = $wpdb->get_results($sql);
+		   if(!empty($results)){
+			   $response = 0;
+		   }else{
+				$response = 1;
+		   }
+		   echo $response;
+		   die;
+	   }
 	        
 	    public function  perma_admin_footer_load_html(){
 	        echo '<div class="perma-admin-loader" style="display:none">';
@@ -458,20 +479,56 @@ class Permasafe_User_Pro_Admin {
 			$edit_fax_number = $_POST['pmsafe_distributor_fax_number'];
 			$new_password = $_POST['pmsafe_distributor_password'];
 			
+			$distributor_contact_id = $_POST['pmsafe_distributor_contact_id'];
 			$distributor_contact_fname = $_POST['pmsafe_distributor_contact_fname'];
 			$distributor_contact_lname = $_POST['pmsafe_distributor_contact_lname'];
 			$distributor_contact_phone = $_POST['pmsafe_distributor_contact_phone'];
 			$distributor_contact_email = $_POST['pmsafe_distributor_contact_email'];
+			$distributor_contact_password = $_POST['pmsafe_distributor_contact_password'];
 			
-			if($distributor_contact_fname != ''){
-				$contact_info = array();
-				foreach ( $distributor_contact_fname as $key=>$name ) {
-					$contact_info[] = array( 'fname' => $name, 'lname' => $distributor_contact_lname[ $key ], 'phone' => $distributor_contact_phone[ $key ], 'email' => $distributor_contact_email[ $key ] );	
-				}
-				update_user_meta( $user_id, 'distributor_contact_info', $contact_info );
-			}
+			
 
 			$user_id = wp_update_user( array( 'ID' => $user_id, 'user_email' => $edit_email ) );
+
+			if($distributor_contact_fname != ''){
+				
+				foreach ( $distributor_contact_fname as $key=>$name ) {
+			
+					$edit_contact_id = $distributor_contact_id[ $key ];
+					if($edit_contact_id){
+						
+						$contact_id = wp_update_user( array( 'ID' => $edit_contact_id, 'user_email' => $distributor_contact_email[$key] ) );
+						if($distributor_contact_password[$key] != ''){
+							$pass = $distributor_contact_password[$key];
+							wp_set_password( $pass, $contact_id );
+							
+						}
+					}else{
+						$contact_id = wp_create_user( $distributor_contact_email[ $key ], $distributor_contact_password[ $key ], $distributor_contact_email[ $key ] );
+						$set_user_role = new WP_User( $contact_id );
+						
+						// $userdata = array(
+						// 	'ID' => $contact_id, // ID of existing user
+						// 	'user_login' =>  $distributor_contact_email[$key],
+						// 	'user_email' =>  $distributor_contact_email[$key],
+						// 	'user_pass'  =>  $distributor_contact_password[$key] // no plain password here!
+						// ); 
+						// pr($userdata);
+						// $contact_id = wp_insert_user( $userdata );
+						// echo $contact_id;
+						// $set_user_role = new WP_User( $contact_id );
+						$set_user_role->set_role( 'distributor-user' );
+					}
+					
+					update_user_meta( $contact_id, 'distributor_contact_fname', $name );	
+					update_user_meta( $contact_id, 'distributor_contact_lname', $distributor_contact_lname[ $key ] );	
+					update_user_meta( $contact_id, 'distributor_contact_phone', $distributor_contact_phone[ $key ] );	
+					update_user_meta( $contact_id, 'contact_distributor_id', $user_id );	
+				}
+				// update_user_meta( $user_id, 'distributor_contact_info', $contact_info );
+			}
+
+			
 			update_user_meta( $user_id, 'distributor_name', $edit_name );
 			update_user_meta( $user_id, 'distributor_store_address', $edit_store_address );
 			update_user_meta( $user_id, 'distributor_phone_number', $edit_phone_number );
@@ -480,7 +537,7 @@ class Permasafe_User_Pro_Admin {
 				wp_set_password( $new_password, $user_id );
 			}
 
-			$redirect_url = admin_url('admin.php?page=distributors-lists');
+			$redirect_url = admin_url('admin.php?page=distributors-lists&action=view&distributor='.$user_id);
 			$response = array('status' => true,'redirect'=>$redirect_url);
             echo json_encode($response);
         	die;
@@ -500,6 +557,38 @@ class Permasafe_User_Pro_Admin {
             echo json_encode($response);
         	die;
         }
+
+		//delete distributor contact
+		public function pmsafe_delete_distributor_contact_form_function(){
+        	$user_id = $_POST['contact_id'];
+			wp_delete_user( $user_id );
+			
+        	$redirect_url = admin_url('admin.php?page=distributors-lists');
+        	$response = array('status' => true,'redirect'=>$redirect_url);
+            echo json_encode($response);
+        	die;
+		}
+
+		//add distributor contact information
+		public function add_distributor_contact_information(){
+
+			$fname = $_POST['fname'];
+			$lname = $_POST['lname'];
+			$phone = $_POST['phone'];
+			$email = $_POST['email'];
+			$password = $_POST['password'];
+			$distributor_id = $_POST['distributor_id'];
+			
+			$contact_id = wp_create_user( $email, $password, $email );
+			$set_user_role = new WP_User( $contact_id );
+			$set_user_role->set_role( 'distributor-user' );
+			update_user_meta( $contact_id, 'distributor_contact_fname', $fname );	
+			update_user_meta( $contact_id, 'distributor_contact_lname', $lname );	
+			update_user_meta( $contact_id, 'distributor_contact_phone', $phone );	
+			update_user_meta( $contact_id, 'contact_distributor_id', $distributor_id );
+
+			die;
+		}
 
         //add dealer
         public function pmsafe_register_dealer_form_function(){
@@ -565,7 +654,7 @@ class Permasafe_User_Pro_Admin {
 			update_user_meta( $user_id, 'dealer_fax_number', $dealer_fax_number );
 			update_user_meta( $user_id, 'dealer_distributor_name', $dealer_distributor );
 			
-			$redirect_url = admin_url('admin.php?page=dealers-lists');
+			$redirect_url = admin_url('admin.php?page=dealers-lists&action=view&dealer='.$user_id);
 			$response = array('status' => true,'redirect'=>$redirect_url);
             echo json_encode($response);
         	die;
@@ -620,27 +709,29 @@ class Permasafe_User_Pro_Admin {
 				
 				foreach ( $dealer_contact_fname as $key=>$name ) {
 					
-					$contact_id = $dealer_contact_id[ $key ];
-
-					
-					// $contact_id = wp_update_user( array( 'ID' => $contact_id, 'user_email' => $dealer_contact_email[ $key ] ) );
+					$edit_contact_id = $dealer_contact_id[ $key ];
+					if($edit_contact_id){
+					$contact_id = wp_update_user( array( 'ID' => $edit_contact_id, 'user_email' => $dealer_contact_email[ $key ] ) );
 					
 						if($dealer_contact_password[$key] != ''){
 							$pass = $dealer_contact_password[$key];
 							wp_set_password( $pass, $contact_id );
 							
 						}
-						
-							$userdata = array(
-								'ID' => $contact_id, // ID of existing user
-								'user_login' =>  $dealer_contact_email[$key],
-								'user_email' =>  $dealer_contact_email[$key],
-								// 'user_pass'  =>  $pass // no plain password here!
-							); 
-						
-						$contact_id = wp_insert_user( $userdata ) ;
+					}else{
+						// $userdata = array(
+						// 	'ID' => $contact_id, // ID of existing user
+						// 	'user_login' =>  $dealer_contact_email[$key],
+						// 	'user_email' =>  $dealer_contact_email[$key],
+						// 	'user_pass'  =>  $dealer_contact_password[$key] // no plain password here!
+						// ); 
+						// $contact_id = wp_insert_user( $userdata ) ;
+						// $set_user_role = new WP_User( $contact_id );
+						$contact_id = wp_create_user( $dealer_contact_email[ $key ], $dealer_contact_password[ $key ], $dealer_contact_email[ $key ] );
 						$set_user_role = new WP_User( $contact_id );
 						$set_user_role->set_role( 'dealer-user' );
+					}
+							
 						
 						update_user_meta( $contact_id, 'contact_fname', $name );	
 						update_user_meta( $contact_id, 'contact_lname', $dealer_contact_lname[ $key ] );	
@@ -662,13 +753,14 @@ class Permasafe_User_Pro_Admin {
 				wp_set_password( $new_password, $user_id );
 			}
 
-			$redirect_url = admin_url('admin.php?page=dealers-lists');
+			$redirect_url = admin_url('admin.php?page=dealers-lists&action=view&dealer='.$user_id);
 			
-				$response = array('status' => true,'redirect'=>$redirect_url);
+			$response = array('status' => true,'redirect'=>$redirect_url);
             echo json_encode($response);
         	die;
 		}
 		
+
 
 		
         //delete dealer
@@ -2599,7 +2691,12 @@ class Permasafe_User_Pro_Admin {
 				$code = get_post_meta($post_id,'_pmsafe_invitation_code',true);
 				$code_prefix = get_post_meta($post_id,'_pmsafe_code_prefix',true);
 				$bulk_id = get_post_meta($post_id,'_pmsafe_bulk_invitation_id',true);
-				$bulk_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
+				// $bulk_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
+				if($bulk_id == ''){
+                    $bulk_prefix = get_post_meta($post_id,'_pmsafe_invitation_prefix',true);    
+                }else{
+                    $bulk_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
+                }
 
 				 if($distributor != '' && $dealer == ''){
 					 if($upgraded_date >= $datepicker1 && $upgraded_date <= $datepicker2){
@@ -2662,6 +2759,7 @@ class Permasafe_User_Pro_Admin {
 			foreach ($original_prefix  as $prefix1) {// PC3,BP1,BP2
 				foreach ($original_prefix  as $prefix2) { //PC3,BP1,BP2
 					if($prefix1 != $prefix2){
+
 						
 					$results = $wpdb->get_results('SELECT post_id FROM wp_postmeta WHERE 
 					meta_key = "_pmsafe_bulk_invitation_id" AND 
@@ -2728,7 +2826,12 @@ class Permasafe_User_Pro_Admin {
                 $post_id = $str->post_id;
 				$upgraded_date = get_post_meta($post_id,'upgraded_date',true);
 				$bulk_id = get_post_meta($post_id,'_pmsafe_bulk_invitation_id',true);
-				$bulk_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
+				// $bulk_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
+				if($bulk_id == ''){
+                    $bulk_prefix = get_post_meta($post_id,'_pmsafe_invitation_prefix',true);    
+                }else{
+                    $bulk_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
+                }
 				$code = get_post_meta($post_id,'_pmsafe_invitation_code',true);
 				$upgraded_id = get_post_meta($post_id,'upgraded_by',true);
 				$dealer_name = get_user_meta($upgraded_id,'dealer_name',true);

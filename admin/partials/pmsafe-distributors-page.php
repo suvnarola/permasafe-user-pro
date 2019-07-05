@@ -6,12 +6,16 @@ $distributor_id =  $_GET['distributor'];
 $user = get_user_by( 'ID', $distributor_id );
 $name = get_user_meta( $distributor_id, 'distributor_name' , true );
 $address = get_user_meta( $distributor_id, 'distributor_store_address' , true );
+$distributor_login = $user->user_login;
 
  // echo "test->".$address;
 // die;
 $phone = get_user_meta( $distributor_id, 'distributor_phone_number' , true );
 $fax = get_user_meta( $distributor_id, 'distributor_fax_number' , true );
-$contact_info = get_the_author_meta('distributor_contact_info' ,$distributor_id);
+// $contact_info = get_the_author_meta('distributor_contact_info' ,$distributo_id);
+global $wpdb;
+$contact_info = $wpdb->get_results('SELECT wum.user_id,wu.user_email FROM wp_users wu, wp_usermeta wum WHERE wu.ID = wum.user_id AND wum.meta_key = "contact_distributor_id" AND wum.meta_value ='.$distributor_id);
+// pr($contact_info);
 
 if($action == 'view'){
 
@@ -54,7 +58,7 @@ if($action == 'view'){
     );
 
     echo '<div class="top-head">';
-    echo '<h1>View Distributor Information</h1>';
+    echo '<h1 class="top-heading">View <span style="color:#0065a7">'.$name.' ('.$distributor_login.')</span> Information</h1>';
     echo $actions['edit'];
     echo $actions['add'];
     $dealer_distributor_name =  get_users(
@@ -128,43 +132,91 @@ if($action == 'view'){
        //      echo '<td>'.$dealer_name.'</td>';
        //  echo '</tr>'; 
     echo '</table>'; 
+    
+    echo '<div class="lr-wrapper">';
+    echo '<div class="left-wrapper">';
+    echo '<h3 style="color:#0065a7">Contact Person\'s Information:</h3>'; 
 
     if($contact_info){
-        echo '<h3>Contact Information:</h3>';   
-
-        // echo '<table class="view-distributor-tbl" id="">';
-         
         foreach ($contact_info as $key => $value) {
-            echo '<table class="view-distributor-tbl" id="">';
+            $user_id = $value->user_id;
+            $fname = get_user_meta($user_id,'distributor_contact_fname',true);
+            $lname = get_user_meta($user_id,'distributor_contact_lname',true);
+            $phone = get_user_meta($user_id,'distributor_contact_phone',true);
+
+            echo '<table class="view-distributor-contacts-tbl" id="">';
                 $number = $key + 1;
                 echo '<tr>';
-                    echo '<td colspan="2"><b>Person '.$number.'</b></td>';
+                echo '<td colspan="2" style="font-size:15px"><b>Person '.$number.'</b><i class="fa fa-trash" id="pmsafe_distributors_contact_delete" data-id="'.$user_id.'" title="click here to delete this contact" style="color: #fff;cursor:pointer;float:right;background: #0065a7;padding: 8px;border-radius: 50%;"></td>';
                 echo '</tr>';
                 
                 echo '<tr>';
                     echo '<td>Name</td>';
-                    echo '<td>'.$value['fname'].' '.$value['lname'].'</td>';
+                    echo '<td>'.$fname.' '.$lname.'</td>';
                 echo '</tr>';
 
                 echo '<tr>';
                     echo '<td>Phone Number</td>';
-                    echo '<td>'.$value['phone'].'</td>';
+                    echo '<td>'.$phone.'</td>';
                 echo '</tr>';
                 
                 echo '<tr>';
                     echo '<td>Email</td>';
-                    echo '<td>'.$value['email'].'</td>';
+                    echo '<td>'.$value->user_email.'</td>';
                 echo '</tr>';
 
             echo '</table>';  
-            
+            echo '<div class="blank-space"/></div>';
         }
-    } 
+
+    }else{
+        echo '<p>No contact persons are added.</p>';
+   }
+
+   echo '<a href="#contact-person-modal" rel="modal:open" id="add_contact_person">Add New Contact Person</a>';
+    /*********************** Add Contact Person Modal ******************************************** */
+    echo '<input type="hidden" value="'.$distributor_id.'" id="distributor_id">';
+    echo '<div id="contact-person-modal" class="modal">';   
+    echo '<h3>Add Contact Person: '.$name.'<h3>';
+        echo '<hr/>';
+        echo '<div class="nisl-wrap">';
+        echo '<label><strong>First Name:</strong></label>';
+        echo '<input type="text" id="pmsafe_distributor_contact_fname" name="pmsafe_distributor_contact_fname" value="" class="widefat" />';
+        echo '</div>';
+
+        echo '<div class="nisl-wrap">';
+        echo '<label><strong>Last Name:</strong></label>';
+        echo '<input type="text" id="pmsafe_distributor_contact_lname" name="pmsafe_distributor_contact_lname" value="" class="widefat" />';
+        echo '</div>';
+
+        echo '<div class="nisl-wrap">';
+        echo '<label><strong>Phone Number:</strong></label>';
+        echo '<input type="text" id="pmsafe_distributor_contact_phone" name="pmsafe_distributor_contact_phone" value="" class="widefat" />';
+        echo '</div>';
+
+        echo '<div class="nisl-wrap">';
+        echo '<label><strong>Email:</strong></label>';
+        echo '<input type="email" id="pmsafe_distributor_contact_email" name="pmsafe_distributor_contact_email" value="" class="widefat check-mail" />';
+        echo '</div>';
+
+        echo '<div class="nisl-wrap">';
+        echo '<label><strong>Password</strong></label>';
+        echo '<input type="text" rel="gp" name="pmsafe_distributor_contact_password" id="pmsafe_distributor_contact_password" value="" class="widefat" style="width:35%"/>';
+        echo '<input type="button" value="Change Password" class="generate_distributor_contact_password" />';
+        echo '</div>';
+        echo '<hr/>';
+            echo '<input type="button" value="Add" id="distributor_add_new_contact_person" class="btn-disabled" />';
+    echo '</div>';
+    
+   echo '</div>';
+       echo '<div class="right-wrapper">';
+            echo '<h3 style="color:#0065a7">Benefits Package Pricing:</h3>';  
+        echo '</div>';
      
 
 
 }else if($action == 'edit'){
-    echo '<h1>Edit Distributor Information</h1>'; 
+    echo '<h1 class="top-heading">Edit <span style="color:#0065a7">'.$name.' ('.$distributor_login.')</span> Information</h1>';
     echo '<div class="wrap distributor_add_form_div">';
         echo '<form name="perma_edit_distributor" id="perma_edit_distributor_form" method="POST" class="validate">';
 
@@ -213,28 +265,39 @@ if($action == 'view'){
             if($contact_info){
                  echo '<div id="fname_divgroup">';
                 foreach ($contact_info as $key => $value) {
-                    // $numbers = $key + 1;
-                   if($value['fname'] != ''){
+                    $user_id = $value->user_id;
+                    $fname = get_user_meta($user_id,'distributor_contact_fname',true);
+                    $lname = get_user_meta($user_id,'distributor_contact_lname',true);
+                    $phone = get_user_meta($user_id,'distributor_contact_phone',true);
+
+                   if($fname != ''){
                         echo '<div id="fname_div'.$number.'">';
-                            echo '<h3>Contact Information:</h3>';
+                            echo '<h3 style="color:#0065a7">Contact Person\'s Information:</h3>';
                             echo '<div class="nisl-wrap">';
                             echo '<label><strong>First Name:</strong></label>';
-                            echo '<input type="text" id="pmsafe_distributor_contact_fname'.$number.'" name="pmsafe_distributor_contact_fname[]" value="'.$value['fname'].'" class="widefat" />';
+                            echo '<input type="hidden" id="pmsafe_distributor_contact_id'.$number.'" name="pmsafe_distributor_contact_id[]" value="'.$user_id.'" class="widefat" />';
+                            echo '<input type="text" id="pmsafe_distributor_contact_fname'.$number.'" name="pmsafe_distributor_contact_fname[]" value="'.$fname.'" class="widefat" />';
                             echo '</div>';
 
                             echo '<div class="nisl-wrap">';
                             echo '<label><strong>Last Name:</strong></label>';
-                            echo '<input type="text" id="pmsafe_distributor_contact_lname'.$number.'" name="pmsafe_distributor_contact_lname[]" value="'.$value['lname'].'" class="widefat" />';
+                            echo '<input type="text" id="pmsafe_distributor_contact_lname'.$number.'" name="pmsafe_distributor_contact_lname[]" value="'.$lname.'" class="widefat" />';
                             echo '</div>';
 
                             echo '<div class="nisl-wrap">';
                             echo '<label><strong>Phone Number:</strong></label>';
-                            echo '<input type="text" id="pmsafe_distributor_contact_phone'.$number.'" name="pmsafe_distributor_contact_phone[]" value="'.$value['phone'].'" class="widefat" />';
+                            echo '<input type="text" id="pmsafe_distributor_contact_phone'.$number.'" name="pmsafe_distributor_contact_phone[]" value="'.$phone.'" class="widefat" />';
                             echo '</div>';
 
                             echo '<div class="nisl-wrap">';
                             echo '<label><strong>Email:</strong></label>';
-                            echo '<input type="email" id="pmsafe_distributor_contact_email'.$number.'" name="pmsafe_distributor_contact_email[]" value="'.$value['email'].'" class="widefat" />';
+                            echo '<input type="email" id="pmsafe_distributor_contact_email'.$number.'" name="pmsafe_distributor_contact_email[]" value="'.$value->user_email.'" class="widefat check-mail"style="width:35%"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;">Please enter unique email-id.</span>';
+                            echo '</div>';
+
+                            echo '<div class="nisl-wrap">';
+                            echo '<label><strong>Password:</strong></label>';
+                            echo '<input type="text" rel="gp" name="pmsafe_distributor_contact_password[]" value="" class="widefat" style="width:35%"/>';
+                            echo '<input type="button" value="Generate Password" class="generate_distributor_contact_password" />';
                             echo '</div>';
                         echo '</div>';
                     }
@@ -250,7 +313,7 @@ if($action == 'view'){
             else{
                 echo '<div id="fname_divgroup">';
                 echo '<div id="fname_div1">';
-                    echo '<h3>Contact Person 1 Information:</h3>';
+                    echo '<h3 style="color:#0065a7">Contact Person\'s Information:</h3>';
                     echo '<div class="nisl-wrap">';
                     echo '<label><strong>First Name:</strong></label>';
                     echo '<input type="text" id="pmsafe_distributor_contact_fname1" name="pmsafe_distributor_contact_fname[]" value="" class="widefat" />';
@@ -268,17 +331,24 @@ if($action == 'view'){
 
                     echo '<div class="nisl-wrap">';
                     echo '<label><strong>Email:</strong></label>';
-                    echo '<input type="email" id="pmsafe_distributor_contact_email1" name="pmsafe_distributor_contact_email[]" value="" class="widefat" />';
+                    echo '<input type="email" id="pmsafe_distributor_contact_email1" name="pmsafe_distributor_contact_email[]" value="" class="widefat check-mail" style="width:35%"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;">Please enter unique email-id.</span>';
                     echo '</div>';
+
+                    echo '<div class="nisl-wrap">';
+                    echo '<label><strong>Password</strong></label>';
+                    echo '<input type="text" rel="gp" name="pmsafe_distributor_contact_password[]" value="" class="widefat" style="width:35%"/>';
+                    echo '<input type="button" value="Change Password" class="generate_distributor_contact_password" />';
+                    echo '</div>';
+
                 echo '</div>';
                 echo '</div>';
 
             }
                 echo '<input type="button" value="Add New Contact Information" id="add_new" />';
-                echo '<input type="button" value="Remove Contact Information" id="removeButton" />';
+                // echo '<input type="button" value="Remove Contact Information" id="removeButton" />';
            
 
-            echo '<input type="submit" id="pmsafe_distributors_update" value="Update" class="button button-primary button-large">';
+            echo '<input type="submit" id="pmsafe_distributors_update" value="Save" class="button button-primary button-large btn-disabled">';
     
         echo '</form>';
     echo '</div>';
@@ -327,7 +397,8 @@ class User_List_Table extends WP_List_Table
         foreach ( $distributors as $user ) {
             // echo '<span>' . esc_html( $user->user_login ) . '</span>';
             $user_id = $user->ID;
-            $registered_date = $user->user_registered;
+            
+            $registered_date = date('Y-m-d', strtotime($user->user_registered));
             $name = get_user_meta( $user_id, 'distributor_name' , true );
             $address = get_user_meta( $user_id, 'distributor_store_address' , true );
             $phone = get_user_meta( $user_id, 'distributor_phone_number' , true );

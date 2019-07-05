@@ -9,6 +9,7 @@ $phone = get_user_meta( $dealer_id, 'dealer_phone_number' , true );
 $fax = get_user_meta( $dealer_id, 'dealer_fax_number' , true );
 $distributor_id = get_user_meta( $dealer_id, 'dealer_distributor_name' , true );
 $distributor_name = get_user_meta( $distributor_id, 'distributor_name' , true );
+$dealer_login = $user->user_login;
 // $contact_info = get_the_author_meta('dealer_contact_info' ,$dealer_id);
 global $wpdb;
 $contact_info = $wpdb->get_results('SELECT wum.user_id,wu.user_email FROM wp_users wu, wp_usermeta wum WHERE wu.ID = wum.user_id AND wum.meta_key = "contact_dealer_id" AND wum.meta_value ='.$dealer_id);
@@ -70,8 +71,8 @@ if($action == 'view'){
     );
     $posts = get_posts($args);
     // pr($posts);    
-	echo '<div class="top-head">';
-    echo '<h1>View Dealer Information</h1>';
+    echo '<div class="top-head">';
+    echo '<h1 class="top-heading">View <span style="color:#0065a7">'.$name.' ('.$dealer_login.')</span> Information</h1>';
     echo '<br/>';
     echo '<br/>';
     echo $actions['edit'];
@@ -135,7 +136,7 @@ if($action == 'view'){
     
     echo '<div class="lr-wrapper">';
         echo '<div class="left-wrapper">';
-        echo '<h3>Contact Information:</h3>';   
+        echo '<h3 style="color:#0065a7">Contact Person\'s Information:</h3>';   
         if($contact_info){
 
     	    // echo '<table class="view-distributor-tbl" id="">';
@@ -171,10 +172,13 @@ if($action == 'view'){
                
     	       echo '<div class="blank-space"/></div>';
             }
+        }else{
+            echo '<p>No contact persons are added.</p>';
+        }
             echo '<a href="#contact-person-modal" rel="modal:open" id="add_contact_person">Add New Contact Person</a>';
             /*********************** Add Contact Person Modal ******************************************** */
             echo '<div id="contact-person-modal" class="modal">';   
-            echo '<h3>Add Contact Person:'.$dealer_id.'<h3>';
+            echo '<h3>Add Contact Person: '.$name.'<h3>';
                     echo '<div class="nisl-wrap">';
                         echo '<label><strong>First Name:</strong></label>';
                         echo '<input type="text" id="pmsafe_dealer_contact_fname" name="pmsafe_dealer_contact_fname" value="" class="widefat" />';
@@ -192,7 +196,7 @@ if($action == 'view'){
 
 				    echo '<div class="nisl-wrap">';
                         echo '<label><strong>Email:</strong></label>';
-                        echo '<input type="email" id="pmsafe_dealer_contact_email" name="pmsafe_dealer_contact_email" value="" class="widefat" />';
+                        echo '<input type="email" id="pmsafe_dealer_contact_email" name="pmsafe_dealer_contact_email" value="" class="widefat check-mail" />';
 					echo '</div>';
 					
 					echo '<div class="nisl-wrap">';
@@ -200,16 +204,14 @@ if($action == 'view'){
 						echo '<input type="text" rel="gp" name="pmsafe_dealer_contact_password" id="pmsafe_dealer_contact_password" value="" class="widefat" style="width:35%"/>';
 						echo '<input type="button" value="Generate Password" class="generate_dealer_contact_password" />';
                     echo '</div>';
-                    echo '<input type="button" value="Add" id="add_new_contact_person" />';
+                    echo '<input type="button" value="Add" id="add_new_contact_person" class="btn-disabled"/>';
 			echo '</div>';
 			
             
-       }else{
-            echo '<p>No contact persons are added.</p>';
-       }
+      
        echo '</div>';
        echo '<div class="right-wrapper">';
-            echo '<h3>Benefits Package Pricing:</h3>'; 
+            echo '<h3 style="color:#0065a7">Benefits Package Pricing:</h3>'; 
             $price_arr = get_user_meta($dealer_id,'pricing_pacakge',true);
             echo '<table class="view-dealer-price-tbl" id="">';
                 echo '<thead>';
@@ -241,7 +243,7 @@ if($action == 'view'){
                 }
                 }else{
                     echo '<tr>';
-                        echo '<td colspan="4">No package is added.</td>';
+                        echo '<td colspan="5">No package is added.</td>';
     	            echo '</tr>';
                 }
     	        echo '</tbody>';  
@@ -359,7 +361,8 @@ if($action == 'view'){
 
 }else if($action == 'edit'){
 	$distributors = get_users( 'role=author&orderby=ID&order=DESC' );
-	echo '<h1>Edit dealer Information</h1>'; 
+    echo '<h1>Edit <span style="color:#0065a7">'.$name.' ('.$dealer_login.')</span> Information</h1>'; 
+    
     echo '<div class="wrap dealer_add_form_div">';
         echo '<form name="perma_edit_dealer" id="perma_edit_dealer_form" method="POST" class="validate">';
 
@@ -434,7 +437,7 @@ if($action == 'view'){
                     // $number = $key + 1;
                     if($fname != ''){
                         echo '<div id="fname_div'.$number.'">';
-                            echo '<h3>Contact Information:</h3>';
+                            echo '<h3 style="color:#0065a7">Contact Person\'s Information:</h3>';
                             echo '<div class="nisl-wrap">';
                             echo '<label><strong>First Name:</strong></label>';
                             echo '<input type="hidden" id="pmsafe_dealer_contact_id'.$number.'" name="pmsafe_dealer_contact_id[]" value="'.$user_id.'" class="widefat" />';
@@ -453,13 +456,13 @@ if($action == 'view'){
 
                             echo '<div class="nisl-wrap">';
                             echo '<label><strong>Email:</strong></label>';
-                            echo '<input type="email" id="pmsafe_dealer_contact_email'.$number.'" name="pmsafe_dealer_contact_email[]" value="'.$value->user_email.'" class="widefat" />';
+                            echo '<input type="email" id="pmsafe_dealer_contact_email'.$number.'" name="pmsafe_dealer_contact_email[]" value="'.$value->user_email.'" class="widefat check-mail" style="width:35%;"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;">Please enter unique email-id.</span>';
                             echo '</div>';
 
                             echo '<div class="nisl-wrap">';
                                 echo '<label><strong>Password:</strong></label>';
                                 echo '<input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat" style="width:35%"/>';
-                                echo '<input type="button" value="Change Password" class="generate_dealer_contact_password" />';
+                                echo '<input type="button" value="Generate Password" class="generate_dealer_contact_password" />';
                               
                             echo '</div>';
                         echo '</div>';
@@ -470,7 +473,7 @@ if($action == 'view'){
             }else{
                 echo '<div id="fname_divgroup">';
                 echo '<div id="fname_div1">';
-                    echo '<h3>Contact Information:</h3>';
+                    echo '<h3 style="color:#0065a7">Contact Person\'s Information:</h3>';
                     echo '<div class="nisl-wrap">';
                     echo '<label><strong>First Name:</strong></label>';
                     echo '<input type="text" id="pmsafe_dealer_contact_fname1" name="pmsafe_dealer_contact_fname[]" value="" class="widefat" />';
@@ -488,7 +491,7 @@ if($action == 'view'){
 
                     echo '<div class="nisl-wrap">';
                     echo '<label><strong>Email:</strong></label>';
-                    echo '<input type="email" id="pmsafe_dealer_contact_email1" name="pmsafe_dealer_contact_email[]" value="" class="widefat" />';
+                    echo '<input type="email" id="pmsafe_dealer_contact_email1" name="pmsafe_dealer_contact_email[]" value="" class="widefat check-mail" style="width:35%;"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;">Please enter unique email-id.</span>';
                     echo '</div>';
                     
                     echo '<div class="nisl-wrap">';
@@ -502,7 +505,7 @@ if($action == 'view'){
             echo '<input type="button" value="Add New Contact Information" id="add_new_dealer" />';
             // echo '<input type="button" value="Remove Contact Information" id="removeButton_dealer" />';
 
-            echo '<input type="submit" id="pmsafe_dealers_update" value="Update" class="button button-primary button-large">';
+            echo '<input type="submit" id="pmsafe_dealers_update" value="Save" class="button button-primary button-large btn-disabled">';
     
         echo '</form>';
     echo '</div>';
@@ -757,7 +760,8 @@ class User_List_Table extends WP_List_Table
                         esc_url( wp_nonce_url( add_query_arg( $view_customer_query_args, 'admin.php' ), 'viewcustomer_' . $user_id ) ),
                         _x( 'View Registered Customers', 'List table row action', 'wp-list-table-example' )
                     );
-                    $registered_date = $dealername->user_registered;
+                    
+                    $registered_date = date('Y-m-d', strtotime($dealername->user_registered));
                     $name = get_user_meta( $user_id, 'dealer_name' , true );
                     $address = get_user_meta( $user_id, 'dealer_store_address' , true );
                     $phone = get_user_meta( $user_id, 'dealer_phone_number' , true );
@@ -817,7 +821,8 @@ class User_List_Table extends WP_List_Table
                     esc_url( wp_nonce_url( add_query_arg( $view_customer_query_args, 'admin.php' ), 'viewcustomer_' . $user_id ) ),
                     _x( 'View Registered Customers', 'List table row action', 'wp-list-table-example' )
                 );
-                $registered_date = $user->user_registered;
+                
+                $registered_date = date('Y-m-d', strtotime($user->user_registered));
                 $name = get_user_meta( $user_id, 'dealer_name' , true );
                 $address = get_user_meta( $user_id, 'dealer_store_address' , true );
                 $phone = get_user_meta( $user_id, 'dealer_phone_number' , true );

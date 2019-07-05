@@ -167,7 +167,16 @@ class Permasafe_User_Pro {
         $this->loader->add_action( 'wp_ajax_nopriv_pmsafe_edit_distributor_form', $plugin_admin, 'pmsafe_edit_distributor_form_function' );
         //delete distributor
         $this->loader->add_action( 'wp_ajax_pmsafe_delete_distributor_form', $plugin_admin, 'pmsafe_delete_distributor_form_function' );
-        $this->loader->add_action( 'wp_ajax_nopriv_pmsafe_delete_distributor_form', $plugin_admin, 'pmsafe_delete_distributor_form_function' );
+		$this->loader->add_action( 'wp_ajax_nopriv_pmsafe_delete_distributor_form', $plugin_admin, 'pmsafe_delete_distributor_form_function' );
+		
+		//delete distributor contacts
+        $this->loader->add_action( 'wp_ajax_pmsafe_delete_distributor_contact_form', $plugin_admin, 'pmsafe_delete_distributor_contact_form_function' );
+		$this->loader->add_action( 'wp_ajax_nopriv_pmsafe_delete_distributor_contact_form', $plugin_admin, 'pmsafe_delete_distributor_contact_form_function' );
+		
+		//add distributor contact information
+        $this->loader->add_action( 'wp_ajax_add_distributor_contact_information', $plugin_admin, 'add_distributor_contact_information' );
+		$this->loader->add_action( 'wp_ajax_nopriv_add_distributor_contact_information', $plugin_admin, 'add_distributor_contact_information' );
+		
         //add dealer
         $this->loader->add_action( 'wp_ajax_pmsafe_register_dealer_form', $plugin_admin, 'pmsafe_register_dealer_form_function' );
     	$this->loader->add_action( 'wp_ajax_nopriv_pmsafe_register_dealer_form', $plugin_admin, 'pmsafe_register_dealer_form_function' );
@@ -241,6 +250,10 @@ class Permasafe_User_Pro {
 		
 		$this->loader->add_action( 'wp_ajax_edit_dealer_benefits_package_price', $plugin_admin, 'edit_dealer_benefits_package_price_function' );
         $this->loader->add_action( 'wp_ajax_nopriv_edit_dealer_benefits_package_price', $plugin_admin, 'edit_dealer_benefits_package_price_function' );
+		
+		// check if email is exist or not.
+		$this->loader->add_action( 'wp_ajax_check_email_exist', $plugin_admin, 'check_email_exist' );
+        $this->loader->add_action( 'wp_ajax_nopriv_check_email_exist', $plugin_admin, 'check_email_exist' );
 		
 	
 	}

@@ -251,7 +251,10 @@ class Permasafe_User_Pro_Public {
                 $args['menu'] = 'distributor-menu';
             }else if($role['dealer-user'] == 1) {
                 $args['menu'] = 'dealer-menu';
+            }else if($role['distributor-user'] == 1) {
+                $args['menu'] = 'distributor-menu';
             }
+
         } else { 
             $args['menu'] = 'Top Menu';
         } 
@@ -282,6 +285,9 @@ class Permasafe_User_Pro_Public {
             }
             elseif( $user->has_cap( 'dealer-user') ) {
                 $url = get_site_url().'/dealer-account/';
+            }
+            elseif( $user->has_cap( 'distributor-user') ) {
+                $url = get_site_url().'/distributor-account/';
             }
             
         }
@@ -783,15 +789,29 @@ class Permasafe_User_Pro_Public {
             $last_month_name = date('F', strtotime("last day of -1 month"));
             
                 $role = (array) $current_user->caps;
-                if($role['author'] == 1) 
+                if($role['author'] == 1 || $role['distributor-user'] == 1) 
                 {
-                    $distributor_username = $current_user->user_login;
-                    $user = get_user_by('login',$distributor_username);
+
+                    if($role['distributor-user'] == 1){
+                        
+                        $distributor_user_login = $current_user->user_login;
+                        $user = get_user_by('login',$distributor_user_login);
+                        $contact_id = $user->ID;
+                        $distributor_id = get_user_meta($contact_id,'contact_distributor_id',true);
+                        $distributor_user = get_user_by('id',$distributor_id);
+                        $distributor_username = $distributor_user->user_login;
+                    }else{
+                        $distributor_username = $current_user->user_login;
+                        $user = get_user_by('login',$distributor_username);
+                        $distributor_id =  $user->ID;
+                    }
+                   
+                   
                 
                     $distributor_name =  get_users(
                       array(
                        'meta_key' => 'dealer_distributor_name',
-                       'meta_value' => $user->ID
+                       'meta_value' => $distributor_id
                     ) ) ;
                     // echo '<pre>';
                     if($distributor_name){
@@ -844,18 +864,6 @@ class Permasafe_User_Pro_Public {
                         }
                         $html .= '<p class="member_number">'.$current_month.'</p>';
                         $html .= '</div>';      
-                    // return $html;
-                       // $html .= '<div class="card-wrap">';
-                       // $html .= '<h3>'.$last_month_name.'\'s </h3>';
-                       // $html .= '<h4>Memberships:</h4>';
-                       // if($total_last_month == ''){
-                       //     $last_month = 0;
-                       // }
-                       // else{
-                       //  $last_month = $total_last_month;   
-                       // }
-                       // $html .= '<p class="member_number">'.$last_month.'</p>';
-                       // $html .= '</div>';   
                     
                         $html .= '<div class="card-wrap">';
                         $html .= '<div class="contents">';
@@ -876,6 +884,11 @@ class Permasafe_User_Pro_Public {
                         $html .= '<h3>Total</h3>';
                         $html .= '<h4>Memberships<br />To Date:</h4>';
                         $html .= '</div>';
+                        if($total_count == ''){
+                            $total_count = 0;
+                        }else{
+                            $total_count = $total_count;
+                        }
                         $html .= '<p class="member_number-2">'.$total_count.'</p>';
                         $html .= '</div>';   
                     
@@ -896,7 +909,7 @@ class Permasafe_User_Pro_Public {
                 $current_user = wp_get_current_user();
                  $role = (array) $current_user->caps;
 
-                if($role['author'] == 1 || $role['contributor'] == 1 || $role['dealer-user'] == 1) 
+                if($role['author'] == 1 || $role['contributor'] == 1 || $role['dealer-user'] == 1 || $role['distributor-user'] == 1) 
                 {
                     $html .= '<div class="filter-wrap">';
                         $html .= '<div class="select-filter-wrap">';
@@ -951,6 +964,16 @@ class Permasafe_User_Pro_Public {
                 if($role['author'] == 1) 
                 {   
                     $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value in ( SELECT user_login FROM `wp_users` WHERE ID in (SELECT user_id FROM `wp_usermeta` WHERE meta_key="dealer_distributor_name" AND meta_value = (SELECT ID FROM `wp_users` WHERE user_login = "'.$login.'"))))');
+                }
+                if($role['distributor-user'] == 1) 
+                {   
+                    $distributor_user_login = $current_user->user_login;
+                    $user = get_user_by('login',$distributor_user_login);
+                    $contact_id = $user->ID;
+                    $distributor_id = get_user_meta($contact_id,'contact_distributor_id',true);
+                    $distributor_user = get_user_by('id',$distributor_id);
+                    $distributor_username = $distributor_user->user_login;
+                    $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value in ( SELECT user_login FROM `wp_users` WHERE ID in (SELECT user_id FROM `wp_usermeta` WHERE meta_key="dealer_distributor_name" AND meta_value = (SELECT ID FROM `wp_users` WHERE user_login = "'.$distributor_username.'"))))');
                 }
                 if($role['contributor'] == 1) {
                         
@@ -1203,7 +1226,7 @@ class Permasafe_User_Pro_Public {
         		$current_user = wp_get_current_user();
         		 $role = (array) $current_user->caps;
 
-                if($role['author'] == 1 || $role['contributor'] == 1 ||  $role['dealer-user'] == 1) 
+                if($role['author'] == 1 || $role['contributor'] == 1 ||  $role['dealer-user'] == 1 ||  $role['distributor-user'] == 1) 
                 {
             		$html .= '<div class="reports-wrap">';	
 
@@ -1600,6 +1623,17 @@ class Permasafe_User_Pro_Public {
                     {   
                         $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value in ( SELECT user_login FROM `wp_users` WHERE ID in (SELECT user_id FROM `wp_usermeta` WHERE meta_key="dealer_distributor_name" AND meta_value = (SELECT ID FROM `wp_users` WHERE user_login = "'.$login.'"))))');
                     }
+                    if($role['distributor-user'] == 1) 
+                    {   
+                        $distributor_user_login = $current_user->user_login;
+                        $user = get_user_by('login',$distributor_user_login);
+                        $contact_id = $user->ID;
+                        $distributor_id = get_user_meta($contact_id,'contact_distributor_id',true);
+                        $distributor_user = get_user_by('id',$distributor_id);
+                        $distributor_username = $distributor_user->user_login;
+
+                        $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value in ( SELECT user_login FROM `wp_users` WHERE ID in (SELECT user_id FROM `wp_usermeta` WHERE meta_key="dealer_distributor_name" AND meta_value = (SELECT ID FROM `wp_users` WHERE user_login = "'.$distributor_username.'"))))');
+                    }
                     if($role['contributor'] == 1) {
                         
                         $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "'.$login.'")');
@@ -1765,17 +1799,7 @@ class Permasafe_User_Pro_Public {
                                             $html .= '</td>';
 
                                             $vehicle_info = get_user_meta($value->user_id,'pmsafe_vehicle_info',false);
-                                          /*  if($vehicle_year != ''){
-                                                // pr($vehicle_info);
-                                                $year = $vehicle_info[0][$nickname]['pmsafe_vehicle_year'];
-                                                // echo $year.'<br/>';
-                                                if($vehicle_year == $year){
-                                                    echo $year.'->'.$value->user_id.'<br/>';
-                                                }
-
-                                            }
-                                            else{*/
-                                            // pr($vehicle_info);
+                                          
                                                 $url = get_site_url().'/wp-includes/images/media/document.png';
                                                 $html .= '<td>';
                                                     $html .= '<a href="'.$vehicle_info[0][$nickname]['pmsafe_pdf_link'].'" target="blank"><img src="'.$url.'" class="attachment-thumbnail" style="width:20px !important"/></a>';
@@ -1813,7 +1837,7 @@ class Permasafe_User_Pro_Public {
             if ( is_user_logged_in() ) {
                 $current_user = wp_get_current_user();
                 $role = (array) $current_user->caps;
-                if($role['author'] == 1) 
+                if($role['author'] == 1 || $role['distributor-user'] == 1) 
                 {
                     if($_GET['dealer']){
 
@@ -1931,6 +1955,18 @@ class Permasafe_User_Pro_Public {
                   //      $html .= '</div>';
                     return $html;
             }
+            else if($role['distributor-user'] == 1) {
+                $perma_user_id = $current_user->user_login;
+                $user = get_user_by('login',$perma_user_id);
+                $contact_id = $user->ID;
+                $distributor_id = get_user_meta($contact_id,'contact_distributor_id',true);
+                $contact_fname = get_user_meta( $contact_id, 'distributor_contact_fname' , true );
+                $distributor_name = get_user_meta( $distributor_id, 'distributor_name' , true );
+                $html .= '<h1><strong>Welcome</strong> '.$contact_fname.'</h1>';
+                $html .= '<h3><strong>'.$distributor_name.'\'s Account Information</strong></h3>';
+          //      $html .= '</div>';
+            return $html;
+            }
         }
             
         }
@@ -1949,13 +1985,10 @@ class Permasafe_User_Pro_Public {
         public function view_reg_user_dist_function(){
             if ( is_user_logged_in() ) {
             $current_user = wp_get_current_user();
-            // echo '<pre>';
-            // print_r($current_user);
-            // echo '</pre>';
-            // $month = date('m');
-            // echo $month;
+           
             $role = (array) $current_user->caps;
-            if($role['author'] == 1) 
+            
+            if($role['author'] == 1 || $role['distributor-user'] == 1) 
             {
                 // echo 'abcacas'.$_GET['action'];
                 if($_GET['dealer']){
@@ -2046,7 +2079,8 @@ class Permasafe_User_Pro_Public {
                                     $distributors = get_user_by('login', $distributor_login);
                                     $distributor_id = $distributors->data->ID;
                                     $distributor_name = get_user_meta( $distributor_id, 'distributor_name', true);
-                                    $date_created = get_post_meta( $post_id, '_pmsafe_code_create_date', true );
+                                    
+                                    $date_created = date('Y-m-d', strtotime(get_post_meta( $post_id, '_pmsafe_code_create_date', true )));
                                     $data = pmsafe_unused_code_count($post_id);
                                     $used_code = $data['used'];
                                     $available = $data['total'] - $data['used'];
@@ -2306,13 +2340,23 @@ class Permasafe_User_Pro_Public {
                         </div>
                     <?php
                     }                    
-                $distributor_username = $current_user->user_login;
-                $user = get_user_by('login',$distributor_username);
+                    if($role['distributor-user'] == 1){
+                        $distributor_user_login = $current_user->user_login;
+                        $user = get_user_by('login',$distributor_user_login);
+                        $contact_id = $user->ID;
+                        $distributor_id = get_user_meta($contact_id,'contact_distributor_id',true);
+                        $distributor_user = get_user_by('id',$distributor_id);
+                        $distributor_username = $distributor_user->user_login;
+                    }else{
+                        $distributor_username = $current_user->user_login;
+                        $user = get_user_by('login',$distributor_username);
+                        $distributor_id = $user->ID;
+                    }
                 
                   $distributor_name =  get_users(
                       array(
                        'meta_key' => 'dealer_distributor_name',
-                       'meta_value' => $user->ID
+                       'meta_value' => $distributor_id
                     ) ) ;
                   // echo '<pre>';
                   // print_r($distributor_name);
@@ -2384,7 +2428,8 @@ class Permasafe_User_Pro_Public {
                                     $view_range_code_url = get_site_url().'/distributor-account/?dealer='.$dealername->user_login.'&action=view_codes';
                                     $view_customer_code_url = get_site_url().'/distributor-account/?dealer='.$dealername->user_login.'&action=view_customer';
                                     $view_membership_url = get_site_url().'/upgraded-policies/?dealer='.$dealername->user_login.'&action=view_membership';
-                                   $contact_info = get_the_author_meta('dealer_contact_info' ,$user_id);
+                                    global $wpdb;
+                                    $contact_info = $wpdb->get_results('SELECT wum.user_id,wu.user_email FROM wp_users wu, wp_usermeta wum WHERE wu.ID = wum.user_id AND wum.meta_key = "contact_dealer_id" AND wum.meta_value ='.$user_id);
                                    
                                   
                                     $html .= '<tr>';
@@ -2397,17 +2442,29 @@ class Permasafe_User_Pro_Public {
                                         $html .= '</td>';
 
                                         $html .= '<td>';
-                                        foreach ($contact_info as $key => $value) {
-                                            $number = $key + 1;
-                                            $html .= '<b>Person '.$number.': </b>'.$value['fname'].' '.$value['lname'];
-                                            $html .= ',<br/>';
+                                        if($contact_info){
+                                            foreach ($contact_info as $key => $value) {
+                                                $user_id = $value->user_id;
+                                                $fname = get_user_meta($user_id,'contact_fname',true);
+                                                $lname = get_user_meta($user_id,'contact_lname',true);
+                                                $number = $key + 1;
+                                                $html .= '<b>Person '.$number.': </b>'.$fname.' '.$lname;
+                                                $html .= ',<br/>';
+                                            }
+                                        }else{
+                                            $html .= '-';
                                         }
                                         $html .= '</td>';
                                         $html .= '<td>';
+                                        if($contact_info){
                                             foreach ($contact_info as $key => $value) {
-                                            $number = $key + 1;
-                                            $html .= '<b>Person '.$number.': </b>'.$value['phone'];
-                                            $html .= '<br/>';
+                                                $phone = get_user_meta($user_id,'contact_phone',true);
+                                                $number = $key + 1;
+                                                $html .= '<b>Person '.$number.': </b>'.$phone;
+                                                $html .= '<br/>';
+                                            }
+                                        }else{
+                                            $html .= '-';
                                         }
                                         $html .= '</td>';
                                         
@@ -2460,24 +2517,24 @@ class Permasafe_User_Pro_Public {
                 // $dealer_login = $_GET['dealer_login'];
 
                 $user_id = get_current_user_id();
-                if($role['author'] == 1) 
+                if($role['author'] == 1 || $role['distributor-user'] == 1) 
                 {
-                    // echo $user_id;
-                    $distributor_username = $current_user->user_login;
-                    $user = get_user_by('login',$distributor_username);
+                    
+                    if($role['distributor-user'] == 1){
+                        $distributor_user_login = $current_user->user_login;
+                        $user = get_user_by('login',$distributor_user_login);
+                        $contact_id = $user->ID;
+                        $distributor_id = get_user_meta($contact_id,'contact_distributor_id',true);
+                        $distributor_user = get_user_by('id',$distributor_id);
+                        $distributor_username = $distributor_user->user_login;
+                    }else{
+                        $distributor_username = $current_user->user_login;
+                        $user = get_user_by('login',$distributor_username);
+                        $distributor_id = $user->ID;
+                    }
                     
                    
-                    $results = $wpdb->get_results( 'SELECT user_id FROM `wp_usermeta` WHERE meta_key="dealer_distributor_name" AND meta_value="'.$user->ID.'"');
-
-                    /*$distributors =  get_users(
-                      array(
-                       'meta_key' => 'dealer_distributor_name',
-                       'meta_value' => $user->ID
-                    ));*/
-                    // echo $dealer_id;
-                    // echo '<pre>';
-                    //     print_r($results);
-                    // echo '</pre>';
+                    $results = $wpdb->get_results( 'SELECT user_id FROM `wp_usermeta` WHERE meta_key="dealer_distributor_name" AND meta_value="'.$distributor_id.'"');
 
                     foreach ($results as $result) {
                             
@@ -2760,7 +2817,7 @@ class Permasafe_User_Pro_Public {
                             $html .= '</label>';
                         $html .= '</div>';
 
-                        if($role['dealer-user'] == 1 || $role['contributor'] == 1 || $role['author'] == 1 || $role['administrator'] == 1){
+                        if($role['dealer-user'] == 1 || $role['contributor'] == 1 || $role['author'] == 1 || $role['administrator'] == 1 || $role['distributor-user'] == 1){
                             $login_id = get_current_user_id();
                             $html .= '<div id="change_benefits_package">';
                                 $html .= '<input type="hidden" name="is_upgradable" id="is_upgradable" value="1"/>';
@@ -3171,6 +3228,13 @@ class Permasafe_User_Pro_Public {
                 $dealer_user = get_user_by('id',$dealer_id);
                 $login = $dealer_user->user_login;
                 
+            }else if($role['distributor-user'] == 1){
+                $distributor_user_login = $current_user->user_login;
+                $user = get_user_by('login',$distributor_user_login);
+                $contact_id = $user->ID;
+                $distributor_id = get_user_meta($contact_id,'contact_distributor_id',true);
+                $distributor_user = get_user_by('id',$distributor_id);
+                $login = $distributor_user->user_login;
             }else{
                 $login = $current_user->user_login;
             }
@@ -3259,7 +3323,70 @@ class Permasafe_User_Pro_Public {
                             echo json_encode($response);
                         }
                     }
-                }else if($role['contributor'] == 1 ) 
+                }else if($role['distributor-user'] == 1 ){
+                    $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value in ( SELECT user_login FROM `wp_users` WHERE ID in (SELECT user_id FROM `wp_usermeta` WHERE meta_key="dealer_distributor_name" AND meta_value = (SELECT ID FROM `wp_users` WHERE user_login = "'.$login.'"))))');
+                    $str = '';
+                    foreach ($user_query as $value_query) {
+                        $str = $value_query->meta_value.','.$str;
+                    }
+
+                    $str = rtrim($str,",");
+                    // echo $str;
+                    $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in ('.$str.') ');
+                    // pr($str_results);
+                    $check_array = array();
+                    foreach ($str_results as $str_result) {
+                        $check_array[] = $str_result->meta_value;
+                    }
+                    // pr($check_array);
+                    // die;
+                    if(in_array($member_code,$check_array)){
+                        $member_code_id = pmsafe_if_code_exist($member_code);
+                        $member_code_postid = get_post_id_by_meta_key_and_value('_pmsafe_invitation_code',$member_code);
+                        $bulk_id = get_post_meta($member_code_postid,'_pmsafe_bulk_invitation_id',true);
+                        $package = get_post_meta($member_code_postid,'_pmsafe_code_prefix',true);
+                        $upgradable_prefix_str = get_post_meta($bulk_id,'upgradable_prefix',true);
+                        $upgradable_prefix = explode(",",$upgradable_prefix_str);
+                        $is_upgradable = get_post_meta($bulk_id,'pmsafe_invitation_code_upgradable',true);
+                        foreach($upgradable_prefix as $prefix){
+                            $option[] = '<option value="'.$prefix.'">'.$prefix.'</option>';
+                        }
+                        if($member_code_id){
+                            // $response = array('status' => true,'code'=>$member_code);
+                            $response = array('status' => true,'code'=>$member_code,'option'=>$option,'is_upgradable'=>$is_upgradable,'package'=>$package,'code_id'=>$member_code_postid);
+                            echo json_encode($response);
+                        }else{
+                            $response = array('status' => false,'message'=>'<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="'.get_site_url().'/contact">here</a>.</span>');
+                            echo json_encode($response);
+                        }
+                    }else{
+                        $member_code_id = pmsafe_if_code_exist($member_code);
+                        // $invite_code_dealer = get_post_meta($member_code_id,'_pmsafe_dealer',true);
+                        $invite_code_distributor = get_post_meta($member_code_id,'_pmsafe_distributor',true);
+                        if($invite_code_distributor == $login){
+                            $package = get_post_meta($member_code_id,'_pmsafe_code_prefix',true);
+                            $upgradable_prefix_str = get_post_meta($member_code_id,'upgradable_prefix',true);
+                            $upgradable_prefix = explode(",",$upgradable_prefix_str);
+                            $is_upgradable = get_post_meta($member_code_id,'pmsafe_invitation_code_upgradable',true);
+                            foreach($upgradable_prefix as $prefix){
+                                $option[] = '<option value="'.$prefix.'">'.$prefix.'</option>';
+                            }
+                            if($member_code_id){
+                            
+                                $response = array('status' => true,'code'=>$member_code,'option'=>$option,'is_upgradable'=>$is_upgradable,'package'=>$package,'code_id'=>$member_code_id);
+                                
+                                echo json_encode($response);
+                            }else{
+                                $response = array('status' => false,'message'=>'<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="'.get_site_url().'/contact">here</a>.</span>');
+                                echo json_encode($response);
+                            }
+                        }else{
+                            $response = array('status' => false,'message'=>'<span class="perma-error"><strong>Error!</strong>  The member code you have provided is other distributor\'s code. If you believe this is an error, please contact us <a href="'.get_site_url().'/contact">here</a>.</span>');
+                            echo json_encode($response);
+                        }
+                    }
+                }
+                else if($role['contributor'] == 1 ) 
                 {   
                     $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "'.$login.'")');
                     $str = '';
@@ -4082,8 +4209,10 @@ class Permasafe_User_Pro_Public {
 
                             if($role['author'] == 1) {
                                 $url = get_site_url().'/distributor-account/';
-                            
-                            }else if($role['contributor'] == 1) {
+                            }else if($role['distributor-user'] == 1) {
+                                $url = get_site_url().'/distributor-account/';
+                            }
+                            else if($role['contributor'] == 1) {
                                 $url = get_site_url().'/dealer-account/';
                             }else if($role['dealer-user'] == 1) {
                                 $url = get_site_url().'/dealer-account/';
@@ -4207,8 +4336,10 @@ class Permasafe_User_Pro_Public {
                                     
                                     if($role['author'] == 1) {
                                         $url = get_site_url().'/distributor-account/';
-                                    
-                                    }else if($role['contributor'] == 1) {
+                                    }else if($role['distributor-user'] == 1) {
+                                        $url = get_site_url().'/distributor-account/';
+                                    }
+                                    else if($role['contributor'] == 1) {
                                         $url = get_site_url().'/dealer-account/';
                                     
                                     }else if($role['dealer-user'] == 1) {

@@ -1,4 +1,4 @@
-<h1>Add Distributors</h1>
+<h1 class="top-heading">Add Distributor</h1>
 <?php
 	
 	echo '<div class="wrap distributor_add_form_div">';
@@ -44,7 +44,7 @@
 
 			echo '<div id="fname_divgroup">';
 				echo '<div id="fname_div1">';
-					echo '<h3>Contact Information:</h3>';
+					echo '<h3 style="color:#0065a7">Contact Person\'s Information:</h3>';
 					echo '<div class="nisl-wrap">';
  				    echo '<label><strong>First Name:</strong></label>';
 				    echo '<input type="text" id="pmsafe_distributor_contact_fname1" name="pmsafe_distributor_contact_fname[]" value="" class="widefat" />';
@@ -62,15 +62,22 @@
 
 				    echo '<div class="nisl-wrap">';
 				    echo '<label><strong>Email:</strong></label>';
-				    echo '<input type="email" id="pmsafe_distributor_contact_email1" name="pmsafe_distributor_contact_email[]" value="" class="widefat" />';
-				    echo '</div>';
+				    echo '<input type="email" id="pmsafe_distributor_contact_email1" name="pmsafe_distributor_contact_email[]" value="" class="widefat check-mail" style="width:35%"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;">Please enter unique email-id.</span>';
+					echo '</div>';
+					
+					echo '<div class="nisl-wrap">';
+						echo '<label><strong>Password:</strong></label>';
+						echo '<input type="text" rel="gp" name="pmsafe_distributor_contact_password[]" value="" class="widefat" style="width:35%"/>';
+						echo '<input type="button" value="Generate Password" class="generate_distributor_contact_password" />';
+					echo '</div>';
+
 				echo '</div>';
 			echo '</div>';   
 
 			echo '<input type="button" value="Add New Contact Information" id="add_new" />';
-			echo '<input type="button" value="Remove Contact Information" id="removeButton" />';
+			
 
-			echo '<input type="submit" id="pmsafe_distributors_submit" value="Save" class="button button-primary button-large">';
+			echo '<input type="submit" id="pmsafe_distributors_submit" value="Save" class="button button-primary button-large btn-disabled">';
 	
 		echo '</form>';
 	echo '</div>';

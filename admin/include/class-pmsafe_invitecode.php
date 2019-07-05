@@ -483,6 +483,7 @@ class PMSafe_Invitation_Code {
             $invitation_meta['_pmsafe_code_create_date'] = $_POST['pmsafe_code_create_date'];
             $invitation_meta['_pmsafe_dealer'] = $_POST['pmsafe_dealer'];
             $invitation_meta['_pmsafe_distributor'] = $_POST['pmsafe_distributor'];
+            $invitation_meta['_pmsafe_bulk_invitation_id'] = $post_id;
             $invitation_meta['_pmsafe_is_invite_code'] = 1;
             if(isset($_POST['pmsafe_invitation_code_upgradable'])){
                 $invitation_meta['pmsafe_invitation_code_upgradable'] = 1;
