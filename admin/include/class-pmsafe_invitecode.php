@@ -36,9 +36,34 @@ class PMSafe_Invitation_Code {
             
             add_action( 'wp_ajax_update_invite_codes', array($this, 'update_invite_codes' ));
             add_action( 'wp_ajax_nopriv_update_invite_codes', array($this, 'update_invite_codes' ));
+            
+            add_action( 'wp_ajax_delete_invite_codes', array($this, 'delete_invite_codes' ));
+            add_action( 'wp_ajax_nopriv_delete_invite_codes', array($this, 'delete_invite_codes' ));
 
             add_action('admin_footer',array($this, 'disable_enter_key_event_function'));
+
+            add_filter( 'post_row_actions', array($this,'custom_post_action_links'), 10, 2 );
     }
+    
+
+    public function custom_post_action_links( $actions, $post ) {
+        $post_type = $_GET['post_type']; 
+        $bulk_id = get_post_meta($post->ID,'_pmsafe_bulk_invitation_id',true);
+        
+        if($post_type == 'pmsafe_invitecode'){
+            unset($actions['edit']);
+            unset($actions['trash']);
+            unset( $actions['inline hide-if-no-js'] );
+            if($bulk_id == $post->ID){
+                $url = admin_url('post.php?post='.$post->ID.'&action=edit');
+                $actions['custom-edit'] = '<a href="'.$url.'">Edit</a>';
+                $actions['custom-delete'] ='<span id="delete_invitation_code" style="color:#ff0000;cursor:pointer;" data-id="'.$post->ID.'">Delete</span>';
+            }
+        }
+        return $actions;
+    }
+
+
     
     public function disable_enter_key_event_function(){
         $post_type = $_GET['post_type']; 
@@ -56,6 +81,7 @@ class PMSafe_Invitation_Code {
                 });
                 </script>
             <?php
+           
         }
 
     }
@@ -454,6 +480,19 @@ class PMSafe_Invitation_Code {
         // $url = admin_url('edit.php?post_type=pmsafe_bulk_invi');
         $response = array('status'=>true);
         echo json_encode($response);
+        die;
+    }
+
+    public function delete_invite_codes(){
+        $post_id = $_POST['post_id'];
+        $user_login = get_post_meta($post_id,'_pmsafe_invitation_code',true);
+        $users = get_user_by('login',$user_login);
+        $user_id = $users->ID;
+        $result = wp_delete_user( $user_id );
+        wp_delete_post($post_id,true);
+        global $wpdb;
+        $delete_post_meta = $wpdb->delete( $wpdb->postmeta , array( 'post_id' => $post_id ) );
+        
         die;
     }
 

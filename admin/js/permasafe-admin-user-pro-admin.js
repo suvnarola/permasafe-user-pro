@@ -1037,6 +1037,33 @@ jQuery( document ).ready(function() {
         return false;
      });
 
+
+     jQuery(document).on("click","#delete_invitation_code", function(e) {
+        
+        var post_id = jQuery(this).attr('data-id');
+        
+        var data = {
+            action: 'delete_invite_codes',
+            post_id: post_id,
+        };
+        if (confirm('Are you sure to Delete?')) {
+            jQuery('.perma-admin-loader').show();
+        jQuery.ajax({
+            type: 'POST',
+            url: pmAjax.ajaxurl,
+            data: data,
+            success: function (response) {
+                jQuery('.perma-admin-loader').hide();
+                      location.reload();
+            },
+            dataType: 'html'
+        });
+        return false;
+        }else{
+            alert('Code is not deleted.');
+        }
+     });
+
      jQuery(document).on("click","#delete_code_button", function(e) {
         
         
