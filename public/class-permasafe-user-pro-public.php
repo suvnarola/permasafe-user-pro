@@ -2353,7 +2353,7 @@ class Permasafe_User_Pro_Public {
                         $distributor_id = $user->ID;
                     }
                 
-                  $distributor_name =  get_users(
+                  $dealers =  get_users(
                       array(
                        'meta_key' => 'dealer_distributor_name',
                        'meta_value' => $distributor_id
@@ -2414,9 +2414,9 @@ class Permasafe_User_Pro_Public {
                             $html .= '</thead>';
 
                             $html .= '<tbody">';
-                            if($distributor_name){
+                            if($dealers){
                                 $dealers_name = '';
-                                foreach ($distributor_name as $dealername) {
+                                foreach ($dealers as $dealername) {
                                     $user_id = $dealername->ID;
                                     $registered_date = $dealername->user_registered;
                                     $name = get_user_meta( $user_id, 'dealer_name' , true );
@@ -3844,11 +3844,14 @@ class Permasafe_User_Pro_Public {
 				$code_prefix = get_post_meta($post_id,'_pmsafe_code_prefix',true);
 				
 				$code_dealer_login =  get_post_meta($post_id,'_pmsafe_dealer',true);
-				$dealer_users = get_user_by('login',$code_dealer_login);
-				$dealer_id = $dealer_users->ID;
-				$price_arr = get_user_meta($dealer_id,'pricing_pacakge',true);
-				$dealer_cost = $price_arr[$code_prefix]['dealer_cost'];
-				$distributor_cost = $price_arr[$code_prefix]['distributor_cost'];
+                $dealer_users = get_user_by('login',$code_dealer_login);
+                $dealer_id = $dealer_users->ID;
+                $distributor_id = get_user_meta( $dealer_id, 'dealer_distributor_name' , true );
+                
+                $dealer_price_arr = get_user_meta($dealer_id,'pricing_package',true);
+                $distributor_price_arr = get_user_meta($distributor_id,'pricing_package',true);
+                $dealer_cost = $dealer_price_arr[$code_prefix]['dealer_cost'];
+                $distributor_cost = $distributor_price_arr[$code_prefix]['distributor_cost'];
 				if($dealer_name){
 					$upgraded_by = $dealer_name;
 				}
@@ -3988,7 +3991,7 @@ class Permasafe_User_Pro_Public {
             $user = get_user_by('login',$dealer_login);
             $dealer_id = $user->ID;
 
-            $price_arr = get_user_meta($dealer_id,'pricing_pacakge',true);
+            $price_arr = get_user_meta($dealer_id,'pricing_package',true);
             $selling_price = $price_arr[$package]['selling_price'];
             $html = '';
             $html .= '<div id="update_package_price">';
@@ -4046,7 +4049,7 @@ class Permasafe_User_Pro_Public {
             $dealer_id = $user->ID;
             $input_selling_price = $_POST['selling_price'];
 
-            $get_price_arr = get_user_meta($dealer_id,'pricing_pacakge',true);
+            $get_price_arr = get_user_meta($dealer_id,'pricing_package',true);
             $selling_price = $get_price_arr[$package]['selling_price'];
             if($selling_price != $input_selling_price){
                 update_post_meta($code_id,'updated_selling_price',$input_selling_price);

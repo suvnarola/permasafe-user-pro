@@ -73,17 +73,17 @@ if($action == 'view'){
     // pr($posts);    
     echo '<div class="top-head">';
     echo '<h1 class="top-heading">View <span style="color:#0065a7">'.$name.' ('.$dealer_login.')</span> Information</h1>';
-    echo '<br/>';
-    echo '<br/>';
-    echo $actions['edit'];
-    echo $actions['addcode'];
-    echo $actions['view_customer'];
-    if($posts){
-        $url = admin_url('edit.php?s&post_status=all&post_type=pmsafe_bulk_invi&dealer_list='.$user->user_login.'&export=1');
-        echo '<a href="'.$url.'">View Active and Used Batch Member Codes</a>';
-    }
+    echo '<div class="navigation-btn">';
+        echo $actions['edit'];
+        echo $actions['addcode'];
+        echo $actions['view_customer'];
+        if($posts){
+            $url = admin_url('edit.php?s&post_status=all&post_type=pmsafe_bulk_invi&dealer_list='.$user->user_login.'&export=1');
+            echo '<a href="'.$url.'">View Active and Used Batch Member Codes</a>';
+        }
+        echo '</div>';   
     echo '</div>';   
-	echo '<br/>';    
+	
 
 	
 
@@ -212,40 +212,39 @@ if($action == 'view'){
        echo '</div>';
        echo '<div class="right-wrapper">';
             echo '<h3 style="color:#0065a7">Benefits Package Pricing:</h3>'; 
-            $price_arr = get_user_meta($dealer_id,'pricing_pacakge',true);
+            $price_arr = get_user_meta($dealer_id,'pricing_package',true);
+            $distributor_id = get_user_meta( $dealer_id, 'dealer_distributor_name' , true );
+            $distributor_get_price_arr = get_user_meta($distributor_id,'pricing_package',true);
+            
             echo '<table class="view-dealer-price-tbl" id="">';
                 echo '<thead>';
                     echo '<th>Benefits Package</th>';
                     echo '<th>Price
-                    <p>Dealer Cost</p>
+                    <p>Distributor Cost</p>
                     </th>';
-                    echo '<th> </br> <p>Distributor Cost </p></th>';
+                    echo '<th> </br> <p>Dealer Cost </p></th>';
                     echo '<th> </br> <p>Selling Price </p></th>';
                     echo '<th></th>';
                 echo '</thead>';
                 
                 echo '<tbody>';
-                ksort($price_arr);
-                if($price_arr){
-                foreach ($price_arr as $key => $value) {
-    	            echo '<tr>';
-                        echo '<td>'.$key.'</td>';
-                        foreach ($value as $k => $v) {
-        	                echo '<td>$'.$v.'</td>';
-                        }
+                // ksort($price_arr);
+                $benefit_prefix = pmsafe_get_meta_values( '_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish' );
+                foreach ($benefit_prefix as $prefix) {
+                    echo '<tr>';
+                        echo '<td>'.$prefix.'</td>';
+                        echo (($distributor_get_price_arr[$prefix]['distributor_cost'])?'<td>$'.$distributor_get_price_arr[$prefix]['distributor_cost'].'</td>':'<td>-</td>');
+                        echo (($price_arr[$prefix]['dealer_cost'])?'<td>$'.$price_arr[$prefix]['dealer_cost'].'</td>':'<td>-</td>');
+                        echo (($price_arr[$prefix]['selling_price'])?'<td>$'.$price_arr[$prefix]['selling_price'].'</td>':'<td>-</td>');
                         echo '<td style="text-align:right;">';
-                            echo '<a href="#edit-price-modal" style="margin: 0 5px;color: #ffffff;cursor: pointer;background:#0065a7;padding:5px;border-radius:50%;" rel="modal:open" id="edit_price"  data-id="'.$key.'">';
+                            echo '<a href="#edit-price-modal" style="margin: 0 5px;color: #ffffff;cursor: pointer;background:#0065a7;padding:5px;border-radius:50%;" rel="modal:open" id="edit_price"  data-id="'.$prefix.'">';
                                 echo '<i class="fa fa-edit"></i>';
                             echo '</a>';
-                            echo '<i id="delete_price" class="fa fa-trash" style="margin: 0 5px;color: #ffffff;cursor: pointer;background:#ff0000;padding:5px;border-radius:50%;" data-id="'.$key.'"></i>';
+                            echo '<i id="delete_price" class="fa fa-trash" style="margin: 0 5px;color: #ffffff;cursor: pointer;background:#ff0000;padding:5px;border-radius:50%;" data-id="'.$prefix.'"></i>';
                         echo '</td>';
-    	            echo '</tr>';
+                    echo '</tr>';
                 }
-                }else{
-                    echo '<tr>';
-                        echo '<td colspan="5">No package is added.</td>';
-    	            echo '</tr>';
-                }
+               
     	        echo '</tbody>';  
                 echo '</table>';  
                 
@@ -276,6 +275,15 @@ if($action == 'view'){
                     }
                 echo '</td>';
             echo '</tr>';
+        
+        echo '<tr>';
+            echo '<td>';
+                echo '<label><strong>Distributor Cost($):</strong></label>';
+            echo '</td>';
+            echo '<td>';
+                echo '<input type="number" min="1" id="distributor_cost">';
+            echo '</td>';
+        echo '</tr>';
 
         echo '<tr>';
                 echo '<td>';
@@ -286,14 +294,7 @@ if($action == 'view'){
                 echo '</td>';
         echo '</tr>';
 
-        echo '<tr>';
-                echo '<td>';
-                    echo '<label><strong>Distributor Cost($):</strong></label>';
-                echo '</td>';
-                echo '<td>';
-                    echo '<input type="number" min="1" id="distributor_cost">';
-                echo '</td>';
-        echo '</tr>';
+       
 
         echo '<tr>';
             echo '<td>';
@@ -316,15 +317,24 @@ if($action == 'view'){
       
         
         echo '<table>';
-            echo '<tr>';
-                echo '<td>';
-                    echo '<label><strong>Benefits Packages:</strong></label>';
-                echo '</td>';
-                echo '<td>';
-                        echo '<select name="edit_pmsafe_invitation_prefix" id="edit_pmsafe_invitation_prefix">';
-                        echo '</select>';
-                echo '</td>';
-            echo '</tr>';
+        echo '<tr>';
+            echo '<td>';
+                echo '<label><strong>Benefits Packages:</strong></label>';
+            echo '</td>';
+            echo '<td>';
+                    echo '<select name="edit_pmsafe_invitation_prefix" id="edit_pmsafe_invitation_prefix">';
+                    echo '</select>';
+            echo '</td>';
+        echo '</tr>';
+
+        echo '<tr>';
+            echo '<td>';
+                echo '<label><strong>Distributor Cost($):</strong></label>';
+            echo '</td>';
+            echo '<td>';
+                echo '<input type="number" min="1" id="edit_distributor_cost">';
+            echo '</td>';
+        echo '</tr>';
 
         echo '<tr>';
                 echo '<td>';
@@ -335,14 +345,7 @@ if($action == 'view'){
                 echo '</td>';
         echo '</tr>';
 
-        echo '<tr>';
-                echo '<td>';
-                    echo '<label><strong>Distributor Cost($):</strong></label>';
-                echo '</td>';
-                echo '<td>';
-                    echo '<input type="number" min="1" id="edit_distributor_cost">';
-                echo '</td>';
-        echo '</tr>';
+        
 
         echo '<tr>';
             echo '<td>';
@@ -744,7 +747,7 @@ class User_List_Table extends WP_List_Table
                     $actions['addcode'] = sprintf(
                         '<a href="%1$s">%2$s</a>',
                         esc_url( wp_nonce_url( add_query_arg( $add_code_query_args, 'post-new.php' ), 'addcode_' . $user_id ) ),
-                        _x( 'Add Batch Member Codes', 'List table row action', 'wp-list-table-example' )
+                        _x( 'Add Batch Code', 'List table row action', 'wp-list-table-example' )
                     );
 
                     // Build view registered customer row action.
@@ -780,7 +783,7 @@ class User_List_Table extends WP_List_Table
                         'fax' => $fax,
                         'createdate' => $registered_date,
                         'createcode' => $actions['addcode'],
-                        'viewcode' => '<a href="'.$view_batch_code_url.'">View Batch Member Codes</a>',
+                        'viewcode' => '<a href="'.$view_batch_code_url.'">View Batch Codes</a>',
                         'viewcustomers' => $actions['view_customer'],
                     );
                 }
@@ -805,7 +808,7 @@ class User_List_Table extends WP_List_Table
                 $actions['addcode'] = sprintf(
                     '<a href="%1$s">%2$s</a>',
                     esc_url( wp_nonce_url( add_query_arg( $add_code_query_args, 'post-new.php' ), 'addcode_' . $user_id ) ),
-                    _x( 'Add Codes', 'List table row action', 'wp-list-table-example' )
+                    _x( 'Add Batch Code', 'List table row action', 'wp-list-table-example' )
                 );
 
                 // Build view registered customer row action.
@@ -841,7 +844,7 @@ class User_List_Table extends WP_List_Table
                     'fax' => $fax,
                     'createdate' => $registered_date,
                     'createcode' => $actions['addcode'],
-                    'viewcode' => '<a href="'.$view_code_url.'">View Codes</a>',
+                    'viewcode' => '<a href="'.$view_code_url.'">View Batch Codes</a>',
                     'viewcustomers' => $actions['view_customer'],
                 );
             }
@@ -892,8 +895,8 @@ class User_List_Table extends WP_List_Table
             // 'phone' => _x( 'Phone Number', 'Column label', 'wp-list-table-example' ),
             // 'fax' => _x( 'Fax Number', 'Column label', 'wp-list-table-example' ),
             'createdate' => _x( 'Created Date', 'Column label', 'wp-list-table-example' ),
-            'createcode' => _x( 'Member Codes', 'Column label', 'wp-list-table-example' ),
-            'viewcode' => _x( ' ', 'Column label', 'wp-list-table-example' ),
+            'createcode' => _x( 'Batch Code', 'Column label', 'wp-list-table-example' ),
+            'viewcode' => _x( 'View Codes', 'Column label', 'wp-list-table-example' ),
             'viewcustomers' => _x( 'View Customers', 'Column label', 'wp-list-table-example' ),
         );
 

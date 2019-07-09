@@ -245,11 +245,20 @@ class Permasafe_User_Pro {
 		$this->loader->add_action( 'wp_ajax_add_dealer_benefits_package_price', $plugin_admin, 'add_dealer_benefits_package_price_function' );
         $this->loader->add_action( 'wp_ajax_nopriv_add_dealer_benefits_package_price', $plugin_admin, 'add_dealer_benefits_package_price_function' );
 		
+		$this->loader->add_action( 'wp_ajax_add_distributor_cost', $plugin_admin, 'add_distributor_cost_function' );
+        $this->loader->add_action( 'wp_ajax_nopriv_add_distributor_cost', $plugin_admin, 'add_distributor_cost_function' );
+		
 		$this->loader->add_action( 'wp_ajax_delete_dealer_benefits_package_price', $plugin_admin, 'delete_dealer_benefits_package_price_function' );
 		$this->loader->add_action( 'wp_ajax_nopriv_delete_dealer_benefits_package_price', $plugin_admin, 'delete_dealer_benefits_package_price_function' );
 		
 		$this->loader->add_action( 'wp_ajax_edit_dealer_benefits_package_price', $plugin_admin, 'edit_dealer_benefits_package_price_function' );
         $this->loader->add_action( 'wp_ajax_nopriv_edit_dealer_benefits_package_price', $plugin_admin, 'edit_dealer_benefits_package_price_function' );
+		
+		$this->loader->add_action( 'wp_ajax_edit_distributor_cost_package', $plugin_admin, 'edit_distributor_cost_function' );
+		$this->loader->add_action( 'wp_ajax_nopriv_edit_distributor_cost_package', $plugin_admin, 'edit_distributor_cost_function' );
+		
+		$this->loader->add_action( 'wp_ajax_delete_distributor_cost', $plugin_admin, 'delete_distributor_cost_function' );
+		$this->loader->add_action( 'wp_ajax_nopriv_delete_distributor_cost', $plugin_admin, 'delete_distributor_cost_function' );
 		
 		// check if email is exist or not.
 		$this->loader->add_action( 'wp_ajax_check_email_exist', $plugin_admin, 'check_email_exist' );

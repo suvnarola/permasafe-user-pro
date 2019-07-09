@@ -146,9 +146,12 @@ foreach ($membership_results as $str) {
     $code_dealer_login =  get_post_meta($post_id,'_pmsafe_dealer',true);
     $dealer_users = get_user_by('login',$code_dealer_login);
     $dealer_id = $dealer_users->ID;
-    $price_arr = get_user_meta($dealer_id,'pricing_pacakge',true);
-    $dealer_cost = $price_arr[$code_prefix]['dealer_cost'];
-    $distributor_cost = $price_arr[$code_prefix]['distributor_cost'];
+    $distributor_id = get_user_meta( $dealer_id, 'dealer_distributor_name' , true );
+    
+    $dealer_price_arr = get_user_meta($dealer_id,'pricing_package',true);
+    $distributor_price_arr = get_user_meta($distributor_id,'pricing_package',true);
+    $dealer_cost = $dealer_price_arr[$code_prefix]['dealer_cost'];
+    $distributor_cost = $distributor_price_arr[$code_prefix]['distributor_cost'];
     echo '<tr>';
         
         echo '<td>';

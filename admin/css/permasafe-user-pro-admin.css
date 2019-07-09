@@ -154,6 +154,7 @@ table.distributors th a, table.distributors th, table.dealers th a, table.dealer
     margin-top: 10px;
     margin-left: 15px;
 }
+.top-head .navigation-btn a{margin-left:0px !important; margin-right:15px; }
 .top-head a:hover{
     background: #007cbf;
     border-color: #007cbf;
@@ -162,6 +163,11 @@ table.distributors th a, table.distributors th, table.dealers th a, table.dealer
 .code-exist, .code-range{color:red;}
 .type-pmsafe_bulk_invi span.inline.hide-if-no-js {
     display: none;
+}
+input#add_new_dealer:hover, input#add_new:hover {
+    background: #0065a7 !important;
+    cursor: pointer;
+    color: #ffffff !important;
 }
 .nisl-pdf-link{display: none;}
 /*datatable*/
@@ -202,20 +208,20 @@ div#view_customer_table_filter {margin-bottom: 15px;}
 .table-responsive{min-height: .01%;overflow-x: auto;}
 
 
-table.view-distributor-tbl, table.view-dealer-tbl, table.view-customer-details-tbl, table.view-dealer-contacts-tbl,table.view-distributor-contacts-tbl, table.view-dealer-price-tbl {
+table.view-distributor-tbl, table.view-dealer-tbl, table.view-customer-details-tbl, table.view-dealer-contacts-tbl,table.view-distributor-contacts-tbl, table.view-dealer-price-tbl, table.view-distributor-price-tbl {
     font-family: arial, sans-serif;
     border-collapse: collapse;
     width: 100%;
     margin-bottom: 10px;
 }
 
-table.view-distributor-tbl td, table.view-distributor-tbl th, table.view-dealer-tbl td, table.view-dealer-tbl th, table.view-customer-details-tbl td, table.view-customer-details-tbl th, table.view-dealer-contacts-tbl td, table.view-dealer-contacts-tbl th,table.view-distributor-contacts-tbl td, table.view-distributor-contacts-tbl th, table.view-dealer-price-tbl td, table.view-dealer-price-tbl th {
+table.view-distributor-tbl td, table.view-distributor-tbl th, table.view-dealer-tbl td, table.view-dealer-tbl th, table.view-customer-details-tbl td, table.view-customer-details-tbl th, table.view-dealer-contacts-tbl td, table.view-dealer-contacts-tbl th,table.view-distributor-contacts-tbl td, table.view-distributor-contacts-tbl th, table.view-dealer-price-tbl td, table.view-dealer-price-tbl th, table.view-distributor-price-tbl td, table.view-distributor-price-tbl th {
     border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
 }
 
-table.view-dealer-price-tbl tr:nth-child(even), table.view-dealer-contacts-tbl tr:nth-child(even),table.view-distributor-contacts-tbl tr:nth-child(even), table.view-distributor-tbl tr:nth-child(even), table.view-dealer-tbl tr:nth-child(even), table.view-customer-details-tbl tr:nth-child(even) {
+table.view-distributor-price-tbl tr:nth-child(even),table.view-dealer-price-tbl tr:nth-child(even), table.view-dealer-contacts-tbl tr:nth-child(even),table.view-distributor-contacts-tbl tr:nth-child(even), table.view-distributor-tbl tr:nth-child(even), table.view-dealer-tbl tr:nth-child(even), table.view-customer-details-tbl tr:nth-child(even) {
     background-color: #dddddd;
 }
 .page-navigation {text-align: center;margin-top: 32px;}
@@ -312,7 +318,7 @@ table.view-dealer-price-tbl thead > tr > th:last-child {
     width: 25%;
     border-left: none;
 }
-table.view-dealer-price-tbl thead > tr > th p{margin: 0;}
+table.view-dealer-price-tbl thead > tr > th p, table.view-distributor-price-tbl thead > tr > th p{margin: 0;}
 table.view-dealer-price-tbl tr:nth-child(odd){
     background-color: #dddddd !important;
 }
@@ -320,7 +326,7 @@ table.view-dealer-price-tbl tr:nth-child(even) , table.view-dealer-price-tbl the
     background-color: #ffffff !important;
 }
 table.view-dealer-price-tbl thead > tr > th , table.view-dealer-price-tbl thead > tr > th p{font-weight: 700;}
-#distributor_add_new_contact_person,#add_new_contact_person, #add_contact_person, #add_price,#add_package_price,#update_package_price{background: #0065a7;color: #fff;padding: 5px 10px;border: 0;border-radius: 5%;cursor: pointer;text-decoration: none;}
+#distributor_add_new_contact_person,#add_new_contact_person, #add_contact_person, #add_price,#add_package_price,#add_distributor_cost,#update_package_price,#update_distributor_cost{background: #0065a7;color: #fff;padding: 5px 10px;border: 0;border-radius: 5%;cursor: pointer;text-decoration: none;}
 /******** Responsive **********/
 
  

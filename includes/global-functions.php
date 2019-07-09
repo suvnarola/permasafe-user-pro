@@ -490,7 +490,7 @@ function pmsafe_warranty_card($user_id,$membercode){
     $dealer_address = get_user_meta( $dealer_id, 'dealer_store_address' , true );
     $dealer_phone = get_user_meta( $dealer_id, 'dealer_phone_number' , true );
 
-    $price_arr = get_user_meta($dealer_id,'pricing_pacakge',true);
+    $price_arr = get_user_meta($dealer_id,'pricing_package',true);
     $selling_price = $price_arr[$benefits_package]['selling_price'];
     $updated_selling_price = get_post_meta($post_id,'updated_selling_price',true);
 
@@ -1033,7 +1033,7 @@ function pmsafe_warranty_card_pdf($user_id,$member_code){
     $dealer_address = get_user_meta( $dealer_id, 'dealer_store_address' , true );
     $dealer_phone = get_user_meta( $dealer_id, 'dealer_phone_number' , true );
 
-    $price_arr = get_user_meta($dealer_id,'pricing_pacakge',true);
+    $price_arr = get_user_meta($dealer_id,'pricing_package',true);
     $selling_price = $price_arr[$benefits_package]['selling_price'];
     $updated_selling_price = get_post_meta($post_id,'updated_selling_price',true);
 

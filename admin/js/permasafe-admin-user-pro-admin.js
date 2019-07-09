@@ -2361,14 +2361,6 @@ jQuery( document ).ready(function() {
             jQuery('#dealer_cost').css({'color':'#333333'});
         }
         
-        if(jQuery('#distributor_cost' ).val().trim()=="" ){
-            jQuery('#distributor_cost' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#distributor_cost').after( "<span class='error'>This field is required.</span>" );
-            validflag = false;
-        }else{
-            jQuery('#distributor_cost').css({'color':'#333333'});
-        }
-        
         if(jQuery('#selling_price' ).val().trim()=="" ){
             jQuery('#selling_price' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
             jQuery( '#selling_price').after( "<span class='error'>This field is required.</span>" );
@@ -2403,6 +2395,70 @@ jQuery( document ).ready(function() {
                         if(response == 0){
                             jQuery('#exist-package').remove();
                             jQuery('<p id="exist-package" style="color:red;">Already Exist.</p>').insertBefore('#add_package_price');
+                        }
+                        if(response == 1){
+                            location.reload();
+                        }
+                        
+                   
+                }
+            });// ajax
+          return false;
+        }
+    });
+
+
+    jQuery(document).on("click","#add_distributor_cost", function(e) {
+        
+        e.preventDefault();
+        jQuery('.error').remove();
+        
+        var validflag = true;
+        var selected_package = jQuery('#pmsafe_invitation_prefix' ).val();
+        var distributor_cost = jQuery('#distributor_cost' ).val();
+        var distributor_id = jQuery('#distributor_id' ).val();
+
+        
+        if(jQuery('#pmsafe_invitation_prefix' ).val().trim()=="" ){
+            jQuery('#pmsafe_invitation_prefix' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#pmsafe_invitation_prefix').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#pmsafe_invitation_prefix').css({'color':'#333333'});
+        }
+        
+        
+        if(jQuery('#distributor_cost' ).val().trim()=="" ){
+            jQuery('#distributor_cost' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#distributor_cost').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#distributor_cost').css({'color':'#333333'});
+        }
+        
+        var data = {
+            action: 'add_distributor_cost',
+            selected_package:selected_package,
+            distributor_cost:distributor_cost,
+            distributor_id:distributor_id
+        };
+
+        if(!validflag){
+            return validflag;
+        }else{
+    		jQuery('.perma-admin-loader').show();
+            
+             jQuery.ajax({
+                type: 'POST',
+                url: pmAjax.ajaxurl,
+                data: data,
+                dataType: 'html',
+                success: function(response) {
+                    jQuery('.perma-admin-loader').hide();
+                        
+                        if(response == 0){
+                            jQuery('#exist-package').remove();
+                            jQuery('<p id="exist-package" style="color:red;">Already Exist.</p>').insertBefore('#add_distributor_cost');
                         }
                         if(response == 1){
                             location.reload();
@@ -2459,28 +2515,14 @@ jQuery( document ).ready(function() {
     jQuery(document).on("click","#update_package_price", function(e) {
         e.preventDefault();
         jQuery('.error').remove();
-        
+
         var validflag = true;
-        var selected_package = jQuery('#edit_pmsafe_invitation_prefix' ).val();
-        var dealer_cost = jQuery('#edit_dealer_cost' ).val();
-        var distributor_cost = jQuery('#edit_distributor_cost' ).val();
-        var selling_price = jQuery('#edit_selling_price' ).val();
-        var dealer_id = jQuery('#pricing_dealer_id' ).val();
-              
         if(jQuery('#edit_dealer_cost' ).val().trim()=="" ){
             jQuery('#edit_dealer_cost' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
             jQuery( '#edit_dealer_cost').after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
             jQuery('#edit_dealer_cost').css({'color':'#333333'});
-        }
-        
-        if(jQuery('#edit_distributor_cost' ).val().trim()=="" ){
-            jQuery('#edit_distributor_cost' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#edit_distributor_cost').after( "<span class='error'>This field is required.</span>" );
-            validflag = false;
-        }else{
-            jQuery('#edit_distributor_cost').css({'color':'#333333'});
         }
         
         if(jQuery('#edit_selling_price' ).val().trim()=="" ){
@@ -2490,7 +2532,15 @@ jQuery( document ).ready(function() {
         }else{
             jQuery('#edit_selling_price').css({'color':'#333333'});
         }
-         var data = {
+
+        
+        var selected_package = jQuery('#edit_pmsafe_invitation_prefix' ).val();
+        var dealer_cost = jQuery('#edit_dealer_cost' ).val();
+        var distributor_cost = jQuery('#edit_distributor_cost' ).val();
+        var selling_price = jQuery('#edit_selling_price' ).val();
+        var dealer_id = jQuery('#pricing_dealer_id' ).val();
+              
+        var data = {
             action: 'edit_dealer_benefits_package_price',
             selected_package:selected_package,
             dealer_cost:dealer_cost,
@@ -2513,6 +2563,72 @@ jQuery( document ).ready(function() {
                 }
             });// ajax
         }
+    });
+
+    jQuery(document).on("click","#update_distributor_cost", function(e) {
+        e.preventDefault();
+        jQuery('.error').remove();
+        
+       
+        var selected_package = jQuery('#edit_pmsafe_invitation_prefix' ).val();
+        
+        var distributor_cost = jQuery('#edit_distributor_cost' ).val();
+        var distributor_id = jQuery('#distributor_id' ).val();
+        
+        var validflag = true;
+        if(jQuery('#edit_distributor_cost' ).val().trim()=="" ){
+            jQuery('#edit_distributor_cost' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#edit_distributor_cost').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#edit_distributor_cost').css({'color':'#333333'});
+        }
+        
+        
+              
+        var data = {
+            action: 'edit_distributor_cost_package',
+            selected_package:selected_package,
+            distributor_cost:distributor_cost,
+            distributor_id:distributor_id
+        };
+        if(!validflag){
+            return validflag;
+        }else{
+            jQuery('.perma-admin-loader').show();
+            jQuery.ajax({
+                type: 'POST',
+                url: pmAjax.ajaxurl,
+                data: data,
+                dataType: 'html',
+                success: function(response) {
+                    jQuery('.perma-admin-loader').hide();
+                        location.reload();
+                }
+            });// ajax
+        }
+    });
+
+    jQuery(document).on("click","#delete_distributor_price", function(e) {
+        var package = jQuery(this).attr('data-id');
+        var distributor_id = jQuery('#distributor_id' ).val();
+        
+        var data = {
+            action: 'delete_distributor_cost',
+            package:package,
+            distributor_id:distributor_id
+        };
+        jQuery('.perma-admin-loader').show();
+        jQuery.ajax({
+            type: 'POST',
+            url: pmAjax.ajaxurl,
+            data: data,
+            dataType: 'html',
+            success: function(response) {
+                jQuery('.perma-admin-loader').hide();
+                       location.reload();
+            }
+        });// ajax
     });
 
     jQuery(document).on("focus","#pmsafe_distributor_contact_fname,#pmsafe_distributor_contact_lname,#pmsafe_distributor_contact_phone,#pmsafe_distributor_contact_email,#pmsafe_distributor_contact_password,#pmsafe_dealer_contact_fname,#pmsafe_dealer_contact_lname,#pmsafe_dealer_contact_phone,#pmsafe_dealer_contact_email,#pmsafe_dealer_contact_password,#benefit_packages,#distributor_cost,#dealer_cost,#selling_price,#pmsafe_invitation_prefix,#edit_distributor_cost,#edit_dealer_cost,#edit_selling_price", function(e) {
