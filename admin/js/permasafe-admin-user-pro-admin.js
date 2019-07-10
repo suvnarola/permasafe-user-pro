@@ -2506,10 +2506,66 @@ jQuery( document ).ready(function() {
             // showClose: false
         });
         var package = jQuery(this).attr('data-id');
+        var dealer_id = jQuery('#pricing_dealer_id' ).val();
         var option = '<option value="'+package+'">'+package+'</option>';
         
-        jQuery('#edit_pmsafe_invitation_prefix').html('');
-        jQuery('#edit_pmsafe_invitation_prefix').append(option);
+        var data = {
+            action: 'fetch_dealer_package_price',
+            package:package,
+            dealer_id:dealer_id
+        };
+        jQuery('.perma-admin-loader').show();
+        jQuery.ajax({
+            type: 'POST',
+            url: pmAjax.ajaxurl,
+            data: data,
+            
+            success: function(response) {
+                jQuery('.perma-admin-loader').hide();
+                jQuery('#edit_pmsafe_invitation_prefix').html('');
+                jQuery('#edit_pmsafe_invitation_prefix').append(option);
+                var obj = jQuery.parseJSON(response);
+                jQuery('#edit_distributor_cost').val(obj.distributor_cost);
+                jQuery('#edit_dealer_cost').val(obj.dealer_cost);
+                jQuery('#edit_selling_price').val(obj.selling_price);
+
+                
+            }
+        });// ajax
+
+        
+    });
+    
+    jQuery(document).on("click","#edit_distributor_price", function(e) {
+        jQuery("#edit-price-modal").modal({
+            escapeClose: false,
+            clickClose: false,
+            // showClose: false
+        });
+        var package = jQuery(this).attr('data-id');
+        var distributor_id = jQuery('#distributor_id' ).val();
+        var option = '<option value="'+package+'">'+package+'</option>';
+        
+        var data = {
+            action: 'fetch_dealer_package_price',
+            package:package,
+            distributor_id:distributor_id
+        };
+        jQuery('.perma-admin-loader').show();
+        jQuery.ajax({
+            type: 'POST',
+            url: pmAjax.ajaxurl,
+            data: data,
+            
+            success: function(response) {
+                jQuery('.perma-admin-loader').hide();
+                jQuery('#edit_pmsafe_invitation_prefix').html('');
+                jQuery('#edit_pmsafe_invitation_prefix').append(option);
+                var obj = jQuery.parseJSON(response);
+                jQuery('#edit_distributor_cost').val(obj.distributor_cost);
+                
+            }
+        });
     });
     
     jQuery(document).on("click","#update_package_price", function(e) {
@@ -2823,6 +2879,18 @@ jQuery( document ).ready(function() {
             });// ajax
         }
     });
+
+
+    var tbl_distributor = jQuery('#tbl_distributors').DataTable( {
+        dom: 'Bfrtip',
+        responsive: true,
+        orderCellsTop: true,
+        fixedHeader: true,
+        "order": [[ 1, "asc" ]],
+       
+    } );
+    
+    
 
 });// ready
 

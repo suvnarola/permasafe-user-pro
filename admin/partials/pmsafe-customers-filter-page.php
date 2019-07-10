@@ -1,5 +1,5 @@
 <?php
-$html .= '<h1>Quick filetrs</h1>'; 
+$html .= '<h1 class="top-heading">Quick filetrs</h1>'; 
 $html .= '<div class="filter-wrap">';
 
 $html .= '<div class="filter-up">';

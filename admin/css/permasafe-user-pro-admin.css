@@ -170,6 +170,11 @@ input#add_new_dealer:hover, input#add_new:hover {
     color: #ffffff !important;
 }
 .nisl-pdf-link{display: none;}
+#tbl_distributors_wrapper .dt-buttons{display:none;}
+#tbl_distributors_filter{margin-bottom: 20px;}
+#tbl_distributors tr td{padding: 10px 10px;}
+#tbl_distributors .row-actions a{text-decoration: none !important;}
+.dataTables_wrapper .dataTables_paginate .fg-button{background: #0065a7;color: #ffff;}
 /*datatable*/
  .dataTables_wrapper .fg-toolbar div.dataTables_length label {display: flex !important;align-items: center;}
 .dataTables_wrapper .fg-toolbar div.dataTables_length label .fancy-select-wrap {padding-top: 0;margin: 0 6px;}
@@ -179,7 +184,7 @@ input#add_new_dealer:hover, input#add_new:hover {
 table#search_tbl tr th span {
     right: -6px !important;
 }
-button.dt-button.buttons-csv.buttons-html5, button.dt-button.buttons-pdf.buttons-html5, button.dt-button.buttons-excel.buttons-html5,button.dt-button.buttons-print{background-color: #333;padding: 7px 26px;border: none;color: #fff;cursor: pointer;float:left;}
+button.dt-button.buttons-csv.buttons-html5, button.dt-button.buttons-pdf.buttons-html5, button.dt-button.buttons-excel.buttons-html5,button.dt-button.buttons-print{background-color: #0065a7;padding: 7px 26px;border: none;color: #fff;cursor: pointer;float:left;font-weight: 600;}
 button.dt-button.buttons-pdf.buttons-html5, button.dt-button.buttons-excel.buttons-html5, button.dt-button.buttons-print{ margin-left: 10px;}
 .nisl-pdf-link{display: none;}
 div#dealertable_filter label,

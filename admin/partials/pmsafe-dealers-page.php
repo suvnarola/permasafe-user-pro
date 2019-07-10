@@ -25,7 +25,7 @@ if($action == 'view'){
     $actions['addcode'] = sprintf(
         '<a href="%1$s">%2$s</a>',
         esc_url( wp_nonce_url( add_query_arg( $add_code_query_args, 'post-new.php' ), 'addcode_' . $dealer_id ) ),
-        _x( 'Add New Batch Member Code', 'List table row action', 'wp-list-table-example' )
+        _x( 'Add Member Codes', 'List table row action', 'wp-list-table-example' )
     );
 
 // Build view registered customer row action.
@@ -51,7 +51,7 @@ if($action == 'view'){
     $actions['view_customer'] = sprintf(
         '<a href="%1$s">%2$s</a>',
         esc_url( wp_nonce_url( add_query_arg( $view_customer_query_args, 'admin.php' ), 'viewcustomer_' . $dealer_id ) ),
-        _x( 'View Registered Customers', 'List table row action', 'wp-list-table-example' )
+        _x( 'View Customers', 'List table row action', 'wp-list-table-example' )
     );
 
 
@@ -76,11 +76,12 @@ if($action == 'view'){
     echo '<div class="navigation-btn">';
         echo $actions['edit'];
         echo $actions['addcode'];
-        echo $actions['view_customer'];
+        
         if($posts){
             $url = admin_url('edit.php?s&post_status=all&post_type=pmsafe_bulk_invi&dealer_list='.$user->user_login.'&export=1');
-            echo '<a href="'.$url.'">View Active and Used Batch Member Codes</a>';
+            echo '<a href="'.$url.'">View Member Codes</a>';
         }
+        echo $actions['view_customer'];
         echo '</div>';   
     echo '</div>';   
 	
@@ -699,7 +700,7 @@ else if($action == 'delete_customer_details'){
 }
 else{
 echo '<div class="top-head">';
-echo '<h1>Dealers</h1>';
+echo '<h1 class="top-heading">Dealers</h1>';
 $url = admin_url('admin.php?page=add-new-dealer');
 echo '<a class="dealer_add" href="'.$url.'">Add New Dealer</a>';
 echo '</div>';

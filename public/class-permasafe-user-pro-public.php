@@ -4172,6 +4172,7 @@ class Permasafe_User_Pro_Public {
                             update_user_meta( $user_id, 'pmsafe_zip_code', $_POST['zip_code'] );
                             update_user_meta( $user_id, 'edit_pmsafe_zip_code', $_POST['zip_code'] );
                             update_user_meta( $user_id, 'pmsafe_email', $_POST['email'] );
+                            update_user_meta( $user_id, 'pmsafe_signature', $_POST['signature'] );
                             
                             $vehicle_info = array();
                 
@@ -4298,6 +4299,7 @@ class Permasafe_User_Pro_Public {
                                     update_user_meta( $user_id, 'edit_pmsafe_zip_code', $_POST['zip_code'] );
 
                                     update_user_meta( $user_id, 'pmsafe_email', $_POST['email'] );
+                                    update_user_meta( $user_id, 'pmsafe_signature', $_POST['signature'] );
                                     
                                     
                                     $vehicle_info = array();

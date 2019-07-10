@@ -3225,6 +3225,31 @@ class Permasafe_User_Pro_Admin {
 		}
 		die;
 	}
+	
+	/**
+	 * ajax function for fetching benefits package price for dealers during edit functionality.
+	*/
+	public function fetch_dealer_package_price(){
+		$dealer_id = $_POST['dealer_id'];
+		$post_distributor_id = $_POST['distributor_id'];
+		$selected_package = $_POST['package'];
+		$get_price_arr = get_user_meta($dealer_id,'pricing_package',true);
+		$selling_price = $get_price_arr[$selected_package]['selling_price'];
+		$dealer_cost = $get_price_arr[$selected_package]['dealer_cost'];
+		$distributor_id = get_user_meta( $dealer_id, 'dealer_distributor_name' , true );
+		if($post_distributor_id != ''){
+			$distributor_id = $post_distributor_id;
+		}else{
+			$distributor_id = $distributor_id;
+		}
+		
+		$distributor_get_price_arr = get_user_meta($distributor_id,'pricing_package',true);
+		
+		$distributor_cost = $distributor_get_price_arr[$selected_package]['distributor_cost'];
+		$response = array('distributor_cost' => $distributor_cost,'dealer_cost' => $dealer_cost, 'selling_price'=>$selling_price);
+		echo json_encode($response);
+		die;
+	}
 
 	/**
 	 * ajax function for delete benefits package price for dealers.
@@ -3258,38 +3283,7 @@ class Permasafe_User_Pro_Admin {
 				'meta_key' => 'dealer_distributor_name',
 				'meta_value' => $distributor_id
 		) ) ;
-		// pr($dealers);
 
-		// foreach ($dealers as $key => $value) {
-		// 	$dealer_id = $value->ID;
-		// 	// $dealer_id = 366;
-			
-		// 	$get_dealer_price_arr = get_user_meta($dealer_id,'pricing_package',true);
-		// 	$dealer_cost = $get_dealer_price_arr[$selected_package]['dealer_cost'];
-			
-		// 	$selling_price = $get_dealer_price_arr[$selected_package]['selling_price'];
-			
-
-		// 	$dealer_price_arr[$selected_package] = array(
-		// 		'dealer_cost' => $dealer_cost,
-		// 		'distributor_cost' => $distributor_cost,
-		// 		'selling_price' => $selling_price
-		// 	);
-		// 	// pr($get_dealer_price_arr);
-		// 	// pr($dealer_price_arr);
-
-		// 	if($get_dealer_price_arr){
-		// 		unset($get_dealer_price_arr[$selected_package]);
-		// 		$new_price_arr = $get_dealer_price_arr + $dealer_price_arr;	
-			
-		// 	}else{
-		// 		$new_price_arr = $dealer_price_arr;	
-		// 	}
-			
-		// 	// pr($new_price_arr);
-			
-		// 	update_user_meta($dealer_id,'pricing_package',$new_price_arr);
-		// }
 
 		if($get_price_arr){
 			

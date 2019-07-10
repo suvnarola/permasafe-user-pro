@@ -1,5 +1,5 @@
 <?php
-$html .= '<h1>Search Customer Information</h1>'; 
+$html .= '<h1 class="top-heading">Search Customer Information</h1>'; 
 $html .= '<div class="reports-wrap">';	
 
 // member code

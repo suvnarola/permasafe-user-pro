@@ -1,6 +1,6 @@
 <?php
  echo '<div class="top-head">';
- echo '<h1>View Upgraded Membership</h1>';
+ echo '<h1 class="top-heading">View Upgraded Membership</h1>';
  
  echo '</div>';
 global $wpdb;

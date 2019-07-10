@@ -44,7 +44,7 @@ if($action == 'view_customer_details'){
     $address2 = get_user_meta($user_id,'pmsafe_address_2',true);
 
     echo '<div class="top-head">';
-        echo '<h1>Customer Details</h1>';
+        echo '<h1 class="top-heading">Customer Details</h1>';
         echo $actions['edit_customer_details'];
         echo '<p class="expired">EXPIRED ON '.$expiration_date.'</p>';
     echo '</div>';
@@ -419,7 +419,7 @@ $dealer_name = get_user_meta( $dealer_id, 'dealer_name', true);
     $post_id = $vehicle_info[0][$nickname]['pmsafe_member_code_id'];
 
 
-    echo '<h1>Edit Customer Information</h1>';
+    echo '<h1 class="top-heading">Edit Customer Information</h1>';
    
     echo '<div class="wrap dealer_add_form_div">';
         echo '<form name="perma_edit_customer" id="perma_edit_customer_form" method="POST" class="validate">';
@@ -535,7 +535,7 @@ $dealer_name = get_user_meta( $dealer_id, 'dealer_name', true);
 }
 else{
 echo '<div class="top-head">';
-echo '<h1 class="customer-head">Customers</h1>';
+echo '<h1 class="customer-head top-heading">Customers</h1>';
 echo '<a href="'.admin_url().'admin.php?page=customer-search" title="Advanced Search">Advanced Search</a>';
 echo '<a href="'.admin_url().'admin.php?page=customer-filter" title="Quick filter">Quick Filters</a>';
 echo '</div>';

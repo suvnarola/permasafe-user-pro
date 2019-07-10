@@ -260,6 +260,9 @@ class Permasafe_User_Pro {
 		$this->loader->add_action( 'wp_ajax_delete_distributor_cost', $plugin_admin, 'delete_distributor_cost_function' );
 		$this->loader->add_action( 'wp_ajax_nopriv_delete_distributor_cost', $plugin_admin, 'delete_distributor_cost_function' );
 		
+		$this->loader->add_action( 'wp_ajax_fetch_dealer_package_price', $plugin_admin, 'fetch_dealer_package_price' );
+		$this->loader->add_action( 'wp_ajax_nopriv_fetch_dealer_package_price', $plugin_admin, 'fetch_dealer_package_price' );
+		
 		// check if email is exist or not.
 		$this->loader->add_action( 'wp_ajax_check_email_exist', $plugin_admin, 'check_email_exist' );
         $this->loader->add_action( 'wp_ajax_nopriv_check_email_exist', $plugin_admin, 'check_email_exist' );
