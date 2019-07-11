@@ -96,6 +96,7 @@ if($action == 'view'){
     else{
         $dealer_name = 'No Dealers Assigned to this Distributor.';   
     }
+    
     echo '<table class="view-distributor-tbl">';
         echo '<tr>';
             echo '<td><strong>Name</strong></td>';
@@ -147,7 +148,14 @@ if($action == 'view'){
                     echo '<table class="view-distributor-contacts-tbl" id="">';
                         $number = $key + 1;
                         echo '<tr>';
-                        echo '<td colspan="2" style="font-size:15px"><b>Person '.$number.'</b><i class="fa fa-trash" id="pmsafe_distributors_contact_delete" data-id="'.$user_id.'" title="click here to delete this contact" style="color: #fff;cursor:pointer;float:right;background: #0065a7;padding: 8px;border-radius: 50%;"></td>';
+                        // echo '<td colspan="2" style="font-size:15px"><b>Person '.$number.'</b><i class="fa fa-trash" id="pmsafe_distributors_contact_delete" data-id="'.$user_id.'" title="click here to delete this contact" style="color: #fff;cursor:pointer;float:right;background: #0065a7;padding: 8px;border-radius: 50%;"></td>';
+                            echo '<td style="font-size:15px;border-right:none;">';
+                                echo '<b>Person '.$number.'</b>';
+                            echo '</td>';
+
+                            echo '<td style="border-left:none;text-align:right;">';
+                                echo '<a href="#edit-contact-person-modal" id="pmsafe_distributors_contact_edit" data-id="'.$user_id.'" title="click here to edit this contact" style="color: #fff;cursor:pointer;background: #0065a7;padding: 5px;border-radius: 50%;margin:0 5px"><i class="fa fa-edit"></i></a><i class="fa fa-trash" id="pmsafe_distributors_contact_delete" data-id="'.$user_id.'" title="click here to delete this contact" style="color: #fff;cursor:pointer;background: #ff0000;padding: 5px;border-radius: 50%;margin:0 5px;"></i>';
+                            echo '</td>';
                         echo '</tr>';
                         
                         echo '<tr>';
@@ -205,7 +213,42 @@ if($action == 'view'){
                 echo '</div>';
                 echo '<hr/>';
                     echo '<input type="button" value="Add" id="distributor_add_new_contact_person" class="btn-disabled" />';
-            echo '</div>';    
+            echo '</div>'; 
+            /*********************** Edit Contact Person Modal ******************************************** */
+            
+            echo '<div id="edit-contact-person-modal" class="modal">';   
+                echo '<h3>Edit Contact Person: '.$name.'<h3>';
+                echo '<hr/>';
+                echo '<div class="nisl-wrap">';
+                echo '<input type="hidden" id="contact_person_id" value=""/>';
+                echo '<label><strong>First Name:</strong></label>';
+                echo '<input type="text" id="edit_distributor_contact_fname" name="edit_distributor_contact_fname" value="" class="widefat" />';
+                echo '</div>';
+
+                echo '<div class="nisl-wrap">';
+                echo '<label><strong>Last Name:</strong></label>';
+                echo '<input type="text" id="edit_distributor_contact_lname" name="edit_distributor_contact_lname" value="" class="widefat" />';
+                echo '</div>';
+
+                echo '<div class="nisl-wrap">';
+                echo '<label><strong>Phone Number:</strong></label>';
+                echo '<input type="text" id="edit_distributor_contact_phone" name="edit_distributor_contact_phone" value="" class="widefat" />';
+                echo '</div>';
+
+                echo '<div class="nisl-wrap">';
+                echo '<label><strong>Email:</strong></label>';
+                echo '<input type="email" id="edit_distributor_contact_email" name="edit_distributor_contact_email" value="" class="widefat" disabled />';
+                echo '</div>';
+
+                echo '<div class="nisl-wrap">';
+                echo '<label><strong>Password</strong></label>';
+                echo '<input type="text" rel="gp" name="edit_distributor_contact_password" id="edit_distributor_contact_password" value="" class="widefat" style="width:35%"/>';
+                echo '<input type="button" value="Change Password" class="generate_distributor_contact_password" />';
+                echo '</div>';
+                echo '<hr/>';
+                    echo '<input type="button" value="Update" id="distributor_edit_new_contact_person" class="" />';
+            echo '</div>'; 
+               
         echo '</div>'; //left wrapper end
         echo '<div class="right-wrapper">';
             echo '<h3 style="color:#0065a7">Benefits Package Pricing:</h3>'; 
@@ -464,6 +507,7 @@ echo '</div>';
 
 $distributors = get_users( 'role=author' );
 
+echo '<div class="table-responsive">';
 echo '<table id="tbl_distributors" class="display nowrap" style="width:100%">';
 echo '<thead>';
     echo '<tr>';
@@ -587,5 +631,5 @@ foreach ( $distributors as $user ) {
 }
 echo '</tbody>';    
 echo '</table>';  
-   
+echo '</div>';
 }

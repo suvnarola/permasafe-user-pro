@@ -2687,7 +2687,7 @@ jQuery( document ).ready(function() {
         });// ajax
     });
 
-    jQuery(document).on("focus","#pmsafe_distributor_contact_fname,#pmsafe_distributor_contact_lname,#pmsafe_distributor_contact_phone,#pmsafe_distributor_contact_email,#pmsafe_distributor_contact_password,#pmsafe_dealer_contact_fname,#pmsafe_dealer_contact_lname,#pmsafe_dealer_contact_phone,#pmsafe_dealer_contact_email,#pmsafe_dealer_contact_password,#benefit_packages,#distributor_cost,#dealer_cost,#selling_price,#pmsafe_invitation_prefix,#edit_distributor_cost,#edit_dealer_cost,#edit_selling_price", function(e) {
+    jQuery(document).on("focus","#pmsafe_distributor_contact_fname,#pmsafe_distributor_contact_lname,#pmsafe_distributor_contact_phone,#pmsafe_distributor_contact_email,#pmsafe_distributor_contact_password,#pmsafe_dealer_contact_fname,#pmsafe_dealer_contact_lname,#pmsafe_dealer_contact_phone,#pmsafe_dealer_contact_email,#pmsafe_dealer_contact_password,#benefit_packages,#distributor_cost,#dealer_cost,#selling_price,#pmsafe_invitation_prefix,#edit_distributor_cost,#edit_dealer_cost,#edit_selling_price,#edit_dealer_contact_fname,#edit_dealer_contact_lname,#edit_dealer_contact_phone,#edit_distributor_contact_fname,#edit_distributor_contact_lname,#edit_distributor_contact_phone", function(e) {
         jQuery(this).css({'border-color':'#cccccc'});
         jQuery(this).css({'color':'#555'});
         jQuery(this).siblings('.error').remove();
@@ -2709,6 +2709,66 @@ jQuery( document ).ready(function() {
             clickClose: false,
             // showClose: false
         });
+    });
+
+    jQuery(document).on("click","#pmsafe_dealers_contact_edit", function(e) {
+        jQuery("#edit-contact-person-modal").modal({
+            escapeClose: false,
+            clickClose: false,
+            // showClose: false
+        });
+        var contact_id = jQuery(this).attr('data-id');
+        var data = {
+            action : 'fetch_dealer_contact_info',
+            contact_id : contact_id
+        }
+        jQuery('.perma-admin-loader').show();
+        jQuery.ajax({
+            type: 'POST',
+            url: pmAjax.ajaxurl,
+            data: data,
+            
+            success: function(response) {
+                jQuery('.perma-admin-loader').hide();
+                var obj = jQuery.parseJSON(response);
+                jQuery('#edit_dealer_contact_fname').val(obj.fname);
+                jQuery('#edit_dealer_contact_lname').val(obj.lname);
+                jQuery('#edit_dealer_contact_phone').val(obj.phone);
+                jQuery('#edit_dealer_contact_email').val(obj.email);
+                jQuery('#contact_person_id').val(obj.contact_id);
+                
+            }
+        });// ajax
+    });
+
+    jQuery(document).on("click","#pmsafe_distributors_contact_edit", function(e) {
+        jQuery("#edit-contact-person-modal").modal({
+            escapeClose: false,
+            clickClose: false,
+            // showClose: false
+        });
+        var contact_id = jQuery(this).attr('data-id');
+        var data = {
+            action : 'fetch_distributor_contact_info',
+            contact_id : contact_id
+        }
+        jQuery('.perma-admin-loader').show();
+        jQuery.ajax({
+            type: 'POST',
+            url: pmAjax.ajaxurl,
+            data: data,
+            
+            success: function(response) {
+                jQuery('.perma-admin-loader').hide();
+                var obj = jQuery.parseJSON(response);
+                jQuery('#edit_distributor_contact_fname').val(obj.fname);
+                jQuery('#edit_distributor_contact_lname').val(obj.lname);
+                jQuery('#edit_distributor_contact_phone').val(obj.phone);
+                jQuery('#edit_distributor_contact_email').val(obj.email);
+                jQuery('#contact_person_id').val(obj.contact_id);
+                
+            }
+        });// ajax
     });
 
     jQuery(document).on("click","#add_new_contact_person", function(e) {
@@ -2781,6 +2841,155 @@ jQuery( document ).ready(function() {
         if(!validflag){
             return validflag;
         }else{
+            jQuery('.perma-admin-loader').show();
+            jQuery.ajax({
+                type: 'POST',
+                url: pmAjax.ajaxurl,
+                data: data,
+                dataType: 'html',
+                success: function(response) {
+                    jQuery('.perma-admin-loader').hide();
+                        location.reload();
+                }
+            });// ajax
+        }
+    });
+
+    jQuery(document).on("click","#edit_new_contact_person", function(e) {
+        
+        
+        jQuery('.error').remove();
+        
+        var validflag = true;
+        var fname = jQuery('#edit_dealer_contact_fname' ).val();
+        var lname = jQuery('#edit_dealer_contact_lname' ).val();
+        var phone = jQuery('#edit_dealer_contact_phone' ).val();
+        var email = jQuery('#edit_dealer_contact_email' ).val();
+        var password = jQuery('#edit_dealer_contact_password' ).val();
+        
+        var contact_id = jQuery('#contact_person_id' ).val();
+              
+        if(jQuery('#edit_dealer_contact_fname' ).val().trim()=="" ){
+            jQuery('#edit_dealer_contact_fname' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#edit_dealer_contact_fname').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#edit_dealer_contact_fname').css({'color':'#333333'});
+        }
+        
+        if(jQuery('#edit_dealer_contact_lname' ).val().trim()=="" ){
+            jQuery('#edit_dealer_contact_lname' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#edit_dealer_contact_lname').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#edit_dealer_contact_lname').css({'color':'#333333'});
+        }
+        
+        //Phone
+        var numbers = /^[0-9]+$/;
+        if(jQuery('#edit_dealer_contact_phone').val().trim() == ''){
+            jQuery('#edit_dealer_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#edit_dealer_contact_phone' ).after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else if(!(jQuery('#edit_dealer_contact_phone').val().match(numbers))){
+            jQuery('#edit_dealer_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#edit_dealer_contact_phone' ).after( "<span class='error'>Please enter valid phone number.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#edit_dealer_contact_phone').css({'border-color':'#cccccc'});
+        }
+        
+        
+        
+        
+         var data = {
+            action: 'edit_dealer_contact_information',
+            fname:fname,
+            lname:lname,
+            phone:phone,
+            email:email,
+            password:password,
+            contact_id:contact_id
+        };
+        
+        if(!validflag){
+            
+            return validflag;
+        }else{
+            
+            jQuery('.perma-admin-loader').show();
+            jQuery.ajax({
+                type: 'POST',
+                url: pmAjax.ajaxurl,
+                data: data,
+                dataType: 'html',
+                success: function(response) {
+                    jQuery('.perma-admin-loader').hide();
+                        location.reload();
+                }
+            });// ajax
+        }
+    });
+
+    jQuery(document).on("click","#distributor_edit_new_contact_person", function(e) {
+        
+        
+        jQuery('.error').remove();
+        
+        var validflag = true;
+        var fname = jQuery('#edit_distributor_contact_fname' ).val();
+        var lname = jQuery('#edit_distributor_contact_lname' ).val();
+        var phone = jQuery('#edit_distributor_contact_phone' ).val();
+        var email = jQuery('#edit_distributor_contact_email' ).val();
+        var password = jQuery('#edit_distributor_contact_password' ).val();
+        
+        var contact_id = jQuery('#contact_person_id' ).val();
+              
+        if(jQuery('#edit_distributor_contact_fname' ).val().trim()=="" ){
+            jQuery('#edit_distributor_contact_fname' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#edit_distributor_contact_fname').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#edit_distributor_contact_fname').css({'color':'#333333'});
+        }
+        
+        if(jQuery('#edit_distributor_contact_lname' ).val().trim()=="" ){
+            jQuery('#edit_distributor_contact_lname' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#edit_distributor_contact_lname').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#edit_distributor_contact_lname').css({'color':'#333333'});
+        }
+        
+        //Phone
+        var numbers = /^[0-9]+$/;
+        if(jQuery('#edit_distributor_contact_phone').val().trim() == ''){
+            jQuery('#edit_distributor_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#edit_distributor_contact_phone' ).after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else if(!(jQuery('#edit_distributor_contact_phone').val().match(numbers))){
+            jQuery('#edit_distributor_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#edit_distributor_contact_phone' ).after( "<span class='error'>Please enter valid phone number.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#edit_distributor_contact_phone').css({'border-color':'#cccccc'});
+        }
+        
+        var data = {
+            action: 'edit_distributor_contact_information',
+            fname:fname,
+            lname:lname,
+            phone:phone,
+            email:email,
+            password:password,
+            contact_id:contact_id
+        };
+        
+        if(!validflag){
+            
+            return validflag;
+        }else{
+            
             jQuery('.perma-admin-loader').show();
             jQuery.ajax({
                 type: 'POST',
@@ -2882,6 +3091,15 @@ jQuery( document ).ready(function() {
 
 
     var tbl_distributor = jQuery('#tbl_distributors').DataTable( {
+        dom: 'Bfrtip',
+        responsive: true,
+        orderCellsTop: true,
+        fixedHeader: true,
+        "order": [[ 1, "asc" ]],
+       
+    } );
+    
+    var tbl_dealers = jQuery('#tbl_dealers').DataTable( {
         dom: 'Bfrtip',
         responsive: true,
         orderCellsTop: true,

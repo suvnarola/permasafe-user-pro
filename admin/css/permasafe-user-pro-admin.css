@@ -170,10 +170,10 @@ input#add_new_dealer:hover, input#add_new:hover {
     color: #ffffff !important;
 }
 .nisl-pdf-link{display: none;}
-#tbl_distributors_wrapper .dt-buttons{display:none;}
-#tbl_distributors_filter{margin-bottom: 20px;}
-#tbl_distributors tr td{padding: 10px 10px;}
-#tbl_distributors .row-actions a{text-decoration: none !important;}
+#tbl_dealers_wrapper .dt-buttons, #tbl_distributors_wrapper .dt-buttons{display:none;}
+#tbl_dealers_filter,#tbl_distributors_filter{margin-bottom: 20px;}
+#tbl_dealers tr td,#tbl_distributors tr td{padding: 10px 10px;}
+#tbl_dealers .row-actions a,#tbl_distributors .row-actions a{text-decoration: none !important;}
 .dataTables_wrapper .dataTables_paginate .fg-button{background: #0065a7;color: #ffff;}
 /*datatable*/
  .dataTables_wrapper .fg-toolbar div.dataTables_length label {display: flex !important;align-items: center;}
@@ -331,7 +331,7 @@ table.view-dealer-price-tbl tr:nth-child(even) , table.view-dealer-price-tbl the
     background-color: #ffffff !important;
 }
 table.view-dealer-price-tbl thead > tr > th , table.view-dealer-price-tbl thead > tr > th p{font-weight: 700;}
-#distributor_add_new_contact_person,#add_new_contact_person, #add_contact_person, #add_price,#add_package_price,#add_distributor_cost,#update_package_price,#update_distributor_cost{background: #0065a7;color: #fff;padding: 5px 10px;border: 0;border-radius: 5%;cursor: pointer;text-decoration: none;}
+#distributor_add_new_contact_person,#distributor_edit_new_contact_person,#edit_new_contact_person,#add_new_contact_person, #add_contact_person, #add_price,#add_package_price,#add_distributor_cost,#update_package_price,#update_distributor_cost{background: #0065a7;color: #fff;padding: 5px 10px;border: 0;border-radius: 5%;cursor: pointer;text-decoration: none;}
 /******** Responsive **********/
 
  
@@ -371,7 +371,7 @@ flex-wrap: wrap;
     form#perma_register_distributor_form label{width:100%;}
     form#perma_register_distributor_form input, form#perma_register_distributor_form textarea{width:100%;}
     form#perma_register_distributor_form div#fname_divgroup label {margin-bottom: 5px;}
-    div#view_customer_table_filter {display: -webkit-box;display: -ms-flexbox;display: flex;}
+    div#tbl_dealers_filter, div#tbl_distributors_filter, div#view_customer_table_filter {display: -webkit-box;display: -ms-flexbox;display: flex;}
     div#search_tbl_wrapper {width: 100%;overflow: auto;}
     .reports-wrap .reports-wrap-inner ,  .reports-wrap .reports-wrap-inner .input-div input {width: 100%;}
     .search-result-wrap .dt-buttons {display: -webkit-box;display: -ms-flexbox;display: flex;}

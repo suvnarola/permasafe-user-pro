@@ -645,7 +645,7 @@ class Permasafe_User_Pro_Admin {
 				}
 				
 			}
-			// die;
+			
 			// $user_role[] = 'contributor';
 			// update_user_meta( $user_id, 'wp_capabilities', serialize($user_role) );
 			update_user_meta( $user_id, 'dealer_name', $dealer_name );
@@ -679,11 +679,88 @@ class Permasafe_User_Pro_Admin {
 
 			die;
 		}
+
+		//fetch dealer contact information
+		public function fetch_dealer_contact_info(){
+			$contact_id = $_POST['contact_id'];
+			$users =  get_user_by('id',$contact_id);
+			$email = $users->user_email;
+			$fname  = get_user_meta( $contact_id, 'contact_fname', true);	
+			$lname  = get_user_meta( $contact_id, 'contact_lname', true);	
+			$phone  = get_user_meta( $contact_id, 'contact_phone', true);	
+			$response = array('fname'=>$fname, 'lname'=>$lname, 'phone'=>$phone,'email'=>$email,'contact_id'=>$contact_id );
+			echo json_encode($response);
+			die;
+		}
+
+		
+		//fetch distributor contact information
+		public function fetch_distributor_contact_info(){
+			$contact_id = $_POST['contact_id'];
+			$users =  get_user_by('id',$contact_id);
+			$email = $users->user_email;
+			$fname  = get_user_meta( $contact_id, 'distributor_contact_fname', true);	
+			$lname  = get_user_meta( $contact_id, 'distributor_contact_lname', true);	
+			$phone  = get_user_meta( $contact_id, 'distributor_contact_phone', true);	
+			$response = array('fname'=>$fname, 'lname'=>$lname, 'phone'=>$phone,'email'=>$email,'contact_id'=>$contact_id );
+			echo json_encode($response);
+			die;
+		}
+
+	
+		//Edit dealer contact information
+		public function edit_dealer_contact_information(){
+
+			$fname = $_POST['fname'];
+			$lname = $_POST['lname'];
+			$phone = $_POST['phone'];
+			$email = $_POST['email'];
+			$password = $_POST['password'];
+			$contact_id = $_POST['contact_id'];
+			
+			$contact_id = wp_update_user( array( 'ID' => $contact_id, 'user_email' => $email ) );
+			if($password != ''){
+
+				wp_set_password( $password, $contact_id );
+				
+			}
+			update_user_meta( $contact_id, 'contact_fname', $fname );	
+			update_user_meta( $contact_id, 'contact_lname', $lname );	
+			update_user_meta( $contact_id, 'contact_phone', $phone );	
+			
+
+			die;
+		}
+
+		//Edit dealer contact information
+		public function edit_distributor_contact_information(){
+
+			$fname = $_POST['fname'];
+			$lname = $_POST['lname'];
+			$phone = $_POST['phone'];
+			$email = $_POST['email'];
+			$password = $_POST['password'];
+			$contact_id = $_POST['contact_id'];
+			
+			$contact_id = wp_update_user( array( 'ID' => $contact_id, 'user_email' => $email ) );
+			if($password != ''){
+
+				wp_set_password( $password, $contact_id );
+				
+			}
+			update_user_meta( $contact_id, 'distributor_contact_fname', $fname );	
+			update_user_meta( $contact_id, 'distributor_contact_lname', $lname );	
+			update_user_meta( $contact_id, 'distributor_contact_phone', $phone );	
+			
+
+			die;
+		}
+		
         
         //edit dealer
         public function pmsafe_edit_dealer_form_function(){
 			// pr($_POST);
-			// die;
+			
         	$user_id = $_POST['pmsafe_dealer_id'];
         	$dealer_code = $_POST['pmsafe_dealer_code'];
 			$edit_name = $_POST['pmsafe_dealer_name'];
@@ -719,14 +796,7 @@ class Permasafe_User_Pro_Admin {
 							
 						}
 					}else{
-						// $userdata = array(
-						// 	'ID' => $contact_id, // ID of existing user
-						// 	'user_login' =>  $dealer_contact_email[$key],
-						// 	'user_email' =>  $dealer_contact_email[$key],
-						// 	'user_pass'  =>  $dealer_contact_password[$key] // no plain password here!
-						// ); 
-						// $contact_id = wp_insert_user( $userdata ) ;
-						// $set_user_role = new WP_User( $contact_id );
+						
 						$contact_id = wp_create_user( $dealer_contact_email[ $key ], $dealer_contact_password[ $key ], $dealer_contact_email[ $key ] );
 						$set_user_role = new WP_User( $contact_id );
 						$set_user_role->set_role( 'dealer-user' );
@@ -923,7 +993,7 @@ class Permasafe_User_Pro_Admin {
 			// pr($vehicle_info);
 			$post_id = $vehicle_info[0][$nickname]['pmsafe_member_code_id'];
 			// echo 'post'.$post_id;
-			// die;
+			
 			$login = get_post_meta($post_id,'_pmsafe_dealer', true);
         	$users = get_user_by('login',$login);
 			$dealer_id = $users->ID;
