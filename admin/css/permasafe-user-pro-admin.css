@@ -174,7 +174,7 @@ input#add_new_dealer:hover, input#add_new:hover {
 #tbl_dealers_filter,#tbl_distributors_filter{margin-bottom: 20px;}
 #tbl_dealers tr td,#tbl_distributors tr td{padding: 10px 10px;}
 #tbl_dealers .row-actions a,#tbl_distributors .row-actions a{text-decoration: none !important;}
-.dataTables_wrapper .dataTables_paginate .fg-button{background: #0065a7;color: #ffff;}
+.dataTables_wrapper .dataTables_paginate .fg-button{background: #0065a7;color: #ffffff;}
 /*datatable*/
  .dataTables_wrapper .fg-toolbar div.dataTables_length label {display: flex !important;align-items: center;}
 .dataTables_wrapper .fg-toolbar div.dataTables_length label .fancy-select-wrap {padding-top: 0;margin: 0 6px;}

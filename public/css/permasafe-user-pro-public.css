@@ -257,7 +257,7 @@ a.more-btn {cursor: pointer;display: block;width: 100%;background: #4578b5;paddi
 #tab-vehicle-registrations .vc_column-inner > .wpb_wrapper {display: inline-block;width: 100%;}
 ul#paginator {clear: both;display: block;text-align: center;}
 ul#paginator li {list-style: none;}
-#salesperson_update_prefix,#pmsafe_skip_price,#pmsafe_update_price,input#pmsafe_next, #pmsafe_update_prefix, #dialog_upgrade, #dialog_upgrade_no {padding: 15px 22px!important;margin-top: 1.5em;background-color: #4778b5!important;}
+#salesperson_update_prefix,#pmsafe_skip_price,#salesperson_update_price,#pmsafe_update_price,input#pmsafe_next, #pmsafe_update_prefix, #dialog_upgrade, #dialog_upgrade_no {padding: 15px 22px!important;margin-top: 1.5em;background-color: #4778b5!important;}
 #mebership_info_table_filter{margin-bottom: 10px;}
 #mebership_info_table_filter input{margin-left: 0 !important;}
 #mebership_date_table_filter{margin-bottom: 10px;}

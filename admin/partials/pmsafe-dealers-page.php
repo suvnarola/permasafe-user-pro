@@ -851,6 +851,7 @@ if($action == 'viewdealers'){
         ); 
     }
 }
+
 echo '<div class="table-responsive">';
 echo '<table id="tbl_dealers" class="display nowrap" style="width:100%">';
 echo '<thead>';
@@ -888,10 +889,11 @@ echo '</thead>';
 
 echo '<tbody id="">';  
 foreach ($dealer_array as $key => $value) {
+    $page = 'dealers-lists';
     $view_query_args = array(
         'page'   => $page,
         'action' => 'view',
-        'dealer'  => $item['ID'],
+        'dealer'  => $value['dealer_id'],
     );
 
     $actions['view'] = sprintf(
@@ -904,7 +906,7 @@ foreach ($dealer_array as $key => $value) {
     $edit_query_args = array(
         'page'   => $page,
         'action' => 'edit',
-        'dealer'  => $item['ID'],
+        'dealer'  => $value['dealer_id'],
     );
 
     $actions['edit'] = sprintf(
@@ -917,7 +919,7 @@ foreach ($dealer_array as $key => $value) {
     $delete_query_args = array(
         'page'   => $page,
         'action' => 'delete',
-        'dealer'  => $item['ID'],
+        'dealer'  => $value['dealer_id'],
     );
 
     $actions['delete'] = sprintf(

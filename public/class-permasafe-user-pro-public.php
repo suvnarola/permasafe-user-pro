@@ -3240,21 +3240,23 @@ class Permasafe_User_Pro_Public {
             }
             if($member_code === '00000' || $member_code === '0000' || $member_code === '000' || $member_code === '00' || $member_code === '0'){
                
-                if($role['contributor'] == 1) {
+                if($role['contributor'] == 1 || $role['author'] == 1 || $role['dealer-user'] == 1  || $role['distributor-user'] == 1)  {
 
                     $benefit_prefix = pmsafe_get_meta_values( '_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish' );
                     $html .= '<div id="salesperson_benefits_package_div">';
-                    $html .= '<div class="content-column one_half">';
-                        $html .= '<label>Upgradable Packages: ';
-                            $html .= '<select id="salesperson_benefits_package">';
-                            foreach ($benefit_prefix as $prefix) {
-                                $html .= '<option value="'.$prefix.'">'.$prefix.'</option>';
-                            }
-                            $html .= '</select>';
-                        $html .= '</label>';
-                        $html .= '<input type="button" id="salesperson_update_prefix" value="Update" style="margin-top:10px;">';
+                        $html .= '<div class="content-column one_half">';
+                            $html .= '<label>Upgradable Packages: ';
+                                $html .= '<select id="salesperson_benefits_package">';
+                                foreach ($benefit_prefix as $prefix) {
+                                    $html .= '<option value="'.$prefix.'">'.$prefix.'</option>';
+                                }
+                                $html .= '</select>';
+                            $html .= '</label>';
+                            $html .= '<input type="button" id="salesperson_update_prefix" value="Update" style="margin-top:10px;">';
+                        $html .= '</div>';
                     $html .= '</div>';
-                $html .= '</div>';
+
+                    
                 }
                 
                 $response = array('status' => true,'code'=>$member_code,'html'=>$html);
@@ -4105,6 +4107,7 @@ class Permasafe_User_Pro_Public {
                     $sales_person = array(
                         'first_name'                        => $_POST['first_name'],
                         'last_name'                         => $_POST['last_name'],
+                        'signature'                         => $_POST['signature'],
                         'pmsafe_address_1'                  => $_POST['address1'],
                         'pmsafe_address_2'                  => $_POST['address2'],
                         'pmsafe_city'                       => $_POST['city'],
@@ -4118,6 +4121,7 @@ class Permasafe_User_Pro_Public {
                         'pmsafe_vehicle_model'              => $_POST['vehicle_model'],
                         'pmsafe_vehicle_mileage'            => $_POST['vehicle_mileage'],
                         'pmsafe_vin'                        => $_POST['vin'],
+                        'pmsafe_vehicle_type'               => $_POST['vehicle_type'],
                         'pmsafe_warranty_registration'      => $member_code,
                         'pmsafe_plan_id'                    => 'sales-person',
                     );
