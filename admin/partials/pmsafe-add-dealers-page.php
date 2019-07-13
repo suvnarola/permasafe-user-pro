@@ -87,7 +87,7 @@
 
 				    echo '<div class="nisl-wrap">';
 				    echo '<label><strong>Email:</strong></label>';
-				    echo '<input type="email" id="pmsafe_dealer_contact_email1" name="pmsafe_dealer_contact_email[]" value="" class="widefat check-mail" style="width:35%;"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;">Please enter unique email-id.</span>';
+				    echo '<input type="email" id="pmsafe_dealer_contact_email1" name="pmsafe_dealer_contact_email[]" value="" class="widefat check-mail" style="width:35%;"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;"> (This will be the Username for this person to Login)</span>';
 					echo '</div>';
 					
 					echo '<div class="nisl-wrap">';

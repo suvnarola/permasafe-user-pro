@@ -88,6 +88,14 @@ echo '<thead>';
         echo '<th>';
         echo 'Registration Number';
         echo '</th>';
+        
+        echo '<th>';
+        echo 'Customer Name';
+        echo '</th>';
+        
+        echo '<th>';
+        echo 'VIN';
+        echo '</th>';
 
         echo '<th>';
         echo 'Original Policy';
@@ -103,10 +111,6 @@ echo '<thead>';
 
         echo '<th>';
         echo 'Date';
-        echo '</th>';
-
-        echo '<th>';
-        echo 'Customer Name';
         echo '</th>';
 
         echo '<th>';
@@ -152,20 +156,17 @@ foreach ($membership_results as $str) {
     $distributor_price_arr = get_user_meta($distributor_id,'pricing_package',true);
     $dealer_cost = $dealer_price_arr[$code_prefix]['dealer_cost'];
     $distributor_cost = $distributor_price_arr[$code_prefix]['distributor_cost'];
+
+    $users = get_user_by('login', $code);
+    $user_id = $users->ID;
+    $vehicle_info = get_user_meta($user_id,'pmsafe_vehicle_info',true);
+    $vin = $vehicle_info[$code]['pmsafe_vin'];
     echo '<tr>';
         
         echo '<td>';
             echo $code;
         echo '</td>';
-        
-        echo '<td>';
-            echo $bulk_prefix;
-        echo '</td>';
-        
-        echo '<td>';
-            echo $code_prefix;
-        echo '</td>';
-        
+
         echo '<td>';
         if($dealer_name){
             echo $dealer_name;
@@ -180,6 +181,20 @@ foreach ($membership_results as $str) {
             echo $admin_name;
         }
         echo '</td>';
+
+        echo '<td>';
+            echo $vin;
+        echo '</td>';
+
+        echo '<td>';
+            echo $bulk_prefix;
+        echo '</td>';
+        
+        echo '<td>';
+            echo $code_prefix;
+        echo '</td>';
+        
+        
 
         echo '<td>';
             echo get_post_meta($post_id,'upgraded_date',true);

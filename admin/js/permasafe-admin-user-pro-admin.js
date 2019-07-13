@@ -45,6 +45,16 @@ jQuery( document ).ready(function() {
             jQuery('#pmsafe_distributor_password').css({'color':'#333333'});
         }
 
+        //Phone
+        var numbers = /^[0-9]{10}$/;
+        if(!(jQuery('#pmsafe_distributor_phone_number').val().match(numbers))){
+            
+            jQuery('#pmsafe_distributor_phone_number').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#pmsafe_distributor_phone_number' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#pmsafe_distributor_phone_number').css({'border-color':'#cccccc'});
+        }
               
         if(!validflag){
             return validflag;
@@ -133,7 +143,7 @@ jQuery( document ).ready(function() {
         var newTextBoxDiv = jQuery(document.createElement('div'))
          .attr("id", 'fname_div' + counter);
 
-        newTextBoxDiv.after().html( '<h3 style="color:#0065a7">Contact Person\'s Information:<i class="fa fa-trash" id="removeButton_distributor" style="cursor:pointer;color: #fff;float: right;background: #0065a7;padding: 5px;border-radius: 50%;"></i></h3>'+'<div class="nisl-wrap"><label><strong>First Name:</strong></label><input type="text" id="pmsafe_distributor_contact_fname'+ counter +'" name="pmsafe_distributor_contact_fname[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Last Name:</strong></label><input type="text" id="pmsafe_distributor_contact_lname'+ counter +'" name="pmsafe_distributor_contact_lname[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Phone Number:</strong></label><input type="text" id="pmsafe_distributor_contact_phone'+ counter +'" name="pmsafe_distributor_contact_phone[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Email:</strong></label><input type="text" id="pmsafe_distributor_contact_email'+ counter +'" name="pmsafe_distributor_contact_email[]" value="" class="widefat check-mail"style="width:35%"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;">Please enter unique email-id.</span></div><div class="nisl-wrap"><label><strong>Password:</strong></label><input type="text" rel="gp" name="pmsafe_distributor_contact_password[]" value="" class="widefat" style="width:35%"/><input type="button" value="Generate Password" class="generate_distributor_contact_password" /></div>');
+        newTextBoxDiv.after().html( '<h3 style="color:#0065a7">Contact Person\'s Information:<i class="fa fa-trash" id="removeButton_distributor" style="cursor:pointer;color: #fff;float: right;background: #0065a7;padding: 5px;border-radius: 50%;"></i></h3>'+'<div class="nisl-wrap"><label><strong>First Name:</strong></label><input type="text" id="pmsafe_distributor_contact_fname'+ counter +'" name="pmsafe_distributor_contact_fname[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Last Name:</strong></label><input type="text" id="pmsafe_distributor_contact_lname'+ counter +'" name="pmsafe_distributor_contact_lname[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Phone Number:</strong></label><input type="text" id="pmsafe_distributor_contact_phone'+ counter +'" name="pmsafe_distributor_contact_phone[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Email:</strong></label><input type="text" id="pmsafe_distributor_contact_email'+ counter +'" name="pmsafe_distributor_contact_email[]" value="" class="widefat check-mail"style="width:35%"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;"> (This will be the Username for this person to Login)</span></div><div class="nisl-wrap"><label><strong>Password:</strong></label><input type="text" rel="gp" name="pmsafe_distributor_contact_password[]" value="" class="widefat" style="width:35%"/><input type="button" value="Generate Password" class="generate_distributor_contact_password" /></div>');
         newTextBoxDiv.appendTo("#fname_divgroup");
         counter++;
     });
@@ -199,14 +209,18 @@ jQuery( document ).ready(function() {
                 }
             }
         }
-        
-        
 
-        // var msg = '';
-        // for(i=1; i<counter; i++){
-        //   msg += "\n Textbox #" + i + " : " + jQuery('#pmsafe_distributor_contact_fname' + i).val();
-        // }
-        //alert(msg);
+        //Phone
+        var numbers = /^[0-9]{10}$/;
+        if(!(jQuery('#pmsafe_distributor_phone_number').val().match(numbers))){
+            
+            jQuery('#pmsafe_distributor_phone_number').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#pmsafe_distributor_phone_number' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#pmsafe_distributor_phone_number').css({'border-color':'#cccccc'});
+        }
+       
         if(!validflag){
             return validflag;
         }else{
@@ -301,7 +315,7 @@ jQuery( document ).ready(function() {
             }
         }
         
-        //Password 
+        
         if(jQuery('#pmsafe_dealer_password').val().trim()=="" ){
             jQuery('#pmsafe_dealer_password').css({'border':'1px solid #ff0000','color':'#ff0000'});
             jQuery( '#pmsafe_dealer_password' ).after( "<span class='error'>This field is required.</span>" );
@@ -310,6 +324,16 @@ jQuery( document ).ready(function() {
             jQuery('#pmsafe_dealer_password').css({'color':'#333333'});
         }
 
+        //Phone
+        var numbers = /^[0-9]{10}$/;
+        if(!(jQuery('#pmsafe_dealer_phone_number').val().match(numbers))){
+            
+            jQuery('#pmsafe_dealer_phone_number').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#pmsafe_dealer_phone_number' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#pmsafe_dealer_phone_number').css({'border-color':'#cccccc'});
+        }
 
         //select 
         if(jQuery('#pmsafe_dealer_distributor').val().trim()=="" ){
@@ -321,11 +345,7 @@ jQuery( document ).ready(function() {
         }
 
 
-        // var msg = '';
-        // for(i=1; i<counter; i++){
-        //   msg += "\n Textbox #" + i + " : " + jQuery('#pmsafe_distributor_contact_fname' + i).val();
-        // }
-        //alert(msg);
+       
         if(!validflag){
             return validflag;
         }else{
@@ -378,7 +398,7 @@ jQuery( document ).ready(function() {
         var newTextBoxDiv = jQuery(document.createElement('div'))
          .attr("id", 'fname_div' + counter);
 
-        newTextBoxDiv.after().html( '<h3 style="color:#0065a7">Contact Person\'s Information:<i class="fa fa-trash" id="removeButton_dealer" style="cursor:pointer;color: #fff;float: right;background: #0065a7;padding: 5px;border-radius: 50%;"></i></h3><div class="nisl-wrap"><label><strong>First Name:</strong></label><input type="text" id="pmsafe_dealer_contact_fname'+ counter +'" name="pmsafe_dealer_contact_fname[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Last Name:</strong></label><input type="text" id="pmsafe_dealer_contact_lname'+ counter +'" name="pmsafe_dealer_contact_lname[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Phone Number:</strong></label><input type="text" id="pmsafe_dealer_contact_phone'+ counter +'" name="pmsafe_dealer_contact_phone[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Email:</strong></label><input type="text" id="pmsafe_dealer_contact_email'+ counter +'" name="pmsafe_dealer_contact_email[]" value="" class="widefat check-mail" style="width:35%"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;">Please enter unique email-id.</span></div><div class="nisl-wrap"><label><strong>Password:</strong></label><input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat" style="width:35%"/><input type="button" value="Generate Password" class="generate_dealer_contact_password" /></div>');
+        newTextBoxDiv.after().html( '<h3 style="color:#0065a7">Contact Person\'s Information:<i class="fa fa-trash" id="removeButton_dealer" style="cursor:pointer;color: #fff;float: right;background: #0065a7;padding: 5px;border-radius: 50%;"></i></h3><div class="nisl-wrap"><label><strong>First Name:</strong></label><input type="text" id="pmsafe_dealer_contact_fname'+ counter +'" name="pmsafe_dealer_contact_fname[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Last Name:</strong></label><input type="text" id="pmsafe_dealer_contact_lname'+ counter +'" name="pmsafe_dealer_contact_lname[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Phone Number:</strong></label><input type="text" id="pmsafe_dealer_contact_phone'+ counter +'" name="pmsafe_dealer_contact_phone[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Email:</strong></label><input type="text" id="pmsafe_dealer_contact_email'+ counter +'" name="pmsafe_dealer_contact_email[]" value="" class="widefat check-mail" style="width:35%"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;"> (This will be the Username for this person to Login)</span></div><div class="nisl-wrap"><label><strong>Password:</strong></label><input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat" style="width:35%"/><input type="button" value="Generate Password" class="generate_dealer_contact_password" /></div>');
         newTextBoxDiv.appendTo("#fname_divgroup");
         counter++;
     });
@@ -431,14 +451,19 @@ jQuery( document ).ready(function() {
                 }
             }
         }
-        
+        //Phone
+        var numbers = /^[0-9]{10}$/;
+        if(!(jQuery('#pmsafe_dealer_phone_number').val().match(numbers))){
+            
+            jQuery('#pmsafe_dealer_phone_number').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#pmsafe_dealer_phone_number' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#pmsafe_dealer_phone_number').css({'border-color':'#cccccc'});
+        }
+
         
 
-        // var msg = '';
-        // for(i=1; i<counter; i++){
-        //   msg += "\n Textbox #" + i + " : " + jQuery('#pmsafe_dealer_contact_fname' + i).val();
-        // }
-        //alert(msg);
         if(!validflag){
             return validflag;
         }else{
@@ -1431,15 +1456,7 @@ jQuery( document ).ready(function() {
         }else{
             jQuery('#pmsafe_customer_state').css({'color':'#333333'});
         }
-        //password
-        //  if(jQuery('#pmsafe_customer_password').val().trim()=="" ){
-        //     jQuery('#pmsafe_customer_password').css({'border':'1px solid #ff0000','color':'#ff0000'});
-        //     jQuery( '#pmsafe_customer_password' ).after( "<span class='error'>This field is required.</span>" );
-        //     validflag = false;
-        // }else{
-        //     jQuery('#pmsafe_customer_password').css({'color':'#333333'});
-        // }
-
+        
         
         //zip code
         var numbers = /^[0-9]+$/;
@@ -1457,45 +1474,35 @@ jQuery( document ).ready(function() {
         }
 
         //Phone
-        var numbers = /^[0-9]+$/;
+        var numbers = /^[0-9]{10}$/;
         if(jQuery('#pmsafe_customer_phone_number').val().trim() == ''){
+            ``
             jQuery('#pmsafe_customer_phone_number').css({'border':'1px solid #ff0000','color':'#ff0000'});
             jQuery( '#pmsafe_customer_phone_number' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else if(!(jQuery('#pmsafe_customer_phone_number').val().match(numbers))){
+            
             jQuery('#pmsafe_customer_phone_number').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#pmsafe_customer_phone_number' ).after( "<span class='error'>Please enter valid phone number.</span>" );
+            jQuery( '#pmsafe_customer_phone_number' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
             validflag = false;
         }else{
             jQuery('#pmsafe_customer_phone_number').css({'border-color':'#cccccc'});
         }
         
-        //vehicle year
-        var numbers = /^[0-9]+$/;
-        if(jQuery('#pmsafe_customer_vehicle_year').val().trim() == ''){
-            jQuery('#pmsafe_customer_vehicle_year').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#pmsafe_customer_phone_number' ).after( "<span class='error'>This field is required.</span>" );
-            validflag = false;
-        }else if(!(jQuery('#pmsafe_customer_phone_number').val().match(numbers))){
-            jQuery('#pmsafe_customer_phone_number').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#pmsafe_customer_phone_number' ).after( "<span class='error'>Please enter valid phone number.</span>" );
-            validflag = false;
-        }else{
-            jQuery('#pmsafe_customer_phone_number').css({'border-color':'#cccccc'});
-        }
+        
 
          //vehicle year
         var numbers = /^[0-9]+$/;
         if(jQuery('#pmsafe_customer_vehicle_year').val().trim() == ''){
             jQuery('#pmsafe_customer_vehicle_year').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#pmsafe_customer_phone_number' ).after( "<span class='error'>This field is required.</span>" );
+            jQuery( '#pmsafe_customer_vehicle_year' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
-        }else if(!(jQuery('#pmsafe_customer_phone_number').val().match(numbers))){
-            jQuery('#pmsafe_customer_phone_number').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#pmsafe_customer_phone_number' ).after( "<span class='error'>Please enter valid phone number.</span>" );
+        }else if(!(jQuery('#pmsafe_customer_vehicle_year').val().match(numbers))){
+            jQuery('#pmsafe_customer_vehicle_year').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#pmsafe_customer_vehicle_year' ).after( "<span class='error'>Please enter valid Year.</span>" );
             validflag = false;
         }else{
-            jQuery('#pmsafe_customer_phone_number').css({'border-color':'#cccccc'});
+            jQuery('#pmsafe_customer_vehicle_year').css({'border-color':'#cccccc'});
         }
 
          //vehicle mileage
@@ -1531,14 +1538,18 @@ jQuery( document ).ready(function() {
         }
 
         //vehicle vin
-        if(jQuery('#pmsafe_customer_vehicle_vin').val().trim()=="" ){
+        var numbers = /^[0-9A-Z]+$/;
+        if(jQuery('#pmsafe_customer_vehicle_vin').val().trim() == ''){
             jQuery('#pmsafe_customer_vehicle_vin').css({'border':'1px solid #ff0000','color':'#ff0000'});
             jQuery( '#pmsafe_customer_vehicle_vin' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
+        }else if(!(jQuery('#pmsafe_customer_vehicle_vin').val().match(numbers))){
+            jQuery('#pmsafe_customer_vehicle_vin').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#pmsafe_customer_vehicle_vin' ).after( "<span class='error'>Please enter valid VIN number.</span>" );
+            validflag = false;
         }else{
-            jQuery('#pmsafe_customer_vehicle_vin').css({'color':'#333333'});
+            jQuery('#pmsafe_customer_vehicle_vin').css({'border-color':'#cccccc'});
         }
-
         
         if(!validflag){
             return validflag;
@@ -2800,14 +2811,14 @@ jQuery( document ).ready(function() {
         }
         
         //Phone
-        var numbers = /^[0-9]+$/;
+        var numbers = /^[0-9]{10}$/;
         if(jQuery('#pmsafe_dealer_contact_phone').val().trim() == ''){
             jQuery('#pmsafe_dealer_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
             jQuery( '#pmsafe_dealer_contact_phone' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else if(!(jQuery('#pmsafe_dealer_contact_phone').val().match(numbers))){
             jQuery('#pmsafe_dealer_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#pmsafe_dealer_contact_phone' ).after( "<span class='error'>Please enter valid phone number.</span>" );
+            jQuery( '#pmsafe_dealer_contact_phone' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
             validflag = false;
         }else{
             jQuery('#pmsafe_dealer_contact_phone').css({'border-color':'#cccccc'});
@@ -2886,14 +2897,14 @@ jQuery( document ).ready(function() {
         }
         
         //Phone
-        var numbers = /^[0-9]+$/;
+        var numbers = /^[0-9]{10}$/;
         if(jQuery('#edit_dealer_contact_phone').val().trim() == ''){
             jQuery('#edit_dealer_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
             jQuery( '#edit_dealer_contact_phone' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else if(!(jQuery('#edit_dealer_contact_phone').val().match(numbers))){
             jQuery('#edit_dealer_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#edit_dealer_contact_phone' ).after( "<span class='error'>Please enter valid phone number.</span>" );
+            jQuery( '#edit_dealer_contact_phone' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
             validflag = false;
         }else{
             jQuery('#edit_dealer_contact_phone').css({'border-color':'#cccccc'});
@@ -2962,14 +2973,14 @@ jQuery( document ).ready(function() {
         }
         
         //Phone
-        var numbers = /^[0-9]+$/;
+        var numbers = /^[0-9]{10}$/;
         if(jQuery('#edit_distributor_contact_phone').val().trim() == ''){
             jQuery('#edit_distributor_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
             jQuery( '#edit_distributor_contact_phone' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else if(!(jQuery('#edit_distributor_contact_phone').val().match(numbers))){
             jQuery('#edit_distributor_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#edit_distributor_contact_phone' ).after( "<span class='error'>Please enter valid phone number.</span>" );
+            jQuery( '#edit_distributor_contact_phone' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
             validflag = false;
         }else{
             jQuery('#edit_distributor_contact_phone').css({'border-color':'#cccccc'});
@@ -3034,14 +3045,14 @@ jQuery( document ).ready(function() {
         }
         
         //Phone
-        var numbers = /^[0-9]+$/;
+        var numbers = /^[0-9]{10}$/;
         if(jQuery('#pmsafe_distributor_contact_phone').val().trim() == ''){
             jQuery('#pmsafe_distributor_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
             jQuery( '#pmsafe_distributor_contact_phone' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else if(!(jQuery('#pmsafe_distributor_contact_phone').val().match(numbers))){
             jQuery('#pmsafe_distributor_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#pmsafe_distributor_contact_phone' ).after( "<span class='error'>Please enter valid phone number.</span>" );
+            jQuery( '#pmsafe_distributor_contact_phone' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
             validflag = false;
         }else{
             jQuery('#pmsafe_distributor_contact_phone').css({'border-color':'#cccccc'});

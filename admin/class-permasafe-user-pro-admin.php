@@ -114,6 +114,7 @@ class Permasafe_User_Pro_Admin {
         wp_enqueue_script( 'dt_table_ui_vfs_fonts', plugin_dir_url( __FILE__ ) . 'js/vfs_fonts.js', array( 'jquery' ), time(), false );
         wp_enqueue_script( 'dt_table_ui_btnprint', plugin_dir_url( __FILE__ ) . 'js/buttons.print.min.js', array( 'jquery' ), time(), false );
 		wp_enqueue_script( 'dt_table_fixedHeader', plugin_dir_url( __FILE__ ) . 'js/dataTables.fixedHeader.min.js', array( 'jquery' ), time(), false );
+		// wp_enqueue_script( 'jquery_validation', plugin_dir_url( __FILE__ ) . 'js/jquery.validate.min.js', array( 'jquery' ), time(), false );
 		
 
 	}
@@ -2924,6 +2925,11 @@ class Permasafe_User_Pro_Admin {
 				$distributor_price_arr = get_user_meta($distributor_id,'pricing_package',true);
 				$dealer_cost = $dealer_price_arr[$code_prefix]['dealer_cost'];
 				$distributor_cost = $distributor_price_arr[$code_prefix]['distributor_cost'];
+				$users = get_user_by('login', $code);
+				$user_id = $users->ID;
+				$vehicle_info = get_user_meta($user_id,'pmsafe_vehicle_info',true);
+				$vin = $vehicle_info[$code]['pmsafe_vin'];
+
 				if($dealer_name){
 					$upgraded_by = $dealer_name;
 				}
@@ -2952,7 +2958,8 @@ class Permasafe_User_Pro_Admin {
 										'upgraded_date' => $upgraded_date,
 										'customer_name' => $name,
 										'dealer_cost' => $dealer_cost,
-										'distributor_cost' => $distributor_cost
+										'distributor_cost' => $distributor_cost,
+										'vin' => $vin
 									);
 								}
 							}else if($policy == "original"){
@@ -2965,7 +2972,8 @@ class Permasafe_User_Pro_Admin {
 										'upgraded_date' => $upgraded_date,
 										'customer_name' => $name,
 										'dealer_cost' => $dealer_cost,
-										'distributor_cost' => $distributor_cost
+										'distributor_cost' => $distributor_cost,
+										'vin' => $vin
 									);
 								}
 							}else{
@@ -2978,7 +2986,8 @@ class Permasafe_User_Pro_Admin {
 									'upgraded_date' => $upgraded_date,
 									'customer_name' => $name,
 									'dealer_cost' => $dealer_cost,
-									'distributor_cost' => $distributor_cost
+									'distributor_cost' => $distributor_cost,
+									'vin' => $vin
 								);
 							}
 						}
@@ -3001,7 +3010,8 @@ class Permasafe_User_Pro_Admin {
 										'upgraded_date' => $upgraded_date,
 										'customer_name' => $name,
 										'dealer_cost' => $dealer_cost,
-										'distributor_cost' => $distributor_cost
+										'distributor_cost' => $distributor_cost,
+										'vin' => $vin
 									);
 								}
 							}else if($policy == "original"){
@@ -3014,7 +3024,8 @@ class Permasafe_User_Pro_Admin {
 										'upgraded_date' => $upgraded_date,
 										'customer_name' => $name,
 										'dealer_cost' => $dealer_cost,
-										'distributor_cost' => $distributor_cost
+										'distributor_cost' => $distributor_cost,
+										'vin' => $vin
 									);
 								}
 							}else{
@@ -3027,7 +3038,8 @@ class Permasafe_User_Pro_Admin {
 									'upgraded_date' => $upgraded_date,
 									'customer_name' => $name,
 									'dealer_cost' => $dealer_cost,
-									'distributor_cost' => $distributor_cost
+									'distributor_cost' => $distributor_cost,
+									'vin' => $vin
 								);
 							}
 						}
@@ -3047,7 +3059,8 @@ class Permasafe_User_Pro_Admin {
 									'upgraded_date' => $upgraded_date,
 									'customer_name' => $name,
 									'dealer_cost' => $dealer_cost,
-									'distributor_cost' => $distributor_cost
+									'distributor_cost' => $distributor_cost,
+									'vin' => $vin
 								);
 							}
 						}else if($policy == "original"){
@@ -3060,7 +3073,8 @@ class Permasafe_User_Pro_Admin {
 									'upgraded_date' => $upgraded_date,
 									'customer_name' => $name,
 									'dealer_cost' => $dealer_cost,
-									'distributor_cost' => $distributor_cost
+									'distributor_cost' => $distributor_cost,
+									'vin' => $vin
 								);
 							}
 						}else{
@@ -3073,7 +3087,8 @@ class Permasafe_User_Pro_Admin {
 								'upgraded_date' => $upgraded_date,
 								'customer_name' => $name,
 								'dealer_cost' => $dealer_cost,
-								'distributor_cost' => $distributor_cost
+								'distributor_cost' => $distributor_cost,
+								'vin' => $vin
 							);
 						}		
 					}
@@ -3085,7 +3100,15 @@ class Permasafe_User_Pro_Admin {
                 $html .= '<tr>';
                 $html .= '<th>';
                 $html .= 'Registration Number';
-                $html .= '</th>';
+				$html .= '</th>';
+				
+				$html .= '<th>';
+				$html .= 'Customer Name';
+				$html .= '</th>';
+
+				$html .= '<th>';
+				$html .= 'VIN';
+				$html .= '</th>';
 
                 $html .= '<th>';
                 $html .= 'Original Policy';
@@ -3098,12 +3121,9 @@ class Permasafe_User_Pro_Admin {
                 $html .= '<th>';
                 $html .= 'Upgraded By';
 				$html .= '</th>';
-				$html .= '<th>';
-				$html .= 'Date';
-				$html .= '</th>';
 
 				$html .= '<th>';
-				$html .= 'Customer Name';
+				$html .= 'Date';
 				$html .= '</th>';
 
 				$html .= '<th>';
@@ -3126,6 +3146,14 @@ class Permasafe_User_Pro_Admin {
 				$html .= '<td>';
 					$html .= $result['registration_number'];
 				$html .= '</td>';
+
+				$html .= '<td>';
+					$html .= $result['customer_name'];
+				$html .= '</td>';
+
+				$html .= '<td>';
+					$html .= $result['vin'];
+				$html .= '</td>';
 				
 				$html .= '<td>';
 					$html .= $result['original_policy'];
@@ -3143,9 +3171,7 @@ class Permasafe_User_Pro_Admin {
 					$html .= $result['upgraded_date'];
 				$html .= '</td>';
 		
-				$html .= '<td>';
-					$html .= $result['customer_name'];
-				$html .= '</td>';
+				
 		
 				$html .= '<td>';
 					$html .= (($result['dealer_cost'])?'$'.$result['dealer_cost']:'-');
