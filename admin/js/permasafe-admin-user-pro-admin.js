@@ -11,7 +11,7 @@ jQuery( document ).ready(function() {
 
         //Name
         if(jQuery('#pmsafe_distributor_name' ).val().trim()=="" ){
-            jQuery('#pmsafe_distributor_name' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_distributor_name' ).css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_distributor_name').after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -20,14 +20,14 @@ jQuery( document ).ready(function() {
 
         //Email     
         if(jQuery('#pmsafe_distributor_email').val().trim() == ''){
-            jQuery('#pmsafe_distributor_email').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_distributor_email').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_distributor_email' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
             if(jQuery('#pmsafe_distributor_email').val()){
                 var email=jQuery("#pmsafe_distributor_email").val();
                 if(!(email.match( /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i) )){
-                    jQuery('#pmsafe_distributor_email').css({'border':'1px solid #ff0000','color':'#ff0000'});
+                    jQuery('#pmsafe_distributor_email').css({'border':'1px solid #ff0000'});
                     jQuery( '#pmsafe_distributor_email' ).after( "<span class='error'>Please enter valid email address.</span>" );
                     validflag = false;
                 }else{
@@ -38,7 +38,7 @@ jQuery( document ).ready(function() {
         
         //Password 
         if(jQuery('#pmsafe_distributor_password').val().trim()=="" ){
-            jQuery('#pmsafe_distributor_password').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_distributor_password').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_distributor_password' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -47,15 +47,115 @@ jQuery( document ).ready(function() {
 
         //Phone
         var numbers = /^[0-9]{10}$/;
-        if(!(jQuery('#pmsafe_distributor_phone_number').val().match(numbers))){
-            
-            jQuery('#pmsafe_distributor_phone_number').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#pmsafe_distributor_phone_number' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
-            validflag = false;
-        }else{
-            jQuery('#pmsafe_distributor_phone_number').css({'border-color':'#cccccc'});
+        
+        if(jQuery('#pmsafe_distributor_phone_number').val() != ''){
+            if(!(jQuery('#pmsafe_distributor_phone_number').val().match(numbers))){
+                
+                jQuery('#pmsafe_distributor_phone_number').css({'border':'1px solid #ff0000'});
+                jQuery( '#pmsafe_distributor_phone_number' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
+                validflag = false;
+            }else{
+                jQuery('#pmsafe_distributor_phone_number').css({'border-color':'#cccccc'});
+            }
         }
-              
+        
+
+        //contact-person validation
+        jQuery('.is-validate').each(function() {
+            var fname = jQuery(this).find('.check-fname').val();
+            var lname = jQuery(this).find('.check-lname').val();
+            var phone = jQuery(this).find('.check-phone').val();
+            var mail = jQuery(this).find('.check-mail').val();
+            var password = jQuery(this).find('.check-password').val();
+            if(fname.trim() != '' || lname.trim() != '' || phone.trim() != '' || mail.trim() != '' || password.trim() != ''){
+                //fname
+                var name = /^[A-Za-z]+$/;
+                if(fname.trim()=="" ){
+                    jQuery(this).find('.check-fname').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-fname').after( "<span class='error'>This field is required.</span>" );
+                    validflag = false;
+                }else if(!(fname.match(name))){
+                    
+                    jQuery(this).find('.check-fname').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-fname').after( "<span class='error'>Please enter valid name.</span>" );
+                    validflag = false;
+                }else{
+                    jQuery(this).find('.check-fname').css({'border-color':'#cccccc'});
+                }
+
+                 //fname
+                 var name = /^[A-Za-z]+$/;
+                 if(lname.trim()=="" ){
+                    jQuery(this).find('.check-lname').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-lname').after( "<span class='error'>This field is required.</span>" );
+                    validflag = false;
+                }else if(!(lname.match(name))){
+                     
+                     jQuery(this).find('.check-lname').css({'border':'1px solid #ff0000'});
+                     jQuery(this).find('.check-lname').after( "<span class='error'>Please enter valid name.</span>" );
+                     validflag = false;
+                 }else{
+                     jQuery(this).find('.check-lname').css({'border-color':'#cccccc'});
+                 }
+
+                 //phone
+                var numbers = /^[0-9]{10}$/;
+                if(phone.trim()=="" ){
+                    jQuery(this).find('.check-phone').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-phone').after( "<span class='error'>This field is required.</span>" );
+                    validflag = false;
+                }else if(!(phone.match(numbers))){
+                    
+                    jQuery(this).find('.check-phone').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-phone').after( "<span class='error'>Please enter 10 digit number.</span>" );
+                    validflag = false;
+                }else{
+                    jQuery(this).find('.check-phone').css({'color':'#333333'});
+                }
+
+                 //email
+                    if(mail.trim()=="" ){
+                        jQuery(this).find('.check-mail').css({'border':'1px solid #ff0000'});
+                        jQuery(this).find('.check-mail').after( "<span class='error'>This field is required.</span>" );
+                        validflag = false;
+                    }else if(mail){
+                        if(jQuery('#pmsafe_dealer_email').val() == mail.trim()){
+                        
+                            jQuery(this).find('.check-mail').css({'border':'1px solid #ff0000'});
+                            jQuery(this).find('.check-mail').after( "<span class='error'> Dealer and Contact person\'s email should not be same.</span>" );
+                            validflag = false;
+                        }else{
+                            var email=jQuery(this).find('.check-mail').val();
+                            if(!(email.match( /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i) )){
+                                jQuery(this).find('.check-mail').css({'border':'1px solid #ff0000'});
+                                jQuery(this).find('.check-mail').after( "<span class='error'>Please enter valid email address.</span>" );
+                                validflag = false;
+                            }
+                        }
+                    }else {
+                    
+                        jQuery(this).find('.check-mail').css({'color':'#333333'});
+                    }
+                
+
+                //password
+                if(password.trim()=="" ){
+                    jQuery(this).find('.check-password').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-password').after( "<span class='error'>This field is required.</span>" );
+                    validflag = false;
+                }else{
+                    jQuery(this).find('.check-password').css({'color':'#333333'});
+                }
+
+            }else{
+                jQuery(this).find('.check-fname').css({'border-color':'#DDDDDD'});
+                jQuery(this).find('.check-lname').css({'border-color':'#DDDDDD'});
+                jQuery(this).find('.check-phone').css({'border-color':'#DDDDDD'});
+                jQuery(this).find('.check-mail').css({'border-color':'#DDDDDD'});
+                jQuery(this).find('.check-password').css({'border-color':'#DDDDDD'});
+            }
+        });
+
         if(!validflag){
             return validflag;
         }else{
@@ -116,6 +216,34 @@ jQuery( document ).ready(function() {
         jQuery('.btn-disabled').attr("disabled", false);
     });
 
+    jQuery(document).on("focus",".check-fname", function(e) {
+        var fname_control = jQuery(this);
+        fname_control.css({'border-color':'#cccccc'});
+        fname_control.siblings('.error').remove();
+        
+    });
+
+    jQuery(document).on("focus",".check-lname", function(e) {
+        var lname_control = jQuery(this);
+        lname_control.css({'border-color':'#cccccc'});
+        lname_control.siblings('.error').remove();
+        
+    });
+
+    jQuery(document).on("focus",".check-phone", function(e) {
+        var phone_control = jQuery(this);
+        phone_control.css({'border-color':'#cccccc'});
+        phone_control.siblings('.error').remove();
+        
+    });
+    
+    jQuery(document).on("focus",".check-password", function(e) {
+        var password_control = jQuery(this);
+        password_control.css({'border-color':'#cccccc'});
+        password_control.siblings('.error').remove();
+        
+    });
+
     
     // Focus and blure 
     jQuery('#pmsafe_distributor_name, #pmsafe_distributor_email, #pmsafe_distributor_password, #pmsafe_distributor_store_address, #pmsafe_distributor_phone_number').focus(function(){
@@ -140,10 +268,10 @@ jQuery( document ).ready(function() {
             alert("Only 10 textboxes allow");
             return false;
         }   
-        var newTextBoxDiv = jQuery(document.createElement('div'))
-         .attr("id", 'fname_div' + counter);
+        var newTextBoxDiv = jQuery(document.createElement('div')).attr("id", 'fname_div' + counter).addClass('is-validate');
+         
 
-        newTextBoxDiv.after().html( '<h3 style="color:#0065a7">Contact Person\'s Information:<i class="fa fa-trash" id="removeButton_distributor" style="cursor:pointer;color: #fff;float: right;background: #0065a7;padding: 5px;border-radius: 50%;"></i></h3>'+'<div class="nisl-wrap"><label><strong>First Name:</strong></label><input type="text" id="pmsafe_distributor_contact_fname'+ counter +'" name="pmsafe_distributor_contact_fname[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Last Name:</strong></label><input type="text" id="pmsafe_distributor_contact_lname'+ counter +'" name="pmsafe_distributor_contact_lname[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Phone Number:</strong></label><input type="text" id="pmsafe_distributor_contact_phone'+ counter +'" name="pmsafe_distributor_contact_phone[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Email:</strong></label><input type="text" id="pmsafe_distributor_contact_email'+ counter +'" name="pmsafe_distributor_contact_email[]" value="" class="widefat check-mail"style="width:35%"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;"> (This will be the Username for this person to Login)</span></div><div class="nisl-wrap"><label><strong>Password:</strong></label><input type="text" rel="gp" name="pmsafe_distributor_contact_password[]" value="" class="widefat" style="width:35%"/><input type="button" value="Generate Password" class="generate_distributor_contact_password" /></div>');
+        newTextBoxDiv.after().html( '<h3 style="color:#0065a7">Contact Person\'s Information:<i class="fa fa-trash" id="removeButton_distributor" style="cursor:pointer;color: #fff;float: right;background: #0065a7;padding: 5px;border-radius: 50%;"></i></h3>'+'<div class="nisl-wrap"><label><strong>First Name:</strong></label><input type="text" id="pmsafe_distributor_contact_fname'+ counter +'" name="pmsafe_distributor_contact_fname[]" value="" class="widefat check-fname"/></div><div class="nisl-wrap"><label><strong>Last Name:</strong></label><input type="text" id="pmsafe_distributor_contact_lname'+ counter +'" name="pmsafe_distributor_contact_lname[]" value="" class="widefat check-lname"/></div><div class="nisl-wrap"><label><strong>Phone Number:</strong></label><input type="text" id="pmsafe_distributor_contact_phone'+ counter +'" name="pmsafe_distributor_contact_phone[]" value="" class="widefat check-phone"/></div><div class="nisl-wrap"><label><strong>Email:</strong></label><input type="text" id="pmsafe_distributor_contact_email'+ counter +'" name="pmsafe_distributor_contact_email[]" value="" class="widefat check-mail"style="width:35%"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;"> (This will be the Username for this person to Login)</span></div><div class="nisl-wrap"><label><strong>Password:</strong></label><input type="text" rel="gp" name="pmsafe_distributor_contact_password[]" value="" class="widefat check-password" style="width:35%"/><input type="button" value="Generate Password" class="generate_distributor_contact_password" /></div>');
         newTextBoxDiv.appendTo("#fname_divgroup");
         counter++;
     });
@@ -185,7 +313,7 @@ jQuery( document ).ready(function() {
         var validflag = true;
         //Name
         if(jQuery('#pmsafe_distributor_name' ).val().trim()=="" ){
-            jQuery('#pmsafe_distributor_name' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_distributor_name' ).css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_distributor_name').after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -194,14 +322,14 @@ jQuery( document ).ready(function() {
 
         //Email     
         if(jQuery('#pmsafe_distributor_email').val().trim() == ''){
-            jQuery('#pmsafe_distributor_email').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_distributor_email').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_distributor_email' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
             if(jQuery('#pmsafe_distributor_email').val()){
                 var email=jQuery("#pmsafe_distributor_email").val();
                 if(!(email.match( /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i) )){
-                    jQuery('#pmsafe_distributor_email').css({'border':'1px solid #ff0000','color':'#ff0000'});
+                    jQuery('#pmsafe_distributor_email').css({'border':'1px solid #ff0000'});
                     jQuery( '#pmsafe_distributor_email' ).after( "<span class='error'>Please enter valid email address.</span>" );
                     validflag = false;
                 }else{
@@ -212,14 +340,112 @@ jQuery( document ).ready(function() {
 
         //Phone
         var numbers = /^[0-9]{10}$/;
-        if(!(jQuery('#pmsafe_distributor_phone_number').val().match(numbers))){
-            
-            jQuery('#pmsafe_distributor_phone_number').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#pmsafe_distributor_phone_number' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
-            validflag = false;
-        }else{
-            jQuery('#pmsafe_distributor_phone_number').css({'border-color':'#cccccc'});
+        if(jQuery('#pmsafe_distributor_phone_number').val() != ''){
+            if(!(jQuery('#pmsafe_distributor_phone_number').val().match(numbers))){
+                
+                jQuery('#pmsafe_distributor_phone_number').css({'border':'1px solid #ff0000'});
+                jQuery( '#pmsafe_distributor_phone_number' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
+                validflag = false;
+            }else{
+                jQuery('#pmsafe_distributor_phone_number').css({'border-color':'#cccccc'});
+            }
         }
+
+        //contact-person validation
+        jQuery('.is-validate').each(function() {
+            var fname = jQuery(this).find('.check-fname').val();
+            var lname = jQuery(this).find('.check-lname').val();
+            var phone = jQuery(this).find('.check-phone').val();
+            var mail = jQuery(this).find('.check-mail').val();
+            var password = jQuery(this).find('.check-password').val();
+            if(fname.trim() != '' || lname.trim() != '' || phone.trim() != '' || mail.trim() != '' || password.trim() != ''){
+                //fname
+                var name = /^[A-Za-z]+$/;
+                if(fname.trim()=="" ){
+                    jQuery(this).find('.check-fname').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-fname').after( "<span class='error'>This field is required.</span>" );
+                    validflag = false;
+                }else if(!(fname.match(name))){
+                    
+                    jQuery(this).find('.check-fname').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-fname').after( "<span class='error'>Please enter valid name.</span>" );
+                    validflag = false;
+                }else{
+                    jQuery(this).find('.check-fname').css({'border-color':'#cccccc'});
+                }
+
+                 //fname
+                 var name = /^[A-Za-z]+$/;
+                 if(lname.trim()=="" ){
+                    jQuery(this).find('.check-lname').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-lname').after( "<span class='error'>This field is required.</span>" );
+                    validflag = false;
+                }else if(!(lname.match(name))){
+                     
+                     jQuery(this).find('.check-lname').css({'border':'1px solid #ff0000'});
+                     jQuery(this).find('.check-lname').after( "<span class='error'>Please enter valid name.</span>" );
+                     validflag = false;
+                 }else{
+                     jQuery(this).find('.check-lname').css({'border-color':'#cccccc'});
+                 }
+
+                 //phone
+                var numbers = /^[0-9]{10}$/;
+                if(phone.trim()=="" ){
+                    jQuery(this).find('.check-phone').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-phone').after( "<span class='error'>This field is required.</span>" );
+                    validflag = false;
+                }else if(!(phone.match(numbers))){
+                    
+                    jQuery(this).find('.check-phone').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-phone').after( "<span class='error'>Please enter 10 digit number.</span>" );
+                    validflag = false;
+                }else{
+                    jQuery(this).find('.check-phone').css({'color':'#333333'});
+                }
+
+                 //email
+                    if(mail.trim()=="" ){
+                        jQuery(this).find('.check-mail').css({'border':'1px solid #ff0000'});
+                        jQuery(this).find('.check-mail').after( "<span class='error'>This field is required.</span>" );
+                        validflag = false;
+                    }else if(mail){
+                        if(jQuery('#pmsafe_dealer_email').val() == mail.trim()){
+                        
+                            jQuery(this).find('.check-mail').css({'border':'1px solid #ff0000'});
+                            jQuery(this).find('.check-mail').after( "<span class='error'> Dealer and Contact person\'s email should not be same.</span>" );
+                            validflag = false;
+                        }else{
+                            var email=jQuery(this).find('.check-mail').val();
+                            if(!(email.match( /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i) )){
+                                jQuery(this).find('.check-mail').css({'border':'1px solid #ff0000'});
+                                jQuery(this).find('.check-mail').after( "<span class='error'>Please enter valid email address.</span>" );
+                                validflag = false;
+                            }
+                        }
+                    }else {
+                    
+                        jQuery(this).find('.check-mail').css({'color':'#333333'});
+                    }
+                
+
+                //password
+                if(password.trim()=="" ){
+                    jQuery(this).find('.check-password').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-password').after( "<span class='error'>This field is required.</span>" );
+                    validflag = false;
+                }else{
+                    jQuery(this).find('.check-password').css({'color':'#333333'});
+                }
+
+            }else{
+                jQuery(this).find('.check-fname').css({'border-color':'#DDDDDD'});
+                jQuery(this).find('.check-lname').css({'border-color':'#DDDDDD'});
+                jQuery(this).find('.check-phone').css({'border-color':'#DDDDDD'});
+                jQuery(this).find('.check-mail').css({'border-color':'#DDDDDD'});
+                jQuery(this).find('.check-password').css({'border-color':'#DDDDDD'});
+            }
+        });
        
         if(!validflag){
             return validflag;
@@ -290,7 +516,7 @@ jQuery( document ).ready(function() {
         var validflag = true;
         //Name
         if(jQuery('#pmsafe_dealer_name' ).val().trim()=="" ){
-            jQuery('#pmsafe_dealer_name' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_dealer_name' ).css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_dealer_name').after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -299,14 +525,14 @@ jQuery( document ).ready(function() {
 
         //Email     
         if(jQuery('#pmsafe_dealer_email').val().trim() == ''){
-            jQuery('#pmsafe_dealer_email').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_dealer_email').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_dealer_email' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
             if(jQuery('#pmsafe_dealer_email').val()){
                 var email=jQuery("#pmsafe_dealer_email").val();
                 if(!(email.match( /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i) )){
-                    jQuery('#pmsafe_dealer_email').css({'border':'1px solid #ff0000','color':'#ff0000'});
+                    jQuery('#pmsafe_dealer_email').css({'border':'1px solid #ff0000'});
                     jQuery( '#pmsafe_dealer_email' ).after( "<span class='error'>Please enter valid email address.</span>" );
                     validflag = false;
                 }else{
@@ -317,7 +543,7 @@ jQuery( document ).ready(function() {
         
         
         if(jQuery('#pmsafe_dealer_password').val().trim()=="" ){
-            jQuery('#pmsafe_dealer_password').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_dealer_password').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_dealer_password' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -326,26 +552,125 @@ jQuery( document ).ready(function() {
 
         //Phone
         var numbers = /^[0-9]{10}$/;
-        if(!(jQuery('#pmsafe_dealer_phone_number').val().match(numbers))){
-            
-            jQuery('#pmsafe_dealer_phone_number').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#pmsafe_dealer_phone_number' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
-            validflag = false;
-        }else{
-            jQuery('#pmsafe_dealer_phone_number').css({'border-color':'#cccccc'});
+        if(jQuery('#pmsafe_dealer_phone_number').val() != ''){
+            if(!(jQuery('#pmsafe_dealer_phone_number').val().match(numbers))){
+                
+                jQuery('#pmsafe_dealer_phone_number').css({'border':'1px solid #ff0000'});
+                jQuery( '#pmsafe_dealer_phone_number' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
+                validflag = false;
+            }else{
+                jQuery('#pmsafe_dealer_phone_number').css({'border-color':'#cccccc'});
+            }
         }
 
         //select 
         if(jQuery('#pmsafe_dealer_distributor').val().trim()=="" ){
-            jQuery('#pmsafe_dealer_distributor').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_dealer_distributor').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_dealer_distributor' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
             jQuery('#pmsafe_dealer_distributor').css({'color':'#333333'});
         }
 
+        //contact-person validation
+        jQuery('.is-validate').each(function() {
+            var fname = jQuery(this).find('.check-fname').val();
+            var lname = jQuery(this).find('.check-lname').val();
+            var phone = jQuery(this).find('.check-phone').val();
+            var mail = jQuery(this).find('.check-mail').val();
+            var password = jQuery(this).find('.check-password').val();
+            if(fname.trim() != '' || lname.trim() != '' || phone.trim() != '' || mail.trim() != '' || password.trim() != ''){
+                //fname
+                var name = /^[A-Za-z]+$/;
+                if(fname.trim()=="" ){
+                    jQuery(this).find('.check-fname').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-fname').after( "<span class='error'>This field is required.</span>" );
+                    validflag = false;
+                }else if(!(fname.match(name))){
+                    
+                    jQuery(this).find('.check-fname').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-fname').after( "<span class='error'>Please enter valid name.</span>" );
+                    validflag = false;
+                }else{
+                    jQuery(this).find('.check-fname').css({'border-color':'#cccccc'});
+                }
 
-       
+                 //fname
+                 var name = /^[A-Za-z]+$/;
+                 if(lname.trim()=="" ){
+                    jQuery(this).find('.check-lname').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-lname').after( "<span class='error'>This field is required.</span>" );
+                    validflag = false;
+                }else if(!(lname.match(name))){
+                     
+                     jQuery(this).find('.check-lname').css({'border':'1px solid #ff0000'});
+                     jQuery(this).find('.check-lname').after( "<span class='error'>Please enter valid name.</span>" );
+                     validflag = false;
+                 }else{
+                     jQuery(this).find('.check-lname').css({'border-color':'#cccccc'});
+                 }
+
+                 //phone
+                var numbers = /^[0-9]{10}$/;
+                if(phone.trim()=="" ){
+                    jQuery(this).find('.check-phone').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-phone').after( "<span class='error'>This field is required.</span>" );
+                    validflag = false;
+                }else if(!(phone.match(numbers))){
+                    
+                    jQuery(this).find('.check-phone').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-phone').after( "<span class='error'>Please enter 10 digit number.</span>" );
+                    validflag = false;
+                }else{
+                    jQuery(this).find('.check-phone').css({'color':'#333333'});
+                }
+
+                 //email
+                    if(mail.trim()=="" ){
+                        jQuery(this).find('.check-mail').css({'border':'1px solid #ff0000'});
+                        jQuery(this).find('.check-mail').after( "<span class='error'>This field is required.</span>" );
+                        validflag = false;
+                    }else if(mail){
+                        if(jQuery('#pmsafe_dealer_email').val() == mail.trim()){
+                        
+                            jQuery(this).find('.check-mail').css({'border':'1px solid #ff0000'});
+                            jQuery(this).find('.check-mail').after( "<span class='error'> Dealer and Contact person\'s email should not be same.</span>" );
+                            validflag = false;
+                        }else{
+                            var email=jQuery(this).find('.check-mail').val();
+                            if(!(email.match( /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i) )){
+                                jQuery(this).find('.check-mail').css({'border':'1px solid #ff0000'});
+                                jQuery(this).find('.check-mail').after( "<span class='error'>Please enter valid email address.</span>" );
+                                validflag = false;
+                            }
+                        }
+                    }else {
+                    
+                        jQuery(this).find('.check-mail').css({'color':'#333333'});
+                    }
+                
+
+                //password
+                if(password.trim()=="" ){
+                    jQuery(this).find('.check-password').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-password').after( "<span class='error'>This field is required.</span>" );
+                    validflag = false;
+                }else{
+                    jQuery(this).find('.check-password').css({'color':'#333333'});
+                }
+
+            }else{
+                jQuery(this).find('.check-fname').css({'border-color':'#DDDDDD'});
+                jQuery(this).find('.check-lname').css({'border-color':'#DDDDDD'});
+                jQuery(this).find('.check-phone').css({'border-color':'#DDDDDD'});
+                jQuery(this).find('.check-mail').css({'border-color':'#DDDDDD'});
+                jQuery(this).find('.check-password').css({'border-color':'#DDDDDD'});
+            }
+        });
+
+        
+
+        
         if(!validflag){
             return validflag;
         }else{
@@ -384,8 +709,8 @@ jQuery( document ).ready(function() {
         jQuery(this).css({'color':'#555'});
         jQuery(this).siblings('.error').remove();
     });
-
-  
+    
+    
 
     //add new contact dealers
     jQuery('#add_new_dealer').click(function() {
@@ -395,10 +720,10 @@ jQuery( document ).ready(function() {
             alert("Only 10 textboxes allow");
             return false;
         }   
-        var newTextBoxDiv = jQuery(document.createElement('div'))
-         .attr("id", 'fname_div' + counter);
+        var newTextBoxDiv = jQuery(document.createElement('div')).attr("id", 'fname_div' + counter).addClass('is-validate');
+       
 
-        newTextBoxDiv.after().html( '<h3 style="color:#0065a7">Contact Person\'s Information:<i class="fa fa-trash" id="removeButton_dealer" style="cursor:pointer;color: #fff;float: right;background: #0065a7;padding: 5px;border-radius: 50%;"></i></h3><div class="nisl-wrap"><label><strong>First Name:</strong></label><input type="text" id="pmsafe_dealer_contact_fname'+ counter +'" name="pmsafe_dealer_contact_fname[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Last Name:</strong></label><input type="text" id="pmsafe_dealer_contact_lname'+ counter +'" name="pmsafe_dealer_contact_lname[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Phone Number:</strong></label><input type="text" id="pmsafe_dealer_contact_phone'+ counter +'" name="pmsafe_dealer_contact_phone[]" value="" class="widefat"/></div><div class="nisl-wrap"><label><strong>Email:</strong></label><input type="text" id="pmsafe_dealer_contact_email'+ counter +'" name="pmsafe_dealer_contact_email[]" value="" class="widefat check-mail" style="width:35%"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;"> (This will be the Username for this person to Login)</span></div><div class="nisl-wrap"><label><strong>Password:</strong></label><input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat" style="width:35%"/><input type="button" value="Generate Password" class="generate_dealer_contact_password" /></div>');
+        newTextBoxDiv.after().html( '<h3 style="color:#0065a7">Contact Person\'s Information:<i class="fa fa-trash" id="removeButton_dealer" style="cursor:pointer;color: #fff;float: right;background: #0065a7;padding: 5px;border-radius: 50%;"></i></h3><div class="nisl-wrap"><label><strong>First Name:</strong></label><input type="text" id="pmsafe_dealer_contact_fname'+ counter +'" name="pmsafe_dealer_contact_fname[]" value="" class="widefat check-fname"/></div><div class="nisl-wrap"><label><strong>Last Name:</strong></label><input type="text" id="pmsafe_dealer_contact_lname'+ counter +'" name="pmsafe_dealer_contact_lname[]" value="" class="widefat check-lname"/></div><div class="nisl-wrap"><label><strong>Phone Number:</strong></label><input type="text" id="pmsafe_dealer_contact_phone'+ counter +'" name="pmsafe_dealer_contact_phone[]" value="" class="widefat check-phone"/></div><div class="nisl-wrap"><label><strong>Email:</strong></label><input type="text" id="pmsafe_dealer_contact_email'+ counter +'" name="pmsafe_dealer_contact_email[]" value="" class="widefat check-mail" style="width:35%"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;"> (This will be the Username for this person to Login)</span></div><div class="nisl-wrap"><label><strong>Password:</strong></label><input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat check-password" style="width:35%"/><input type="button" value="Generate Password" class="generate_dealer_contact_password" /></div>');
         newTextBoxDiv.appendTo("#fname_divgroup");
         counter++;
     });
@@ -427,7 +752,7 @@ jQuery( document ).ready(function() {
         var validflag = true;
         //Name
         if(jQuery('#pmsafe_dealer_name' ).val().trim()=="" ){
-            jQuery('#pmsafe_dealer_name' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_dealer_name' ).css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_dealer_name').after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -436,14 +761,14 @@ jQuery( document ).ready(function() {
 
         //Email     
         if(jQuery('#pmsafe_dealer_email').val().trim() == ''){
-            jQuery('#pmsafe_dealer_email').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_dealer_email').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_dealer_email' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
             if(jQuery('#pmsafe_dealer_email').val()){
                 var email=jQuery("#pmsafe_dealer_email").val();
                 if(!(email.match( /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i) )){
-                    jQuery('#pmsafe_dealer_email').css({'border':'1px solid #ff0000','color':'#ff0000'});
+                    jQuery('#pmsafe_dealer_email').css({'border':'1px solid #ff0000'});
                     jQuery( '#pmsafe_dealer_email' ).after( "<span class='error'>Please enter valid email address.</span>" );
                     validflag = false;
                 }else{
@@ -453,15 +778,112 @@ jQuery( document ).ready(function() {
         }
         //Phone
         var numbers = /^[0-9]{10}$/;
-        if(!(jQuery('#pmsafe_dealer_phone_number').val().match(numbers))){
-            
-            jQuery('#pmsafe_dealer_phone_number').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#pmsafe_dealer_phone_number' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
-            validflag = false;
-        }else{
-            jQuery('#pmsafe_dealer_phone_number').css({'border-color':'#cccccc'});
+        if(jQuery('#pmsafe_dealer_phone_number').val() != ''){
+            if(!(jQuery('#pmsafe_dealer_phone_number').val().match(numbers))){
+                
+                jQuery('#pmsafe_dealer_phone_number').css({'border':'1px solid #ff0000'});
+                jQuery( '#pmsafe_dealer_phone_number' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
+                validflag = false;
+            }else{
+                jQuery('#pmsafe_dealer_phone_number').css({'border-color':'#cccccc'});
+            }
         }
 
+        //contact-person validation
+        jQuery('.is-validate').each(function() {
+            var fname = jQuery(this).find('.check-fname').val();
+            var lname = jQuery(this).find('.check-lname').val();
+            var phone = jQuery(this).find('.check-phone').val();
+            var mail = jQuery(this).find('.check-mail').val();
+            var password = jQuery(this).find('.check-password').val();
+            if(fname.trim() != '' || lname.trim() != '' || phone.trim() != '' || mail.trim() != '' || password.trim() != ''){
+                //fname
+                var name = /^[A-Za-z]+$/;
+                if(fname.trim()=="" ){
+                    jQuery(this).find('.check-fname').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-fname').after( "<span class='error'>This field is required.</span>" );
+                    validflag = false;
+                }else if(!(fname.match(name))){
+                    
+                    jQuery(this).find('.check-fname').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-fname').after( "<span class='error'>Please enter valid name.</span>" );
+                    validflag = false;
+                }else{
+                    jQuery(this).find('.check-fname').css({'border-color':'#cccccc'});
+                }
+
+                 //fname
+                 var name = /^[A-Za-z]+$/;
+                 if(lname.trim()=="" ){
+                    jQuery(this).find('.check-lname').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-lname').after( "<span class='error'>This field is required.</span>" );
+                    validflag = false;
+                }else if(!(lname.match(name))){
+                     
+                     jQuery(this).find('.check-lname').css({'border':'1px solid #ff0000'});
+                     jQuery(this).find('.check-lname').after( "<span class='error'>Please enter valid name.</span>" );
+                     validflag = false;
+                 }else{
+                     jQuery(this).find('.check-lname').css({'border-color':'#cccccc'});
+                 }
+
+                 //phone
+                var numbers = /^[0-9]{10}$/;
+                if(phone.trim()=="" ){
+                    jQuery(this).find('.check-phone').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-phone').after( "<span class='error'>This field is required.</span>" );
+                    validflag = false;
+                }else if(!(phone.match(numbers))){
+                    
+                    jQuery(this).find('.check-phone').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-phone').after( "<span class='error'>Please enter 10 digit number.</span>" );
+                    validflag = false;
+                }else{
+                    jQuery(this).find('.check-phone').css({'color':'#333333'});
+                }
+
+                 //email
+                    if(mail == "" ){
+                        jQuery(this).find('.check-mail').css({'border':'1px solid #ff0000'});
+                        jQuery(this).find('.check-mail').after( "<span class='error'>This field is required.</span>" );
+                        validflag = false;
+                    }else if(mail){
+                        if(jQuery('#pmsafe_dealer_email').val() == mail.trim()){
+                        
+                            jQuery(this).find('.check-mail').css({'border':'1px solid #ff0000'});
+                            jQuery(this).find('.check-mail').after( "<span class='error'> Dealer and Contact person\'s email should not be same.</span>" );
+                            validflag = false;
+                        }else{
+                            var email=jQuery(this).find('.check-mail').val();
+                            if(!(email.match( /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i) )){
+                                jQuery(this).find('.check-mail').css({'border':'1px solid #ff0000'});
+                                jQuery(this).find('.check-mail').after( "<span class='error'>Please enter valid email address.</span>" );
+                                validflag = false;
+                            }
+                        }
+                    }else {
+                    
+                        jQuery(this).find('.check-mail').css({'color':'#333333'});
+                    }
+                
+
+                //password
+                if(password.trim()=="" ){
+                    jQuery(this).find('.check-password').css({'border':'1px solid #ff0000'});
+                    jQuery(this).find('.check-password').after( "<span class='error'>This field is required.</span>" );
+                    validflag = false;
+                }else{
+                    jQuery(this).find('.check-password').css({'color':'#333333'});
+                }
+
+            }else{
+                jQuery(this).find('.check-fname').css({'border-color':'#DDDDDD'});
+                jQuery(this).find('.check-lname').css({'border-color':'#DDDDDD'});
+                jQuery(this).find('.check-phone').css({'border-color':'#DDDDDD'});
+                jQuery(this).find('.check-mail').css({'border-color':'#DDDDDD'});
+                jQuery(this).find('.check-password').css({'border-color':'#DDDDDD'});
+            }
+        });
         
 
         if(!validflag){
@@ -1169,7 +1591,7 @@ jQuery( document ).ready(function() {
         var search_val = jQuery('#search-input').val();
         
         if(jQuery('#search-input').val().trim()=="" ){
-            jQuery('#search-input').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#search-input').css({'border':'1px solid #ff0000'});
             jQuery( '#search-input' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -1207,7 +1629,7 @@ jQuery( document ).ready(function() {
         var search_val = jQuery('#individual-search-input').val();
         
         if(jQuery('#individual-search-input').val().trim()=="" ){
-            jQuery('#individual-search-input').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#individual-search-input').css({'border':'1px solid #ff0000'});
             jQuery( '#individual-search-input' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -1255,7 +1677,7 @@ jQuery( document ).ready(function() {
         var search_val = jQuery('#search-input').val()
         
         if(jQuery('#search-input').val().trim()=="" ){
-            jQuery('#search-input').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#search-input').css({'border':'1px solid #ff0000'});
             jQuery( '#search-input' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -1296,7 +1718,7 @@ jQuery( document ).ready(function() {
             var search_val = jQuery('#individual-search-input').val();
             
             if(jQuery('#individual-search-input').val().trim()=="" ){
-                jQuery('#individual-search-input').css({'border':'1px solid #ff0000','color':'#ff0000'});
+                jQuery('#individual-search-input').css({'border':'1px solid #ff0000'});
                 jQuery( '#individual-search-input' ).after( "<span class='error'>This field is required.</span>" );
                 validflag = false;
             }else{
@@ -1408,7 +1830,7 @@ jQuery( document ).ready(function() {
         var validflag = true;
         //Name
         if(jQuery('#pmsafe_customer_fname' ).val().trim()=="" ){
-            jQuery('#pmsafe_customer_fname' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_customer_fname' ).css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_customer_fname').after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -1416,7 +1838,7 @@ jQuery( document ).ready(function() {
         }
 
         if(jQuery('#pmsafe_customer_lname' ).val().trim()=="" ){
-            jQuery('#pmsafe_customer_lname' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_customer_lname' ).css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_customer_lname').after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -1424,24 +1846,17 @@ jQuery( document ).ready(function() {
         }
 
         if(jQuery('#pmsafe_customer_address1' ).val().trim()=="" ){
-            jQuery('#pmsafe_customer_address1' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_customer_address1' ).css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_customer_address1').after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
             jQuery('#pmsafe_customer_address1').css({'color':'#333333'});
         }
 
-        // if(jQuery('#pmsafe_customer_address2' ).val().trim()=="" ){
-        //     jQuery('#pmsafe_customer_address2' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
-        //     jQuery( '#pmsafe_customer_address2').after( "<span class='error'>This field is required.</span>" );
-        //     validflag = false;
-        // }else{
-        //     jQuery('#pmsafe_customer_address2').css({'color':'#333333'});
-        // }
         
         //city
         if(jQuery('#pmsafe_customer_city').val().trim()=="" ){
-            jQuery('#pmsafe_customer_city').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_customer_city').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_customer_city' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -1450,7 +1865,7 @@ jQuery( document ).ready(function() {
 
          //state
          if(jQuery('#pmsafe_customer_state').val().trim()=="" ){
-            jQuery('#pmsafe_customer_state').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_customer_state').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_customer_state' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -1461,11 +1876,11 @@ jQuery( document ).ready(function() {
         //zip code
         var numbers = /^[0-9]+$/;
         if(jQuery('#pmsafe_customer_zip').val().trim() == ''){            
-            jQuery('#pmsafe_customer_zip').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_customer_zip').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_customer_zip' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else if(!(jQuery('#pmsafe_customer_zip').val().match(numbers))){
-            jQuery('#pmsafe_customer_zip').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_customer_zip').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_customer_zip' ).after( "<span class='error'>Please enter valid zip code.</span>" );
             validflag = false;
         }
@@ -1477,12 +1892,12 @@ jQuery( document ).ready(function() {
         var numbers = /^[0-9]{10}$/;
         if(jQuery('#pmsafe_customer_phone_number').val().trim() == ''){
             ``
-            jQuery('#pmsafe_customer_phone_number').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_customer_phone_number').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_customer_phone_number' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else if(!(jQuery('#pmsafe_customer_phone_number').val().match(numbers))){
             
-            jQuery('#pmsafe_customer_phone_number').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_customer_phone_number').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_customer_phone_number' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
             validflag = false;
         }else{
@@ -1494,11 +1909,11 @@ jQuery( document ).ready(function() {
          //vehicle year
         var numbers = /^[0-9]+$/;
         if(jQuery('#pmsafe_customer_vehicle_year').val().trim() == ''){
-            jQuery('#pmsafe_customer_vehicle_year').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_customer_vehicle_year').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_customer_vehicle_year' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else if(!(jQuery('#pmsafe_customer_vehicle_year').val().match(numbers))){
-            jQuery('#pmsafe_customer_vehicle_year').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_customer_vehicle_year').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_customer_vehicle_year' ).after( "<span class='error'>Please enter valid Year.</span>" );
             validflag = false;
         }else{
@@ -1508,11 +1923,11 @@ jQuery( document ).ready(function() {
          //vehicle mileage
         var numbers = /^[0-9]+$/;
         if(jQuery('#pmsafe_customer_vehicle_mileage').val().trim() == ''){
-             jQuery('#pmsafe_customer_vehicle_mileage').css({'border':'1px solid #ff0000','color':'#ff0000'});
+             jQuery('#pmsafe_customer_vehicle_mileage').css({'border':'1px solid #ff0000'});
              jQuery( '#pmsafe_customer_vehicle_mileage' ).after( "<span class='error'>This field is required.</span>" );
              validflag = false;
         }else if(!(jQuery('#pmsafe_customer_vehicle_mileage').val().match(numbers))){
-             jQuery('#pmsafe_customer_vehicle_mileage').css({'border':'1px solid #ff0000','color':'#ff0000'});
+             jQuery('#pmsafe_customer_vehicle_mileage').css({'border':'1px solid #ff0000'});
              jQuery( '#pmsafe_customer_vehicle_mileage' ).after( "<span>Please enter valid mileage.</span>" );
              validflag = false;
         }else{
@@ -1521,7 +1936,7 @@ jQuery( document ).ready(function() {
         
         //vehicle make
         if(jQuery('#pmsafe_customer_vehicle_make').val().trim()=="" ){
-            jQuery('#pmsafe_customer_vehicle_make').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_customer_vehicle_make').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_customer_vehicle_make' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -1530,7 +1945,7 @@ jQuery( document ).ready(function() {
 
         //vehicle model
         if(jQuery('#pmsafe_customer_vehicle_model').val().trim()=="" ){
-            jQuery('#pmsafe_customer_vehicle_model').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_customer_vehicle_model').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_customer_vehicle_model' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -1540,11 +1955,11 @@ jQuery( document ).ready(function() {
         //vehicle vin
         var numbers = /^[0-9A-Z]+$/;
         if(jQuery('#pmsafe_customer_vehicle_vin').val().trim() == ''){
-            jQuery('#pmsafe_customer_vehicle_vin').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_customer_vehicle_vin').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_customer_vehicle_vin' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else if(!(jQuery('#pmsafe_customer_vehicle_vin').val().match(numbers))){
-            jQuery('#pmsafe_customer_vehicle_vin').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_customer_vehicle_vin').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_customer_vehicle_vin' ).after( "<span class='error'>Please enter valid VIN number.</span>" );
             validflag = false;
         }else{
@@ -1921,7 +2336,7 @@ jQuery( document ).ready(function() {
         // alert(select);
 
         if(jQuery('#datepicker1').val().trim()=="" ){
-            jQuery('#datepicker1').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#datepicker1').css({'border':'1px solid #ff0000'});
             jQuery( '#datepicker1' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -1929,7 +2344,7 @@ jQuery( document ).ready(function() {
         }
 
         if(jQuery('#datepicker2').val().trim()=="" ){
-            jQuery('#datepicker2').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#datepicker2').css({'border':'1px solid #ff0000'});
             jQuery( '#datepicker2' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -1937,7 +2352,7 @@ jQuery( document ).ready(function() {
         }
 
         if(jQuery('#quick_filters').val().trim()=="0" ){
-            jQuery('#quick_filters').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#quick_filters').css({'border':'1px solid #ff0000'});
             jQuery( '#quick_filters' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -2240,7 +2655,7 @@ jQuery( document ).ready(function() {
             }
         
         if(jQuery('#membership_datepicker1').val().trim()=="" ){
-            jQuery('#membership_datepicker1').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#membership_datepicker1').css({'border':'1px solid #ff0000'});
             jQuery( '#membership_datepicker1' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -2248,7 +2663,7 @@ jQuery( document ).ready(function() {
         }
 
         if(jQuery('#membership_datepicker2').val().trim()=="" ){
-            jQuery('#membership_datepicker2').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#membership_datepicker2').css({'border':'1px solid #ff0000'});
             jQuery( '#membership_datepicker2' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -2256,7 +2671,7 @@ jQuery( document ).ready(function() {
         }
         
         if(policy != '' && package == ''){
-                jQuery('#benefit_packages').css({'border':'1px solid #ff0000','color':'#ff0000'});
+                jQuery('#benefit_packages').css({'border':'1px solid #ff0000'});
                 jQuery( '#benefit_packages' ).after( "<span class='error'>This field is required.</span>" );
                 validflag = false;
         }else{
@@ -2357,7 +2772,7 @@ jQuery( document ).ready(function() {
 
         
         if(jQuery('#pmsafe_invitation_prefix' ).val().trim()=="" ){
-            jQuery('#pmsafe_invitation_prefix' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_invitation_prefix' ).css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_invitation_prefix').after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -2365,7 +2780,7 @@ jQuery( document ).ready(function() {
         }
         
         if(jQuery('#dealer_cost' ).val().trim()=="" ){
-            jQuery('#dealer_cost' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#dealer_cost' ).css({'border':'1px solid #ff0000'});
             jQuery( '#dealer_cost').after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -2373,7 +2788,7 @@ jQuery( document ).ready(function() {
         }
         
         if(jQuery('#selling_price' ).val().trim()=="" ){
-            jQuery('#selling_price' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#selling_price' ).css({'border':'1px solid #ff0000'});
             jQuery( '#selling_price').after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -2431,7 +2846,7 @@ jQuery( document ).ready(function() {
 
         
         if(jQuery('#pmsafe_invitation_prefix' ).val().trim()=="" ){
-            jQuery('#pmsafe_invitation_prefix' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_invitation_prefix' ).css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_invitation_prefix').after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -2440,7 +2855,7 @@ jQuery( document ).ready(function() {
         
         
         if(jQuery('#distributor_cost' ).val().trim()=="" ){
-            jQuery('#distributor_cost' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#distributor_cost' ).css({'border':'1px solid #ff0000'});
             jQuery( '#distributor_cost').after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -2585,7 +3000,7 @@ jQuery( document ).ready(function() {
 
         var validflag = true;
         if(jQuery('#edit_dealer_cost' ).val().trim()=="" ){
-            jQuery('#edit_dealer_cost' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#edit_dealer_cost' ).css({'border':'1px solid #ff0000'});
             jQuery( '#edit_dealer_cost').after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -2593,7 +3008,7 @@ jQuery( document ).ready(function() {
         }
         
         if(jQuery('#edit_selling_price' ).val().trim()=="" ){
-            jQuery('#edit_selling_price' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#edit_selling_price' ).css({'border':'1px solid #ff0000'});
             jQuery( '#edit_selling_price').after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -2644,7 +3059,7 @@ jQuery( document ).ready(function() {
         
         var validflag = true;
         if(jQuery('#edit_distributor_cost' ).val().trim()=="" ){
-            jQuery('#edit_distributor_cost' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#edit_distributor_cost' ).css({'border':'1px solid #ff0000'});
             jQuery( '#edit_distributor_cost').after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -2793,18 +3208,29 @@ jQuery( document ).ready(function() {
         var email = jQuery('#pmsafe_dealer_contact_email' ).val();
         var password = jQuery('#pmsafe_dealer_contact_password' ).val();
         var dealer_id = jQuery('#pricing_dealer_id' ).val();
-              
+
+        var name = /^[A-Za-z]+$/;
         if(jQuery('#pmsafe_dealer_contact_fname' ).val().trim()=="" ){
-            jQuery('#pmsafe_dealer_contact_fname' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_dealer_contact_fname' ).css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_dealer_contact_fname').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else if(!(fname.match(name))){
+            
+            jQuery('#pmsafe_dealer_contact_fname' ).css({'border':'1px solid #ff0000'});
+            jQuery('#pmsafe_dealer_contact_fname' ).after( "<span class='error'>Please enter valid name.</span>" );
             validflag = false;
         }else{
             jQuery('#pmsafe_dealer_contact_fname').css({'color':'#333333'});
         }
         
         if(jQuery('#pmsafe_dealer_contact_lname' ).val().trim()=="" ){
-            jQuery('#pmsafe_dealer_contact_lname' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_dealer_contact_lname' ).css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_dealer_contact_lname').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else if(!(lname.match(name))){
+            
+            jQuery('#pmsafe_dealer_contact_lname' ).css({'border':'1px solid #ff0000'});
+            jQuery('#pmsafe_dealer_contact_lname' ).after( "<span class='error'>Please enter valid name.</span>" );
             validflag = false;
         }else{
             jQuery('#pmsafe_dealer_contact_lname').css({'color':'#333333'});
@@ -2813,27 +3239,37 @@ jQuery( document ).ready(function() {
         //Phone
         var numbers = /^[0-9]{10}$/;
         if(jQuery('#pmsafe_dealer_contact_phone').val().trim() == ''){
-            jQuery('#pmsafe_dealer_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_dealer_contact_phone').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_dealer_contact_phone' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else if(!(jQuery('#pmsafe_dealer_contact_phone').val().match(numbers))){
-            jQuery('#pmsafe_dealer_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_dealer_contact_phone').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_dealer_contact_phone' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
             validflag = false;
         }else{
             jQuery('#pmsafe_dealer_contact_phone').css({'border-color':'#cccccc'});
         }
         
-        if(jQuery('#pmsafe_dealer_contact_email' ).val().trim()=="" ){
-            jQuery('#pmsafe_dealer_contact_email' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#pmsafe_dealer_contact_email').after( "<span class='error'>This field is required.</span>" );
+        //Email     
+        if(jQuery('#pmsafe_dealer_contact_email').val().trim() == ''){
+            jQuery('#pmsafe_dealer_contact_email').css({'border':'1px solid #ff0000'});
+            jQuery( '#pmsafe_dealer_contact_email' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
-            jQuery('#pmsafe_dealer_contact_email').css({'color':'#333333'});
+            if(jQuery('#pmsafe_dealer_contact_email').val()){
+                var email=jQuery("#pmsafe_dealer_contact_email").val();
+                if(!(email.match( /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i) )){
+                    jQuery('#pmsafe_dealer_contact_email').css({'border':'1px solid #ff0000'});
+                    jQuery( '#pmsafe_dealer_contact_email' ).after( "<span class='error'>Please enter valid email address.</span>" );
+                    validflag = false;
+                }else{
+                    jQuery('#pmsafe_dealer_contact_email').css({'color':'#333333'});
+                }
+            }
         }
         
         if(jQuery('#pmsafe_dealer_contact_password' ).val().trim()=="" ){
-            jQuery('#pmsafe_dealer_contact_password' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_dealer_contact_password' ).css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_dealer_contact_password').after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -2879,31 +3315,43 @@ jQuery( document ).ready(function() {
         var password = jQuery('#edit_dealer_contact_password' ).val();
         
         var contact_id = jQuery('#contact_person_id' ).val();
-              
+         
+        
+        var name = /^[A-Za-z]+$/;
         if(jQuery('#edit_dealer_contact_fname' ).val().trim()=="" ){
-            jQuery('#edit_dealer_contact_fname' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#edit_dealer_contact_fname' ).css({'border':'1px solid #ff0000'});
             jQuery( '#edit_dealer_contact_fname').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else if(!(fname.match(name))){
+            
+            jQuery('#edit_dealer_contact_fname' ).css({'border':'1px solid #ff0000'});
+            jQuery('#edit_dealer_contact_fname' ).after( "<span class='error'>Please enter valid name.</span>" );
             validflag = false;
         }else{
             jQuery('#edit_dealer_contact_fname').css({'color':'#333333'});
         }
-        
+
         if(jQuery('#edit_dealer_contact_lname' ).val().trim()=="" ){
-            jQuery('#edit_dealer_contact_lname' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#edit_dealer_contact_lname' ).css({'border':'1px solid #ff0000'});
             jQuery( '#edit_dealer_contact_lname').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else if(!(lname.match(name))){
+            
+            jQuery('#edit_dealer_contact_lname' ).css({'border':'1px solid #ff0000'});
+            jQuery('#edit_dealer_contact_lname' ).after( "<span class='error'>Please enter valid name.</span>" );
             validflag = false;
         }else{
             jQuery('#edit_dealer_contact_lname').css({'color':'#333333'});
-        }
+        }    
         
         //Phone
         var numbers = /^[0-9]{10}$/;
         if(jQuery('#edit_dealer_contact_phone').val().trim() == ''){
-            jQuery('#edit_dealer_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#edit_dealer_contact_phone').css({'border':'1px solid #ff0000'});
             jQuery( '#edit_dealer_contact_phone' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else if(!(jQuery('#edit_dealer_contact_phone').val().match(numbers))){
-            jQuery('#edit_dealer_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#edit_dealer_contact_phone').css({'border':'1px solid #ff0000'});
             jQuery( '#edit_dealer_contact_phone' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
             validflag = false;
         }else{
@@ -2955,18 +3403,29 @@ jQuery( document ).ready(function() {
         var password = jQuery('#edit_distributor_contact_password' ).val();
         
         var contact_id = jQuery('#contact_person_id' ).val();
-              
+        
+        var name = /^[A-Za-z]+$/;
         if(jQuery('#edit_distributor_contact_fname' ).val().trim()=="" ){
-            jQuery('#edit_distributor_contact_fname' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#edit_distributor_contact_fname' ).css({'border':'1px solid #ff0000'});
             jQuery( '#edit_distributor_contact_fname').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else if(!(fname.match(name))){
+            
+            jQuery('#edit_distributor_contact_fname' ).css({'border':'1px solid #ff0000'});
+            jQuery('#edit_distributor_contact_fname' ).after( "<span class='error'>Please enter valid name.</span>" );
             validflag = false;
         }else{
             jQuery('#edit_distributor_contact_fname').css({'color':'#333333'});
         }
         
         if(jQuery('#edit_distributor_contact_lname' ).val().trim()=="" ){
-            jQuery('#edit_distributor_contact_lname' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#edit_distributor_contact_lname' ).css({'border':'1px solid #ff0000'});
             jQuery( '#edit_distributor_contact_lname').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else if(!(fname.match(name))){
+            
+            jQuery('#edit_distributor_contact_lname' ).css({'border':'1px solid #ff0000'});
+            jQuery('#edit_distributor_contact_lname' ).after( "<span class='error'>Please enter valid name.</span>" );
             validflag = false;
         }else{
             jQuery('#edit_distributor_contact_lname').css({'color':'#333333'});
@@ -2975,11 +3434,11 @@ jQuery( document ).ready(function() {
         //Phone
         var numbers = /^[0-9]{10}$/;
         if(jQuery('#edit_distributor_contact_phone').val().trim() == ''){
-            jQuery('#edit_distributor_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#edit_distributor_contact_phone').css({'border':'1px solid #ff0000'});
             jQuery( '#edit_distributor_contact_phone' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else if(!(jQuery('#edit_distributor_contact_phone').val().match(numbers))){
-            jQuery('#edit_distributor_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#edit_distributor_contact_phone').css({'border':'1px solid #ff0000'});
             jQuery( '#edit_distributor_contact_phone' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
             validflag = false;
         }else{
@@ -3027,18 +3486,29 @@ jQuery( document ).ready(function() {
         var email = jQuery('#pmsafe_distributor_contact_email' ).val();
         var password = jQuery('#pmsafe_distributor_contact_password' ).val();
         var distributor_id = jQuery('#distributor_id' ).val();
-              
+        
+        var name = /^[A-Za-z]+$/;
         if(jQuery('#pmsafe_distributor_contact_fname' ).val().trim()=="" ){
-            jQuery('#pmsafe_distributor_contact_fname' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_distributor_contact_fname' ).css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_distributor_contact_fname').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else if(!(fname.match(name))){
+            
+            jQuery('#pmsafe_distributor_contact_fname' ).css({'border':'1px solid #ff0000'});
+            jQuery('#pmsafe_distributor_contact_fname' ).after( "<span class='error'>Please enter valid name.</span>" );
             validflag = false;
         }else{
             jQuery('#pmsafe_distributor_contact_fname').css({'color':'#333333'});
         }
         
         if(jQuery('#pmsafe_distributor_contact_lname' ).val().trim()=="" ){
-            jQuery('#pmsafe_distributor_contact_lname' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_distributor_contact_lname' ).css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_distributor_contact_lname').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else if(!(lname.match(name))){
+            
+            jQuery('#pmsafe_distributor_contact_lname' ).css({'border':'1px solid #ff0000'});
+            jQuery('#pmsafe_distributor_contact_lname' ).after( "<span class='error'>Please enter valid name.</span>" );
             validflag = false;
         }else{
             jQuery('#pmsafe_distributor_contact_lname').css({'color':'#333333'});
@@ -3047,27 +3517,38 @@ jQuery( document ).ready(function() {
         //Phone
         var numbers = /^[0-9]{10}$/;
         if(jQuery('#pmsafe_distributor_contact_phone').val().trim() == ''){
-            jQuery('#pmsafe_distributor_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_distributor_contact_phone').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_distributor_contact_phone' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else if(!(jQuery('#pmsafe_distributor_contact_phone').val().match(numbers))){
-            jQuery('#pmsafe_distributor_contact_phone').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_distributor_contact_phone').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_distributor_contact_phone' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
             validflag = false;
         }else{
             jQuery('#pmsafe_distributor_contact_phone').css({'border-color':'#cccccc'});
         }
-        
-        if(jQuery('#pmsafe_distributor_contact_email' ).val().trim()=="" ){
-            jQuery('#pmsafe_distributor_contact_email' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#pmsafe_distributor_contact_email').after( "<span class='error'>This field is required.</span>" );
+
+        //Email     
+        if(jQuery('#pmsafe_distributor_contact_email').val().trim() == ''){
+            jQuery('#pmsafe_distributor_contact_email').css({'border':'1px solid #ff0000'});
+            jQuery( '#pmsafe_distributor_contact_email' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
-            jQuery('#pmsafe_distributor_contact_email').css({'color':'#333333'});
+            if(jQuery('#pmsafe_distributor_contact_email').val()){
+                var email=jQuery("#pmsafe_distributor_contact_email").val();
+                if(!(email.match( /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i) )){
+                    jQuery('#pmsafe_distributor_contact_email').css({'border':'1px solid #ff0000'});
+                    jQuery( '#pmsafe_distributor_contact_email' ).after( "<span class='error'>Please enter valid email address.</span>" );
+                    validflag = false;
+                }else{
+                    jQuery('#pmsafe_distributor_contact_email').css({'color':'#333333'});
+                }
+            }
         }
         
+        
         if(jQuery('#pmsafe_distributor_contact_password' ).val().trim()=="" ){
-            jQuery('#pmsafe_distributor_contact_password' ).css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery('#pmsafe_distributor_contact_password' ).css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_distributor_contact_password').after( "<span class='error'>This field is required.</span>" );
             validflag = false;
         }else{
@@ -3120,6 +3601,5 @@ jQuery( document ).ready(function() {
     } );
     
     
-
 });// ready
 

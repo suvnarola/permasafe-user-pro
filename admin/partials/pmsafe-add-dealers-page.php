@@ -68,31 +68,31 @@
 			echo '</div>'; 
 
 			echo '<div id="fname_divgroup">';
-				echo '<div id="fname_div1">';
+				echo '<div id="fname_div1" class="is-validate">';
 					echo '<h3 style="color:#0065a7">Contact Person\'s Information:</h3>';
 					echo '<div class="nisl-wrap">';
  				    echo '<label><strong>First Name:</strong></label>';
-				    echo '<input type="text" id="pmsafe_dealer_contact_fname1" name="pmsafe_dealer_contact_fname[]" value="" class="widefat" />';
+				    echo '<input type="text" id="pmsafe_dealer_contact_fname1" name="pmsafe_dealer_contact_fname[]" value="" class="widefat check-fname" />';
 				    echo '</div>';
 
 				    echo '<div class="nisl-wrap">';
 				    echo '<label><strong>Last Name:</strong></label>';
-				    echo '<input type="text" id="pmsafe_dealer_contact_lname1" name="pmsafe_dealer_contact_lname[]" value="" class="widefat" />';
+				    echo '<input type="text" id="pmsafe_dealer_contact_lname1" name="pmsafe_dealer_contact_lname[]" value="" class="widefat check-lname" />';
 				    echo '</div>';
 
 				    echo '<div class="nisl-wrap">';
 				    echo '<label><strong>Phone Number:</strong></label>';
-				    echo '<input type="text" id="pmsafe_dealer_contact_phone1" name="pmsafe_dealer_contact_phone[]" value="" class="widefat" />';
+				    echo '<input type="text" id="pmsafe_dealer_contact_phone1" name="pmsafe_dealer_contact_phone[]" value="" class="widefat check-phone" />';
 				    echo '</div>';
 
 				    echo '<div class="nisl-wrap">';
 				    echo '<label><strong>Email:</strong></label>';
-				    echo '<input type="email" id="pmsafe_dealer_contact_email1" name="pmsafe_dealer_contact_email[]" value="" class="widefat check-mail" style="width:35%;"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;"> (This will be the Username for this person to Login)</span>';
+				    echo '<input type="email" id="pmsafe_dealer_contact_email1" name="pmsafe_dealer_contact_email[]" value="" class="widefat check-mail " style="width:35%;"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;"> (This will be the Username for this person to Login)</span>';
 					echo '</div>';
 					
 					echo '<div class="nisl-wrap">';
 						echo '<label><strong>Password:</strong></label>';
-						echo '<input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat" style="width:35%"/>';
+						echo '<input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat check-password" style="width:35%"/>';
 						echo '<input type="button" value="Generate Password" class="generate_dealer_contact_password" />';
 					
 					echo '</div>';

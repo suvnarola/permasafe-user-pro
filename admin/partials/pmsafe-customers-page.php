@@ -159,7 +159,7 @@ $dealer_name = get_user_meta( $dealer_id, 'dealer_name', true);
     );
     
     echo '<div class="top-head">';
-    echo '<h1>'.$dealer_name.' ( '.$user->user_login.' )\'s '.'Registered Customers</h1>';
+    echo '<h1 class="top-heading">'.$dealer_name.' ( '.$user->user_login.' )\'s '.'Registered Customers</h1>';
     echo $actions["search_customer_details"];
     echo '</div>';
     // $args = array(

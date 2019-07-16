@@ -24,7 +24,7 @@ if($action == 'view'){
 
     $actions['addcode'] = sprintf(
         '<a href="%1$s">%2$s</a>',
-        esc_url( wp_nonce_url( add_query_arg( $add_code_query_args, 'post-new.php' ), 'addcode_' . $dealer_id ) ),
+        esc_url( add_query_arg( $add_code_query_args, 'post-new.php' ), 'addcode_' . $dealer_id  ),
         _x( 'Add Member Codes', 'List table row action', 'wp-list-table-example' )
     );
 
@@ -38,7 +38,7 @@ if($action == 'view'){
 
     $actions['edit'] = sprintf(
         '<a href="%1$s">%2$s</a>',
-        esc_url( wp_nonce_url( add_query_arg( $edit_customer_query_args, 'admin.php' ), 'editdealer_' . $dealer_id ) ),
+        esc_url(  add_query_arg( $edit_customer_query_args, 'admin.php' ), 'editdealer_' . $dealer_id  ),
         _x( 'Edit Dealer', 'List table row action', 'wp-list-table-example' )
     );
 
@@ -50,7 +50,7 @@ if($action == 'view'){
 
     $actions['view_customer'] = sprintf(
         '<a href="%1$s">%2$s</a>',
-        esc_url( wp_nonce_url( add_query_arg( $view_customer_query_args, 'admin.php' ), 'viewcustomer_' . $dealer_id ) ),
+        esc_url( add_query_arg( $view_customer_query_args, 'admin.php' ), 'viewcustomer_' . $dealer_id  ),
         _x( 'View Customers', 'List table row action', 'wp-list-table-example' )
     );
 
@@ -126,7 +126,7 @@ if($action == 'view'){
 
         $actions['view'] = sprintf(
             '<a href="%1$s">%2$s</a>',
-            esc_url( wp_nonce_url( add_query_arg( $view_query_args, 'admin.php' ), 'viewdistributor_' . $distributor_id ) ),
+            esc_url( add_query_arg( $view_query_args, 'admin.php' ), 'viewdistributor_' . $distributor_id  ),
             _x( $distributor_name, 'List table row action', 'wp-list-table-example' )
         );
 	        echo '<tr>';
@@ -235,7 +235,7 @@ if($action == 'view'){
 
 				    echo '<div class="nisl-wrap">';
                         echo '<label><strong>Email:</strong></label>';
-                        echo '<input type="email" id="edit_dealer_contact_email" name="edit_dealer_contact_email" value="" class="widefat" disabled/>';
+                        echo '<input type="email" id="edit_dealer_contact_email" name="edit_dealer_contact_email" value="" class="widefat" readonly="readonly"/>';
 					echo '</div>';
 					
 					echo '<div class="nisl-wrap">';
@@ -410,7 +410,7 @@ if($action == 'view'){
             echo '<input type="hidden" id="pmsafe_dealer_code" name="pmsafe_dealer_code" value="'.$user->user_login.'" class="widefat" />';
             echo '<div id="name_div">';
                 echo '<label><strong>Dealer Name</strong></label>';
-                echo '<input type="text" id="pmsafe_dealer_name" name="pmsafe_dealer_name" value="'.$name.'" class="widefat" />';
+                echo '<input type="text" id="pmsafe_dealer_name" name="pmsafe_dealer_name" value="'.$name.'" class="widefats" />';
             echo '</div>';
 
             echo '<div id="email_div">';
@@ -481,27 +481,27 @@ if($action == 'view'){
                             echo '<div class="nisl-wrap">';
                             echo '<label><strong>First Name:</strong></label>';
                             echo '<input type="hidden" id="pmsafe_dealer_contact_id'.$number.'" name="pmsafe_dealer_contact_id[]" value="'.$user_id.'" class="widefat" />';
-                            echo '<input type="text" id="pmsafe_dealer_contact_fname'.$number.'" name="pmsafe_dealer_contact_fname[]" value="'.$fname.'" class="widefat" />';
+                            echo '<input type="text" id="pmsafe_dealer_contact_fname'.$number.'" name="pmsafe_dealer_contact_fname[]" value="'.$fname.'" class="widefat check-fname" />';
                             echo '</div>';
 
                             echo '<div class="nisl-wrap">';
                             echo '<label><strong>Last Name:</strong></label>';
-                            echo '<input type="text" id="pmsafe_dealer_contact_lname'.$number.'" name="pmsafe_dealer_contact_lname[]" value="'.$lname.'" class="widefat" />';
+                            echo '<input type="text" id="pmsafe_dealer_contact_lname'.$number.'" name="pmsafe_dealer_contact_lname[]" value="'.$lname.'" class="widefat check-lname" />';
                             echo '</div>';
 
                             echo '<div class="nisl-wrap">';
                             echo '<label><strong>Phone Number:</strong></label>';
-                            echo '<input type="text" id="pmsafe_dealer_contact_phone'.$number.'" name="pmsafe_dealer_contact_phone[]" value="'.$phone.'" class="widefat" />';
+                            echo '<input type="text" id="pmsafe_dealer_contact_phone'.$number.'" name="pmsafe_dealer_contact_phone[]" value="'.$phone.'" class="widefat check-phone" />';
                             echo '</div>';
 
                             echo '<div class="nisl-wrap">';
                             echo '<label><strong>Email:</strong></label>';
-                            echo '<input type="email" id="pmsafe_dealer_contact_email'.$number.'" name="pmsafe_dealer_contact_email[]" value="'.$value->user_email.'" class="widefat check-mail" style="width:35%;"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;"> (This will be the Username for this person to Login)</span>';
+                            echo '<input type="email" id="pmsafe_dealer_contact_email'.$number.'" name="pmsafe_dealer_contact_email[]" value="'.$value->user_email.'" class="widefat" style="width:35%;" readonly="readonly"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;"> (This will be the Username for this person to Login)</span>';
                             echo '</div>';
 
                             echo '<div class="nisl-wrap">';
                                 echo '<label><strong>Password:</strong></label>';
-                                echo '<input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat" style="width:35%"/>';
+                                echo '<input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat check-password" style="width:35%"/>';
                                 echo '<input type="button" value="Generate Password" class="generate_dealer_contact_password" />';
                               
                             echo '</div>';
@@ -512,21 +512,21 @@ if($action == 'view'){
                 echo '</div>';   
             }else{
                 echo '<div id="fname_divgroup">';
-                echo '<div id="fname_div1">';
+                echo '<div id="fname_div1" class="is-validate">';
                     echo '<h3 style="color:#0065a7">Contact Person\'s Information:</h3>';
                     echo '<div class="nisl-wrap">';
                     echo '<label><strong>First Name:</strong></label>';
-                    echo '<input type="text" id="pmsafe_dealer_contact_fname1" name="pmsafe_dealer_contact_fname[]" value="" class="widefat" />';
+                    echo '<input type="text" id="pmsafe_dealer_contact_fname1" name="pmsafe_dealer_contact_fname[]" value="" class="widefat check-fname" />';
                     echo '</div>';
 
                     echo '<div class="nisl-wrap">';
                     echo '<label><strong>Last Name:</strong></label>';
-                    echo '<input type="text" id="pmsafe_dealer_contact_lname1" name="pmsafe_dealer_contact_lname[]" value="" class="widefat" />';
+                    echo '<input type="text" id="pmsafe_dealer_contact_lname1" name="pmsafe_dealer_contact_lname[]" value="" class="widefat check-lname" />';
                     echo '</div>';
 
                     echo '<div class="nisl-wrap">';
                     echo '<label><strong>Phone Number:</strong></label>';
-                    echo '<input type="text" id="pmsafe_dealer_contact_phone1" name="pmsafe_dealer_contact_phone[]" value="" class="widefat" />';
+                    echo '<input type="text" id="pmsafe_dealer_contact_phone1" name="pmsafe_dealer_contact_phone[]" value="" class="widefat check-phone" />';
                     echo '</div>';
 
                     echo '<div class="nisl-wrap">';
@@ -536,7 +536,7 @@ if($action == 'view'){
                     
                     echo '<div class="nisl-wrap">';
                     echo '<label><strong>Password</strong></label>';
-                    echo '<input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat" style="width:35%"/>';
+                    echo '<input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat check-password" style="width:35%"/>';
                     echo '<input type="button" value="Change Password" class="generate_dealer_contact_password" />';
                     echo '</div>';
                 echo '</div>';
@@ -578,7 +578,7 @@ else if($action == 'delete_customer_details'){
 
     $login = $_GET['dealer_login'];
     
-    $html .= '<h1>Search Customer Information</h1>'; 
+    $html .= '<h1 class="top-heading">Search Customer Information</h1>'; 
     $html .= '<div class="reports-wrap">';	
     
     // member code
@@ -605,7 +605,7 @@ else if($action == 'delete_customer_details'){
     // Last Name
     $html .= '<div class="reports-wrap-inner">';
         $html .= '<div class="label-input">';	    	
-            $html .= '<label>Customer last Name : </label>';
+            $html .= '<label>Customer Last Name : </label>';
         $html .= '</div>';	    	
         $html .= '<div class="input-div">';	    	
             $html .= '<input type="text" name="last_name" id="last_name"/>';
@@ -675,7 +675,7 @@ else if($action == 'delete_customer_details'){
     // Vehicle year
     $html .= '<div class="reports-wrap-inner">';
         $html .= '<div class="label-input">';	    	
-            $html .= '<label>Vehicle year : </label>';
+            $html .= '<label>Vehicle Year : </label>';
         $html .= '</div>';	    	
         $html .= '<div class="input-div">';	    	
             $html .= '<input type="text" name="vehicle_year" id="vehicle_year"/>';
@@ -761,7 +761,7 @@ if($action == 'viewdealers'){
 
             $actions['addcode'] = sprintf(
                 '<a href="%1$s" title="Add Batch Code"><i class="fa fa-plus"></i></a>',
-                esc_url( wp_nonce_url( add_query_arg( $add_code_query_args, 'post-new.php' ), 'addcode_' . $user_id ) ),
+                esc_url(  add_query_arg( $add_code_query_args, 'post-new.php' ), 'addcode_' . $user_id  ),
                 _x( 'Add Batch Code', 'List table row action', 'wp-list-table-example' )
             );
 
@@ -775,7 +775,7 @@ if($action == 'viewdealers'){
 
             $actions['view_customer'] = sprintf(
                 '<a href="%1$s" title="View Registered Customers"><i class="fa fa-users"></i></a>',
-                esc_url( wp_nonce_url( add_query_arg( $view_customer_query_args, 'admin.php' ), 'viewcustomer_' . $user_id ) ),
+                esc_url( add_query_arg( $view_customer_query_args, 'admin.php' ), 'viewcustomer_' . $user_id  ),
                 _x( 'View Registered Customers', 'List table row action', 'wp-list-table-example' )
             );
             
@@ -793,7 +793,7 @@ if($action == 'viewdealers'){
                 'dealer_number' => $dealername->user_login,
                 'dealer_name' => $name,
                 'distributor_name' => $distributor_name,
-                'create_date' => $registered_date,
+                'created_date' => $registered_date,
                 'add_code' => $actions['addcode'],
                 'view_code' => '<a href="'.$view_batch_code_url.'" title="View Batch Codes"><i class="fa fa-eye"></i></a>',
                 'view_customers' => $actions['view_customer']
@@ -813,7 +813,7 @@ if($action == 'viewdealers'){
 
         $actions['addcode'] = sprintf(
             '<a href="%1$s" title="Add Batch Code"><i class="fa fa-plus"></i></a>',
-            esc_url( wp_nonce_url( add_query_arg( $add_code_query_args, 'post-new.php' ), 'addcode_' . $user_id ) ),
+            esc_url( add_query_arg( $add_code_query_args, 'post-new.php' ), 'addcode_' . $user_id  ),
             _x( 'Add Batch Code', 'List table row action', 'wp-list-table-example' )
         );
 
@@ -827,7 +827,7 @@ if($action == 'viewdealers'){
 
         $actions['view_customer'] = sprintf(
             '<a href="%1$s" title="View Registered Customers"><i class="fa fa-users"></i></a>',
-            esc_url( wp_nonce_url( add_query_arg( $view_customer_query_args, 'admin.php' ), 'viewcustomer_' . $user_id ) ),
+            esc_url( add_query_arg( $view_customer_query_args, 'admin.php' ), 'viewcustomer_' . $user_id  ),
             _x( 'View Registered Customers', 'List table row action', 'wp-list-table-example' )
         );
         
@@ -898,7 +898,7 @@ foreach ($dealer_array as $key => $value) {
 
     $actions['view'] = sprintf(
         '<a href="%1$s">%2$s</a>',
-        esc_url( wp_nonce_url( add_query_arg( $view_query_args, 'admin.php' ), 'viewdealer_' . $value['dealer_id'] ) ),
+        esc_url( add_query_arg( $view_query_args, 'admin.php' ), 'viewdealer_' . $value['dealer_id']  ),
         _x( 'View', 'List table row action', 'wp-list-table-example' )
     );
 
@@ -911,7 +911,7 @@ foreach ($dealer_array as $key => $value) {
 
     $actions['edit'] = sprintf(
         '<a href="%1$s">%2$s</a>',
-        esc_url( wp_nonce_url( add_query_arg( $edit_query_args, 'admin.php' ), 'editdealer_' . $value['dealer_id'] ) ),
+        esc_url( add_query_arg( $edit_query_args, 'admin.php' ), 'editdealer_' . $value['dealer_id'] ),
         _x( 'Edit', 'List table row action', 'wp-list-table-example' )
     );
 
@@ -924,7 +924,7 @@ foreach ($dealer_array as $key => $value) {
 
     $actions['delete'] = sprintf(
         '<a href="%1$s">%2$s</a>',
-        esc_url( wp_nonce_url( add_query_arg( $delete_query_args, 'admin.php' ), 'deletedealer_' . $value['dealer_id'] ) ),
+        esc_url( add_query_arg( $delete_query_args, 'admin.php' ), 'deletedealer_' . $value['dealer_id']  ),
         _x( 'Delete', 'List table row action', 'wp-list-table-example' )
     );
 

@@ -429,6 +429,18 @@ class Permasafe_User_Pro_Admin {
 					update_user_meta( $contact_id, 'distributor_contact_lname', $distributor_contact_lname[ $key ] );	
 					update_user_meta( $contact_id, 'distributor_contact_phone', $distributor_contact_phone[ $key ] );	
 					update_user_meta( $contact_id, 'contact_distributor_id', $user_id );	
+
+					$to = $distributor_contact_email[ $key ];
+					$subject = 'PermaSafe: Your User Account Registration Information';
+					$message = 'Here is your Username : <b>'.$distributor_contact_email[ $key ].'</b><br/><br/>';
+					$message .= 'Here is your temporary Password : <b>'.$distributor_contact_password[ $key ].'</b><br/><br/>';
+					$message .= 'To access your PermaSafe account use this below link. <br/><br/>';
+					$message .= '<a href="'.get_site_url().'/wp-login.php" target="_blank">'.Login.'</a><br/><br/>';
+					$headers = array('Content-Type: text/html; charset=UTF-8');
+					
+					$mail = wp_mail( $to, $subject, $message, $headers );
+					
+					sleep(1);
 				}
 				
 			}
@@ -503,28 +515,40 @@ class Permasafe_User_Pro_Admin {
 							$pass = $distributor_contact_password[$key];
 							wp_set_password( $pass, $contact_id );
 							
+							$to = $distributor_contact_email[ $key ];
+							$subject = 'PermaSafe: Your User Account has been updated';
+							$message = 'Here is your Username : <b>'.$distributor_contact_email[ $key ].'</b><br/><br/>';
+							$message .= 'Here is your temporary Password : <b>'.$distributor_contact_password[ $key ].'</b><br/><br/>';
+							$message .= 'To access your PermaSafe account use this below link. <br/><br/>';
+							$message .= '<a href="'.get_site_url().'/wp-login.php" target="_blank">'.Login.'</a><br/><br/>';
+							$headers = array('Content-Type: text/html; charset=UTF-8');
+							
+							$mail = wp_mail( $to, $subject, $message, $headers );
+							
+							
 						}
 					}else{
 						$contact_id = wp_create_user( $distributor_contact_email[ $key ], $distributor_contact_password[ $key ], $distributor_contact_email[ $key ] );
 						$set_user_role = new WP_User( $contact_id );
-						
-						// $userdata = array(
-						// 	'ID' => $contact_id, // ID of existing user
-						// 	'user_login' =>  $distributor_contact_email[$key],
-						// 	'user_email' =>  $distributor_contact_email[$key],
-						// 	'user_pass'  =>  $distributor_contact_password[$key] // no plain password here!
-						// ); 
-						// pr($userdata);
-						// $contact_id = wp_insert_user( $userdata );
-						// echo $contact_id;
-						// $set_user_role = new WP_User( $contact_id );
 						$set_user_role->set_role( 'distributor-user' );
+
+						$to = $distributor_contact_email[ $key ];
+						$subject = 'PermaSafe: Your User Account Registration Information';
+						$message = 'Here is your Username : <b>'.$distributor_contact_email[ $key ].'</b><br/><br/>';
+						$message .= 'Here is your temporary Password : <b>'.$distributor_contact_password[ $key ].'</b><br/><br/>';
+						$message .= 'To access your PermaSafe account use this below link. <br/><br/>';
+						$message .= '<a href="'.get_site_url().'/wp-login.php" target="_blank">'.Login.'</a><br/><br/>';
+						$headers = array('Content-Type: text/html; charset=UTF-8');
+						
+						$mail = wp_mail( $to, $subject, $message, $headers );
 					}
 					
 					update_user_meta( $contact_id, 'distributor_contact_fname', $name );	
 					update_user_meta( $contact_id, 'distributor_contact_lname', $distributor_contact_lname[ $key ] );	
 					update_user_meta( $contact_id, 'distributor_contact_phone', $distributor_contact_phone[ $key ] );	
 					update_user_meta( $contact_id, 'contact_distributor_id', $user_id );	
+
+					sleep(1);
 				}
 				// update_user_meta( $user_id, 'distributor_contact_info', $contact_info );
 			}
@@ -546,8 +570,15 @@ class Permasafe_User_Pro_Admin {
 
         //delete distributor
         public function pmsafe_delete_distributor_form_function(){
+			global $wpdb;
         	$user_id = $_POST['pmsafe_distributor_id'];
-        	wp_delete_user( $user_id );
+			wp_delete_user( $user_id );
+			$contact_info = $wpdb->get_results('SELECT wum.user_id,wu.user_email FROM wp_users wu, wp_usermeta wum WHERE wu.ID = wum.user_id AND wum.meta_key = "contact_distributor_id" AND wum.meta_value ='.$user_id);
+        	foreach ($contact_info as $key => $value) {
+				$contact_id = $value->user_id;
+				
+				wp_delete_user( $contact_id );
+			}
         	delete_user_meta($user_id, 'distributor_name');
         	delete_user_meta($user_id, 'distributor_store_address');
         	delete_user_meta($user_id, 'distributor_phone_number');
@@ -588,10 +619,20 @@ class Permasafe_User_Pro_Admin {
 			update_user_meta( $contact_id, 'distributor_contact_phone', $phone );	
 			update_user_meta( $contact_id, 'contact_distributor_id', $distributor_id );
 
+			$to = $email;
+			$subject = 'PermaSafe: Your User Account Registration Information';
+			$message = 'Here is your Username : <b>'.$email.'</b><br/><br/>';
+			$message .= 'Here is your temporary Password : <b>'.$password.'</b><br/><br/>';
+			$message .= 'To access your PermaSafe account use this below link. <br/><br/>';
+			$message .= '<a href="'.get_site_url().'/wp-login.php" target="_blank">'.Login.'</a><br/><br/>';
+			$headers = array('Content-Type: text/html; charset=UTF-8');
+			
+			$mail = wp_mail( $to, $subject, $message, $headers );
+
 			die;
 		}
 
-        //add dealer
+        // add dealer
         public function pmsafe_register_dealer_form_function(){
         	$user_prefix = 'S';
 	       	$dealers = get_users( 'role=contributor&orderby=ID&order=DESC' );
@@ -625,14 +666,12 @@ class Permasafe_User_Pro_Admin {
 			$dealer_contact_phone = $_POST['pmsafe_dealer_contact_phone'];
 			$dealer_contact_email = $_POST['pmsafe_dealer_contact_email'];
 			$dealer_contact_password = $_POST['pmsafe_dealer_contact_password'];
-
 			
-			// echo 'test'.$user_id;die;
 			$user_id = wp_create_user($dealers_code,$dealer_password,$dealer_email);
 			$set_user_role = new WP_User( $user_id );
 			$set_user_role->set_role( 'contributor' );
 			if($dealer_contact_fname != ''){
-				
+
 				foreach ( $dealer_contact_fname as $key=>$name ) {
 					
 					$contact_id = wp_create_user( $dealer_contact_email[ $key ], $dealer_contact_password[ $key ], $dealer_contact_email[ $key ] );
@@ -642,13 +681,24 @@ class Permasafe_User_Pro_Admin {
 					update_user_meta( $contact_id, 'contact_lname', $dealer_contact_lname[ $key ] );	
 					update_user_meta( $contact_id, 'contact_phone', $dealer_contact_phone[ $key ] );	
 					update_user_meta( $contact_id, 'contact_dealer_id', $user_id );	
-					// $dealer_contact_info[] = array( 'fname' => $name, 'lname' => $dealer_contact_lname[ $key ], 'phone' => $dealer_contact_phone[ $key ], 'email' => $dealer_contact_email[ $key ] );	
+					
+					$to = $dealer_contact_email[ $key ];
+					$subject = 'PermaSafe: Your User Account Registration Information';
+					$message = 'Here is your Username : <b>'.$dealer_contact_email[ $key ].'</b><br/><br/>';
+					$message .= 'Here is your temporary Password : <b>'.$dealer_contact_password[ $key ].'</b><br/><br/>';
+					$message .= 'To access your PermaSafe account use this below link. <br/><br/>';
+					$message .= '<a href="'.get_site_url().'/wp-login.php" target="_blank">'.Login.'</a><br/><br/>';
+					$headers = array('Content-Type: text/html; charset=UTF-8');
+					
+					$mail = wp_mail( $to, $subject, $message, $headers );
+					
+					sleep(1);
+					
 				}
 				
 			}
 			
-			// $user_role[] = 'contributor';
-			// update_user_meta( $user_id, 'wp_capabilities', serialize($user_role) );
+			
 			update_user_meta( $user_id, 'dealer_name', $dealer_name );
 			update_user_meta( $user_id, 'dealer_store_address', $dealer_store_address );
 			update_user_meta( $user_id, 'dealer_phone_number', $dealer_phone_number );
@@ -677,6 +727,16 @@ class Permasafe_User_Pro_Admin {
 			update_user_meta( $contact_id, 'contact_lname', $lname );	
 			update_user_meta( $contact_id, 'contact_phone', $phone );	
 			update_user_meta( $contact_id, 'contact_dealer_id', $dealer_id );
+
+			$to = $email;
+			$subject = 'PermaSafe: Your User Account Registration Information';
+			$message = 'Here is your Username : <b>'.$email.'</b><br/><br/>';
+			$message .= 'Here is your temporary Password : <b>'.$password.'</b><br/><br/>';
+			$message .= 'To access your PermaSafe account use this below link. <br/><br/>';
+			$message .= '<a href="'.get_site_url().'/wp-login.php" target="_blank">'.Login.'</a><br/><br/>';
+			$headers = array('Content-Type: text/html; charset=UTF-8');
+			
+			$mail = wp_mail( $to, $subject, $message, $headers );
 
 			die;
 		}
@@ -720,16 +780,27 @@ class Permasafe_User_Pro_Admin {
 			$contact_id = $_POST['contact_id'];
 			
 			$contact_id = wp_update_user( array( 'ID' => $contact_id, 'user_email' => $email ) );
+			
 			if($password != ''){
 
 				wp_set_password( $password, $contact_id );
 				
+			
+				$to = $email;
+				$subject = 'PermaSafe: Your User Account has been updated';
+				$message = 'Here is your Username : <b>'.$email.'</b><br/><br/>';
+				$message .= 'Here is your temporary Password : <b>'.$password.'</b><br/><br/>';
+				$message .= 'To access your PermaSafe account use this below link. <br/><br/>';
+				$message .= '<a href="'.get_site_url().'/wp-login.php" target="_blank">'.Login.'</a><br/><br/>';
+				$headers = array('Content-Type: text/html; charset=UTF-8');
+				
+				$mail = wp_mail( $to, $subject, $message, $headers );
 			}
+			
 			update_user_meta( $contact_id, 'contact_fname', $fname );	
 			update_user_meta( $contact_id, 'contact_lname', $lname );	
 			update_user_meta( $contact_id, 'contact_phone', $phone );	
 			
-
 			die;
 		}
 
@@ -747,6 +818,15 @@ class Permasafe_User_Pro_Admin {
 			if($password != ''){
 
 				wp_set_password( $password, $contact_id );
+				$to = $email;
+				$subject = 'PermaSafe: Your User Account has been updated';
+				$message = 'Here is your Username : <b>'.$email.'</b><br/><br/>';
+				$message .= 'Here is your temporary Password : <b>'.$password.'</b><br/><br/>';
+				$message .= 'To access your PermaSafe account use this below link. <br/><br/>';
+				$message .= '<a href="'.get_site_url().'/wp-login.php" target="_blank">'.Login.'</a><br/><br/>';
+				$headers = array('Content-Type: text/html; charset=UTF-8');
+				
+				$mail = wp_mail( $to, $subject, $message, $headers );
 				
 			}
 			update_user_meta( $contact_id, 'distributor_contact_fname', $fname );	
@@ -780,7 +860,6 @@ class Permasafe_User_Pro_Admin {
 			$dealer_contact_password = $_POST['pmsafe_dealer_contact_password'];
 
 			
-			
 			$user_id = wp_update_user( array( 'ID' => $user_id, 'user_email' => $edit_email ) );
 			// pr($dealer_contact_password);
 			if($dealer_contact_fname != ''){
@@ -794,6 +873,18 @@ class Permasafe_User_Pro_Admin {
 						if($dealer_contact_password[$key] != ''){
 							$pass = $dealer_contact_password[$key];
 							wp_set_password( $pass, $contact_id );
+
+							$to = $dealer_contact_email[ $key ];
+							$subject = 'PermaSafe: Your User Account has been updated';
+							$message = 'Here is your Username : <b>'.$dealer_contact_email[ $key ].'</b><br/><br/>';
+							$message .= 'Here is your temporary Password : <b>'.$dealer_contact_password[ $key ].'</b><br/><br/>';
+							$message .= 'To access your PermaSafe account use this below link. <br/><br/>';
+							$message .= '<a href="'.get_site_url().'/wp-login.php" target="_blank">'.Login.'</a><br/><br/>';
+							$headers = array('Content-Type: text/html; charset=UTF-8');
+							
+							$mail = wp_mail( $to, $subject, $message, $headers );
+							
+							
 							
 						}
 					}else{
@@ -801,6 +892,19 @@ class Permasafe_User_Pro_Admin {
 						$contact_id = wp_create_user( $dealer_contact_email[ $key ], $dealer_contact_password[ $key ], $dealer_contact_email[ $key ] );
 						$set_user_role = new WP_User( $contact_id );
 						$set_user_role->set_role( 'dealer-user' );
+
+						$to = $dealer_contact_email[ $key ];
+						$subject = 'PermaSafe: Your User Account Registration Information';
+						$message = 'Here is your Username : <b>'.$dealer_contact_email[ $key ].'</b><br/><br/>';
+						$message .= 'Here is your temporary Password : <b>'.$dealer_contact_password[ $key ].'</b><br/><br/>';
+						$message .= 'To access your PermaSafe account use this below link. <br/><br/>';
+						$message .= '<a href="'.get_site_url().'/wp-login.php" target="_blank">'.Login.'</a><br/><br/>';
+						$headers = array('Content-Type: text/html; charset=UTF-8');
+						
+						$mail = wp_mail( $to, $subject, $message, $headers );
+					
+					
+
 					}
 							
 						
@@ -808,9 +912,9 @@ class Permasafe_User_Pro_Admin {
 						update_user_meta( $contact_id, 'contact_lname', $dealer_contact_lname[ $key ] );	
 						update_user_meta( $contact_id, 'contact_phone', $dealer_contact_phone[ $key ] );	
 						update_user_meta( $contact_id, 'contact_dealer_id', $user_id );
-					
+						
+						sleep(1);
 
-					// $dealer_contact_info[] = array( 'fname' => $name, 'lname' => $dealer_contact_lname[ $key ], 'phone' => $dealer_contact_phone[ $key ], 'email' => $dealer_contact_email[ $key ] );	
 				}
 			}
 			
@@ -3448,6 +3552,8 @@ class Permasafe_User_Pro_Admin {
 		update_user_meta($distributor_id,'pricing_package',$get_price_arr);
 		die;
 	}
+
+
 
 }
 

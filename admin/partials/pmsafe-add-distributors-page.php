@@ -43,21 +43,21 @@
 			echo '</div>'; 
 
 			echo '<div id="fname_divgroup">';
-				echo '<div id="fname_div1">';
+				echo '<div id="fname_div1" class="is-validate">';
 					echo '<h3 style="color:#0065a7">Contact Person\'s Information:</h3>';
 					echo '<div class="nisl-wrap">';
  				    echo '<label><strong>First Name:</strong></label>';
-				    echo '<input type="text" id="pmsafe_distributor_contact_fname1" name="pmsafe_distributor_contact_fname[]" value="" class="widefat" />';
+				    echo '<input type="text" id="pmsafe_distributor_contact_fname1" name="pmsafe_distributor_contact_fname[]" value="" class="widefat check-fname" />';
 				    echo '</div>';
 
 				    echo '<div class="nisl-wrap">';
 				    echo '<label><strong>Last Name:</strong></label>';
-				    echo '<input type="text" id="pmsafe_distributor_contact_lname1" name="pmsafe_distributor_contact_lname[]" value="" class="widefat" />';
+				    echo '<input type="text" id="pmsafe_distributor_contact_lname1" name="pmsafe_distributor_contact_lname[]" value="" class="widefat check-lname" />';
 				    echo '</div>';
 
 				    echo '<div class="nisl-wrap">';
 				    echo '<label><strong>Phone Number:</strong></label>';
-				    echo '<input type="text" id="pmsafe_distributor_contact_phone1" name="pmsafe_distributor_contact_phone[]" value="" class="widefat" />';
+				    echo '<input type="text" id="pmsafe_distributor_contact_phone1" name="pmsafe_distributor_contact_phone[]" value="" class="widefat check-phone" />';
 				    echo '</div>';
 
 				    echo '<div class="nisl-wrap">';
@@ -67,7 +67,7 @@
 					
 					echo '<div class="nisl-wrap">';
 						echo '<label><strong>Password:</strong></label>';
-						echo '<input type="text" rel="gp" name="pmsafe_distributor_contact_password[]" value="" class="widefat" style="width:35%"/>';
+						echo '<input type="text" rel="gp" name="pmsafe_distributor_contact_password[]" value="" class="widefat check-password" style="width:35%"/>';
 						echo '<input type="button" value="Generate Password" class="generate_distributor_contact_password" />';
 					echo '</div>';
 
