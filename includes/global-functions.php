@@ -1332,31 +1332,79 @@ function test_pdf(){
 }
 
 
-// add_action('init','fffffffff');
-function fffffffff(){
-    $password =  wp_generate_password();
-    $to = 'ka@narola.email';
-    $subject = 'Perma safe : Your password';
-    $message = 'Hi Test,<br/><br/>';
-    $message .= 'Here is your Password : '.$password.'<br/><br/>';
-    $message .= 'Thanks';
+// add_action('init','contact_user_mail');
+function contact_user_mail($to, $password, $subject){
+    
+    $to = $to;
+    $subject = $subject;
+    // $to = "ka@narola.email";
+    // $subject = "testing";
+    $message = '<div class="content" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: block; margin: 0 auto; padding: 20px;">';
+   
+        $message .= '<table class="main" width="100%" cellpadding="0" cellspacing="0" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; background-color: #fff; margin: 0; border: 2px solid #0065a7;" bgcolor="#fff">';
+            $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                $message .= '<td class="content-wrap" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 20px;" valign="top">';
+
+                    $message .= '<table width="100%" cellpadding="0" cellspacing="0" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+
+                        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;text-align: center;">';
+                            $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                            $message .= '<img src="'.plugins_url().'/permasafe-user-pro/public/images/PermaSafe-Logo-small.png">';
+                            $message .= '<hr style="border-top:1px solid #0065a7;"/>';
+                            $message .= '</td>';
+                        $message .= '</tr>';
+
+                        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                        $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 20px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                            $message .= 'Following is your account details:';
+                        $message .= '</td>';
+                        $message .= '</tr>';
+
+                        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                        $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                            $message .= 'Here is your <b>Username</b> : <span style="color:#0065a7">'.$to.'</span>';
+                        $message .= '</td>';
+                        $message .= '</tr>';
+
+                        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                        $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                            $message .= 'Here is your <b>Password</b> : <span style="color:#0065a7">'.$password.'</span>';
+                        $message .= '</td>';
+                        $message .= '</tr>';
+
+                        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                            $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                            $message .= 'To access your PermaSafe account click on below button.';
+                            $message .= '</td>';
+                        $message .= '</tr>';
+
+                        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                            $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                                $message .= '<a href="'.get_site_url().'/wp-login.php" target="_blank" class="btn-primary" itemprop="url" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #0065a7; margin: 0; border-color: #0065a7; border-style: solid; border-width: 10px 20px;">';
+                                $message .= 'Login';
+                                $message .= '</a>';
+                            $message .= '</td>';
+                        $message .= '</tr>';
+                    $message .= '</table>';
+                $message .= '</td>';
+            $message .= '</tr>';
+        $message .= '</table>';
+        // $message .= '<div class="footer" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; clear: both; color: #999; margin: 0; padding: 20px;">';
+        //     $message .= '<table width="100%" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+        //         $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+        //             $message .= '<td class="aligncenter content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 12px; vertical-align: top; color: #999; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top">';
+        //                 $message .= 'Change <a href="" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 12px; color: #999; text-decoration: underline; margin: 0;">Password</a> From Here.';
+        //             $message .= '</td>';
+        //         $message .= '</tr>';
+        //     $message .= '</table>';
+        // $message .= '</div>';
+
+    $message .= '</div>';
     $headers = array('Content-Type: text/html; charset=UTF-8');
-    $check = wp_mail( $to, $subject, $message, $headers );
-    pr($check);
-    die;
+    
+    $mail = wp_mail( $to, $subject, $message, $headers );
 }
 
-// add_action('init','gggggggggggggg');
-function gggggggggggggg(){
-     $user = get_user_by( 'login', 61 );
-     $pass = 'N%X0#(Z!skIS';
-if ( $user && wp_check_password( $pass, $user->data->user_pass, $user->ID ) ) {
-    echo "That's it";
-} else {
-    echo "Nope";
-}
-     
-}
 
 function get_user_by_dealer($dealer){
 

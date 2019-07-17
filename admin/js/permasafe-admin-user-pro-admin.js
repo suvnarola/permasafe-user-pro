@@ -1753,6 +1753,7 @@ jQuery( document ).ready(function() {
     var view_customer_table = jQuery('#view_customer_table').DataTable( {
         dom: 'Bfrtip',
         responsive: true,
+        
         "order": [[ 17, "desc" ]],
         orderCellsTop: true,
         fixedHeader: true,
@@ -3585,6 +3586,7 @@ jQuery( document ).ready(function() {
     var tbl_distributor = jQuery('#tbl_distributors').DataTable( {
         dom: 'Bfrtip',
         responsive: true,
+        "pagingType": "input",
         orderCellsTop: true,
         fixedHeader: true,
         "order": [[ 1, "asc" ]],
