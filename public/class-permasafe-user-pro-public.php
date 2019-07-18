@@ -156,12 +156,152 @@ class Permasafe_User_Pro_Public {
                 add_action( 'wp_ajax_nopriv_membership_date_filter', array($this, 'membership_date_filter' ));
 
                 add_filter( 'wp_mail_from_name', array($this,'my_mail_from_name' ));
+
+                add_filter('retrieve_password_title',array($this,'change_reset_password_subject'));
+                add_filter( 'retrieve_password_message', array( $this, 'replace_retrieve_password_message' ), 10, 4 );
+                add_filter( 'wp_mail_content_type', array( $this, 'wp_set_html_mail_content_type') );
+
+                add_filter('password_change_email', array( $this,'change_password_mail_message'), 10, 3 );
     }
     
   
 
     public function my_mail_from_name( $name ) {
         return "Permasafe";
+    }
+    
+    public function change_reset_password_subject(){
+        return 'Password Reset';
+    }
+
+    public function wp_set_html_mail_content_type() {
+        return 'text/html';
+    }
+    
+    public function change_password_mail_message( $pass_change_mail, $user, $userdata ) {
+        $message = '<div class="content" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: block; margin: 0 auto; padding: 20px;">';
+        $message .= '<table class="main" width="100%" cellpadding="0" cellspacing="0" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; background-color: #fff; margin: 0; border: 2px solid #0065a7;" bgcolor="#fff">';
+            $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                $message .= '<td class="content-wrap" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 20px;" valign="top">';
+
+                    $message .= '<table width="100%" cellpadding="0" cellspacing="0" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+
+                        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;text-align: center;">';
+                            $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                            $message .= '<img src="'.plugins_url().'/permasafe-user-pro/public/images/PermaSafe-Logo-small.png">';
+                            $message .= '<hr style="border-top:1px solid #0065a7;"/>';
+                            $message .= '</td>';
+                        $message .= '</tr>';
+
+                        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                        $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 20px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                            $message .= 'Hello!';
+                        $message .= '</td>';
+                        $message .= '</tr>';
+
+                        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                        $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                            $message .=__( 'This notice confirms that your password was changed on PermaSafe of <b>Username: </b> ###USERNAME###' );
+                        $message .= '</td>';
+                        $message .= '</tr>';
+
+                        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                        $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                            $message .= 'If you did not change your password, please contact the Site Administrator at <a href="mailto:cbbickler@gmail.com">cbbickler@gmail.com</a>';
+                        $message .= '</td>';
+                        $message .= '</tr>';
+
+                        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                            $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                            $message .= __( 'This email has been sent to ###EMAIL###' );
+                            $message .= '</td>';
+                        $message .= '</tr>';
+
+                        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                            $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                                $message .= 'Regards,<br/>All at ';
+                                $message .= '<a href="'.get_site_url().'">';
+                                $message .= 'PermaSafe';
+                                $message .= '</a>';
+                            $message .= '</td>';
+                        $message .= '</tr>';
+                    $message .= '</table>';
+                $message .= '</td>';
+            $message .= '</tr>';
+        $message .= '</table>';
+        $message .= '</div>';
+        
+        $pass_change_mail[ 'message' ] = $message;
+        $pass_change_mail[ 'subject' ] = 'Notice of Password Change';
+        return $pass_change_mail;
+      }
+    
+    public function replace_retrieve_password_message( $message, $key, $user_login, $user_data ) {
+        
+        $message = '<div class="content" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: block; margin: 0 auto; padding: 20px;">';
+   
+        $message .= '<table class="main" width="100%" cellpadding="0" cellspacing="0" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; background-color: #fff; margin: 0; border: 2px solid #0065a7;" bgcolor="#fff">';
+            $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                $message .= '<td class="content-wrap" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 20px;" valign="top">';
+
+                    $message .= '<table width="100%" cellpadding="0" cellspacing="0" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+
+                        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;text-align: center;">';
+                            $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                            $message .= '<img src="'.plugins_url().'/permasafe-user-pro/public/images/PermaSafe-Logo-small.png">';
+                            $message .= '<hr style="border-top:1px solid #0065a7;"/>';
+                            $message .= '</td>';
+                        $message .= '</tr>';
+
+                        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                        $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 20px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                            $message .= 'Hello!';
+                        $message .= '</td>';
+                        $message .= '</tr>';
+
+                        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                        $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                            $message .= sprintf( __( 'You asked us to reset your password for your account using the <b>Username</b> %s.', 'personalize-login' ),'<span style="color:#0065a7">'. $user_login.'</span>' );
+                        $message .= '</td>';
+                        $message .= '</tr>';
+
+                        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                        $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                            $message .= __( "If this was a mistake, or you didn't ask for a password reset, just ignore this email and nothing will happen.", 'personalize-login' );
+                        $message .= '</td>';
+                        $message .= '</tr>';
+
+                        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                            $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                            $message .=  __( 'To reset your password, click the following button:', 'personalize-login' );
+                            $message .= '</td>';
+                        $message .= '</tr>';
+
+                        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                            $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                                $message .= '<a href="'.site_url( "wp-login.php?action=rp&key=$key&login=" . rawurlencode( $user_login ), 'login' ).'" class="btn-primary" itemprop="url" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #0065a7; margin: 0; border-color: #0065a7; border-style: solid; border-width: 10px 20px;">';
+                                $message .= 'Reset Password';
+                                $message .= '</a>';
+                            $message .= '</td>';
+                        $message .= '</tr>';
+                    $message .= '</table>';
+                $message .= '</td>';
+            $message .= '</tr>';
+        $message .= '</table>';
+       
+            $message .= '<div class="footer" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; clear: both; color: #999; margin: 0; padding: 20px;">';
+                $message .= '<table width="100%" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                    $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                        $message .= '<td class="aligncenter content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 12px; vertical-align: top; color: #999; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top">';
+                            $message .= 'Thank you for choosing PermaSafe.';
+                        $message .= '</td>';
+                    $message .= '</tr>';
+                $message .= '</table>';
+            $message .= '</div>';
+        
+    $message .= '</div>';
+       
+        return $message;
     }
 
 
@@ -4204,16 +4344,21 @@ class Permasafe_User_Pro_Public {
                             
                             $to = $_POST['email'];
                             $subject = 'PermaSafe: Your Registration Information';
-                            $message = 'Hello '.$_POST["first_name"].',<br/><br/>';
-                            $message .= 'Thank you for registering with PermaSafe! <br/><br/>';
-                            $message .= 'Here is your Username : <b>'.$member_code.'</b><br/><br/>';
-                            $message .= 'Here is your Password : <b>'.$password.'</b><br/><br/>';
-                            $message .= 'To access your PermaSafe account use this below link. <br/><br/>';
-                            $message .= '<a href="'.get_site_url().'/wp-login.php" target="_blank">'.Login.'</a><br/><br/>';
-                            $message .= 'Thank you for choosing PermaSafe.';
-                            $headers = array('Content-Type: text/html; charset=UTF-8');
-                            // $headers = array('From: Permasafe','Content-Type: text/html; charset=UTF-8');
-                            $mail = wp_mail( $to, $subject, $message, $headers );
+                            $password = $password;
+                            $fname = $_POST["first_name"];
+                            $member_code = $member_code;
+                            $process = 'customer_registration';
+                            send_mail_to_users($to, $password,$subject,$fname, $member_code, $process);
+                            // $message = 'Hello '.$_POST["first_name"].',<br/><br/>';
+                            // $message .= 'Thank you for registering with PermaSafe! <br/><br/>';
+                            // $message .= 'Here is your Username : <b>'.$member_code.'</b><br/><br/>';
+                            // $message .= 'Here is your Password : <b>'.$password.'</b><br/><br/>';
+                            // $message .= 'To access your PermaSafe account use this below link. <br/><br/>';
+                            // $message .= '<a href="'.get_site_url().'/wp-login.php" target="_blank">'.Login.'</a><br/><br/>';
+                            // $message .= 'Thank you for choosing PermaSafe.';
+                            // $headers = array('Content-Type: text/html; charset=UTF-8');
+                            // // $headers = array('From: Permasafe','Content-Type: text/html; charset=UTF-8');
+                            // $mail = wp_mail( $to, $subject, $message, $headers );
 
                             if($role['author'] == 1) {
                                 $url = get_site_url().'/distributor-account/';
@@ -4332,16 +4477,21 @@ class Permasafe_User_Pro_Public {
                                     
                                     $to = $_POST['email'];
                                     $subject = 'PermaSafe: Your Registration Information';
-                                    $message = 'Hello '.$_POST["first_name"].',<br/><br/>';
-                                    $message .= 'Thank you for registering with PermaSafe! <br/><br/>';
-                                    $message .= 'Here is your Username : <b>'.$member_code.'</b><br/><br/>';
-                                    $message .= 'Here is your Password : <b>'.$password.'</b><br/><br/>';
-                                    $message .= 'To access your PermaSafe account use this below link. <br/><br/>';
-                                    $message .= '<a href="'.get_site_url().'/wp-login.php" target="_blank">'.Login.'</a><br/><br/>';
-                                    $message .= 'Thank you for choosing PermaSafe.';
-                                    $headers = array('Content-Type: text/html; charset=UTF-8');
-                                    // $headers = array('From: Permasafe','Content-Type: text/html; charset=UTF-8');
-                                    $mail = wp_mail( $to, $subject, $message, $headers );
+                                    $password = $password;
+                                    $fname = $_POST["first_name"];
+                                    $member_code = $member_code;
+                                    $process = 'customer_registration';
+                                    send_mail_to_users($to, $password,$subject,$fname, $member_code, $process);
+                                    // $message = 'Hello '.$_POST["first_name"].',<br/><br/>';
+                                    // $message .= 'Thank you for registering with PermaSafe! <br/><br/>';
+                                    // $message .= 'Here is your Username : <b>'.$member_code.'</b><br/><br/>';
+                                    // $message .= 'Here is your Password : <b>'.$password.'</b><br/><br/>';
+                                    // $message .= 'To access your PermaSafe account use this below link. <br/><br/>';
+                                    // $message .= '<a href="'.get_site_url().'/wp-login.php" target="_blank">'.Login.'</a><br/><br/>';
+                                    // $message .= 'Thank you for choosing PermaSafe.';
+                                    // $headers = array('Content-Type: text/html; charset=UTF-8');
+                                    // // $headers = array('From: Permasafe','Content-Type: text/html; charset=UTF-8');
+                                    // $mail = wp_mail( $to, $subject, $message, $headers );
                                     
                                     if($role['author'] == 1) {
                                         $url = get_site_url().'/distributor-account/';

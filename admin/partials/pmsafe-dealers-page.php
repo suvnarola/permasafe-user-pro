@@ -54,6 +54,18 @@ if($action == 'view'){
         _x( 'View Customers', 'List table row action', 'wp-list-table-example' )
     );
 
+    // $view_customer_query_args = array(
+    //     'page'   => 'permasafe-upgraded-membership',
+    //     'action' => 'view_upgraded_policy',
+    //     'dealer'  => $dealer_login,
+    // );
+
+    // $actions['view_customer'] = sprintf(
+    //     '<a href="%1$s">%2$s</a>',
+    //     esc_url( add_query_arg( $view_customer_query_args, 'admin.php' ), 'view_upgraded_policy_' . $dealer_id  ),
+    //     _x( 'View Customers', 'List table row action', 'wp-list-table-example' )
+    // );
+
 
     $args = array(
         'post_type' => 'pmsafe_bulk_invi',
@@ -408,7 +420,7 @@ if($action == 'view'){
 
             echo '<input type="hidden" id="pmsafe_dealer_id" name="pmsafe_dealer_id" value="'.$dealer_id.'" class="widefat" />';
             echo '<input type="hidden" id="pmsafe_dealer_code" name="pmsafe_dealer_code" value="'.$user->user_login.'" class="widefat" />';
-            echo '<div id="name_div">';
+            echo '<div id="name_div" style="display:flex;">';
                 echo '<label><strong>Dealer Name</strong></label>';
                 echo '<input type="text" id="pmsafe_dealer_name" name="pmsafe_dealer_name" value="'.$name.'" class="widefats" />';
             echo '</div>';

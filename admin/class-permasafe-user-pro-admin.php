@@ -434,7 +434,7 @@ class Permasafe_User_Pro_Admin {
 					$to = $distributor_contact_email[ $key ];
 					$subject = 'PermaSafe: Your User Account Registration Information';
 					$password = $distributor_contact_password[ $key ];
-					contact_user_mail($to, $password, $subject);
+					send_mail_to_users($to, $password, $subject);
 
 					sleep(1);
 				}
@@ -514,7 +514,7 @@ class Permasafe_User_Pro_Admin {
 							$to = $distributor_contact_email[ $key ];
 							$subject = 'PermaSafe: Your User Account has been updated';
 							$password = $distributor_contact_password[ $key ];
-							contact_user_mail($to, $password, $subject);
+							send_mail_to_users($to, $password, $subject);
 
 							
 							
@@ -527,7 +527,7 @@ class Permasafe_User_Pro_Admin {
 						$to = $distributor_contact_email[ $key ];
 						$subject = 'PermaSafe: Your User Account Registration Information';
 						$password = $distributor_contact_password[ $key ];
-						contact_user_mail($to, $password, $subject);
+						send_mail_to_users($to, $password, $subject);
 					}
 					
 					update_user_meta( $contact_id, 'distributor_contact_fname', $name );	
@@ -609,7 +609,7 @@ class Permasafe_User_Pro_Admin {
 			$to = $email;
 			$subject = 'PermaSafe: Your User Account Registration Information';
 			$password = $password;
-			contact_user_mail($to, $password, $subject);
+			send_mail_to_users($to, $password, $subject);
 
 
 			die;
@@ -668,7 +668,7 @@ class Permasafe_User_Pro_Admin {
 					$to = $dealer_contact_email[ $key ];
 					$subject = 'PermaSafe: Your User Account Registration Information';
 					$password = $dealer_contact_password[ $key ];
-					contact_user_mail($to, $password, $subject);
+					send_mail_to_users($to, $password, $subject);
 					
 					sleep(1);
 					
@@ -709,7 +709,7 @@ class Permasafe_User_Pro_Admin {
 			$to = $email;
 			$password = $password;
 			$subject = 'PermaSafe: Your User Account Registration Information';
-			contact_user_mail($to, $password, $subject);
+			send_mail_to_users($to, $password, $subject);
 
 			die;
 		}
@@ -761,7 +761,7 @@ class Permasafe_User_Pro_Admin {
 				$to = $email;
 				$password = $password;
 				$subject = 'PermaSafe: Your User Account has been updated';
-				contact_user_mail($to, $password, $subject);
+				send_mail_to_users($to, $password, $subject);
 			}
 			
 			update_user_meta( $contact_id, 'contact_fname', $fname );	
@@ -788,7 +788,7 @@ class Permasafe_User_Pro_Admin {
 				$to = $email;
 				$subject = 'PermaSafe: Your User Account has been updated';
 				$password = $password;
-				contact_user_mail($to, $password, $subject);
+				send_mail_to_users($to, $password, $subject);
 
 				
 			}
@@ -840,7 +840,7 @@ class Permasafe_User_Pro_Admin {
 							$to = $dealer_contact_email[ $key ];
 							$subject = 'PermaSafe: Your User Account has been updated';
 							$password = $dealer_contact_password[ $key ];
-							contact_user_mail($to, $password, $subject);
+							send_mail_to_users($to, $password, $subject);
 							
 							
 						}
@@ -853,7 +853,7 @@ class Permasafe_User_Pro_Admin {
 						$to = $dealer_contact_email[ $key ];
 						$subject = 'PermaSafe: Your User Account Registration Information';
 						$password = $dealer_contact_password[ $key ];
-						contact_user_mail($to, $password, $subject);
+						send_mail_to_users($to, $password, $subject);
 
 					
 
@@ -3199,7 +3199,7 @@ class Permasafe_User_Pro_Admin {
 			foreach($data as $result){
 			$html .= '<tr>';
 								
-				$html .= '<td>';
+				$html .= '<td style="text-align:center;">';
 					$html .= $result['registration_number'];
 				$html .= '</td>';
 
@@ -3207,15 +3207,15 @@ class Permasafe_User_Pro_Admin {
 					$html .= $result['customer_name'];
 				$html .= '</td>';
 
-				$html .= '<td>';
+				$html .= '<td style="text-align:center;">';
 					$html .= $result['vin'];
 				$html .= '</td>';
 				
-				$html .= '<td>';
+				$html .= '<td style="text-align:center;">';
 					$html .= $result['original_policy'];
 				$html .= '</td>';
 				
-				$html .= '<td>';
+				$html .= '<td style="text-align:center;">';
 					$html .= $result['upgraded_policy'];
 				$html .= '</td>';
 				
@@ -3223,17 +3223,15 @@ class Permasafe_User_Pro_Admin {
 					$html .= $result['upgraded_by'];
 				$html .= '</td>';
 		
-				$html .= '<td>';
+				$html .= '<td style="text-align:center;">';
 					$html .= $result['upgraded_date'];
 				$html .= '</td>';
 		
-				
-		
-				$html .= '<td>';
+				$html .= '<td style="text-align:center;">';
 					$html .= (($result['dealer_cost'])?'$'.$result['dealer_cost']:'-');
 				$html .= '</td>';
 		
-				$html .= '<td>';
+				$html .= '<td style="text-align:center;">';
 					$html .= (($result['distributor_cost'])?'$'.$result['distributor_cost']:'-');
 				$html .= '</td>';
 

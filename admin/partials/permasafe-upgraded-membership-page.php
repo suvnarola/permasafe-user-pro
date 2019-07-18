@@ -163,10 +163,27 @@ foreach ($membership_results as $str) {
     $vin = $vehicle_info[$code]['pmsafe_vin'];
     echo '<tr>';
         
-        echo '<td>';
+        echo '<td style="text-align:center;">';
             echo $code;
         echo '</td>';
+       
+        echo '<td>';
+         echo $fname.' '.$lname;
+        echo '</td>';
 
+        echo '<td style="text-align:center;">';
+            echo $vin;
+        echo '</td>';
+
+        echo '<td style="text-align:center;">';
+            echo $bulk_prefix;
+        echo '</td>';
+        
+        echo '<td style="text-align:center;">';
+            echo $code_prefix;
+        echo '</td>';
+        
+        
         echo '<td>';
         if($dealer_name){
             echo $dealer_name;
@@ -182,33 +199,15 @@ foreach ($membership_results as $str) {
         }
         echo '</td>';
 
-        echo '<td>';
-            echo $vin;
-        echo '</td>';
-
-        echo '<td>';
-            echo $bulk_prefix;
-        echo '</td>';
-        
-        echo '<td>';
-            echo $code_prefix;
-        echo '</td>';
-        
-        
-
-        echo '<td>';
+        echo '<td style="text-align:center;">';
             echo get_post_meta($post_id,'upgraded_date',true);
         echo '</td>';
 
-        echo '<td>';
-            echo $fname.' '.$lname;
-        echo '</td>';
-
-        echo '<td>';
+        echo '<td style="text-align:center;">';
             echo (($dealer_cost)?'$'.$dealer_cost:'-');
         echo '</td>';
 
-        echo '<td>';
+        echo '<td style="text-align:center;">';
         echo (($distributor_cost)?'$'.$distributor_cost:'-');
         echo '</td>';
 

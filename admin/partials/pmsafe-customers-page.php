@@ -14,7 +14,7 @@ if($action == 'view_customer_details'){
 
     $actions['edit_customer_details'] = sprintf(
         '<a href="%1$s" title="Edit Details">%2$s</a>',
-        esc_url( wp_nonce_url( add_query_arg( $edit_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $customer_user->ID ) ),
+        esc_url( add_query_arg( $edit_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $customer_user->ID ),
         _x( 'Edit details', 'List table row action', 'wp-list-table-example' )
     );
 
@@ -154,7 +154,7 @@ $dealer_name = get_user_meta( $dealer_id, 'dealer_name', true);
 
     $actions['search_customer_details'] = sprintf(
         '<a href="%1$s" title="Advanced Search">%2$s</a>',
-        esc_url( wp_nonce_url( add_query_arg( $search_customer_details_query_args, 'admin.php' ), 'searchcustomerdetails_' . $customer_user->ID ) ),
+        esc_url( add_query_arg( $search_customer_details_query_args, 'admin.php' ), 'searchcustomerdetails_' . $customer_user->ID ),
         _x( 'Advanced Search', 'List table row action', 'wp-list-table-example' )
     );
     
@@ -348,7 +348,7 @@ $dealer_name = get_user_meta( $dealer_id, 'dealer_name', true);
 
                                 $actions['view_customer_details'] = sprintf(
                                     '<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
-                                    esc_url( wp_nonce_url( add_query_arg( $view_customer_details_query_args, 'admin.php' ), 'viewcustomerdetails_' . $value['user_id'] ) ),
+                                    esc_url( add_query_arg( $view_customer_details_query_args, 'admin.php' ), 'viewcustomerdetails_' . $value['user_id'] ),
                                     _x( 'view details', 'List table row action', 'wp-list-table-example' )
                                 );
 
@@ -366,7 +366,7 @@ $dealer_name = get_user_meta( $dealer_id, 'dealer_name', true);
 
                                 $actions['edit_customer_details'] = sprintf(
                                     '<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
-                                    esc_url( wp_nonce_url( add_query_arg( $edit_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $value['user_id'] ) ),
+                                    esc_url( add_query_arg( $edit_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $value['user_id'] ),
                                     _x( 'edit details', 'List table row action', 'wp-list-table-example' )
                                 );
                                 
@@ -382,7 +382,7 @@ $dealer_name = get_user_meta( $dealer_id, 'dealer_name', true);
 
                                 $actions['delete_customer_details'] = sprintf(
                                     '<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
-                                    esc_url( wp_nonce_url( add_query_arg( $delete_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $value['user_id'] ) ),
+                                    esc_url( add_query_arg( $delete_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $value['user_id'] ),
                                     _x( 'delete details', 'List table row action', 'wp-list-table-example' )
                                 );
                                 
@@ -753,7 +753,7 @@ $html .= '<div id="perma-warranty-wrapper">';
 
                             $actions['view_customer_details'] = sprintf(
                                 '<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
-                                esc_url( wp_nonce_url( add_query_arg( $view_customer_details_query_args, 'admin.php' ), 'viewcustomerdetails_' . $customer_user->ID ) ),
+                                esc_url( add_query_arg( $view_customer_details_query_args, 'admin.php' ), 'viewcustomerdetails_' . $customer_user->ID ),
                                 _x( 'view details', 'List table row action', 'wp-list-table-example' )
                             );
 
@@ -770,7 +770,7 @@ $html .= '<div id="perma-warranty-wrapper">';
 
                             $actions['edit_customer_details'] = sprintf(
                                 '<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
-                                esc_url( wp_nonce_url( add_query_arg( $edit_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $customer_user->ID ) ),
+                                esc_url( add_query_arg( $edit_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $customer_user->ID ),
                                 _x( 'edit details', 'List table row action', 'wp-list-table-example' )
                             );
 
@@ -786,7 +786,7 @@ $html .= '<div id="perma-warranty-wrapper">';
 
                             $actions['delete_customer_details'] = sprintf(
                                 '<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
-                                esc_url( wp_nonce_url( add_query_arg( $delete_customer_details_query_args, 'admin.php' ), 'deletecustomerdetails_' . $customer_user->ID ) ),
+                                esc_url( add_query_arg( $delete_customer_details_query_args, 'admin.php' ), 'deletecustomerdetails_' . $customer_user->ID ),
                                 _x( 'delete details', 'List table row action', 'wp-list-table-example' )
                             );
 

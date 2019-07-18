@@ -1753,7 +1753,7 @@ jQuery( document ).ready(function() {
     var view_customer_table = jQuery('#view_customer_table').DataTable( {
         dom: 'Bfrtip',
         responsive: true,
-        
+        "pagingType": "input",
         "order": [[ 17, "desc" ]],
         orderCellsTop: true,
         fixedHeader: true,
@@ -2129,6 +2129,7 @@ jQuery( document ).ready(function() {
                 
                jQuery('#search_tbl').DataTable( {
                         dom: 'Bfrtip',
+                        "pagingType": "input",
                         orderCellsTop: true,
                         fixedHeader: true,
                         buttons: [
@@ -2271,6 +2272,7 @@ jQuery( document ).ready(function() {
                 
                jQuery('#search_tbl').DataTable( {
                         dom: 'Bfrtip',
+                        "pagingType": "input",
                         orderCellsTop: true,
                         fixedHeader: true,
                         buttons: [
@@ -2388,6 +2390,7 @@ jQuery( document ).ready(function() {
 
                     jQuery('#search_tbl').DataTable( {
                             dom: 'Bfrtip',
+                            "pagingType": "input",
                             orderCellsTop: true,
                             fixedHeader: true,
                             buttons: [
@@ -2581,6 +2584,7 @@ jQuery( document ).ready(function() {
     var mebership_info_table = jQuery('#mebership_info_table').DataTable( {
         dom: 'Bfrtip',
         responsive: true,
+        "pagingType": "input",
         orderCellsTop: true,
         fixedHeader: true,
         buttons: [
@@ -2590,7 +2594,7 @@ jQuery( document ).ready(function() {
                 //Name the CSV
                 filename: 'mebership_info',
                exportOptions: {
-                columns: [0, 1, 2, 3, 4, 5, 6, 7 ]
+                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8 ]
                 },
             },
             {
@@ -2600,7 +2604,7 @@ jQuery( document ).ready(function() {
                 orientation : 'landscape',
                 pageSize : 'LEGAL',
                 exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7 ]
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8 ]
                 },
             },
             {
@@ -2608,7 +2612,7 @@ jQuery( document ).ready(function() {
                 text: 'EXCEL',
                 filename: 'mebership_info',
                 exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7 ]
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8 ]
                 },
             },
             {
@@ -2617,7 +2621,7 @@ jQuery( document ).ready(function() {
                 filename: 'mebership_info',
                 
                 exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7 ]
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8 ]
                 },
                 customize: function (win) {
                     jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
@@ -2695,6 +2699,7 @@ jQuery( document ).ready(function() {
                     jQuery('.membership-result-wrap').html(response);
                     jQuery('#mebership_date_table').DataTable( {
                         dom: 'Bfrtip',
+                        "pagingType": "input",
                         responsive: true,
                         orderCellsTop: true,
                         fixedHeader: true,
@@ -2705,7 +2710,7 @@ jQuery( document ).ready(function() {
                                 //Name the CSV
                                 filename: 'mebership_info',
                                 exportOptions: {
-                                        columns: [0, 1, 2,3, 4, 5, 6, 7 ]
+                                        columns: [0, 1, 2,3, 4, 5, 6, 7, 8 ]
                                 },
                             },
                             {
@@ -2715,7 +2720,7 @@ jQuery( document ).ready(function() {
                                 orientation : 'landscape',
                                 pageSize : 'LEGAL',
                                 exportOptions: {
-                                    columns: [0, 1, 2,3, 4, 5, 6, 7 ]
+                                    columns: [0, 1, 2,3, 4, 5, 6, 7, 8 ]
                                 },
                             },
                             {
@@ -2723,7 +2728,7 @@ jQuery( document ).ready(function() {
                                 text: 'EXCEL',
                                 filename: 'mebership_info',
                                 exportOptions: {
-                                    columns: [0, 1, 2,3, 4, 5, 6, 7 ]
+                                    columns: [0, 1, 2,3, 4, 5, 6, 7, 8 ]
                                 },
                             },
                             {
@@ -2732,7 +2737,7 @@ jQuery( document ).ready(function() {
                                 filename: 'mebership_info',
                                 
                                 exportOptions: {
-                                    columns: [0, 1, 2,3, 4, 5, 6, 7 ]
+                                    columns: [0, 1, 2,3, 4, 5, 6, 7, 8 ]
                                 },
                                 customize: function (win) {
                                     jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
@@ -3595,6 +3600,7 @@ jQuery( document ).ready(function() {
     
     var tbl_dealers = jQuery('#tbl_dealers').DataTable( {
         dom: 'Bfrtip',
+        "pagingType": "input",
         responsive: true,
         orderCellsTop: true,
         fixedHeader: true,

@@ -28,7 +28,7 @@ if($action == 'view'){
     
     $actions['edit'] = sprintf(
         '<a href="%1$s">%2$s</a>',
-        esc_url( wp_nonce_url( add_query_arg( $add_query_args, 'admin.php' ), 'editdealer_' . $distributor_id ) ),
+        esc_url( add_query_arg( $add_query_args, 'admin.php' ), 'editdealer_' . $distributor_id ),
         _x( 'Edit Distributor', 'List table row action', 'wp-list-table-example' )
     );
 
@@ -41,7 +41,7 @@ if($action == 'view'){
 
     $actions['add'] = sprintf(
         '<a href="%1$s">%2$s</a>',
-        esc_url( wp_nonce_url( add_query_arg( $add_query_args, 'admin.php' ), 'adddealer_' . $distributor_id ) ),
+        esc_url( add_query_arg( $add_query_args, 'admin.php' ), 'adddealer_' . $distributor_id ),
         _x( 'Add New Dealer', 'List table row action', 'wp-list-table-example' )
     );
 
@@ -53,7 +53,7 @@ if($action == 'view'){
 
     $actions['viewdealers'] = sprintf(
         '<a href="%1$s">%2$s</a>',
-        esc_url( wp_nonce_url( add_query_arg( $add_query_args, 'admin.php' ), 'viewdealers_' . $distributor_id ) ),
+        esc_url( add_query_arg( $add_query_args, 'admin.php' ), 'viewdealers_' . $distributor_id ),
         _x( 'View Dealers', 'List table row action', 'wp-list-table-example' )
     );
 
@@ -87,7 +87,7 @@ if($action == 'view'){
                 'dealer'  => $dealer_id,
             );
             $d_name = get_user_meta( $dealer_id, 'dealer_name' , true );
-            $dealers_name .='<a href="'.esc_url( wp_nonce_url( add_query_arg( $view_query_args, 'admin.php' ), 'viewdealer_' . $dealer_id ) ).'">'. $d_name . "</a>, ";
+            $dealers_name .='<a href="'.esc_url( add_query_arg( $view_query_args, 'admin.php' ), 'viewdealer_' . $dealer_id ).'">'. $d_name . "</a>, ";
         }
         
         
@@ -557,7 +557,7 @@ foreach ( $distributors as $user ) {
 
         $actions['viewdealers'] = sprintf(
             '<a href="%1$s" title="View Dealers" target="_blank"><i class="fa fa-users"></i></a>',
-            esc_url( wp_nonce_url( add_query_arg( $add_query_args, 'admin.php' ), 'viewdealers_' . $user_id ) ),
+            esc_url( add_query_arg( $add_query_args, 'admin.php' ), 'viewdealers_' . $user_id ),
             _x( 'View Dealers', 'List table row action', 'wp-list-table-example' )
         );
         
@@ -576,7 +576,7 @@ foreach ( $distributors as $user ) {
 
     $actions['add'] = sprintf(
         '<a href="%1$s">%2$s</a>',
-        esc_url( wp_nonce_url( add_query_arg( $add_query_args, 'admin.php' ), 'adddealer_' . $user_id ) ),
+        esc_url( add_query_arg( $add_query_args, 'admin.php' ), 'adddealer_' . $user_id ),
         _x( 'Add Dealer', 'List table row action', 'wp-list-table-example' )
     );
     $page = 'distributors-lists';
@@ -589,7 +589,7 @@ foreach ( $distributors as $user ) {
 
     $actions['view'] = sprintf(
         '<a href="%1$s">%2$s</a>',
-        esc_url( wp_nonce_url( add_query_arg( $view_query_args, 'admin.php' ), 'viewdistributor_' .$user_id ) ),
+        esc_url( add_query_arg( $view_query_args, 'admin.php' ), 'viewdistributor_' .$user_id ),
         _x( 'View', 'List table row action', 'wp-list-table-example' )
     );
 
@@ -602,7 +602,7 @@ foreach ( $distributors as $user ) {
 
     $actions['edit'] = sprintf(
         '<a href="%1$s">%2$s</a>',
-        esc_url( wp_nonce_url( add_query_arg( $edit_query_args, 'admin.php' ), 'editdistributor_' . $user_id ) ),
+        esc_url( add_query_arg( $edit_query_args, 'admin.php' ), 'editdistributor_' . $user_id ),
         _x( 'Edit', 'List table row action', 'wp-list-table-example' )
     );
     // Build delete row action.
@@ -614,7 +614,7 @@ foreach ( $distributors as $user ) {
 
     $actions['delete'] = sprintf(
         '<a href="%1$s">%2$s</a>',
-        esc_url( wp_nonce_url( add_query_arg( $delete_query_args, 'admin.php' ), 'deletedistributor_' .$user_id ) ),
+        esc_url( add_query_arg( $delete_query_args, 'admin.php' ), 'deletedistributor_' .$user_id ),
         _x( 'Delete', 'List table row action', 'wp-list-table-example' )
     );
     echo '<tr>';

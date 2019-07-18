@@ -1333,12 +1333,14 @@ function test_pdf(){
 
 
 // add_action('init','contact_user_mail');
-function contact_user_mail($to, $password, $subject){
+function send_mail_to_users($to, $password, $subject, $fname='', $member_code='', $process=''){
     
     $to = $to;
     $subject = $subject;
-    // $to = "ka@narola.email";
-    // $subject = "testing";
+    $fname = $fname;
+    $member_code = $member_code;
+    $process = $process;
+    
     $message = '<div class="content" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: block; margin: 0 auto; padding: 20px;">';
    
         $message .= '<table class="main" width="100%" cellpadding="0" cellspacing="0" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; background-color: #fff; margin: 0; border: 2px solid #0065a7;" bgcolor="#fff">';
@@ -1356,15 +1358,37 @@ function contact_user_mail($to, $password, $subject){
 
                         $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
                         $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 20px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
-                            $message .= 'Following is your account details:';
+                            $message .= 'Account Details:';
                         $message .= '</td>';
                         $message .= '</tr>';
 
-                        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
-                        $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
-                            $message .= 'Here is your <b>Username</b> : <span style="color:#0065a7">'.$to.'</span>';
-                        $message .= '</td>';
-                        $message .= '</tr>';
+                        if($process == 'customer_registration'){
+
+                            $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                            $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                                $message .= 'Hello <b>'.$fname.'</b>,';
+                            $message .= '</td>';
+                            $message .= '</tr>';
+
+                            $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                            $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                                $message .= 'Thank you for registering with PermaSafe!';
+                            $message .= '</td>';
+                            $message .= '</tr>';
+
+                            $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                            $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                                $message .= 'Here is your <b>Username</b> : <span style="color:#0065a7">'.$member_code.'</span>';
+                            $message .= '</td>';
+                            $message .= '</tr>';
+                        }else{
+
+                            $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                            $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+                                $message .= 'Here is your <b>Username</b> : <span style="color:#0065a7">'.$to.'</span>';
+                            $message .= '</td>';
+                            $message .= '</tr>';
+                        }
 
                         $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
                         $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
@@ -1389,16 +1413,17 @@ function contact_user_mail($to, $password, $subject){
                 $message .= '</td>';
             $message .= '</tr>';
         $message .= '</table>';
-        // $message .= '<div class="footer" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; clear: both; color: #999; margin: 0; padding: 20px;">';
-        //     $message .= '<table width="100%" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
-        //         $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
-        //             $message .= '<td class="aligncenter content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 12px; vertical-align: top; color: #999; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top">';
-        //                 $message .= 'Change <a href="" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 12px; color: #999; text-decoration: underline; margin: 0;">Password</a> From Here.';
-        //             $message .= '</td>';
-        //         $message .= '</tr>';
-        //     $message .= '</table>';
-        // $message .= '</div>';
-
+        if($process == 'customer_registration'){
+            $message .= '<div class="footer" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; clear: both; color: #999; margin: 0; padding: 20px;">';
+                $message .= '<table width="100%" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                    $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                        $message .= '<td class="aligncenter content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 12px; vertical-align: top; color: #999; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top">';
+                            $message .= 'Thank you for choosing PermaSafe.';
+                        $message .= '</td>';
+                    $message .= '</tr>';
+                $message .= '</table>';
+            $message .= '</div>';
+        }
     $message .= '</div>';
     $headers = array('Content-Type: text/html; charset=UTF-8');
     
