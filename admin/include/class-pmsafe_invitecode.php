@@ -552,6 +552,7 @@ class PMSafe_Invitation_Code {
     }
 
     public function set_custom_columns($columns){
+        unset($columns['cb']);
         unset( $columns['title'] );
         unset( $columns['author'] );
         unset( $columns['date'] );
@@ -645,7 +646,7 @@ class PMSafe_Invitation_Code {
                         }
                         break;
                 case 'reset':
-                        echo '<i class="fa fa-undo" style="font-size:20px;cursor:pointer" title="reset" id="reset-code" data-id="'.$post_id.'"></i>';
+                        echo '<i class="fa fa-undo" style="font-size:20px;cursor:pointer;color:#0065a7;" title="reset" id="reset-code" data-id="'.$post_id.'"></i>';
                     break;
             }
     }

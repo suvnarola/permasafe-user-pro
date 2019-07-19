@@ -154,7 +154,7 @@ if($action == 'view'){
                             echo '</td>';
 
                             echo '<td style="border-left:none;text-align:right;">';
-                                echo '<a href="#edit-contact-person-modal" id="pmsafe_distributors_contact_edit" data-id="'.$user_id.'" title="click here to edit this contact" style="color: #fff;cursor:pointer;background: #0065a7;padding: 5px;border-radius: 50%;margin:0 5px"><i class="fa fa-edit"></i></a><i class="fa fa-trash" id="pmsafe_distributors_contact_delete" data-id="'.$user_id.'" title="click here to delete this contact" style="color: #fff;cursor:pointer;background: #ff0000;padding: 5px;border-radius: 50%;margin:0 5px;"></i>';
+                                echo '<a href="#edit-contact-person-modal" id="pmsafe_contact_info_mail" data-id="'.$user_id.'" title="Send password reset link" style="color: #fff;cursor:pointer;background: #0065a7;padding: 5px;border-radius: 50%;margin:0 5px"><i class="fa fa-envelope"></i></a><a href="#edit-contact-person-modal" id="pmsafe_distributors_contact_edit" data-id="'.$user_id.'" title="click here to edit this contact" style="color: #fff;cursor:pointer;background: #0065a7;padding: 5px;border-radius: 50%;margin:0 5px"><i class="fa fa-edit"></i></a><i class="fa fa-trash" id="pmsafe_distributors_contact_delete" data-id="'.$user_id.'" title="click here to delete this contact" style="color: #fff;cursor:pointer;background: #ff0000;padding: 5px;border-radius: 50%;margin:0 5px;"></i>';
                             echo '</td>';
                         echo '</tr>';
                         

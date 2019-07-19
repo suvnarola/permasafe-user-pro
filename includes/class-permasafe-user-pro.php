@@ -277,7 +277,10 @@ class Permasafe_User_Pro {
         $this->loader->add_action( 'wp_ajax_nopriv_edit_dealer_contact_information', $plugin_admin, 'edit_dealer_contact_information' );
 		
 		$this->loader->add_action( 'wp_ajax_edit_distributor_contact_information', $plugin_admin, 'edit_distributor_contact_information' );
-        $this->loader->add_action( 'wp_ajax_nopriv_edit_distributor_contact_information', $plugin_admin, 'edit_distributor_contact_information' );
+		$this->loader->add_action( 'wp_ajax_nopriv_edit_distributor_contact_information', $plugin_admin, 'edit_distributor_contact_information' );
+		
+		$this->loader->add_action( 'wp_ajax_send_reset_mail', $plugin_admin, 'send_reset_mail' );
+        $this->loader->add_action( 'wp_ajax_nopriv_send_reset_mail', $plugin_admin, 'send_reset_mail' );
 		
 	}
 

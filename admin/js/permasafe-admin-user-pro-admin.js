@@ -3608,6 +3608,34 @@ jQuery( document ).ready(function() {
        
     } );
     
+    jQuery(document).on("click","#pmsafe_contact_info_mail", function(e) {
+        
+        
+        
+        var contact_id = jQuery(this).attr('data-id');
+        
+        
+        
+        var data = {
+            action: 'send_reset_mail',
+            contact_id:contact_id
+        };
+        
+        
+            
+            jQuery('.perma-admin-loader').show();
+            jQuery.ajax({
+                type: 'POST',
+                url: pmAjax.ajaxurl,
+                data: data,
+                dataType: 'html',
+                success: function(response) {
+                    jQuery('.perma-admin-loader').hide();
+                        // location.reload();
+                }
+            });// ajax
+        
+    });
     
 });// ready
 

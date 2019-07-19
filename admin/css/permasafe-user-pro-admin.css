@@ -333,6 +333,9 @@ table.view-dealer-price-tbl tr:nth-child(even) , table.view-dealer-price-tbl the
 table.view-dealer-price-tbl thead > tr > th , table.view-dealer-price-tbl thead > tr > th p{font-weight: 700;}
 #distributor_add_new_contact_person,#distributor_edit_new_contact_person,#edit_new_contact_person,#add_new_contact_person, #add_contact_person, #add_price,#add_package_price,#add_distributor_cost,#update_package_price,#update_distributor_cost{background: #0065a7;color: #fff;padding: 5px 10px;border: 0;border-radius: 5%;cursor: pointer;text-decoration: none;}
 #mebership_info_table_wrapper thead tr th span, #mebership_date_table_wrapper thead tr th span{right:-18px !important;}
+
+.post-type-pmsafe_bulk_invi .tablenav .bulkactions, .post-type-pmsafe_invitecode .tablenav .bulkactions{display:none;}
+.post-type-pmsafe_bulk_invi table, .post-type-pmsafe_invitecode table{border:1px solid #eeecec !important}
 /******** Responsive **********/
 
  

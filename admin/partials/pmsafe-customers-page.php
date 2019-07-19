@@ -381,7 +381,7 @@ $dealer_name = get_user_meta( $dealer_id, 'dealer_name', true);
                                 );
 
                                 $actions['delete_customer_details'] = sprintf(
-                                    '<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
+                                    '<a href="%1$s" title="Delete"><i class="fa fa-trash" style="color:#ff0000;"></i></a>',
                                     esc_url( add_query_arg( $delete_customer_details_query_args, 'admin.php' ), 'editcustomerdetails_' . $value['user_id'] ),
                                     _x( 'delete details', 'List table row action', 'wp-list-table-example' )
                                 );
@@ -785,7 +785,7 @@ $html .= '<div id="perma-warranty-wrapper">';
                             );
 
                             $actions['delete_customer_details'] = sprintf(
-                                '<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
+                                '<a href="%1$s" title="Delete"><i class="fa fa-trash" style="color:#ff0000;"></i></a>',
                                 esc_url( add_query_arg( $delete_customer_details_query_args, 'admin.php' ), 'deletecustomerdetails_' . $customer_user->ID ),
                                 _x( 'delete details', 'List table row action', 'wp-list-table-example' )
                             );

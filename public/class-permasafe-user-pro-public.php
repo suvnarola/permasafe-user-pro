@@ -3710,194 +3710,204 @@ class Permasafe_User_Pro_Public {
          */
         public function upgradable_membership_info_function(){
             
-            global $wpdb;
-            $id = get_current_user_id();
-            $current_user = wp_get_current_user();
-        	$role = (array) $current_user->caps;
-            $login = $current_user->user_login;
-            $dealer = $_GET['dealer'];
-            // $a = extract(shortcode_atts(array(
-            //     'dealer' => $dealer,
-            //   ), $atts));
-            
-            if($dealer){
-                $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "'.$dealer.'")');
-            }else{
-            
-                if($role['contributor'] == 1) {
-                    
-                    $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "'.$login.'")');
-                }
-                if($role['dealer-user'] == 1){
-                    $dealer_user_login = $current_user->user_login;
-                    $user = get_user_by('login',$dealer_user_login);
-                    $contact_id = $user->ID;
-                    $dealer_id = get_user_meta($contact_id,'contact_dealer_id',true);
-                    $dealer_user = get_user_by('id',$dealer_id);
-                    $dealer_username = $dealer_user->user_login;
-
-                    $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "'.$dealer_username.'")');
-                }
-            }
-            $str = '';
-            foreach ($user_query as $value_query) {
-                $str = $value_query->meta_value.','.$str;
-            }
-
-            $str = rtrim($str,",");
-            // echo $str;
-            $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in ('.$str.') ');
-            // pr($str_results);
-            $check_array = array();
-            foreach ($str_results as $str_result) {
-                $check_array[] = $str_result->meta_value;
-            }
-            // pr($check_array);
-            $invite_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (SELECT post_id FROM wp_postmeta WHERE meta_key="_pmsafe_is_invite_code")');
-            // pr($str_results);
-            $invite_array = array();
-            foreach ($invite_results as $invite_result) {
-                $invite_array[] = $invite_result->meta_value;
-            }
-            if(empty($invite_array)){
-                $dealer_array = $check_array;
-            }else{
-                $dealer_array = array_merge($check_array, $invite_array);
-            }
-            // pr($dealer_array);
-
-
-            $membership_results = $wpdb->get_results('SELECT post_id FROM wp_postmeta WHERE meta_key = "is_upgraded" and meta_value ="1"');
-            $html .= '<div class="filter-wrap">';
-            // $html .= '<input type="hidden" id="membership_login_id" value="'.$login.'">';
-                $html .= '<div class="input-filter-wrap">';
-                    $html .= '<label>Date: </label><input type="text" id="membership_datepicker1" style="width:auto;"> <input type="text" id="membership_datepicker2" style="width:auto;">';
-                $html .= '</div>';
-                $html .= '<div class="select-filter-wrap" style="margin-right: 10px;">';    	
-                        $html .= '<select id="policy">';
-                        $html .= '<option value="">Select Policy</option>';
-                            $html .= '<option value="upgraded">Upgraded Policy</option>';
-                            $html .= '<option value="original">Original Policy</option>';
-                        $html .= '</select>';
-                $html .= '</div>';   
-
-                $html .= '<div class="select-filter-wrap filter-package" style="display:none;">';    	
-                    $benefit_prefix = pmsafe_get_meta_values( '_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish' );
-                    $html .= '<select id="benefit_packages">';
-                    $html .= '<option value="">Select Package</option>';
-                    foreach ($benefit_prefix as $prefix) {
-                        $html .= '<option value="'.$prefix.'">'.$prefix.'</option>';
-                    }
-                    $html .= '</select>';
-                $html .= '</div>'; 
-
-                if($dealer){
-                    $html .= '<input type="hidden" value="'.$dealer.'" id="view_membership">';
-                }
-
-                $html .= '<div class="btn-filter-wrap" style="margin-left: 10px;">';
-                    $html .= '<input type="button" id="membership_date_submit" value="Submit"/>';
-                $html .= '</div>';    
-                $html .= '<div><input type="button" name="reset" id="search_reset" value="Reset" style="padding: 10px 70px;background: #ddd;border: 0;color: #333;cursor: pointer;margin-left: 10px;"/></div>';
-            $html .= '</div>';
-            $html .= '<div class="membership-result-wrap">';    
-                           
-            $html .= '<table id="mebership_info_table" class="display nowrap" style="width:100%">';
-            $html .= '<thead>';
-                $html .= '<tr>';
-                    $html .= '<th>';
-                    $html .= 'Registration Number';
-                    $html .= '</th>';
-
-                    $html .= '<th>';
-                    $html .= 'Original Policy';
-                    $html .= '</th>';
-
-                    $html .= '<th>';
-                    $html .= 'Upgraded Policy';
-                    $html .= '</th>';
-                   
-                    $html .= '<th>';
-                    $html .= 'Upgraded By';
-                    $html .= '</th>';
-
-                    $html .= '<th>';
-                    $html .= 'Date';
-                    $html .= '</th>';
-            
-                    $html .= '<th>';
-                    $html .= 'Customer Name';
-                    $html .= '</th>';
-            
-                    
-                $html .= '</tr>';
-            $html .= '</thead>';
-
-            $html .= '<tbody id="">';        
-            foreach ($membership_results as $str) {
-                $post_id = $str->post_id;
-                $bulk_id = get_post_meta($post_id,'_pmsafe_bulk_invitation_id',true);
-                if($bulk_id == ''){
-                    $bulk_prefix = get_post_meta($post_id,'_pmsafe_invitation_prefix',true);    
-                }else{
-                    $bulk_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
-                }
+            if(is_user_logged_in()){
                 
-                $code = get_post_meta($post_id,'_pmsafe_invitation_code',true);
-                $upgraded_id = get_post_meta($post_id,'upgraded_by',true);
-                $dealer_name = get_user_meta($upgraded_id,'dealer_name',true);
-                $distributor_name = get_user_meta($upgraded_id,'distributor_name',true);
-                $contact_fname = get_user_meta($upgraded_id,'contact_fname',true);
-                $admin_name = get_user_meta($upgraded_id,'first_name',true);
-                $users = get_user_by('login',$code);
-                $user_id = $users->ID;
-                $fname = get_user_meta($user_id,'first_name',true);
-                $lname = get_user_meta($user_id,'last_name',true);
-                if(in_array($code,$dealer_array)){
-                $html .= '<tr>';
-                    
-                    $html .= '<td>';
-                        $html .= get_post_meta($post_id,'_pmsafe_invitation_code',true);
-                    $html .= '</td>';
-                    
-                    $html .= '<td>';
-                        $html .= $bulk_prefix;
-                    $html .= '</td>';
-                    
-                    $html .= '<td>';
-                        $html .= get_post_meta($post_id,'_pmsafe_code_prefix',true);
-                    $html .= '</td>';
-                    
-                    $html .= '<td>';
-                    if($dealer_name){
-                        $html .= $dealer_name;
+                global $wpdb;
+                $id = get_current_user_id();
+                $current_user = wp_get_current_user();
+                $role = (array) $current_user->caps;
+                $login = $current_user->user_login;
+                $dealer = $_GET['dealer'];
+                // $a = extract(shortcode_atts(array(
+                //     'dealer' => $dealer,
+                //   ), $atts));
+                
+                if($dealer){
+                    $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "'.$dealer.'")');
+                }else{
+                
+                    if($role['contributor'] == 1) {
+                        
+                        $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "'.$login.'")');
                     }
-                    if($distributor_name){
-                        $html .= $distributor_name;
-                    }
-                    if($contact_fname){
-                        $html .= $contact_fname;
-                    }
-                    if($admin_name){
-                        $html .= $admin_name;
-                    }
-                    $html .= '</td>';
+                    if($role['dealer-user'] == 1){
+                        $dealer_user_login = $current_user->user_login;
+                        $user = get_user_by('login',$dealer_user_login);
+                        $contact_id = $user->ID;
+                        $dealer_id = get_user_meta($contact_id,'contact_dealer_id',true);
+                        $dealer_user = get_user_by('id',$dealer_id);
+                        $dealer_username = $dealer_user->user_login;
 
-                    $html .= '<td>';
-                        $html .= get_post_meta($post_id,'upgraded_date',true);
-                    $html .= '</td>';
-            
-                    $html .= '<td>';
-                        $html .= $fname.' '.$lname;
-                    $html .= '</td>';
-
-                $html .= '</tr>';
+                        $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "'.$dealer_username.'")');
+                    }
                 }
+                $str = '';
+                foreach ($user_query as $value_query) {
+                    $str = $value_query->meta_value.','.$str;
+                }
+
+                $str = rtrim($str,",");
+                // echo $str;
+                $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in ('.$str.') ');
+                // pr($str_results);
+                $check_array = array();
+                foreach ($str_results as $str_result) {
+                    $check_array[] = $str_result->meta_value;
+                }
+                // pr($check_array);
+                $invite_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (SELECT post_id FROM wp_postmeta WHERE meta_key="_pmsafe_is_invite_code")');
+                // pr($str_results);
+                $invite_array = array();
+                foreach ($invite_results as $invite_result) {
+                    $invite_array[] = $invite_result->meta_value;
+                }
+                if(empty($invite_array)){
+                    $dealer_array = $check_array;
+                }else{
+                    $dealer_array = array_merge($check_array, $invite_array);
+                }
+                // pr($dealer_array);
+
+
+                $membership_results = $wpdb->get_results('SELECT post_id FROM wp_postmeta WHERE meta_key = "is_upgraded" and meta_value ="1"');
+                $html .= '<div class="filter-wrap">';
+                // $html .= '<input type="hidden" id="membership_login_id" value="'.$login.'">';
+                    $html .= '<div class="input-filter-wrap">';
+                        $html .= '<label>Date: </label><input type="text" id="membership_datepicker1" style="width:auto;"> <input type="text" id="membership_datepicker2" style="width:auto;">';
+                    $html .= '</div>';
+                    $html .= '<div class="select-filter-wrap" style="margin-right: 10px;">';    	
+                            $html .= '<select id="policy">';
+                            $html .= '<option value="">Select Policy</option>';
+                                $html .= '<option value="upgraded">Upgraded Policy</option>';
+                                $html .= '<option value="original">Original Policy</option>';
+                            $html .= '</select>';
+                    $html .= '</div>';   
+
+                    $html .= '<div class="select-filter-wrap filter-package" style="display:none;">';    	
+                        $benefit_prefix = pmsafe_get_meta_values( '_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish' );
+                        $html .= '<select id="benefit_packages">';
+                        $html .= '<option value="">Select Package</option>';
+                        foreach ($benefit_prefix as $prefix) {
+                            $html .= '<option value="'.$prefix.'">'.$prefix.'</option>';
+                        }
+                        $html .= '</select>';
+                    $html .= '</div>'; 
+
+                    if($dealer){
+                        $html .= '<input type="hidden" value="'.$dealer.'" id="view_membership">';
+                    }
+
+                    $html .= '<div class="btn-filter-wrap" style="margin-left: 10px;">';
+                        $html .= '<input type="button" id="membership_date_submit" value="Submit"/>';
+                    $html .= '</div>';    
+                    $html .= '<div><input type="button" name="reset" id="search_reset" value="Reset" style="padding: 10px 70px;background: #ddd;border: 0;color: #333;cursor: pointer;margin-left: 10px;"/></div>';
+                $html .= '</div>';
+                $html .= '<div class="membership-result-wrap">';    
+                            
+                $html .= '<table id="mebership_info_table" class="display nowrap" style="width:100%">';
+                $html .= '<thead>';
+                    $html .= '<tr>';
+                        $html .= '<th>';
+                        $html .= 'Registration Number';
+                        $html .= '</th>';
+
+                        $html .= '<th>';
+                        $html .= 'Original Policy';
+                        $html .= '</th>';
+
+                        $html .= '<th>';
+                        $html .= 'Upgraded Policy';
+                        $html .= '</th>';
+                    
+                        $html .= '<th>';
+                        $html .= 'Upgraded By';
+                        $html .= '</th>';
+
+                        $html .= '<th>';
+                        $html .= 'Date';
+                        $html .= '</th>';
+                
+                        $html .= '<th>';
+                        $html .= 'Customer Name';
+                        $html .= '</th>';
+                
+                        
+                    $html .= '</tr>';
+                $html .= '</thead>';
+
+                $html .= '<tbody id="">';        
+                foreach ($membership_results as $str) {
+                    $post_id = $str->post_id;
+                    $bulk_id = get_post_meta($post_id,'_pmsafe_bulk_invitation_id',true);
+                    if($bulk_id == ''){
+                        $bulk_prefix = get_post_meta($post_id,'_pmsafe_invitation_prefix',true);    
+                    }else{
+                        $bulk_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
+                    }
+                    
+                    $code = get_post_meta($post_id,'_pmsafe_invitation_code',true);
+                    $upgraded_id = get_post_meta($post_id,'upgraded_by',true);
+                    $dealer_name = get_user_meta($upgraded_id,'dealer_name',true);
+                    $distributor_name = get_user_meta($upgraded_id,'distributor_name',true);
+                    $contact_fname = get_user_meta($upgraded_id,'contact_fname',true);
+                    $admin_name = get_user_meta($upgraded_id,'first_name',true);
+                    $users = get_user_by('login',$code);
+                    $user_id = $users->ID;
+                    $fname = get_user_meta($user_id,'first_name',true);
+                    $lname = get_user_meta($user_id,'last_name',true);
+                    if(in_array($code,$dealer_array)){
+                    $html .= '<tr>';
+                        
+                        $html .= '<td>';
+                            $html .= get_post_meta($post_id,'_pmsafe_invitation_code',true);
+                        $html .= '</td>';
+                        
+                        $html .= '<td>';
+                            $html .= $bulk_prefix;
+                        $html .= '</td>';
+                        
+                        $html .= '<td>';
+                            $html .= get_post_meta($post_id,'_pmsafe_code_prefix',true);
+                        $html .= '</td>';
+                        
+                        $html .= '<td>';
+                        if($dealer_name){
+                            $html .= $dealer_name;
+                        }
+                        if($distributor_name){
+                            $html .= $distributor_name;
+                        }
+                        if($contact_fname){
+                            $html .= $contact_fname;
+                        }
+                        if($admin_name){
+                            $html .= $admin_name;
+                        }
+                        $html .= '</td>';
+
+                        $html .= '<td>';
+                            $html .= get_post_meta($post_id,'upgraded_date',true);
+                        $html .= '</td>';
+                
+                        $html .= '<td>';
+                            $html .= $fname.' '.$lname;
+                        $html .= '</td>';
+
+                    $html .= '</tr>';
+                    }
+                
+                }
+                $html .= '</tbody>';        
+                $html .= '</table>';       
+                $html .= '</div>'; 
              
+            }else{
+                
+                $location = get_site_url() . "/perma-register/";
+                wp_redirect( $location, 301 );
+                exit;
             }
-            $html .= '</tbody>';        
-            $html .= '</table>';       
-            $html .= '</div>'; 
+            
             return $html;
         }
 
@@ -4268,6 +4278,14 @@ class Permasafe_User_Pro_Public {
 
                     $pdf_link = sales_person_generate_pdf($sales_person);
                     $warranty_card = pmsafe_sales_person_warranty_card($sales_person,$pdf_link);
+                    
+                    $to = $_POST['email'];
+                    $subject = 'PermaSafe: Your Registration Information';
+                    $password = $_POST['zip_code'];
+                    $fname = $_POST["first_name"];
+                    $member_code = $member_code;
+                    $process = 'customer_registration';
+                    send_mail_to_users($to, $password,$subject,$fname, $member_code, $process);
 
                     $response = array('status' => true,'sales'=>true,'html'=>$warranty_card);
                     echo json_encode($response);

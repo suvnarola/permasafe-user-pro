@@ -903,6 +903,7 @@ class PMSafe_Bulk_Invitation{
     }
 
     public function set_custom_columns($columns){        
+        unset($columns['cb']);
         unset( $columns['title'] );
         unset( $columns['author'] );
         unset( $columns['date'] );
@@ -981,10 +982,10 @@ class PMSafe_Bulk_Invitation{
                         echo '<code>'.get_post_meta( $post_id, '_pmsafe_invitation_prefix', true ).'</code>'; 
                         break;
                 case 'edit_code':
-                        echo '<a href="'.admin_url('post.php?post='.$post_id.'&action=edit').'"><i class="fa fa-edit"></i></a>'; 
+                        echo '<a href="'.admin_url('post.php?post='.$post_id.'&action=edit').'"><i class="fa fa-edit" style="font-size:18px;"></i></a>'; 
                 break;
                 case 'delete_code':
-                        echo '<i class="fa fa-trash" id="delete_code_button" style="cursor:pointer;color:#ff3800" data-id="'.$post_id.'"></i>';
+                        echo '<i class="fa fa-trash" id="delete_code_button" style="cursor:pointer;color:#ff0000;font-size:18px;" data-id="'.$post_id.'"></i>';
                 break;
                
             }
