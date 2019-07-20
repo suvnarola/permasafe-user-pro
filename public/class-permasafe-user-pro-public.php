@@ -207,7 +207,7 @@ class Permasafe_User_Pro_Public {
 
                         $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
                         $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
-                            $message .= 'If you did not change your password, please contact the Site Administrator at <a href="mailto:cbbickler@gmail.com">cbbickler@gmail.com</a>';
+                            $message .= 'If you did not change your password, please contact the Site Administrator at <a href="mailto:info@permasafe.com">info@permasafe.com</a>';
                         $message .= '</td>';
                         $message .= '</tr>';
 
