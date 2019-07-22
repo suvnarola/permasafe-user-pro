@@ -55,17 +55,17 @@ if($action == 'view'){
         _x( 'View Customers', 'List table row action', 'wp-list-table-example' )
     );
 
-    // $view_customer_query_args = array(
-    //     'page'   => 'permasafe-upgraded-membership',
-    //     'action' => 'view_upgraded_policy',
-    //     'dealer'  => $dealer_login,
-    // );
+    $view_customer_query_args = array(
+        'page'   => 'permasafe-upgraded-membership',
+        'action' => 'view_upgraded_policy',
+        'dealer'  => $dealer_login,
+    );
 
-    // $actions['view_customer'] = sprintf(
-    //     '<a href="%1$s">%2$s</a>',
-    //     esc_url( add_query_arg( $view_customer_query_args, 'admin.php' ), 'view_upgraded_policy_' . $dealer_id  ),
-    //     _x( 'View Customers', 'List table row action', 'wp-list-table-example' )
-    // );
+    $actions['view_upgraded_policies'] = sprintf(
+        '<a href="%1$s">%2$s</a>',
+        esc_url( add_query_arg( $view_customer_query_args, 'admin.php' ), 'view_upgraded_policy_' . $dealer_id  ),
+        _x( 'View Upgraded Policies', 'List table row action', 'wp-list-table-example' )
+    );
 
 
     $args = array(
@@ -95,6 +95,7 @@ if($action == 'view'){
             echo '<a href="'.$url.'">View Member Codes</a>';
         }
         echo $actions['view_customer'];
+        echo $actions['view_upgraded_policies'];
         echo '</div>';   
     echo '</div>';   
 	

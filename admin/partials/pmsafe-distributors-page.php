@@ -57,6 +57,18 @@ if($action == 'view'){
         _x( 'View Dealers', 'List table row action', 'wp-list-table-example' )
     );
 
+    $view_customer_query_args = array(
+        'page'   => 'permasafe-upgraded-membership',
+        'action' => 'view_upgraded_policy',
+        'distributor'  => $distributor_login,
+    );
+
+    $actions['view_upgraded_policies'] = sprintf(
+        '<a href="%1$s">%2$s</a>',
+        esc_url( add_query_arg( $view_customer_query_args, 'admin.php' ), 'view_upgraded_policy_' . $distributor_id  ),
+        _x( 'View Upgraded Policies', 'List table row action', 'wp-list-table-example' )
+    );
+
     echo '<div class="top-head">';
     echo '<h1 class="top-heading">View <span style="color:#0065a7">'.$name.' ('.$distributor_login.')</span> Information</h1>';
     echo $actions['edit'];
@@ -68,6 +80,7 @@ if($action == 'view'){
     ) ) ;
     if($dealer_distributor_name){
         echo $actions['viewdealers'];
+        echo $actions['view_upgraded_policies'];
     }
     echo '</div>';   
     echo '<br/>';        

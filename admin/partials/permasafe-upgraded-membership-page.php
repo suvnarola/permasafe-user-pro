@@ -1,50 +1,160 @@
 <?php
- echo '<div class="top-head">';
- echo '<h1 class="top-heading">View Upgraded Membership</h1>';
- 
- echo '</div>';
+$action = $_GET['action'];
+$dealer_login = $_GET['dealer'];
+$dealers = get_user_by('login',$dealer_login);
+$dealer_id = $dealers->ID;
+$dealer_name = get_user_meta($dealer_id,'dealer_name',true);
+
+$distributor_login = $_GET['distributor'];
+$distributors = get_user_by('login',$distributor_login);
+$distributor_id = $distributors->ID;
+$distributor_name = get_user_meta($distributor_id,'distributor_name',true);
+
 global $wpdb;
+
+if($action == 'view_upgraded_policy'){
+    if($dealer_login){
+        echo '<div class="top-head">';
+            echo '<h1 class="top-heading">View <span style="color:#0065a7">'.$dealer_name.' ('.$dealer_login.')</span> Upgraded Membership</h1>';
+        echo '</div>';
+        $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "'.$dealer_login.'")');
+    }
+    if($distributor_login){
+        echo '<div class="top-head">';
+            echo '<h1 class="top-heading">View <span style="color:#0065a7">'.$distributor_name.' ('.$distributor_login.')</span> Upgraded Membership</h1>';
+        echo '</div>';
+        $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value in ( SELECT user_login FROM `wp_users` WHERE ID in (SELECT user_id FROM `wp_usermeta` WHERE meta_key="dealer_distributor_name" AND meta_value = (SELECT ID FROM `wp_users` WHERE user_login = "'.$distributor_login.'"))))');
+    }
+        $str = '';
+        foreach ($user_query as $value_query) {
+            $str = $value_query->meta_value.','.$str;
+        }
+
+        $str = rtrim($str,",");
+        // echo $str;
+        $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in ('.$str.') ');
+        // pr($str_results);
+        $check_array = array();
+        foreach ($str_results as $str_result) {
+            $check_array[] = $str_result->meta_value;
+        }
+        // pr($check_array);
+        if($dealer_login){
+            $invite_args = array(
+                'post_type' => 'pmsafe_invitecode',
+                'post_status' => 'publish',
+                'posts_per_page' => -1,
+                'orderby'=> 'date',
+                'order' => 'DESC',
+                'meta_query' => array(
+                    // 'relation' => 'AND',
+                    array(
+                        'key'     => '_pmsafe_dealer',
+                        'value'   => $dealer_login,
+                        'compare' => '=',
+                    ),
+        
+                ),
+            );
+            $invite_results = get_posts($invite_args);
+        }
+        if($distributor_login){
+            $dealers =  get_users(
+                array(
+                 'meta_key' => 'dealer_distributor_name',
+                 'meta_value' => $distributor_id
+              ) ) ;
+              foreach ($dealers as $key => $value) {
+                  $dealer_login_arr[] = $value->user_login;
+              }
+             
+            $invite_args = array(
+                'post_type' => 'pmsafe_invitecode',
+                'post_status' => 'publish',
+                'posts_per_page' => -1,
+                'orderby'=> 'date',
+                'order' => 'DESC',
+                'meta_query' => array(
+                    // 'relation' => 'AND',
+                    array(
+                        'key'     => '_pmsafe_dealer',
+                        'value'   => $dealer_login_arr,
+                        'compare' => 'IN',
+                    ),
+        
+                ),
+            );
+            $invite_results = get_posts($invite_args);
+        }
+        
+        $invite_array = array();
+        foreach ($invite_results as $invite_result) {
+            $post_id = $invite_result->ID;
+            $invite_array[] = get_post_meta($post_id,'_pmsafe_invitation_code',true);
+        }
+        
+        if(empty($invite_array)){
+            $users_array = $check_array;
+        }else{
+            $users_array = array_merge($check_array, $invite_array);
+        }
+    
+}else{
+    echo '<div class="top-head">';
+        echo '<h1 class="top-heading">View Upgraded Membership</h1>';
+    echo '</div>';
+}
 
 
 $membership_results = $wpdb->get_results('SELECT post_id FROM wp_postmeta WHERE meta_key = "is_upgraded" and meta_value ="1"');
+
 echo '<div class="filter-wrap">';
 // echo '<input type="hidden" id="membership_login_id" value="'.$login.'">';
     echo '<div class="input-filter-wrap">';
         echo '<label>Date: </label><input type="text" id="membership_datepicker1" style="width:auto;"> <input type="text" id="membership_datepicker2" style="width:auto;">';
     echo '</div>';
    
-    $args = array(
-        'role'         => 'author',
-    );
-    $distributor_users = get_users( $args );
-    echo '<div class="filter-mid">';
-    echo '<div class="select-filter-wrap">';    	   	
-            // echo '<label>Distributot name : </label>';
-            echo '<select id="pmsafe_distributor">';
-            echo '<option value="">Distributor Name</option>';
-            foreach ($distributor_users as $key => $value) {
-                $distributor_name = get_user_meta($value->ID,'distributor_name',true);
-                echo '<option value="'.$value->user_login.'">'.$distributor_name.' ('. $value->user_login .')'.'</option>';
-            }
-            echo '</select>';
-    echo '</div>';   
-    echo '</div>';   
+    if($action == 'view_upgraded_policy'){
+        if($dealer_login){
+            echo '<input type="hidden" id="membership_login" value="'.$dealer_login.'">';
+        }
+        if($distributor_login){
+            echo '<input type="hidden" id="membership_login" value="'.$distributor_login.'">';
+        }
+    }    
+    if($action != 'view_upgraded_policy'){
+        $args = array(
+            'role'         => 'author',
+        );
+        $distributor_users = get_users( $args );
+        echo '<div class="filter-mid">';
+            echo '<div class="select-filter-wrap">';    	   	
+                    // echo '<label>Distributot name : </label>';
+                    echo '<select id="pmsafe_distributor">';
+                    echo '<option value="">Distributor Name</option>';
+                    foreach ($distributor_users as $key => $value) {
+                        $distributor_name = get_user_meta($value->ID,'distributor_name',true);
+                        echo '<option value="'.$value->user_login.'">'.$distributor_name.' ('. $value->user_login .')'.'</option>';
+                    }
+                    echo '</select>';
+            echo '</div>';   
+        echo '</div>';   
 
-    //Dealer name
-    $args = array(
-        'role'         => 'contributor',
-    );
-    $dealer_users = get_users( $args );
-    echo '<div class="filter-down">';
-    echo '<div class="select-filter-wrap">';    	
-            
-            echo '<select id="pmsafe_dealer">';
-            echo '<option value="">Dealer Name</option>';
-            echo '</select>';
-    echo '</div>';   
-     
-    echo '</div>';
-    
+        //Dealer name
+        $args = array(
+            'role'         => 'contributor',
+        );
+        $dealer_users = get_users( $args );
+        echo '<div class="filter-down">';
+            echo '<div class="select-filter-wrap">';    	
+                    
+                    echo '<select id="pmsafe_dealer">';
+                    echo '<option value="">Dealer Name</option>';
+                    echo '</select>';
+            echo '</div>';   
+        
+        echo '</div>';
+    }
     echo '<div class="filter-policy">';
     echo '<div class="select-filter-wrap">';    	
            
@@ -79,8 +189,9 @@ echo '<div class="filter-wrap">';
         echo '</div>';
     echo '</div>';
 echo '</div>';
-echo '<div class="membership-result-wrap">';    
 
+
+echo '<div class="membership-result-wrap">';    
 echo '<div class="table-responsive">';
 echo '<table id="mebership_info_table" class="display nowrap" style="width:100%">';
 echo '<thead>';
@@ -161,57 +272,112 @@ foreach ($membership_results as $str) {
     $user_id = $users->ID;
     $vehicle_info = get_user_meta($user_id,'pmsafe_vehicle_info',true);
     $vin = $vehicle_info[$code]['pmsafe_vin'];
-    echo '<tr>';
-        
-        echo '<td style="text-align:center;">';
-            echo $code;
-        echo '</td>';
-       
-        echo '<td>';
-         echo $fname.' '.$lname;
-        echo '</td>';
+    if($action == 'view_upgraded_policy'){
+        if(in_array($code,$users_array)){
+            echo '<tr>';
+                echo '<td style="text-align:center;">';
+                    echo $code;
+                echo '</td>';
+            
+                echo '<td>';
+                echo $fname.' '.$lname;
+                echo '</td>';
 
-        echo '<td style="text-align:center;">';
-            echo $vin;
-        echo '</td>';
+                echo '<td style="text-align:center;">';
+                    echo $vin;
+                echo '</td>';
 
-        echo '<td style="text-align:center;">';
-            echo $bulk_prefix;
-        echo '</td>';
-        
-        echo '<td style="text-align:center;">';
-            echo $code_prefix;
-        echo '</td>';
-        
-        
-        echo '<td>';
-        if($dealer_name){
-            echo $dealer_name;
+                echo '<td style="text-align:center;">';
+                    echo $bulk_prefix;
+                echo '</td>';
+                
+                echo '<td style="text-align:center;">';
+                    echo $code_prefix;
+                echo '</td>';
+                
+                
+                echo '<td>';
+                if($dealer_name){
+                    echo $dealer_name;
+                }
+                if($distributor_name){
+                    echo $distributor_name;
+                }
+                if($contact_fname){
+                    echo $contact_fname;
+                }
+                if($admin_name){
+                    echo $admin_name;
+                }
+                echo '</td>';
+
+                echo '<td style="text-align:center;">';
+                    echo get_post_meta($post_id,'upgraded_date',true);
+                echo '</td>';
+
+                echo '<td style="text-align:center;">';
+                    echo (($dealer_cost)?'$'.$dealer_cost:'-');
+                echo '</td>';
+
+                echo '<td style="text-align:center;">';
+                echo (($distributor_cost)?'$'.$distributor_cost:'-');
+                echo '</td>';
+
+            echo '</tr>';
         }
-        if($distributor_name){
-            echo $distributor_name;
-        }
-        if($contact_fname){
-            echo $contact_fname;
-        }
-        if($admin_name){
-            echo $admin_name;
-        }
-        echo '</td>';
+    }else{
+        echo '<tr>';
+            
+            echo '<td style="text-align:center;">';
+                echo $code;
+            echo '</td>';
+        
+            echo '<td>';
+            echo $fname.' '.$lname;
+            echo '</td>';
 
-        echo '<td style="text-align:center;">';
-            echo get_post_meta($post_id,'upgraded_date',true);
-        echo '</td>';
+            echo '<td style="text-align:center;">';
+                echo $vin;
+            echo '</td>';
 
-        echo '<td style="text-align:center;">';
-            echo (($dealer_cost)?'$'.$dealer_cost:'-');
-        echo '</td>';
+            echo '<td style="text-align:center;">';
+                echo $bulk_prefix;
+            echo '</td>';
+            
+            echo '<td style="text-align:center;">';
+                echo $code_prefix;
+            echo '</td>';
+            
+            
+            echo '<td>';
+            if($dealer_name){
+                echo $dealer_name;
+            }
+            if($distributor_name){
+                echo $distributor_name;
+            }
+            if($contact_fname){
+                echo $contact_fname;
+            }
+            if($admin_name){
+                echo $admin_name;
+            }
+            echo '</td>';
 
-        echo '<td style="text-align:center;">';
-        echo (($distributor_cost)?'$'.$distributor_cost:'-');
-        echo '</td>';
+            echo '<td style="text-align:center;">';
+                echo get_post_meta($post_id,'upgraded_date',true);
+            echo '</td>';
 
-    echo '</tr>';
+            echo '<td style="text-align:center;">';
+                echo (($dealer_cost)?'$'.$dealer_cost:'-');
+            echo '</td>';
+
+            echo '<td style="text-align:center;">';
+            echo (($distributor_cost)?'$'.$distributor_cost:'-');
+            echo '</td>';
+
+        echo '</tr>';
+    }
     
  
 }

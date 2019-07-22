@@ -2646,11 +2646,12 @@ jQuery( document ).ready(function() {
         var distributor     = jQuery('#pmsafe_distributor').val();
         var policy     = jQuery('#policy').val();
         var package     = jQuery('#benefit_packages').val();
+        var login     = jQuery('#membership_login').val();
       
-        // alert(dealer + distributor);
+        
+        if(login === ''){
             var data = {
                 action : 'admin_membership_date_filter',
-                // membership_login_id : membership_login_id,
                 datepicker1 : datepicker1,
                 datepicker2 : datepicker2,
                 dealer : dealer,
@@ -2658,6 +2659,17 @@ jQuery( document ).ready(function() {
                 policy : policy,
                 package : package
             }
+        }else{
+            var data = {
+                action : 'admin_membership_date_filter',
+                datepicker1 : datepicker1,
+                datepicker2 : datepicker2,
+                policy : policy,
+                package : package,
+                login : login
+            }
+          
+        }
         
         if(jQuery('#membership_datepicker1').val().trim()=="" ){
             jQuery('#membership_datepicker1').css({'border':'1px solid #ff0000'});
@@ -3609,19 +3621,12 @@ jQuery( document ).ready(function() {
     } );
     
     jQuery(document).on("click","#pmsafe_contact_info_mail", function(e) {
-        
-        
-        
         var contact_id = jQuery(this).attr('data-id');
-        
-        
         
         var data = {
             action: 'send_reset_mail',
             contact_id:contact_id
         };
-        
-        
             
             jQuery('.perma-admin-loader').show();
             jQuery.ajax({

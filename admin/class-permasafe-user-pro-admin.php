@@ -2790,14 +2790,32 @@ class Permasafe_User_Pro_Admin {
 			$distributor = $_POST['distributor'];
 			$policy = $_POST['policy'];
 			$package = $_POST['package'];
+			$login = $_POST['login'];
+			$users = get_user_by('login',$login);
+			$role = $users->roles;
 			
-			if($distributor != '' && $dealer == ''){
-				$user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value in ( SELECT user_login FROM `wp_users` WHERE ID in (SELECT user_id FROM `wp_usermeta` WHERE meta_key="dealer_distributor_name" AND meta_value = (SELECT ID FROM `wp_users` WHERE user_login = "'.$distributor.'"))))');
+			if($login != ''){
+				if(in_array('contributor',$role)){	
+					
+					$user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "'.$login.'")');
+				}
+				if(in_array('author',$role)){	
+					
+					$user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value in ( SELECT user_login FROM `wp_users` WHERE ID in (SELECT user_id FROM `wp_usermeta` WHERE meta_key="dealer_distributor_name" AND meta_value = (SELECT ID FROM `wp_users` WHERE user_login = "'.$login.'"))))');
+				}
+			}else{
+				// echo 'in else';
+				if($distributor != '' && $dealer == ''){
+					// echo 'in dis';
+					$user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value in ( SELECT user_login FROM `wp_users` WHERE ID in (SELECT user_id FROM `wp_usermeta` WHERE meta_key="dealer_distributor_name" AND meta_value = (SELECT ID FROM `wp_users` WHERE user_login = "'.$distributor.'"))))');
+				}
+				
+				if($dealer != '' && $distributor != ''){
+					// echo 'in del';
+					$user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "'.$dealer.'")');
+				}
 			}
-			if($dealer != '' && $distributor != ''){
-				$user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "'.$dealer.'")');
-			}
-			
+			// pr($user_query);
 			$str = '';
 			foreach ($user_query as $value_query) {
 				$str = $value_query->meta_value.','.$str;
@@ -2809,8 +2827,115 @@ class Permasafe_User_Pro_Admin {
 			
 			$check_array = array();
 			foreach ($str_results as $str_result) {
-				$check_array[] = $str_result->meta_value;
+				$user_array[] = $str_result->meta_value;
 			}
+
+			if($login != ''){
+				// echo 'in';
+				if(in_array('contributor',$role)){	
+					$invite_args = array(
+						'post_type' => 'pmsafe_invitecode',
+						'post_status' => 'publish',
+						'posts_per_page' => -1,
+						'orderby'=> 'date',
+						'order' => 'DESC',
+						'meta_query' => array(
+							// 'relation' => 'AND',
+							array(
+								'key'     => '_pmsafe_dealer',
+								'value'   => $login,
+								'compare' => '=',
+							),
+				
+						),
+					);
+				}
+				if(in_array('author',$role)){
+					$distributor_id = $users->ID;
+					$dealers =  get_users(
+						array(
+						 'meta_key' => 'dealer_distributor_name',
+						 'meta_value' => $distributor_id
+					  ) ) ;
+					  foreach ($dealers as $key => $value) {
+						  $dealer_login_arr[] = $value->user_login;
+					  }
+					 
+					$invite_args = array(
+						'post_type' => 'pmsafe_invitecode',
+						'post_status' => 'publish',
+						'posts_per_page' => -1,
+						'orderby'=> 'date',
+						'order' => 'DESC',
+						'meta_query' => array(
+							// 'relation' => 'AND',
+							array(
+								'key'     => '_pmsafe_dealer',
+								'value'   => $dealer_login_arr,
+								'compare' => 'IN',
+							),
+				
+						),
+					);
+				}
+				$invite_results = get_posts($invite_args);
+			}else{
+				// echo 'in else';
+				if($distributor != '' && $dealer == ''){
+					$invite_args = array(
+						'post_type' => 'pmsafe_invitecode',
+						'post_status' => 'publish',
+						'posts_per_page' => -1,
+						'orderby'=> 'date',
+						'order' => 'DESC',
+						'meta_query' => array(
+							// 'relation' => 'AND',
+							array(
+								'key'     => '_pmsafe_dealer',
+								'value'   => $distributor,
+								'compare' => '=',
+							),
+				
+						),
+					);
+					$invite_results = get_posts($invite_args);
+				}
+				
+				if($dealer != '' && $distributor != ''){
+					$invite_args = array(
+						'post_type' => 'pmsafe_invitecode',
+						'post_status' => 'publish',
+						'posts_per_page' => -1,
+						'orderby'=> 'date',
+						'order' => 'DESC',
+						'meta_query' => array(
+							// 'relation' => 'AND',
+							array(
+								'key'     => '_pmsafe_dealer',
+								'value'   => $dealer,
+								'compare' => '=',
+							),
+				
+						),
+					);
+					$invite_results = get_posts($invite_args);
+				}
+			}
+			
+            $invite_array = array();
+            foreach ($invite_results as $invite_result) {
+				$post_id = $invite_result->ID;
+				$invite_array[] = get_post_meta($post_id,'_pmsafe_invitation_code',true);
+			}
+			
+            if(empty($invite_array)){
+                $check_array = $user_array;
+            }else{
+                $check_array = array_merge($user_array, $invite_array);
+			}
+
+			// pr($check_array);
+			
 			$membership_results = $wpdb->get_results('SELECT post_id FROM wp_postmeta WHERE meta_key = "is_upgraded" and meta_value ="1"');
 			foreach ($membership_results as $key=>$value) {
 				$post_id = $value->post_id;
@@ -2825,6 +2950,23 @@ class Permasafe_User_Pro_Admin {
                     $bulk_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
                 }
 
+				if($login != ''){
+					if($upgraded_date >= $datepicker1 && $upgraded_date <= $datepicker2){
+						if(in_array($code,$check_array)){
+						   if($policy == "upgraded"){
+							   if($code_prefix == $package){
+								   $invite_post_id[] = $post_id;
+							   }
+						   }else if($policy == "original"){
+							   if($bulk_prefix == $package){
+								   $invite_post_id[] = $post_id;
+							   }
+						   }else{
+							   $invite_post_id[] = $post_id;
+						   }
+						}
+					}
+				}else{
 				 if($distributor != '' && $dealer == ''){
 					 if($upgraded_date >= $datepicker1 && $upgraded_date <= $datepicker2){
 						 if(in_array($code,$check_array)){
@@ -2873,9 +3015,10 @@ class Permasafe_User_Pro_Admin {
 						}
 					 }
 				 }
+				}
 			 
 			 }
-
+			//  pr($invite_post_id);
 			$benefit_prefix = pmsafe_get_meta_values( '_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish' );
 			foreach ($benefit_prefix as $prefix) {
 				
@@ -2999,60 +3142,9 @@ class Permasafe_User_Pro_Admin {
 					$upgraded_by = $admin_name;
 				}
 				$name = $fname.' '.$lname;
-				if($distributor != '' && $dealer == ''){
+				if($login != ''){
 					if($upgraded_date >= $datepicker1 && $upgraded_date <= $datepicker2){
 						
-						if(in_array($code,$check_array)){
-							if($policy == "upgraded"){
-								
-								if($code_prefix == $package){
-									$data[] = array(
-										'registration_number' => $code,
-										'original_policy' => $bulk_prefix,
-										'upgraded_policy' => $code_prefix,
-										'upgraded_by'=> $upgraded_by,
-										'upgraded_date' => $upgraded_date,
-										'customer_name' => $name,
-										'dealer_cost' => $dealer_cost,
-										'distributor_cost' => $distributor_cost,
-										'vin' => $vin
-									);
-								}
-							}else if($policy == "original"){
-								if($bulk_prefix == $package){
-									$data[] = array(
-										'registration_number' => $code,
-										'original_policy' => $bulk_prefix,
-										'upgraded_policy' => $code_prefix,
-										'upgraded_by'=> $upgraded_by,
-										'upgraded_date' => $upgraded_date,
-										'customer_name' => $name,
-										'dealer_cost' => $dealer_cost,
-										'distributor_cost' => $distributor_cost,
-										'vin' => $vin
-									);
-								}
-							}else{
-							
-								$data[] = array(
-									'registration_number' => $code,
-									'original_policy' => $bulk_prefix,
-									'upgraded_policy' => $code_prefix,
-									'upgraded_by'=> $upgraded_by,
-									'upgraded_date' => $upgraded_date,
-									'customer_name' => $name,
-									'dealer_cost' => $dealer_cost,
-									'distributor_cost' => $distributor_cost,
-									'vin' => $vin
-								);
-							}
-						}
-						
-						
-					}
-				}else if($dealer != '' && $distributor != ''){
-					if($upgraded_date >= $datepicker1 && $upgraded_date <= $datepicker2){
-					
 						if(in_array($code,$check_array)){
 						
 							if($policy == "upgraded"){
@@ -3101,11 +3193,142 @@ class Permasafe_User_Pro_Admin {
 						}
 							
 					}
-				}
-                else{
-					if($upgraded_date >= $datepicker1 && $upgraded_date <= $datepicker2){
-						if($policy == "upgraded"){
-							if($code_prefix == $package){
+				}else{
+					if($distributor != '' && $dealer == ''){
+						if($upgraded_date >= $datepicker1 && $upgraded_date <= $datepicker2){
+						
+							if(in_array($code,$check_array)){
+							
+								if($policy == "upgraded"){
+									
+									if($code_prefix == $package){
+										$data[] = array(
+											'registration_number' => $code,
+											'original_policy' => $bulk_prefix,
+											'upgraded_policy' => $code_prefix,
+											'upgraded_by'=> $upgraded_by,
+											'upgraded_date' => $upgraded_date,
+											'customer_name' => $name,
+											'dealer_cost' => $dealer_cost,
+											'distributor_cost' => $distributor_cost,
+											'vin' => $vin
+										);
+									}
+								}else if($policy == "original"){
+									if($bulk_prefix == $package){
+										$data[] = array(
+											'registration_number' => $code,
+											'original_policy' => $bulk_prefix,
+											'upgraded_policy' => $code_prefix,
+											'upgraded_by'=> $upgraded_by,
+											'upgraded_date' => $upgraded_date,
+											'customer_name' => $name,
+											'dealer_cost' => $dealer_cost,
+											'distributor_cost' => $distributor_cost,
+											'vin' => $vin
+										);
+									}
+								}else{
+								
+									$data[] = array(
+										'registration_number' => $code,
+										'original_policy' => $bulk_prefix,
+										'upgraded_policy' => $code_prefix,
+										'upgraded_by'=> $upgraded_by,
+										'upgraded_date' => $upgraded_date,
+										'customer_name' => $name,
+										'dealer_cost' => $dealer_cost,
+										'distributor_cost' => $distributor_cost,
+										'vin' => $vin
+									);
+								}
+							}
+								
+						}
+					}else if($dealer != '' && $distributor != ''){
+						if($upgraded_date >= $datepicker1 && $upgraded_date <= $datepicker2){
+						
+							if(in_array($code,$check_array)){
+							
+								if($policy == "upgraded"){
+									
+									if($code_prefix == $package){
+										$data[] = array(
+											'registration_number' => $code,
+											'original_policy' => $bulk_prefix,
+											'upgraded_policy' => $code_prefix,
+											'upgraded_by'=> $upgraded_by,
+											'upgraded_date' => $upgraded_date,
+											'customer_name' => $name,
+											'dealer_cost' => $dealer_cost,
+											'distributor_cost' => $distributor_cost,
+											'vin' => $vin
+										);
+									}
+								}else if($policy == "original"){
+									if($bulk_prefix == $package){
+										$data[] = array(
+											'registration_number' => $code,
+											'original_policy' => $bulk_prefix,
+											'upgraded_policy' => $code_prefix,
+											'upgraded_by'=> $upgraded_by,
+											'upgraded_date' => $upgraded_date,
+											'customer_name' => $name,
+											'dealer_cost' => $dealer_cost,
+											'distributor_cost' => $distributor_cost,
+											'vin' => $vin
+										);
+									}
+								}else{
+								
+									$data[] = array(
+										'registration_number' => $code,
+										'original_policy' => $bulk_prefix,
+										'upgraded_policy' => $code_prefix,
+										'upgraded_by'=> $upgraded_by,
+										'upgraded_date' => $upgraded_date,
+										'customer_name' => $name,
+										'dealer_cost' => $dealer_cost,
+										'distributor_cost' => $distributor_cost,
+										'vin' => $vin
+									);
+								}
+							}
+								
+						}
+					}
+					else{
+						if($upgraded_date >= $datepicker1 && $upgraded_date <= $datepicker2){
+							if($policy == "upgraded"){
+								if($code_prefix == $package){
+									
+									$data[] = array(
+										'registration_number' => $code,
+										'original_policy' => $bulk_prefix,
+										'upgraded_policy' => $code_prefix,
+										'upgraded_by'=> $upgraded_by,
+										'upgraded_date' => $upgraded_date,
+										'customer_name' => $name,
+										'dealer_cost' => $dealer_cost,
+										'distributor_cost' => $distributor_cost,
+										'vin' => $vin
+									);
+								}
+							}else if($policy == "original"){
+								if($bulk_prefix == $package){
+									$data[] = array(
+										'registration_number' => $code,
+										'original_policy' => $bulk_prefix,
+										'upgraded_policy' => $code_prefix,
+										'upgraded_by'=> $upgraded_by,
+										'upgraded_date' => $upgraded_date,
+										'customer_name' => $name,
+										'dealer_cost' => $dealer_cost,
+										'distributor_cost' => $distributor_cost,
+										'vin' => $vin
+									);
+								}
+							}else{
 								
 								$data[] = array(
 									'registration_number' => $code,
@@ -3118,35 +3341,8 @@ class Permasafe_User_Pro_Admin {
 									'distributor_cost' => $distributor_cost,
 									'vin' => $vin
 								);
-							}
-						}else if($policy == "original"){
-							if($bulk_prefix == $package){
-								$data[] = array(
-									'registration_number' => $code,
-									'original_policy' => $bulk_prefix,
-									'upgraded_policy' => $code_prefix,
-									'upgraded_by'=> $upgraded_by,
-									'upgraded_date' => $upgraded_date,
-									'customer_name' => $name,
-									'dealer_cost' => $dealer_cost,
-									'distributor_cost' => $distributor_cost,
-									'vin' => $vin
-								);
-							}
-						}else{
-							
-							$data[] = array(
-								'registration_number' => $code,
-								'original_policy' => $bulk_prefix,
-								'upgraded_policy' => $code_prefix,
-								'upgraded_by'=> $upgraded_by,
-								'upgraded_date' => $upgraded_date,
-								'customer_name' => $name,
-								'dealer_cost' => $dealer_cost,
-								'distributor_cost' => $distributor_cost,
-								'vin' => $vin
-							);
-						}		
+							}		
+						}
 					}
 				}
 			}
