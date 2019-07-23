@@ -2649,7 +2649,8 @@ jQuery( document ).ready(function() {
         var login     = jQuery('#membership_login').val();
       
         
-        if(login === ''){
+        if(login === undefined){
+        
             var data = {
                 action : 'admin_membership_date_filter',
                 datepicker1 : datepicker1,
@@ -2660,6 +2661,7 @@ jQuery( document ).ready(function() {
                 package : package
             }
         }else{
+        
             var data = {
                 action : 'admin_membership_date_filter',
                 datepicker1 : datepicker1,

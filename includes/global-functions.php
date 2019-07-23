@@ -1619,10 +1619,13 @@ function get_user_by_dealer($dealer){
     }
     if(empty($invite_arr)){
         $customer_arr = $bulk_arr;
-    }else{
+    }else if(empty($bulk_arr)){
+        $customer_arr = $invite_arr;
+    }
+    else{
         $customer_arr = array_merge($bulk_arr, $invite_arr);
     }
-    // pr($customer_arr);
+
     return $customer_arr;
 }
 

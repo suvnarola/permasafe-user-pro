@@ -1447,15 +1447,36 @@ class Permasafe_User_Pro_Admin {
                         $bulk_array[] = $str_result->meta_value;
 					}
 					
-					$invite_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (SELECT post_id FROM wp_postmeta WHERE meta_key="_pmsafe_is_invite_code")');
+					// $invite_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (SELECT post_id FROM wp_postmeta WHERE meta_key="_pmsafe_is_invite_code")');
 					// pr($str_results);
+					$invite_args = array(
+						'post_type' => 'pmsafe_invitecode',
+						'post_status' => 'publish',
+						'posts_per_page' => -1,
+						'orderby'=> 'date',
+						'order' => 'DESC',
+						'meta_query' => array(
+							// 'relation' => 'AND',
+							array(
+								'key'     => '_pmsafe_dealer',
+								'value'   => $login,
+								'compare' => '=',
+							),
+				
+						),
+					);
+					$invite_results = get_posts($invite_args);
 					$invite_array = array();
 					foreach ($invite_results as $invite_result) {
-						$invite_array[] = $invite_result->meta_value;
+						$post_id = $invite_result->ID;
+            			$invite_array[] = get_post_meta($post_id,'_pmsafe_invitation_code',true);
 					}
 					if(empty($invite_array)){
 						$check_array = $bulk_array;
-					}else{
+					}else if(empty($bulk_array)){
+						$check_array = $invite_array;
+					}
+					else{
 						$check_array = array_merge($bulk_array, $invite_array);
 					}
                     
@@ -2882,6 +2903,17 @@ class Permasafe_User_Pro_Admin {
 			}else{
 				// echo 'in else';
 				if($distributor != '' && $dealer == ''){
+					$users = get_user_by('login',$distributor);
+					$distributor_id = $users->ID;
+					$dealers =  get_users(
+						array(
+						 'meta_key' => 'dealer_distributor_name',
+						 'meta_value' => $distributor_id
+					  ) ) ;
+					  foreach ($dealers as $key => $value) {
+						  $dealer_login_arr[] = $value->user_login;
+					  }
+					 
 					$invite_args = array(
 						'post_type' => 'pmsafe_invitecode',
 						'post_status' => 'publish',
@@ -2892,8 +2924,8 @@ class Permasafe_User_Pro_Admin {
 							// 'relation' => 'AND',
 							array(
 								'key'     => '_pmsafe_dealer',
-								'value'   => $distributor,
-								'compare' => '=',
+								'value'   => $dealer_login_arr,
+								'compare' => 'IN',
 							),
 				
 						),
@@ -2930,7 +2962,10 @@ class Permasafe_User_Pro_Admin {
 			
             if(empty($invite_array)){
                 $check_array = $user_array;
-            }else{
+			}else if(empty($user_array)){
+				$check_array = $invite_array;
+			}
+			else{
                 $check_array = array_merge($user_array, $invite_array);
 			}
 
