@@ -1,6 +1,5 @@
-// A $( document ).ready() block.
 jQuery( document ).ready(function() {    
-    // console.log( "Ajax "+pmAjax.ajaxurl );
+    
     jQuery('.message').toggleClass('comein');
     jQuery('.check').toggleClass('scaledown');
     jQuery(document).on("click","#ok", function(e) {
@@ -17,6 +16,159 @@ jQuery( document ).ready(function() {
     }, 700);
             
     }
+
+    var registration_form = '<h3>Customer Contact Information</h3><div class="content-column one_half"><label>First Name<input type="text" name="first_name" id="first_name" /></label></div><div class="content-column one_half last_column"><label>Last Name<input type="text" name="last_name" id="last_name" /></label></div><div class="clear_column"></div><div class="content-column"><label>Address<input type="text" name="address1" id="address1" placeholder="Address line 1" /></label></div><div class="content-column"><input type="text" name="address2" id="address2" placeholder="Address line 2" /></div><div class="content-column one_third"><label>City<input type="text" name="city" id="city" /></label></div><div class="content-column one_third"><label>State<input type="text" name="state" id="state" /></label></div><div class="content-column one_third last_column"><label>Zip Code<input type="text" name="zip_code" id="zip_code" /></label></div><div class="clear_column"></div><div class="content-column one_half"><label>Phone Number <span style="font-size:small; color: #676767!important">(No "Dashes." Example: 3334445555)</span><input type="text" name="phone_number" id="phone_number" /></label></div><div class="content-column one_half last_column"><label>Email<input type="text" name="email" id="email" /><p style="font-size:x-small; color: #676767">Note: An accurate email address is required to deliver and receive benefit information.</p></label></div><div class="clear_column"></div><hr><h3>Vehicle Information</h3><div class="content-column one_third"><label>Vehicle Year<input type="text" name="vehicle_year" id="vehicle_year" /></label></div><div class="content-column one_third"><label>Vehicle Make<input type="text" name="vehicle_make" id="vehicle_make" /></label></div><div class="content-column one_third last_column"><label>Vehicle Model<input type="text" name="vehicle_model" id="vehicle_model" /></label></div><div class="content-column one_third"><label>VIN<input type="text" name="vin" id="vin" /></label></div><div class="content-column one_third"><label>Vehicle Mileage<input type="text" name="vehicle_mileage" id="vehicle_mileage" /></label></div><div class="content-column one_third last_column"><label>Vehicle Type<select name="vehicle_type" id="vehicle_type" style="background:#efefef;"><option value="">Select Type</option><option value="new">New</option><option value="preowned">Preowned</option></select></label></div><div class="clear_column"></div><hr><h3>Electronic Consent</h3><p>By electronically signing below, I hereby certify the above information to be true and correct to the best of my knowledge. I further certify that my electronic signature shall have the same legal effect as an originally signed document under applicable Federal and Florida electronic signature laws. </p><p>Any person who knowingly files a statement of claim containing any false or misleading information is subject to criminal and civil penalties. </p><div class="content-column"><label>Signature<input type="text" name="signature" id="signature" placeholder="Signature" style="margin-bottom:10px;"/></label></div><input type="submit" id="pmsafe_submit" value="Submit">';
+
+    // for states
+    var availableStates = [
+        "ALABAMA",
+        "ALASKA",
+        "AMERICAN SAMOA",
+        "ARIZONA",
+        "ARKANSAS",
+        "CALIFORNIA",
+        "COLORADO",
+        "CONNECTICUT",
+        "DELAWARE",
+        "DISTRICT OF COLUMBIA",
+        "FEDERATED STATES OF MICRONESIA",
+        "FLORIDA",
+        "GEORGIA",
+        "GUAM GU",
+        "HAWAII",
+        "IDAHO",
+        "ILLINOIS",
+        "INDIANA",
+        "IOWA",
+        "KANSAS",
+        "KENTUCKY",
+        "LOUISIANA",
+        "MAINE",
+        "MARSHALL ISLANDS",
+        "MARYLAND",
+        "MASSACHUSETTS",
+        "MICHIGAN",
+        "MINNESOTA",
+        "MISSISSIPPI",
+        "MISSOURI",
+        "MONTANA",
+        "NEBRASKA",
+        "NEVADA",
+        "NEW HAMPSHIRE",
+        "NEW JERSEY",
+        "NEW MEXICO",
+        "NEW YORK",
+        "NORTH CAROLINA",
+        "NORTH DAKOTA",
+        "NORTHERN MARIANA ISLANDS",
+        "OHIO",
+        "OKLAHOMA",
+        "OREGON",
+        "PALAU",
+        "PENNSYLVANIA",
+        "PUERTO RICO",
+        "RHODE ISLAND",
+        "SOUTH CAROLINA",
+        "SOUTH DAKOTA",
+        "TENNESSEE",
+        "TEXAS",
+        "UTAH",
+        "VERMONT",
+        "VIRGIN ISLANDS",
+        "VIRGINIA",
+        "WASHINGTON",
+        "WEST VIRGINIA",
+        "WISCONSIN",
+        "WYOMING",
+        "ARMED FORCES AFRICA \ CANADA \ EUROPE \ MIDDLE EAST",
+        "ARMED FORCES AMERICA (EXCEPT CANADA)",
+        "ARMED FORCES PACIFIC"
+      ];
+    
+    
+    var state_options = {
+        source: availableStates
+    };
+
+    jQuery(document).on('keydown.autocomplete', '#state', function() {
+        jQuery(this).autocomplete(state_options);
+    })
+
+    // for vehicle make
+    var manufacurers_list = [
+        "Abarth",
+        "Alfa Romeo",
+        "Aston Martin",
+        "Audi",
+        "Bentley",
+        "BMW",
+        "Bugatti",
+        "Cadillac",
+        "Chevrolet",
+        "Chrysler",
+        "Citroën",
+        "Dacia",
+        "Daewoo",
+        "Daihatsu",
+        "Dodge",
+        "Donkervoort",
+        "DS",
+        "Ferrari",
+        "Fiat",
+        "Fisker",
+        "Ford",
+        "Honda",
+        "Hummer",
+        "Hyundai",
+        "Infiniti",
+        "Iveco",
+        "Jaguar",
+        "Jeep",
+        "Kia",
+        "KTM",
+        "Lada",
+        "Lamborghini",
+        "Lancia",
+        "Land Rover",
+        "Landwind",
+        "Lexus",
+        "Lotus",
+        "Maserati",
+        "Maybach",
+        "Mazda",
+        "McLaren",
+        "Mercedes-Benz",
+        "MG",
+        "Mini",
+        "Mitsubishi",
+        "Morgan",
+        "Nissan",
+        "Opel",
+        "Peugeot",
+        "Porsche",
+        "Renault",
+        "Rolls-Royce",
+        "Rover",
+        "Saab",
+        "Seat",
+        "Skoda",
+        "Smart",
+        "SsangYong",
+        "Subaru",
+        "Suzuki",
+        "Tesla",
+        "Toyota",
+        "Volkswagen",
+        "Volvo"
+    ];
+    
+    var manufacurers_options = {
+        source: manufacurers_list
+    };
+
+    jQuery(document).on('keydown.autocomplete', '#vehicle_make', function() {
+        jQuery(this).autocomplete(manufacurers_options);
+    })
 
     jQuery(document).on("click","#pmsafe_next", function(e) {
         e.preventDefault();
@@ -118,7 +270,7 @@ jQuery( document ).ready(function() {
                                 }
                                 else{
                                     jQuery('.perma-loader').hide();
-                                     jQuery('#hidden_form').html('<h3>Customer Contact Information</h3><div class="content-column one_half"><label>First Name<input type="text" name="first_name" id="first_name" /></label></div><div class="content-column one_half last_column"><label>Last Name<input type="text" name="last_name" id="last_name" /></label></div><div class="clear_column"></div><div class="content-column"><label>Address<input type="text" name="address1" id="address1" placeholder="Address line 1" /></label></div><div class="content-column"><input type="text" name="address2" id="address2" placeholder="Address line 2" /></div><div class="content-column one_third"><label>City<input type="text" name="city" id="city" /></label></div><div class="content-column one_third"><label>State<input type="text" name="state" id="state" /></label></div><div class="content-column one_third last_column"><label>Zip Code<input type="text" name="zip_code" id="zip_code" /></label></div><div class="clear_column"></div><div class="content-column one_half"><label>Phone Number <span style="font-size:small; color: #676767!important">(No "Dashes." Example: 3334445555)</span><input type="text" name="phone_number" id="phone_number" /></label></div><div class="content-column one_half last_column"><label>Email<input type="text" name="email" id="email" /><p style="font-size:x-small; color: #676767">Note: An accurate email address is required to deliver and receive benefit information.</p></label></div><div class="clear_column"></div><hr><h3>Vehicle Information</h3><div class="content-column one_third"><label>Vehicle Year<input type="text" name="vehicle_year" id="vehicle_year" /></label></div><div class="content-column one_third"><label>Vehicle Make<input type="text" name="vehicle_make" id="vehicle_make" /></label></div><div class="content-column one_third last_column"><label>Vehicle Model<input type="text" name="vehicle_model" id="vehicle_model" /></label></div><div class="content-column one_third"><label>VIN<input type="text" name="vin" id="vin" /></label></div><div class="content-column one_third"><label>Vehicle Mileage<input type="text" name="vehicle_mileage" id="vehicle_mileage" /></label></div><div class="content-column one_third last_column"><label>Vehicle Type<select name="vehicle_type" id="vehicle_type" style="background:#efefef;"><option value="">Select Type</option><option value="new">New</option><option value="preowned">Preowned</option></select></label></div><div class="clear_column"></div><hr><h3>Electronic Consent</h3><p>By electronically signing below, I hereby certify the above information to be true and correct to the best of my knowledge. I further certify that my electronic signature shall have the same legal effect as an originally signed document under applicable Federal and Florida electronic signature laws. </p><p>Any person who knowingly files a statement of claim containing any false or misleading information is subject to criminal and civil penalties. </p><div class="content-column"><label>Signature<input type="text" name="signature" id="signature" placeholder="Signature" style="margin-bottom:10px;"/></label></div><input type="submit" id="pmsafe_submit" value="Submit">');
+                                     jQuery('#hidden_form').html(registration_form);
                                 }
                             }
                             
@@ -215,12 +367,12 @@ jQuery( document ).ready(function() {
 
     jQuery(document).on("click","#salesperson_update_price", function(e) {
         jQuery('#salesperson_price_div').css('display','none');
-        jQuery('#hidden_form').html('<h3>Customer Contact Information</h3><div class="content-column one_half"><label>First Name<input type="text" name="first_name" id="first_name" /></label></div><div class="content-column one_half last_column"><label>Last Name<input type="text" name="last_name" id="last_name" /></label></div><div class="clear_column"></div><div class="content-column"><label>Address<input type="text" name="address1" id="address1" placeholder="Address line 1" /></label></div><div class="content-column"><input type="text" name="address2" id="address2" placeholder="Address line 2" /></div><div class="content-column one_third"><label>City<input type="text" name="city" id="city" /></label></div><div class="content-column one_third"><label>State<input type="text" name="state" id="state" /></label></div><div class="content-column one_third last_column"><label>Zip Code<input type="text" name="zip_code" id="zip_code" /></label></div><div class="clear_column"></div><div class="content-column one_half"><label>Phone Number <span style="font-size:small; color: #676767!important">(No "Dashes." Example: 3334445555)</span><input type="text" name="phone_number" id="phone_number" /></label></div><div class="content-column one_half last_column"><label>Email<input type="text" name="email" id="email" /><p style="font-size:x-small; color: #676767">Note: An accurate email address is required to deliver and receive benefit information.</p></label></div><div class="clear_column"></div><hr><h3>Vehicle Information</h3><div class="content-column one_third"><label>Vehicle Year<input type="text" name="vehicle_year" id="vehicle_year" /></label></div><div class="content-column one_third"><label>Vehicle Make<input type="text" name="vehicle_make" id="vehicle_make" /></label></div><div class="content-column one_third last_column"><label>Vehicle Model<input type="text" name="vehicle_model" id="vehicle_model" /></label></div><div class="content-column one_third"><label>VIN<input type="text" name="vin" id="vin" /></label></div><div class="content-column one_third"><label>Vehicle Mileage<input type="text" name="vehicle_mileage" id="vehicle_mileage" /></label></div><div class="content-column one_third last_column"><label>Vehicle Type<select name="vehicle_type" id="vehicle_type" style="background:#efefef;"><option value="">Select Type</option><option value="new">New</option><option value="preowned">Preowned</option></select></label></div><div class="clear_column"></div><hr><h3>Electronic Consent</h3><p>By electronically signing below, I hereby certify the above information to be true and correct to the best of my knowledge. I further certify that my electronic signature shall have the same legal effect as an originally signed document under applicable Federal and Florida electronic signature laws. </p><p>Any person who knowingly files a statement of claim containing any false or misleading information is subject to criminal and civil penalties. </p><div class="content-column"><label>Signature<input type="text" name="signature" id="signature" placeholder="Signature" style="margin-bottom:10px;"/></label></div><input type="submit" id="pmsafe_submit" value="Submit">');
+        jQuery('#hidden_form').html(registration_form);
     });
 
     jQuery(document).on("click","#pmsafe_skip_price", function(e) {
         jQuery('#update_package_price').css('display','none');
-         jQuery('#hidden_form').html('<h3>Customer Contact Information</h3><div class="content-column one_half"><label>First Name<input type="text" name="first_name" id="first_name" /></label></div><div class="content-column one_half last_column"><label>Last Name<input type="text" name="last_name" id="last_name" /></label></div><div class="clear_column"></div><div class="content-column"><label>Address<input type="text" name="address1" id="address1" placeholder="Address line 1" /></label></div><div class="content-column"><input type="text" name="address2" id="address2" placeholder="Address line 2" /></div><div class="content-column one_third"><label>City<input type="text" name="city" id="city" /></label></div><div class="content-column one_third"><label>State<input type="text" name="state" id="state" /></label></div><div class="content-column one_third last_column"><label>Zip Code<input type="text" name="zip_code" id="zip_code" /></label></div><div class="clear_column"></div><div class="content-column one_half"><label>Phone Number <span style="font-size:small; color: #676767!important">(No "Dashes." Example: 3334445555)</span><input type="text" name="phone_number" id="phone_number" /></label></div><div class="content-column one_half last_column"><label>Email<input type="text" name="email" id="email" /><p style="font-size:x-small; color: #676767">Note: An accurate email address is required to deliver and receive benefit information.</p></label></div><div class="clear_column"></div><hr><h3>Vehicle Information</h3><div class="content-column one_third"><label>Vehicle Year<input type="text" name="vehicle_year" id="vehicle_year" /></label></div><div class="content-column one_third"><label>Vehicle Make<input type="text" name="vehicle_make" id="vehicle_make" /></label></div><div class="content-column one_third last_column"><label>Vehicle Model<input type="text" name="vehicle_model" id="vehicle_model" /></label></div><div class="content-column one_third"><label>VIN<input type="text" name="vin" id="vin" /></label></div><div class="content-column one_third"><label>Vehicle Mileage<input type="text" name="vehicle_mileage" id="vehicle_mileage" /></label></div><div class="content-column one_third last_column"><label>Vehicle Type<select name="vehicle_type" id="vehicle_type" style="background:#efefef;"><option value="">Select Type</option><option value="new">New</option><option value="preowned">Preowned</option></select></label></div><div class="clear_column"></div><hr><h3>Electronic Consent</h3><p>By electronically signing below, I hereby certify the above information to be true and correct to the best of my knowledge. I further certify that my electronic signature shall have the same legal effect as an originally signed document under applicable Federal and Florida electronic signature laws. </p><p>Any person who knowingly files a statement of claim containing any false or misleading information is subject to criminal and civil penalties. </p><div class="content-column"><label>Signature<input type="text" name="signature" id="signature" placeholder="Signature" style="margin-bottom:10px;"/></label></div><input type="submit" id="pmsafe_submit" value="Submit">');
+         jQuery('#hidden_form').html(registration_form);
     });
 
     jQuery(document).on("change","#select_upgradable_package", function(e) {
@@ -340,7 +492,7 @@ jQuery( document ).ready(function() {
                             jQuery('#hidden_form').before('<p style="color: #038503;background-color: #c6f2c6;border-color: #ebccd1;padding: 15px;margin-bottom: 20px;border: 1px solid transparent;border-radius: 4px;">'+obj.msg+'.</p>');
                         }
     
-                        jQuery('#hidden_form').html('<h3>Customer Contact Information</h3><div class="content-column one_half"><label>First Name<input type="text" name="first_name" id="first_name" /></label></div><div class="content-column one_half last_column"><label>Last Name<input type="text" name="last_name" id="last_name" /></label></div><div class="clear_column"></div><div class="content-column"><label>Address<input type="text" name="address1" id="address1" placeholder="Address line 1" /></label></div><div class="content-column"><input type="text" name="address2" id="address2" placeholder="Address line 2" /></div><div class="content-column one_third"><label>City<input type="text" name="city" id="city" /></label></div><div class="content-column one_third"><label>State<input type="text" name="state" id="state" /></label></div><div class="content-column one_third last_column"><label>Zip Code<input type="text" name="zip_code" id="zip_code" /></label></div><div class="clear_column"></div><div class="content-column one_half"><label>Phone Number <span style="font-size:small; color: #676767!important">(No "Dashes." Example: 3334445555)</span><input type="text" name="phone_number" id="phone_number" /></label></div><div class="content-column one_half last_column"><label>Email<input type="text" name="email" id="email" /><p style="font-size:x-small; color: #676767">Note: An accurate email address is required to deliver and receive benefit information.</p></label></div><div class="clear_column"></div><hr><h3>Vehicle Information</h3><div class="content-column one_third"><label>Vehicle Year<input type="text" name="vehicle_year" id="vehicle_year" /></label></div><div class="content-column one_third"><label>Vehicle Make<input type="text" name="vehicle_make" id="vehicle_make" /></label></div><div class="content-column one_third last_column"><label>Vehicle Model<input type="text" name="vehicle_model" id="vehicle_model" /></label></div><div class="content-column one_third"><label>VIN<input type="text" name="vin" id="vin" /></label></div><div class="content-column one_third"><label>Vehicle Mileage<input type="text" name="vehicle_mileage" id="vehicle_mileage" /></label></div><div class="content-column one_third last_column"><label>Vehicle Type<select name="vehicle_type" id="vehicle_type" style="background:#efefef;"><option value="">Select Type</option><option value="new">New</option><option value="preowned">Preowned</option></select></label></div><div class="clear_column"></div><hr><h3>Electronic Consent</h3><p>By electronically signing below, I hereby certify the above information to be true and correct to the best of my knowledge. I further certify that my electronic signature shall have the same legal effect as an originally signed document under applicable Federal and Florida electronic signature laws. </p><p>Any person who knowingly files a statement of claim containing any false or misleading information is subject to criminal and civil penalties. </p><div class="content-column"><label>Signature<input type="text" name="signature" id="signature" placeholder="Signature" style="margin-bottom:10px;"/></label></div><input type="submit" id="pmsafe_submit" value="Submit">');
+                        jQuery('#hidden_form').html(registration_form);
                     }
                 },
                 
@@ -348,6 +500,8 @@ jQuery( document ).ready(function() {
             return false;
        }
     });
+
+    
 
     jQuery(document).on("click","#pmsafe_submit", function(e) {
         e.preventDefault();
@@ -410,7 +564,7 @@ jQuery( document ).ready(function() {
         }
         
         //zip code
-        var numbers = /^[0-9]+$/;
+        var numbers = /^[0-9\-]+$/;
         if(jQuery('#zip_code').val().trim() == ''){            
             jQuery('#zip_code').css({'border':'1px solid #ff0000','color':'#ff0000'});
             jQuery( '#zip_code' ).after( "<span class='error'>This field is required.</span>" );
@@ -425,7 +579,7 @@ jQuery( document ).ready(function() {
         }
         
         //Phone
-        var numbers = /^[0-9]+$/;
+        var numbers = /^[0-9]{10}$/;
         if(jQuery('#phone_number').val().trim() == ''){
             jQuery('#phone_number').css({'border':'1px solid #ff0000','color':'#ff0000'});
             jQuery( '#phone_number' ).after( "<span class='error'>This field is required.</span>" );
@@ -489,12 +643,17 @@ jQuery( document ).ready(function() {
         }
         
         //vin
-        if(jQuery('#vin').val().trim()=="" ){
+        var numbers = /^[0-9A-Z]+$/;
+        if(jQuery('#vin').val().trim() == ''){
             jQuery('#vin').css({'border':'1px solid #ff0000','color':'#ff0000'});
             jQuery( '#vin' ).after( "<span class='error'>This field is required.</span>" );
             validflag = false;
+        }else if(!(jQuery('#vin').val().match(numbers))){
+            jQuery('#vin').css({'border':'1px solid #ff0000','color':'#ff0000'});
+            jQuery( '#vin' ).after( "<span class='error'>Please enter valid vin.</span>" );
+            validflag = false;
         }else{
-            jQuery('#vin').css({'color':'#333333'});
+            jQuery('#vin').css({'border-color':'#cccccc'});
         }
         
         //vehicle mileage
@@ -505,7 +664,7 @@ jQuery( document ).ready(function() {
             validflag = false;
         }else if(!(jQuery('#vehicle_mileage').val().match(numbers))){
             jQuery('#vehicle_mileage').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#vehicle_mileage' ).after( "<span>Please enter valid mileage.</span>" );
+            jQuery( '#vehicle_mileage' ).after( "<span class='error'>Please enter valid mileage.</span>" );
             validflag = false;
         }else{
             jQuery('#vehicle_mileage').css({'border-color':'#cccccc'});
@@ -519,6 +678,7 @@ jQuery( document ).ready(function() {
         }else{
             jQuery('#vehicle_type').css({'color':'#333333'});
         }
+        
         //signature
         if(jQuery('#signature').val().trim()=="" ){
             jQuery('#signature').css({'border':'1px solid #ff0000','color':'#ff0000'});
@@ -586,136 +746,7 @@ jQuery( document ).ready(function() {
         PrintElem('#perma-warranty-wrapper');
     });
     
-});
-
-//generate 2nd pdf
-
-jQuery( document ).ready(function() {    
-    // console.log( "Ajax "+pmAjax.ajaxurl );
-    
-    jQuery(document).on("click","#pmsafe_registered_user_submit", function(e) {
-        e.preventDefault();
-        jQuery('.error').remove();
-        var validflag = true;
-        
-        //Member Name
-        if(jQuery('#member_number').val().trim()=="" ){
-            jQuery('#member_number').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#member_number' ).after( "<span class='error'>This field is required.</span>" );
-            validflag = false;
-        }else{
-            jQuery('#member_number').css({'color':'#333333'});
-        }
-       
-        //vehicle year
-        var numbers = /^[0-9]+$/;
-        if(jQuery('#vehicle_year').val().trim() == ''){
-            jQuery('#vehicle_year').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#vehicle_year' ).after( "<span class='error'>This field is required.</span>" );
-            validflag = false;
-        }else if(!(jQuery('#vehicle_year').val().match(numbers))){
-            jQuery('#vehicle_year').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#vehicle_year' ).after( "<span class='error'>Please enter valid year.</span>" );
-            validflag = false;
-        }else{
-            jQuery('#vehicle_year').css({'border-color':'#cccccc'});
-        }
-        
-        //vehicle make
-        if(jQuery('#vehicle_make').val().trim()=="" ){
-            jQuery('#vehicle_make').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#vehicle_make' ).after( "<span class='error'>This field is required.</span>" );
-            validflag = false;
-        }else{
-            jQuery('#vehicle_make').css({'color':'#333333'});
-        }
-        
-        //vehicle model
-        if(jQuery('#vehicle_model').val().trim()=="" ){
-            jQuery('#vehicle_model').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#vehicle_model' ).after( "<span class='error'>This field is required.</span>" );
-            validflag = false;
-        }else{
-            jQuery('#vehicle_model').css({'color':'#333333'});
-        }
-        
-        //vin
-        if(jQuery('#vin').val().trim()=="" ){
-            jQuery('#vin').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#vin' ).after( "<span class='error'>This field is required.</span>" );
-            validflag = false;
-        }else{
-            jQuery('#vin').css({'color':'#333333'});
-        }
-        
-        //vehicle mileage
-        var numbers = /^[0-9]+$/;
-        if(jQuery('#vehicle_mileage').val().trim() == ''){
-            jQuery('#vehicle_mileage').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#vehicle_mileage' ).after( "<span class='error'>This field is required.</span>" );
-            validflag = false;
-        }else if(!(jQuery('#vehicle_mileage').val().match(numbers))){
-            jQuery('#vehicle_mileage').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#vehicle_mileage' ).after( "<span>Please enter valid mileage.</span>" );
-            validflag = false;
-        }else{
-            jQuery('#vehicle_mileage').css({'border-color':'#cccccc'});
-        }
-
-        if(!validflag){
-            return validflag;
-        }else{
-            jQuery('.perma-loader').show();
-            var form = jQuery('#perma_registered_user_form')[0];
-            var fd = new FormData(form);
-            fd.append( 'action', 'pmsafe_registered_user_form');
-            jQuery.ajax({
-                type: 'post',
-                url: pmAjax.ajaxurl,
-                processData: false,
-                contentType: false,
-                data: fd,
-                success: function(response) {
-                   console.log(response);
-                    jQuery('.perma-loader').hide();
-                    var obj = jQuery.parseJSON(response);
-                    if( obj.status == true ){
-                        window.location.replace(obj.redirect);
-//                        jQuery("#response").html(obj.redirect);
-                    }else{
-                        
-                        jQuery('#pmsafe-response').html(obj.message);
-                    }
-                }
-            });
-            return false;
-        }
-    });
-    
-    // Focus and blure 
-    jQuery('#member_number, #first_name, #last_name, #address1, #city, #state, #zip_code, #phone_number, #email, #vehicle_year, #vehicle_make, #vehicle_model, #vin, #vehicle_mileage').focus(function(){
-        jQuery(this).css({'border-color':'#cccccc'});
-        jQuery(this).css({'color':'#555'});
-        jQuery(this).siblings('.error').remove();
-    });
-    jQuery('#member_number, #first_name, #last_name, #address1, #city, #state, #zip_code, #phone_number, #email, #vehicle_year, #vehicle_make, #vehicle_model, #vin, #vehicle_mileage').blur(function(){
-        jQuery(this).css({'color':'#555'});
-        jQuery(this).siblings('.error').remove();
-    });
-    
-    jQuery(document).on("click","#pmsafe_pdf_btn", function(e) {
-        e.preventDefault();
-        
-        PrintElem('#perma-warranty-wrapper');
-    });
-    
-});
-
-
-//end generate 2nd pdf 
-
-jQuery( document ).ready(function() {
-    
+   
     jQuery(document).on("click","#pmsafe_sales_person_submit", function(e) {
         e.preventDefault();
         jQuery('.error').remove();
@@ -777,7 +808,7 @@ jQuery( document ).ready(function() {
         }
         
         //zip code
-        var numbers = /^[0-9]+$/;
+        var numbers = /^[0-9\-]+$/;
         if(jQuery('#zip_code').val().trim() == ''){            
             jQuery('#zip_code').css({'border':'1px solid #ff0000','color':'#ff0000'});
             jQuery( '#zip_code' ).after( "<span class='error'>This field is required.</span>" );
@@ -792,7 +823,7 @@ jQuery( document ).ready(function() {
         }
         
         //Phone
-        var numbers = /^[0-9]+$/;
+        var numbers = /^[0-9]{10}$/;
         if(jQuery('#phone_number').val().trim() == ''){
             jQuery('#phone_number').css({'border':'1px solid #ff0000','color':'#ff0000'});
             jQuery( '#phone_number' ).after( "<span class='error'>This field is required.</span>" );
@@ -856,13 +887,18 @@ jQuery( document ).ready(function() {
         }
         
         //vin
-        if(jQuery('#vin').val().trim()=="" ){
-            jQuery('#vin').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#vin' ).after( "<span class='error'>This field is required.</span>" );
-            validflag = false;
-        }else{
-            jQuery('#vin').css({'color':'#333333'});
-        }
+       var numbers = /^[0-9A-Z]+$/;
+       if(jQuery('#vin').val().trim() == ''){
+           jQuery('#vin').css({'border':'1px solid #ff0000','color':'#ff0000'});
+           jQuery( '#vin' ).after( "<span class='error'>This field is required.</span>" );
+           validflag = false;
+       }else if(!(jQuery('#vin').val().match(numbers))){
+           jQuery('#vin').css({'border':'1px solid #ff0000','color':'#ff0000'});
+           jQuery( '#vin' ).after( "<span class='error'>Please enter valid vin.</span>" );
+           validflag = false;
+       }else{
+           jQuery('#vin').css({'border-color':'#cccccc'});
+       }
         
         //vehicle mileage
         var numbers = /^[0-9]+$/;
@@ -872,7 +908,7 @@ jQuery( document ).ready(function() {
             validflag = false;
         }else if(!(jQuery('#vehicle_mileage').val().match(numbers))){
             jQuery('#vehicle_mileage').css({'border':'1px solid #ff0000','color':'#ff0000'});
-            jQuery( '#vehicle_mileage' ).after( "<span>Please enter valid mileage.</span>" );
+            jQuery( '#vehicle_mileage' ).after( "<span class='error'>Please enter valid mileage.</span>" );
             validflag = false;
         }else{
             jQuery('#vehicle_mileage').css({'border-color':'#cccccc'});
@@ -920,7 +956,7 @@ jQuery( document ).ready(function() {
         jQuery(this).siblings('.error').remove();
     });    
     
-});
+
 
 function PrintElem(elem){
     Popup(jQuery(elem).html());
@@ -945,9 +981,9 @@ function Popup(data){
     return true;
 }
 
-//user profile page
-jQuery(document).ready(function(){
-    // jQuery('form input[type="submit"]').prop("disabled", true);
+
+
+
     jQuery(".btn_nisl_edit").click(function(){
         jQuery('.nisl_name').prop("disabled", false);
         jQuery('.nisl_name').focus();
@@ -976,9 +1012,8 @@ jQuery(document).ready(function(){
         jQuery("#pmsafe_save_dealer_user_info").css("display", "block");
 
     });
- });
+ 
 
-jQuery( document ).ready(function() {
     jQuery(document).on("click","#pmsafe_save_user_info", function(e) {
         e.preventDefault();
         jQuery('.error').remove();
@@ -1239,47 +1274,7 @@ jQuery( document ).ready(function() {
         }
     });
 
-});
-
-// jQuery( document ).ready(function() {
-//     jQuery('#easyPaginate').easyPaginate({
-//     paginateElement: 'div',
-//     elementsPerPage: 3,
-//     effect: 'climb',
-//     prevButtonText : 'Previous',
-//     nextButtonText : 'Next'
-//     });
-// });
-
-jQuery( document ).ready(function() {
-    // jQuery('#customertable').paginate({
-    //   limit: 5
-
-    // });
-    jQuery('#codetable').paginate({
-      limit: 5
-    });
-});
-
-
-
-jQuery(document).ready(function() {
-    
-    /*jQuery('#dealertable thead tr').clone(true).appendTo( '#dealertable thead' );
-    jQuery('#dealertable thead tr:eq(1) th').each( function (i) {
-        var title = jQuery(this).text();
-        jQuery(this).html( '<input type="text" title="Search '+ title +'"/>' );
- 
-        jQuery( 'input', this ).on( 'keyup change', function () {
-            if ( dealertable.column(i).search() !== this.value ) {
-                dealertable
-                    .column(i)
-                    .search( this.value )
-                    .draw();
-            }
-        } );
-    } );*/
-
+     
    var  dealertable = jQuery('#dealertable').DataTable( {
         dom: 'Bfrtip',
         orderCellsTop: true,
@@ -1402,70 +1397,6 @@ jQuery(document).ready(function() {
         view_code_table.columns().search('').draw();
     }); 
 
-
-    var view_customer_table = jQuery('#view_customer_table').DataTable( {
-        dom: 'Bfrtip',
-        responsive: true,
-        orderCellsTop: true,
-        fixedHeader: true,
-        "order": [[ 13, "desc" ]],
-        buttons: [
-            {
-                extend: 'csv',
-                //Name the CSV
-                filename: 'dealer_customer_list',
-               exportOptions: {
-                columns: [0, 1, 2,3, 5, 6, 7,8, 9,10, 11, 12 ]
-                },
-            },
-            {
-                extend: 'pdfHtml5',
-                text: 'PDF',
-                orientation : 'landscape',
-                pageSize : 'LEGAL',
-                filename: 'dealer_customer_list',
-                exportOptions: {
-                    columns: [0, 1, 2,3, 5, 6, 7,8, 9,10, 11, 12 ]
-                },
-            },
-            {
-                extend: 'excel',
-                text: 'EXCEL',
-                filename: 'dealer_customer_list',
-                 exportOptions: {
-                    columns: [0, 1, 2,3, 5, 6, 7,8, 9,10, 11, 12 ]
-                },
-            },
-            {
-                extend: 'print',
-                text: 'PRINT',
-                filename: 'dealer_customer_list',
-                orientation : 'landscape',
-                pageSize : 'LEGAL',
-                 exportOptions: {
-                    columns: [0, 1, 2,3, 5, 6, 7,8, 9,10, 11, 12 ]
-                },
-                customize: function (win) {
-                    jQuery(win.document.body).find('table').addClass('display').css('font-size', '5px');
-                    
-                }
-            }
-        ]
-        // filename: 'dealer_list',
-    } );
-
-     // search fileter for view_customer_table
-    jQuery('#view_customer_table_filter input').unbind().bind('keyup', function() {
-      var colIndex = document.querySelector('#view-customer-table-select').selectedIndex;
-      view_customer_table.column( colIndex).search( this.value ).draw();
-    });
-    
-    jQuery('#view-customer-table-select').change(function() {
-        view_customer_table.columns().search('').draw();
-    }); 
-
-
-    
     var customertable = jQuery('#customertable').DataTable( {
         dom: 'Bfrtip',
         responsive: true,
@@ -1519,7 +1450,7 @@ jQuery(document).ready(function() {
        
     } );
 
-     // search fileter for view_customer_table
+     // search fileter for customertable
     jQuery('#customertable_filter input').unbind().bind('keyup', function() {
       var colIndex = document.querySelector('#customertable-select').selectedIndex;
       customertable.column( colIndex).search( this.value ).draw();
@@ -2067,5 +1998,65 @@ jQuery(document).ready(function() {
         }
     });
    
-});
+    jQuery(document).on("click","#pmsafe_contact_info_mail", function(e) {
+        var contact_id = jQuery(this).attr('data-id');
+        
+        var data = {
+            action: 'send_reset_mail',
+            contact_id:contact_id
+        };
+            
+        jQuery('.perma-loader').show();
+        jQuery.ajax({
+            type: 'POST',
+            url: pmAjax.ajaxurl,
+            data: data,
+            dataType: 'html',
+            success: function(response) {
+                jQuery('.perma-loader').hide();
+                    // location.reload();
+            }
+        });// ajax
+         
+    });
 
+    jQuery('.card-main-wrapper').paginate({
+        scope: jQuery('div'), // targets all div elements
+        perPage:3, 
+    });
+    jQuery('.contact-card-main-wrapper').paginate({
+        scope: jQuery('div'), // targets all div elements
+        perPage:3, 
+    });
+
+    jQuery(document).on("click","#pmsafe_dealers_contact_edit", function(e) {
+        jQuery("#edit-contact-person-modal").modal({
+            escapeClose: false,
+            clickClose: false,
+            // showClose: false
+        });
+        var contact_id = jQuery(this).attr('data-id');
+        var data = {
+            action : 'fetch_dealer_contact_information',
+            contact_id : contact_id
+        }
+        jQuery('.perma-loader').show();
+        jQuery.ajax({
+            type: 'POST',
+            url: pmAjax.ajaxurl,
+            data: data,
+            
+            success: function(response) {
+                jQuery('.perma-loader').hide();
+                var obj = jQuery.parseJSON(response);
+                jQuery('#edit_dealer_contact_fname').val(obj.fname);
+                jQuery('#edit_dealer_contact_lname').val(obj.lname);
+                jQuery('#edit_dealer_contact_phone').val(obj.phone);
+                jQuery('#edit_dealer_contact_email').val(obj.email);
+                jQuery('#contact_person_id').val(obj.contact_id);
+                
+            }
+        });// ajax
+    });
+
+});

@@ -120,9 +120,11 @@ if($action == 'view'){
     	        echo '</tr>';
 	        }
             if($phone){
+              
+                
     	        echo '<tr>';
     	            echo '<td><strong>Phone</strong></td>';
-    	            echo '<td>'.$phone.'</td>';
+    	            echo '<td>'.phone_number_format($phone).'</td>';
     	        echo '</tr>';
             }
             if($fax){
@@ -147,8 +149,10 @@ if($action == 'view'){
 	            echo '<td><strong>Distributor Name</strong></td>';
 	            echo '<td>'.$actions['view'].'</td>';
 	        echo '</tr>';
-	    echo '</table>'; 
-    
+        echo '</table>'; 
+
+        
+
     echo '<div class="lr-wrapper">';
         echo '<div class="left-wrapper">';
         echo '<h3 style="color:#0065a7">Contact Person\'s Information:</h3>';   
@@ -181,7 +185,7 @@ if($action == 'view'){
 
     	            echo '<tr>';
     	                echo '<td>Phone Number</td>';
-    	                echo '<td>'.$phone.'</td>';
+    	                echo '<td>'.phone_number_format($phone).'</td>';
     	            echo '</tr>';
     	            
     	            echo '<tr>';
@@ -230,7 +234,7 @@ if($action == 'view'){
 			
             /*********************** Edit Contact Person Modal ******************************************** */
             echo '<div id="edit-contact-person-modal" class="modal">';   
-            echo '<h3>Edit Contact Person: '.$name.'<h3>';
+            echo '<h3>Edit Contact Person Information:<h3>';
                     echo '<div class="nisl-wrap">';
                         echo '<label><strong>First Name:</strong></label>';
                         echo '<input type="hidden" id="contact_person_id" value="" />';

@@ -1653,3 +1653,103 @@ function objectsIntoArray($arrObjData, $arrSkipIndices = array())
     }
     return $arrData;
 }
+
+function phone_number_format($number){
+    
+        $number = preg_replace("/[^\d]/","",$number);
+ 
+        // get number length.
+        $length = strlen($number);
+       
+       // if number = 10
+       if($length == 10) {
+        $number = preg_replace("/^1?(\d{3})(\d{3})(\d{4})$/", "($1)-$2-$3", $number);
+       }
+        
+       return $number;
+}
+
+function reset_mail_format($user_id){
+    $user = get_user_by('id', $user_id);
+		
+		
+		$email = $user->user_email;
+		$adt_rp_key = get_password_reset_key( $user );
+		$user_login = $user->user_login;
+		// $rp_link = '<a href="' . wp_login_url()."?action=rp&key=$adt_rp_key&login=" . rawurlencode($user_login) . '">' . wp_login_url()."?action=rp&key=$adt_rp_key&login=" . rawurlencode($user_login) . '</a>';
+		
+		
+		
+		$message = '<div class="content" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: block; margin: 0 auto; padding: 20px;">';
+		$message .= '<table class="main" width="100%" cellpadding="0" cellspacing="0" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; background-color: #fff; margin: 0; border: 2px solid #0065a7;" bgcolor="#fff">';
+		$message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+			$message .= '<td class="content-wrap" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 20px;" valign="top">';
+
+			$message .= '<table width="100%" cellpadding="0" cellspacing="0" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+
+			$message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;text-align: center;">';
+				$message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+				$message .= '<img src="'.plugins_url().'/permasafe-user-pro/public/images/PermaSafe-Logo-small.png">';
+				$message .= '<hr style="border-top:1px solid #0065a7;"/>';
+				$message .= '</td>';
+			$message .= '</tr>';
+
+			$message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+			$message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 20px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+				$message .= 'Hello!';
+			$message .= '</td>';
+			$message .= '</tr>';
+
+			$message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+			$message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+				$message .= sprintf( __( 'You asked us to reset your password for your account using the <b>Username</b> %s.', 'personalize-login' ),'<span style="color:#0065a7">'. $user_login.'</span>' );
+			$message .= '</td>';
+			$message .= '</tr>';
+
+			$message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+			$message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+				$message .= __( "If this was a mistake, or you didn't ask for a password reset, just ignore this email and nothing will happen.", 'personalize-login' );
+			$message .= '</td>';
+			$message .= '</tr>';
+
+			$message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+				$message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+				$message .=  __( 'To reset your password, click the following button:', 'personalize-login' );
+				$message .= '</td>';
+			$message .= '</tr>';
+
+			$message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+				$message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+					$message .= '<a href="' . wp_login_url()."?action=rp&key=$adt_rp_key&login=" . rawurlencode($user_login).'" class="btn-primary" itemprop="url" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; color: #FFF; text-decoration: none; line-height: 2em; font-weight: bold; text-align: center; cursor: pointer; display: inline-block; border-radius: 5px; text-transform: capitalize; background-color: #0065a7; margin: 0; border-color: #0065a7; border-style: solid; border-width: 10px 20px;">';
+					$message .= 'Reset Password';
+					$message .= '</a>';
+				$message .= '</td>';
+			$message .= '</tr>';
+		$message .= '</table>';
+				
+				$message .= '</td>';
+		$message .= '</tr>';
+		$message .= '</table>';
+		$message .= '<div class="footer" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; width: 100%; clear: both; color: #999; margin: 0; padding: 20px;">';
+                $message .= '<table width="100%" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                    $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+                        $message .= '<td class="aligncenter content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 12px; vertical-align: top; color: #999; text-align: center; margin: 0; padding: 0 0 20px;" align="center" valign="top">';
+                            $message .= 'Thank you for choosing PermaSafe.';
+                        $message .= '</td>';
+                    $message .= '</tr>';
+                $message .= '</table>';
+            $message .= '</div>';
+		$message .= '</div>';
+	
+		//deze functie moet je zelf nog toevoegen. 
+	   $subject = __("Password Reset ");
+	   $headers = array();
+	
+	   add_filter( 'wp_mail_content_type', function( $content_type ) {return 'text/html';});
+	   
+	   wp_mail( $email, $subject, $message);
+	   
+	
+	   // Reset content-type to avoid conflicts -- http://core.trac.wordpress.org/ticket/23578
+	   remove_filter( 'wp_mail_content_type', 'set_html_content_type' );
+}

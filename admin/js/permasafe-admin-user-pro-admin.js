@@ -1,6 +1,156 @@
 jQuery( document ).ready(function() {
  var counter = 2;
     
+    // for states
+    var availableStates = [
+        "ALABAMA",
+        "ALASKA",
+        "AMERICAN SAMOA",
+        "ARIZONA",
+        "ARKANSAS",
+        "CALIFORNIA",
+        "COLORADO",
+        "CONNECTICUT",
+        "DELAWARE",
+        "DISTRICT OF COLUMBIA",
+        "FEDERATED STATES OF MICRONESIA",
+        "FLORIDA",
+        "GEORGIA",
+        "GUAM GU",
+        "HAWAII",
+        "IDAHO",
+        "ILLINOIS",
+        "INDIANA",
+        "IOWA",
+        "KANSAS",
+        "KENTUCKY",
+        "LOUISIANA",
+        "MAINE",
+        "MARSHALL ISLANDS",
+        "MARYLAND",
+        "MASSACHUSETTS",
+        "MICHIGAN",
+        "MINNESOTA",
+        "MISSISSIPPI",
+        "MISSOURI",
+        "MONTANA",
+        "NEBRASKA",
+        "NEVADA",
+        "NEW HAMPSHIRE",
+        "NEW JERSEY",
+        "NEW MEXICO",
+        "NEW YORK",
+        "NORTH CAROLINA",
+        "NORTH DAKOTA",
+        "NORTHERN MARIANA ISLANDS",
+        "OHIO",
+        "OKLAHOMA",
+        "OREGON",
+        "PALAU",
+        "PENNSYLVANIA",
+        "PUERTO RICO",
+        "RHODE ISLAND",
+        "SOUTH CAROLINA",
+        "SOUTH DAKOTA",
+        "TENNESSEE",
+        "TEXAS",
+        "UTAH",
+        "VERMONT",
+        "VIRGIN ISLANDS",
+        "VIRGINIA",
+        "WASHINGTON",
+        "WEST VIRGINIA",
+        "WISCONSIN",
+        "WYOMING",
+        "ARMED FORCES AFRICA \ CANADA \ EUROPE \ MIDDLE EAST",
+        "ARMED FORCES AMERICA (EXCEPT CANADA)",
+        "ARMED FORCES PACIFIC"
+      ];
+    
+    
+    var state_options = {
+        source: availableStates
+    };
+
+    jQuery(document).on('keydown.autocomplete', '#pmsafe_customer_state', function() {
+        jQuery(this).autocomplete(state_options);
+    })
+
+    // for vehicle make
+    var manufacurers_list = [
+        "Abarth",
+        "Alfa Romeo",
+        "Aston Martin",
+        "Audi",
+        "Bentley",
+        "BMW",
+        "Bugatti",
+        "Cadillac",
+        "Chevrolet",
+        "Chrysler",
+        "Citroën",
+        "Dacia",
+        "Daewoo",
+        "Daihatsu",
+        "Dodge",
+        "Donkervoort",
+        "DS",
+        "Ferrari",
+        "Fiat",
+        "Fisker",
+        "Ford",
+        "Honda",
+        "Hummer",
+        "Hyundai",
+        "Infiniti",
+        "Iveco",
+        "Jaguar",
+        "Jeep",
+        "Kia",
+        "KTM",
+        "Lada",
+        "Lamborghini",
+        "Lancia",
+        "Land Rover",
+        "Landwind",
+        "Lexus",
+        "Lotus",
+        "Maserati",
+        "Maybach",
+        "Mazda",
+        "McLaren",
+        "Mercedes-Benz",
+        "MG",
+        "Mini",
+        "Mitsubishi",
+        "Morgan",
+        "Nissan",
+        "Opel",
+        "Peugeot",
+        "Porsche",
+        "Renault",
+        "Rolls-Royce",
+        "Rover",
+        "Saab",
+        "Seat",
+        "Skoda",
+        "Smart",
+        "SsangYong",
+        "Subaru",
+        "Suzuki",
+        "Tesla",
+        "Toyota",
+        "Volkswagen",
+        "Volvo"
+    ];
+    
+    var manufacurers_options = {
+        source: manufacurers_list
+    };
+
+    jQuery(document).on('keydown.autocomplete', '#pmsafe_customer_vehicle_make', function() {
+        jQuery(this).autocomplete(manufacurers_options);
+    })
     // add distributor
 	jQuery(document).on("click","#pmsafe_distributors_submit", function(e) {
         // alert('in');
@@ -1875,7 +2025,7 @@ jQuery( document ).ready(function() {
         
         
         //zip code
-        var numbers = /^[0-9]+$/;
+        var numbers = /^[0-9\-]+$/;
         if(jQuery('#pmsafe_customer_zip').val().trim() == ''){            
             jQuery('#pmsafe_customer_zip').css({'border':'1px solid #ff0000'});
             jQuery( '#pmsafe_customer_zip' ).after( "<span class='error'>This field is required.</span>" );

@@ -230,7 +230,7 @@ if($action == 'view'){
             /*********************** Edit Contact Person Modal ******************************************** */
             
             echo '<div id="edit-contact-person-modal" class="modal">';   
-                echo '<h3>Edit Contact Person: '.$name.'<h3>';
+                echo '<h3>Edit Contact Person Information:<h3>';
                 echo '<hr/>';
                 echo '<div class="nisl-wrap">';
                 echo '<input type="hidden" id="contact_person_id" value=""/>';
