@@ -203,7 +203,7 @@ if($action == 'view'){
             echo '<a href="#contact-person-modal" rel="modal:open" id="add_contact_person">Add New Contact Person</a>';
             /*********************** Add Contact Person Modal ******************************************** */
             echo '<div id="contact-person-modal" class="modal">';   
-            echo '<h3>Add Contact Person: '.$name.'<h3>';
+            echo '<h3>Add Contact Person Information:<h3>';
                     echo '<div class="nisl-wrap">';
                         echo '<label><strong>First Name:</strong></label>';
                         echo '<input type="text" id="pmsafe_dealer_contact_fname" name="pmsafe_dealer_contact_fname" value="" class="widefat" />';
@@ -261,7 +261,7 @@ if($action == 'view'){
 						echo '<input type="text" rel="gp" name="edit_dealer_contact_password" id="edit_dealer_contact_password" value="" class="widefat" style="width:35%"/>';
 						echo '<input type="button" value="Generate Password" class="generate_dealer_contact_password" />';
                     echo '</div>';
-                    echo '<input type="button" value="Update" id="edit_new_contact_person" />';
+                    echo '<input type="button" value="Save" id="edit_new_contact_person" />';
 			echo '</div>';
       
        echo '</div>';
@@ -413,7 +413,7 @@ if($action == 'view'){
 
     echo '</table>';
     echo '<hr>';
-    echo '<input type="button" value="Update" id="update_package_price">';
+    echo '<input type="button" value="Save" id="update_package_price">';
     echo '</div>';
   
 

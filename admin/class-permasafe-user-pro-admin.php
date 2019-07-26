@@ -1914,7 +1914,7 @@ class Permasafe_User_Pro_Admin {
 												$html .= '</td>';
 												
 												$html .= '<td class="nisl-pdf-link">';
-													$html .= $post_title;
+													$html .= (($post_title) ? $post_title : '-');
 												$html .= '</td>';
 
 												$html .= '<td class="nisl-pdf-link">';
@@ -2110,7 +2110,7 @@ class Permasafe_User_Pro_Admin {
                         $html .= '<label>Phone : </label>';
                     $html .= '</div>';          
                     $html .= '<div class="input-div">';         
-                        $html .= '<p>'.get_user_meta($user_id,'pmsafe_phone_number', true).'</p>';
+                        $html .= '<p>'.phone_number_format(get_user_meta($user_id,'pmsafe_phone_number', true)).'</p>';
                     $html .= '</div>';   
                 $html .= '</div>';
 
@@ -2301,7 +2301,13 @@ class Permasafe_User_Pro_Admin {
 
 						$posts = get_post($post_id);
 						$post_title = $posts->post_title;
+						
 						$post_title = substr($post_title, 0, strpos($post_title, ' '));
+						if($post_title == ''){
+							$post_title = '-';
+						}else{
+							$post_title = $post_title;
+						}
 
 						$login = get_post_meta($post_id,'_pmsafe_dealer', true);
 						$users = get_user_by('login',$login);

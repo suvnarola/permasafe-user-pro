@@ -546,7 +546,7 @@ function pmsafe_warranty_card($user_id,$membercode){
                     $html .= '<input type="text" value="'.esc_attr( get_the_author_meta( 'pmsafe_city', $user_id ) ).' '.esc_attr( get_the_author_meta( 'pmsafe_state', $user_id ) ). ' '.esc_attr( get_the_author_meta( 'pmsafe_zip_code', $user_id ) ). '" disabled/>';
                 $html .= '</div>';
                 $html .= '<div class="pdf-div">';
-                    $html .= '<label class="pdf-label">Phone:</label> <input type="text" value="'.esc_attr( get_the_author_meta( 'pmsafe_phone_number', $user_id ) ).'" disabled/>';
+                    $html .= '<label class="pdf-label">Phone:</label> <input type="text" value="'.phone_number_format( get_the_author_meta( 'pmsafe_phone_number', $user_id ) ).'" disabled/>';
                 $html .= '</div>';
                 $html .= '<div class="pdf-div">';
                     $html .= '<label class="pdf-label">Email:</label> <input type="text" value="'.$user->data->user_email.'" disabled/>';
@@ -616,7 +616,7 @@ function pmsafe_warranty_card($user_id,$membercode){
                         $html .= '<label class="pdf-label">Name:</label><input type="text" value="'.$dealer_name.'" disabled/>';
                     $html .= '</div>';
                     $html .= '<div class="right-side">';
-                        $html .= '<label class="pdf-label">Phone:</label><input type="text" value="'.$dealer_phone.'" disabled/>';
+                        $html .= '<label class="pdf-label">Phone:</label><input type="text" value="'.phone_number_format($dealer_phone).'" disabled/>';
                     $html .= '</div>';
                 $html .= '</div>';
                  $html .= '<div class="pdf-div">';
@@ -773,7 +773,7 @@ function sales_person_generate_pdf($pdf_array){
                     $html .= '<div style="font-family: Libre Franklin;float:left; width: 30%;">&nbsp;&nbsp;&nbsp;&nbsp;</div><div style="margin-left:10px; font-family: Libre Franklin;display: inline-block; float:left;width: 65%;box-shadow: none; border: 0; background: #f4f4f4; font-weight: 400; font-size: 12px; line-height: 20px; color: #555; padding: 5px;">'.$pdf_array['pmsafe_city'].' '.$pdf_array['pmsafe_state']. ' '.$pdf_array['pmsafe_zip_code']. '</div>';
                 $html .= '</div>';
                 $html .= '<div style="display: block;width: 100%; margin-bottom: 3px;">';
-                    $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 30%;text-align: right;">Phone:</div> <div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 65%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;">'.$pdf_array['pmsafe_phone_number'].'</div>';
+                    $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 30%;text-align: right;">Phone:</div> <div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 65%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;">'.phone_number_format($pdf_array['pmsafe_phone_number']).'</div>';
                 $html .= '</div>';
                 $html .= '<div style="display: block;width: 100%; margin-bottom: 3px;">';
                     $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 30%;text-align: right;">Email:</div><div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 65%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;" >'.$pdf_array['pmsafe_email'].'</div>';
@@ -847,7 +847,7 @@ function sales_person_generate_pdf($pdf_array){
                         $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 20%;text-align: right;">Name:</div> <div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 70%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;" >ABC AUTO SALES</div>';
                     $html .= '</div>';
                     $html .= '<div style="display: block;width: 50%;float: left; margin-bottom: 3px;">';
-                        $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 20%;text-align: right;">Phone:</div> <div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 70%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;" >000-000-0000</div>';
+                        $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 20%;text-align: right;">Phone:</div> <div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 70%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;" >(000) 000-0000</div>';
                     $html .= '</div>';
                 $html .= '</div>';
 
@@ -956,7 +956,7 @@ function pmsafe_sales_person_warranty_card($array, $pdf_link){
                     $html .= '<input type="text" value="'.$array['pmsafe_city'].' '.$array['pmsafe_state']. ' '.$array['pmsafe_zip_code']. '" />';
                 $html .= '</div>';
                 $html .= '<div class="pdf-div">';
-                    $html .= '<label class="pdf-label">Phone:</label> <input type="text" value="'.$array['pmsafe_phone_number'].'" />';
+                    $html .= '<label class="pdf-label">Phone:</label> <input type="text" value="'.phone_number_format($array['pmsafe_phone_number']).'" />';
                 $html .= '</div>';
                 $html .= '<div class="pdf-div">';
                     $html .= '<label class="pdf-label">Email:</label> <input type="text" value="'.$array['pmsafe_email'].'" />';
@@ -1024,7 +1024,7 @@ function pmsafe_sales_person_warranty_card($array, $pdf_link){
                         $html .= '<label class="pdf-label">Name:</label><input type="text" value="ABC AUTO SALES" disabled/>';
                     $html .= '</div>';
                     $html .= '<div class="right-side">';
-                        $html .= '<label class="pdf-label">Phone:</label><input type="text" value="000-000-0000" disabled/>';
+                        $html .= '<label class="pdf-label">Phone:</label><input type="text" value="(000) 000-0000" disabled/>';
                     $html .= '</div>';
                 $html .= '</div>';
                  $html .= '<div class="pdf-div">';
@@ -1151,7 +1151,7 @@ function pmsafe_warranty_card_pdf($user_id,$member_code){
                     $html .= '<div style="font-family: Libre Franklin;float:left; width: 30%;">&nbsp;&nbsp;&nbsp;&nbsp;</div><div style="margin-left:10px; font-family: Libre Franklin;display: inline-block; float:left;width: 65%;box-shadow: none; border: 0; background: #f4f4f4; font-weight: 400; font-size: 12px; line-height: 20px; color: #555; padding: 5px;">'.esc_attr( get_the_author_meta( 'pmsafe_city', $user_id ) ).' '.esc_attr( get_the_author_meta( 'pmsafe_state', $user_id ) ). ' '.esc_attr( get_the_author_meta( 'pmsafe_zip_code', $user_id ) ). '</div>';
                 $html .= '</div>';
                 $html .= '<div style="display: block;width: 100%; margin-bottom: 3px;">';
-                    $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 30%;text-align: right;">Phone:</div> <div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 65%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;">'.esc_attr( get_the_author_meta( 'pmsafe_phone_number', $user_id ) ).'</div>';
+                    $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 30%;text-align: right;">Phone:</div> <div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 65%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;">'.phone_number_format( get_the_author_meta( 'pmsafe_phone_number', $user_id ) ).'</div>';
                 $html .= '</div>';
                 $html .= '<div style="display: block;width: 100%; margin-bottom: 3px;">';
                     $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 30%;text-align: right;">Email:</div><div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 65%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;" >'.$pdf_email.'</div>';
@@ -1225,7 +1225,7 @@ function pmsafe_warranty_card_pdf($user_id,$member_code){
                         $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 20%;text-align: right;">Name:</div> <div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 70%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;" >'.$dealer_name.'</div>';
                     $html .= '</div>';
                     $html .= '<div style="display: block;width: 50%;float: left; margin-bottom: 3px;">';
-                        $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 20%;text-align: right;">Phone:</div> <div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 70%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;" >'.$dealer_phone.'</div>';
+                        $html .= '<div style="font-family: Libre Franklin;font-weight: bold;float:left; width: 20%;text-align: right;">Phone:</div> <div style="margin-left:10px; font-family: Libre Franklin;float:left;width: 70%;box-shadow: none;border: 0;background: #f4f4f4;font-weight: 400;font-size: 12px;line-height: 20px;color: #555;padding: 5px;" >'.phone_number_format($dealer_phone).'</div>';
                     $html .= '</div>';
                 $html .= '</div>';
 
@@ -1663,7 +1663,7 @@ function phone_number_format($number){
        
        // if number = 10
        if($length == 10) {
-        $number = preg_replace("/^1?(\d{3})(\d{3})(\d{4})$/", "($1)-$2-$3", $number);
+        $number = preg_replace("/^1?(\d{3})(\d{3})(\d{4})$/", "($1) $2-$3", $number);
        }
         
        return $number;

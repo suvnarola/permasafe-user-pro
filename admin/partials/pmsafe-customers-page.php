@@ -78,7 +78,7 @@ if($action == 'view_customer_details'){
         echo '</tr>';
         echo '<tr>';
             echo '<td>Phone</td>';
-            echo '<td>'.get_user_meta($user_id,'pmsafe_phone_number', true).'</td>';
+            echo '<td>'.phone_number_format(get_user_meta($user_id,'pmsafe_phone_number', true)).'</td>';
         echo '</tr>';
         echo '<tr>';
             echo '<td>Email</td>';

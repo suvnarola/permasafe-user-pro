@@ -130,7 +130,7 @@ if($action == 'view'){
         if($phone){
             echo '<tr>';
                 echo '<td><strong>Phone</strong></td>';
-                echo '<td>'.$phone.'</td>';
+                echo '<td>'.phone_number_format($phone).'</td>';
             echo '</tr>';
         }
 
@@ -178,7 +178,7 @@ if($action == 'view'){
 
                         echo '<tr>';
                             echo '<td>Phone Number</td>';
-                            echo '<td>'.$phone.'</td>';
+                            echo '<td>'.phone_number_format($phone).'</td>';
                         echo '</tr>';
                         
                         echo '<tr>';
@@ -197,7 +197,7 @@ if($action == 'view'){
             /*********************** Add Contact Person Modal ******************************************** */
             echo '<input type="hidden" value="'.$distributor_id.'" id="distributor_id">';
             echo '<div id="contact-person-modal" class="modal">';   
-                echo '<h3>Add Contact Person: '.$name.'<h3>';
+                echo '<h3>Add Contact Person Information:<h3>';
                 echo '<hr/>';
                 echo '<div class="nisl-wrap">';
                 echo '<label><strong>First Name:</strong></label>';
@@ -259,7 +259,7 @@ if($action == 'view'){
                 echo '<input type="button" value="Change Password" class="generate_distributor_contact_password" />';
                 echo '</div>';
                 echo '<hr/>';
-                    echo '<input type="button" value="Update" id="distributor_edit_new_contact_person" class="" />';
+                    echo '<input type="button" value="Save" id="distributor_edit_new_contact_person" class="" />';
             echo '</div>'; 
                
         echo '</div>'; //left wrapper end
@@ -355,7 +355,7 @@ if($action == 'view'){
 
     echo '</table>';
     echo '<hr>';
-    echo '<input type="button" value="Update" id="update_distributor_cost">';
+    echo '<input type="button" value="Save" id="update_distributor_cost">';
     echo '</div>';                    
        
      

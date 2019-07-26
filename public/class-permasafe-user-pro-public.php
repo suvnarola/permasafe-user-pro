@@ -161,6 +161,9 @@ class Permasafe_User_Pro_Public {
 
                 add_action( 'wp_ajax_fetch_dealer_contact_information', array( $this, 'fetch_dealer_contact_information'));
                 add_action( 'wp_ajax_nopriv_fetch_dealer_contact_information',array( $this, 'fetch_dealer_contact_information') );
+                
+                add_action( 'wp_ajax_edit_dealer_contact_info', array( $this, 'edit_dealer_contact_info_function'));
+                add_action( 'wp_ajax_nopriv_edit_dealer_contact_info',array( $this, 'edit_dealer_contact_info_function') );
     }
     
     /**
@@ -793,7 +796,7 @@ class Permasafe_User_Pro_Public {
                                 $html .= '</td>';
                                 
                                 $html .= '<td class="nisl-pdf-link">';
-                                    $html .= $value['phone'];
+                                    $html .= phone_number_format($value['phone']);
                                 $html .= '</td>';
                             
                                 
@@ -1030,7 +1033,7 @@ class Permasafe_User_Pro_Public {
                         
                             echo '<tr>';
                                 echo '<td><strong>Phone</strong></td>';
-                                echo '<td>'.( ($phone) ? $phone : '-').'</td>';
+                                echo '<td>'.( ($phone) ? phone_number_format($phone) : '-').'</td>';
                             echo '</tr>';
                             
                         echo '</table>';
@@ -1045,7 +1048,7 @@ class Permasafe_User_Pro_Public {
                                 echo '<div class="contact-card-inner-wrapper">';
                                     echo '<h3>'.$fname.' '.$lname.'<a href="#edit-contact-person-modal" id="pmsafe_dealers_contact_edit" data-id="'.$user_id.'" title="click here to edit this contact"><i class="fa fa-edit"></i></a></h3>';
                                     echo '<p><i class="fa fa-envelope"></i>'.$value->user_email.'</p>';
-                                    echo '<p><i class="fa fa-phone"></i>'.$phone.'</p>';
+                                    echo '<p><i class="fa fa-phone"></i>'.phone_number_format($phone).'</p>';
                                     echo '<input type="button" value="Send Password Reset" id="pmsafe_contact_info_mail" data-id="'.$user_id.'">';
                                 echo '</div>';
                             }
@@ -1080,10 +1083,10 @@ class Permasafe_User_Pro_Public {
                         
                         echo '<div class="nisl-wrap">';
                             echo '<label><strong>Password:</strong></label>';
-                            echo '<input type="text" rel="gp" name="edit_dealer_contact_password" id="edit_dealer_contact_password" value="" class="widefat" style="width:35%"/>';
-                            echo '<input type="button" value="Generate Password" class="generate_dealer_contact_password" />';
+                            echo '<input type="text" rel="gp" name="edit_dealer_contact_password" id="edit_dealer_contact_password" value="" class="widefat" style="width:35%;margin: 10px;"/>';
+                            echo '<input type="button" value="Generate Password" class="generate_dealer_contact_password" style="padding: 12px 10px;"/>';
                         echo '</div>';
-                        echo '<input type="button" value="Update" id="edit_new_contact_person" />';
+                        echo '<input type="button" value="Save" id="edit_new_contact_person" />';
 			        echo '</div>';
 
                    
@@ -1201,7 +1204,35 @@ class Permasafe_User_Pro_Public {
         echo json_encode($response);
         die;
     }
-    
+
+    public function edit_dealer_contact_info_function(){
+
+        $fname = $_POST['fname'];
+        $lname = $_POST['lname'];
+        $phone = $_POST['phone'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $contact_id = $_POST['contact_id'];
+        
+        $contact_id = wp_update_user( array( 'ID' => $contact_id, 'user_email' => $email ) );
+        
+        if($password != ''){
+
+            wp_set_password( $password, $contact_id );
+            
+            $to = $email;
+            $password = $password;
+            $subject = 'PermaSafe: Your User Account has been updated';
+            send_mail_to_users($to, $password, $subject);
+        }
+        
+        update_user_meta( $contact_id, 'contact_fname', $fname );	
+        update_user_meta( $contact_id, 'contact_lname', $lname );	
+        update_user_meta( $contact_id, 'contact_phone', $phone );	
+        
+        die;
+    }
+
     /**
      * dealer_total_information shortcode
      * 
@@ -2129,7 +2160,7 @@ class Permasafe_User_Pro_Public {
                     $html .= '<label>Phone : </label>';
                 $html .= '</div>';          
                 $html .= '<div class="input-div">';         
-                    $html .= '<p>'.get_user_meta($user_id,'pmsafe_phone_number', true).'</p>';
+                    $html .= '<p>'.phone_number_format(get_user_meta($user_id,'pmsafe_phone_number', true)).'</p>';
                 $html .= '</div>';   
             $html .= '</div>';
 

@@ -2059,4 +2059,109 @@ function Popup(data){
         });// ajax
     });
 
+    function randomPassword(length) {
+        // alert('test');
+        var chars = "abcdefghijklmnopqrstuvwxyz!@#$%^&*()-+<>ABCDEFGHIJKLMNOP1234567890";
+        var pass = "";
+        for (var x = 0; x < length; x++) {
+            var i = Math.floor(Math.random() * chars.length);
+            pass += chars.charAt(i);
+        }
+        return pass;
+    }
+
+     jQuery(document).on("click",".generate_dealer_contact_password", function(e) { 
+
+        var field = jQuery(this).closest('div').find('input[rel="gp"]');
+        // alert(field);
+        jQuery('#edit_dealer_contact_password').css("display","inline-block");
+        field.val(randomPassword(10));
+
+    });
+
+    jQuery(document).on("click","#edit_new_contact_person", function(e) {
+        
+        
+        jQuery('.error').remove();
+        
+        var validflag = true;
+        var fname = jQuery('#edit_dealer_contact_fname' ).val();
+        var lname = jQuery('#edit_dealer_contact_lname' ).val();
+        var phone = jQuery('#edit_dealer_contact_phone' ).val();
+        var email = jQuery('#edit_dealer_contact_email' ).val();
+        var password = jQuery('#edit_dealer_contact_password' ).val();
+        
+        var contact_id = jQuery('#contact_person_id' ).val();
+         
+        
+        var name = /^[A-Za-z]+$/;
+        if(jQuery('#edit_dealer_contact_fname' ).val().trim()=="" ){
+            jQuery('#edit_dealer_contact_fname' ).css({'border':'1px solid #ff0000'});
+            jQuery( '#edit_dealer_contact_fname').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else if(!(fname.match(name))){
+            
+            jQuery('#edit_dealer_contact_fname' ).css({'border':'1px solid #ff0000'});
+            jQuery('#edit_dealer_contact_fname' ).after( "<span class='error'>Please enter valid name.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#edit_dealer_contact_fname').css({'color':'#333333'});
+        }
+
+        if(jQuery('#edit_dealer_contact_lname' ).val().trim()=="" ){
+            jQuery('#edit_dealer_contact_lname' ).css({'border':'1px solid #ff0000'});
+            jQuery( '#edit_dealer_contact_lname').after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else if(!(lname.match(name))){
+            
+            jQuery('#edit_dealer_contact_lname' ).css({'border':'1px solid #ff0000'});
+            jQuery('#edit_dealer_contact_lname' ).after( "<span class='error'>Please enter valid name.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#edit_dealer_contact_lname').css({'color':'#333333'});
+        }    
+        
+        //Phone
+        var numbers = /^[0-9]{10}$/;
+        if(jQuery('#edit_dealer_contact_phone').val().trim() == ''){
+            jQuery('#edit_dealer_contact_phone').css({'border':'1px solid #ff0000'});
+            jQuery( '#edit_dealer_contact_phone' ).after( "<span class='error'>This field is required.</span>" );
+            validflag = false;
+        }else if(!(jQuery('#edit_dealer_contact_phone').val().match(numbers))){
+            jQuery('#edit_dealer_contact_phone').css({'border':'1px solid #ff0000'});
+            jQuery( '#edit_dealer_contact_phone' ).after( "<span class='error'>Please enter 10 digit phone number.</span>" );
+            validflag = false;
+        }else{
+            jQuery('#edit_dealer_contact_phone').css({'border-color':'#cccccc'});
+        }
+        
+         var data = {
+            action: 'edit_dealer_contact_info',
+            fname:fname,
+            lname:lname,
+            phone:phone,
+            email:email,
+            password:password,
+            contact_id:contact_id
+        };
+        
+        if(!validflag){
+            
+            return validflag;
+        }else{
+            
+            jQuery('.perma-loader').show();
+            jQuery.ajax({
+                type: 'POST',
+                url: pmAjax.ajaxurl,
+                data: data,
+                dataType: 'html',
+                success: function(response) {
+                    jQuery('.perma-loader').hide();
+                        location.reload();
+                }
+            });// ajax
+        }
+    });
+
 });

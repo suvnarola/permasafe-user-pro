@@ -271,7 +271,17 @@ table.tbl-dealer-info>tbody>tr:nth-of-type(odd) {
 }
 #pmsafe_dealers_contact_edit{position: absolute;right: 0;top: 0;cursor:pointer;color: #fff;}
 .blocker{z-index: 9999 !important;}
-
+.error{color:#ff0000 !important;}
+#edit-contact-person-modal .nisl-wrap{font-size: 15px;}
+#edit_new_contact_person{
+    background: #0065a7;
+    color: #fff;
+    padding: 10px 15px;
+    border: 0;
+    border-radius: 5%;
+    cursor: pointer;
+    text-decoration: none;
+}
 /*card css end*/
 @media(max-width:1200px){
   .distributor-account-wrap .vc_col-sm-9,
