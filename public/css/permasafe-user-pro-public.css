@@ -52,7 +52,7 @@ input#myInput {margin: 0 0 20px 0;background: transparent;border: 1px solid #eee
 .dataTables_wrapper .fg-toolbar div.dataTables_length label .fancy-select-wrap {padding-top: 0;margin: 0 6px;}
 .dataTables_wrapper .fg-toolbar .dataTables_filter label {display: flex;align-items: center;}
 .dataTables_wrapper thead tr th {  font-size: 13px;}
-.dataTables_wrapper thead tr th span {right: 0 !important;}
+.dataTables_wrapper thead tr th span {right: 0 !important;}  
 table#dealertable thead th div.DataTables_sort_wrapper span{right:-10px !important;}
 button.dt-button.buttons-csv.buttons-html5, button.dt-button.buttons-pdf.buttons-html5, button.dt-button.buttons-excel.buttons-html5,button.dt-button.buttons-print{background-color: #333;padding: 7px 26px;border: none;color: #fff;cursor: pointer;float: left;}
 button.dt-button.buttons-pdf.buttons-html5, button.dt-button.buttons-excel.buttons-html5, button.dt-button.buttons-print{ margin-left: 10px;}
@@ -61,9 +61,9 @@ div#dealertable_filter label,
 div#view_customer_table_filter label {display: flex;align-items: center;margin-bottom: 15px;}
 div#dealertable_filter label input[type="search"],
 div#view_customer_table_filter label input[type="search"]{width: 100%;margin-left: 15px;    min-width: 200px;}
-div#view_code_table_filter label,
+div#view_code_table_filter label,div#view_invi_code_table_filter label,
 #customertable_filter label {display: flex;align-items: center;margin-bottom: 15px;}
-div#view_code_table_filter label input[type="search"],
+div#view_code_table_filter label input[type="search"],div#view_invi_code_table_filter label input[type="search"],
 #customertable_filter label input[type="search"]{margin-left: 15px;min-width: 200px;}
 div#view_code_table_wrapper {  margin-top: 70px;}
 div#perma-warranty-wrapper a.back_link {float: right;}

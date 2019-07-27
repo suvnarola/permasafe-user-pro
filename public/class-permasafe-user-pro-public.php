@@ -896,17 +896,20 @@ class Permasafe_User_Pro_Public {
                     $html .= '<h2>'.$dealer_name.'\'s Product Codes List</h2>';
                         $html .= '<a href="'.$back_link.'" class="back_link"><input type="button" title="Back to Dealer List" value="Back to Dealer List" style="float:left;margin: 10px 5px;"/></a>';
                         $html .= do_shortcode('[total_range_codes]');
+
+                    $html .= '<h3 style="color:#4778b5;">Batch Codes:</h3>';
+
                     $html .= '<div class="filter-main-wrapper">';
-                    $html .= '<div class="filter-wrapper">';
-                    $html .= '<select id="view-code-table-select">';
-                        $html .= '<option>Member Codes</option>';
-                        $html .= '<option>Benefits Package</option>';
-                        $html .= '<option>Dealer</option>';
-                        $html .= '<option>Distributor</option>';
-                        $html .= '<option>Date Created</option>';
-                        $html .= '<option>Number Used</option>';
-                    $html .= '</select>';
-                    $html .= '</div>';
+                        $html .= '<div class="filter-wrapper">';
+                            $html .= '<select id="view-code-table-select">';
+                                $html .= '<option>Member Codes</option>';
+                                $html .= '<option>Benefits Package</option>';
+                                $html .= '<option>Dealer</option>';
+                                $html .= '<option>Distributor</option>';
+                                $html .= '<option>Date Created</option>';
+                                $html .= '<option>Number Used</option>';
+                            $html .= '</select>';
+                        $html .= '</div>';
                     
                         $html .= '<table id="view_code_table" class="display nowrap" style="width:100%">';
                         $html .= '<thead>';
@@ -975,27 +978,124 @@ class Permasafe_User_Pro_Public {
                                         $html .= '<td>';
                                             $html .= $used_code;
                                         $html .= '</td>';
-                                        $role =  get_post_meta( $post_id, '_pmsafe_user_role', true );
-                                        if($role == 'subscriber'){
-                                            $nisl_role = 'Customer';
-                                        }elseif($role == 'editor'){
-                                            $nisl_role = 'Editor';
-                                        }elseif($role == 'contributor'){
-                                            $nisl_role = 'Dealer';
-                                        }elseif($role == 'author'){
-                                            $nisl_role = 'Distributor';
-                                        }elseif($role == 'administrator'){
-                                            $nisl_role = 'Administrator';
-                                        }else{
-                                            $nisl_role = $role;
-                                        }
+                                        
                                     $html .= '</tr>';
                                 }
                             }
                             $html .= '</tbody>';
                         $html .= '</table>';
                     $html .= '</div>';
+
+                    $invite_args = array(
+                        'post_type' => 'pmsafe_invitecode',
+                        'post_status' => 'publish',
+                        'posts_per_page'   => -1,
+                        'meta_query' => array(
+                            array(
+                                'key'     => '_pmsafe_dealer',
+                                'value'   => $dealer_login,
+                                'compare' => '='
+                            ),
+                        
+                        ),
+                    );
+                    $invite_posts = get_posts($invite_args);
+                    // pr($invite_posts);
+                    $html .= '<h3 style="color:#4778b5;">Individual Codes:</h3>';
+                    $html .= '<div class="filter-main-wrapper">';
+                        $html .= '<div class="filter-wrapper">';
+                            $html .= '<select id="view-invi-code-table-select">';
+                            $html .= '<option>Member Codes</option>';
+                            $html .= '<option>Benefits Package</option>';
+                            $html .= '<option>Dealer</option>';
+                            $html .= '<option>Distributor</option>';
+                            $html .= '<option>Date Created</option>';
+                            $html .= '<option>Number Used</option>';
+                            $html .= '</select>';
+                        $html .= '</div>';
+
+                        $html .= '<table id="view_invi_code_table" class="display nowrap" style="width:100%">';
+                        $html .= '<thead>';
+                                $html .= '<tr>';
+                                    $html .= '<th>';
+                                    $html .= 'Member Codes';
+                                    $html .= '</th>';
+
+                                    $html .= '<th>';
+                                    $html .= 'Benefits Package';
+                                    $html .= '</th>';
+
+                                    $html .= '<th>';
+                                    $html .= 'Dealer';
+                                    $html .= '</th>';
+                                    
+                                    $html .= '<th>';
+                                    $html .= 'Distributor';
+                                    $html .= '</th>';
+
+                                    $html .= '<th>';
+                                    $html .= 'Date Created';
+                                    $html .= '</th>';
+
+                                    $html .= '<th>';
+                                    $html .= 'Number Used';
+                                    $html .= '</th>';
+
+                                $html .= '</tr>';
+                            $html .= '</thead>';
+                            $html .= '<tbody id="">';
+                            if($posts){
+                                foreach ($invite_posts as $key => $value) {
+                                    $post_id = $value->ID;
+                                    $is_invite_code = get_post_meta($post_id, '_pmsafe_is_invite_code', true);
+                                    if($is_invite_code == 1){
+                                        $member_code = $value->post_title;
+                                        $benefits_package = get_post_meta( $post_id, '_pmsafe_invitation_prefix', true );
+                                        $dealers = get_user_by('login', $dealer_login);
+                                        $dealer_id = $dealers->data->ID;
+                                        $dealer_name = get_user_meta( $dealer_id, 'dealer_name', true);
+                                        $distributor_login = get_post_meta( $post_id, '_pmsafe_distributor', true ); 
+                                        $distributors = get_user_by('login', $distributor_login);
+                                        $distributor_id = $distributors->data->ID;
+                                        $distributor_name = get_user_meta( $distributor_id, 'distributor_name', true);
+                                        
+                                        $date_created = date('Y-m-d', strtotime(get_post_meta( $post_id, '_pmsafe_code_create_date', true )));
+                                      
+                                        $code_status = get_post_meta($post_id, '_pmsafe_code_status', true);
+                                        if($code_status == 'used'){
+                                            $used_code = '1';
+                                        }else{
+                                            $used_code = '0';
+                                        }
+                                        $html .= '<tr>';
+                                            $html .= '<td>';
+                                                $html .=  $member_code;
+                                            $html .= '</td>';
+                                            $html .= '<td>';
+                                                $html .= $benefits_package;
+                                            $html .= '</td>';
+                                            $html .= '<td>';
+                                                $html .= $dealer_name;
+                                            $html .= '</td>';
+                                            $html .= '<td>';
+                                                $html .= $distributor_name;
+                                            $html .= '</td>';
+                                            $html .= '<td>';
+                                                $html .= $date_created;
+                                            $html .= '</td>';
+                                            $html .= '<td>';
+                                                $html .= $used_code;
+                                            $html .= '</td>';
+                                            
+                                        $html .= '</tr>';
+                                    }
+                                }
+                            }
+                            $html .= '</tbody>';
+                        $html .= '</table>';
                     $html .= '</div>';
+                    $html .= '</div>';
+                    
                     return $html;
 
                 }else if($_GET['action'] == 'view_customer'){
@@ -2633,16 +2733,55 @@ class Permasafe_User_Pro_Public {
                                 $data = pmsafe_unused_code_count($post_id);
                                 $used_code = $data['used'];
                                 $available = $data['total'] - $data['used'];
-                                $total += $data['total'];
-                                $total_used += $data['used'];
+                                $bulk_total += $data['total'];
+                                $bulk_used += $data['used'];
                             }
-                            $html .= '<p class="range-count">Total Used code <span>'.$total_used.'</span>';
-                            $html .= 'Total Used & Unused code <span>'.$total.'</span></p>';
+                           
 
                         }
 
+                        $invite_args = array(
+                            'post_type' => 'pmsafe_invitecode',
+                            'post_status' => 'publish',
+                            'posts_per_page'   => -1,
+                            'meta_query' => array(
+                                array(
+                                    'key'     => '_pmsafe_dealer',
+                                    'value'   => $dealer_login,
+                                    'compare' => '='
+                                ),
+                            
+                            ),
+                        );
+                        $invite_posts = get_posts($invite_args);
+                        if($invite_posts){
+                            foreach ($invite_posts as $key => $value) {
+                                $post_id = $value->ID;
+                                $is_invite_code = get_post_meta($post_id, '_pmsafe_is_invite_code', true);
+                                if($is_invite_code == 1){
+                                    $dealers = get_user_by('login', $dealer_login);
+                                    $dealer_id = $dealers->data->ID;
+                                    $dealer_name = get_user_meta( $dealer_id, 'dealer_name', true);
+                                    $code_status = get_post_meta($post_id, '_pmsafe_code_status', true);
+                                    if($code_status == 'used'){
+                                        $invite_used += 1;
+                                    }else{
+                                        $invite_used = 0;
+                                    }
 
-
+                                    // $data = pmsafe_unused_code_count($post_id);
+                                    // $used_code = $data['used'];
+                                    // $available = $data['total'] - $data['used'];
+                                    $invi_total += count($post_id); 
+                                    // $total_used += $data['used'];
+                                }
+                            }
+                        }
+                        // echo 'invi_total'.$invite_used;
+                        $total_used =  $invite_used + $bulk_used;
+                        $total = $bulk_total + $invi_total;
+                        $html .= '<p class="range-count">Total Used code <span>'.$total_used.'</span>';
+                        $html .= 'Total Used & Unused code <span>'.$total.'</span></p>';
                     }
                 }
             }

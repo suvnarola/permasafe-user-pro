@@ -115,6 +115,7 @@ class Permasafe_User_Pro_Admin {
         wp_enqueue_script( 'dt_table_ui_btnprint', plugin_dir_url( __FILE__ ) . 'js/buttons.print.min.js', array( 'jquery' ), time(), false );
 		wp_enqueue_script( 'dt_table_fixedHeader', plugin_dir_url( __FILE__ ) . 'js/dataTables.fixedHeader.min.js', array( 'jquery' ), time(), false );
 		wp_enqueue_script( 'dt_table_inputjs', plugin_dir_url( __FILE__ ) . 'js/input.js', array( 'jquery' ), time(), false );
+		wp_enqueue_script( 'sweet_alert', plugin_dir_url( __FILE__ ) . 'js/sweetalert.min.js', array( 'jquery' ), time(), false );
 		// wp_enqueue_script( 'jquery_validation', plugin_dir_url( __FILE__ ) . 'js/jquery.validate.min.js', array( 'jquery' ), time(), false );
 		
 
@@ -1217,12 +1218,6 @@ class Permasafe_User_Pro_Admin {
 	        	$end = $result_end->meta_value;
 	        	if( $search_val >= $start &&  $search_val <= $end){
 	        		$html .= '<tr id="post-'.$post_id.'" class="iedit author-self level-0  type-pmsafe_bulk_invi status-publish hentry">';
-	        			$html .= '<th scope="row" class="check-column">';
-	        			$html .= '<label class="screen-reader-text" for="cb-select-'.$post_id.'">Select '.$start.'-'.$end.'</label>';
-	        			$html .= '<input id="cb-select-'.$post_id.'" type="checkbox" name="post[]" value="'.$post_id.'">';
-	        			$html .= '<div class="locked-indicator"><span class="locked-indicator-icon" aria-hidden="true"></span>
-					<span class="screen-reader-text">"'.$start.'-'.$end.'" is locked</span></div>';
-	        			$html .= '</th>';
 		
 		        		$html .= '<td class="invitation_code column-invitation_code has-row-actions column-primary" data-colname="Member code">';
 		        			$html .= '<a href="'.admin_url().'edit.php?post_type=pmsafe_invitecode&bulk-invitation-id='.$post_id.'" target="_blank" class="button-secondary">'.$start .' - '. $end.'</a>';
@@ -1300,12 +1295,6 @@ class Permasafe_User_Pro_Admin {
 
 			if( $post_id){
 				$html .= '<tr id="post-'.$post_id.'" class="iedit author-self level-0 post-'.$post_id.' type-pmsafe_invitecode status-publish hentry">';
-					$html .= '<th scope="row" class="check-column">';
-					$html .= '<label class="screen-reader-text" for="cb-select-'.$post_id.'">Select '.$posts->post_title.'</label>';
-					$html .= '<input id="cb-select-'.$post_id.'" type="checkbox" name="post[]" value="'.$post_id.'">';
-					$html .= '<div class="locked-indicator"><span class="locked-indicator-icon" aria-hidden="true"></span>
-				<span class="screen-reader-text">"'.$posts->post_title.'" is locked</span></div>';
-					$html .= '</th>';
 
 					$html .= '<td class="invitation_code column-invitation_code has-row-actions column-primary" data-colname="Member code">';
 						$html .= '<code>'.get_post_meta($post_id,'_pmsafe_invitation_code',true).'</code>';

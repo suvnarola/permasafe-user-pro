@@ -1332,20 +1332,6 @@ function Popup(data){
         dealertable.columns().search('').draw();
     }); 
 
-    /*jQuery('#view_code_table thead tr').clone(true).appendTo( '#view_code_table thead' );
-    jQuery('#view_code_table thead tr:eq(1) th').each( function (i) {
-        var title = jQuery(this).text();
-        jQuery(this).html( '<input type="text" title="Search '+ title +'"/>' );
- 
-        jQuery( 'input', this ).on( 'keyup change', function () {
-            if ( view_code_table.column(i).search() !== this.value ) {
-                view_code_table
-                    .column(i)
-                    .search( this.value )
-                    .draw();
-            }
-        } );
-    } );*/
 
     var view_code_table = jQuery('#view_code_table').DataTable( {
         dom: 'Bfrtip',
@@ -1395,6 +1381,57 @@ function Popup(data){
 
     jQuery('#view-code-table-select').change(function() {
         view_code_table.columns().search('').draw();
+    }); 
+
+    // individual code table
+    var view_invi_code_table = jQuery('#view_invi_code_table').DataTable( {
+        dom: 'Bfrtip',
+        orderCellsTop: true,
+        fixedHeader: true,
+        buttons: [
+            {
+                extend: 'csv',
+                //Name the CSV
+                filename: 'dealer_product_code_list',
+            },
+            {
+                extend: 'pdfHtml5',
+                text: 'PDF',
+                orientation : 'landscape',
+                pageSize : 'LEGAL',
+                filename: 'dealer_product_code_list',
+                exportOptions: {
+                modifier: {
+                    page: 'current'
+                }
+            }
+            },
+            {
+                extend: 'excel',
+                text: 'EXCEL',
+                filename: 'dealer_product_code_list',
+            },
+            {
+                extend: 'print',
+                text: 'PRINT',
+                filename: 'dealer_product_code_list',
+                customize: function (win) {
+                    jQuery(win.document.body).find('table').addClass('display').css('font-size', '12px');
+                    
+                }
+            }
+        ]
+        // filename: 'dealer_list',
+    } );
+
+    // search fileter for view_code_table
+    jQuery('#view_invi_code_table_filter input').unbind().bind('keyup', function() {
+      var colIndex = document.querySelector('#view-invi-code-table-select').selectedIndex;
+      view_invi_code_table.column( colIndex).search( this.value ).draw();
+    });
+
+    jQuery('#view-invi-code-table-select').change(function() {
+        view_invi_code_table.columns().search('').draw();
     }); 
 
     var customertable = jQuery('#customertable').DataTable( {
