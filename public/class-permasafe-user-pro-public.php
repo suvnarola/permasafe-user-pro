@@ -169,7 +169,77 @@ class Permasafe_User_Pro_Public
 
         add_action('wp_ajax_add_login_session', array($this, 'add_login_session'));
         add_action('wp_ajax_nopriv_add_login_session', array($this, 'add_login_session'));
+
+        add_filter('email_change_email', array($this, 'change_email_mail_message'), 10, 3);
     }
+
+    /* Filter Email Change Email Text */
+
+    public function change_email_mail_message($email_change, $user, $userdata)
+    {
+
+        $new_message_txt = __('ABCD Change the text here, use ###USERNAME###, ###ADMIN_EMAIL###, ###EMAIL###, ###SITENAME###, ###SITEURL### tags.');
+
+        $message = '<div class="content" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; max-width: 600px; display: block; margin: 0 auto; padding: 20px;">';
+        $message .= '<table class="main" width="100%" cellpadding="0" cellspacing="0" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; border-radius: 3px; background-color: #fff; margin: 0; border: 2px solid #0065a7;" bgcolor="#fff">';
+        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+        $message .= '<td class="content-wrap" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 20px;" valign="top">';
+
+        $message .= '<table width="100%" cellpadding="0" cellspacing="0" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+
+        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;text-align: center;">';
+        $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+        $message .= '<img src="' . plugins_url() . '/permasafe-user-pro/public/images/PermaSafe-Logo-small.png">';
+        $message .= '<hr style="border-top:1px solid #0065a7;"/>';
+        $message .= '</td>';
+        $message .= '</tr>';
+
+        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+        $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 20px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+        $message .= 'Hello!';
+        $message .= '</td>';
+        $message .= '</tr>';
+
+        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+        $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+        $message .= __('This notice confirms that your email was changed on PermaSafe of <b>Username: </b> ###USERNAME###');
+        $message .= '</td>';
+        $message .= '</tr>';
+
+        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+        $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+        $message .= 'If you did not change your password, please contact the Site Administrator at <a href="mailto:info@permasafe.com">info@permasafe.com</a>';
+        $message .= '</td>';
+        $message .= '</tr>';
+
+        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+        $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+        $message .= __('This email has been sent to ###EMAIL###');
+        $message .= '</td>';
+        $message .= '</tr>';
+
+        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+        $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+        $message .= 'Regards,<br/>All at ';
+        $message .= '<a href="' . get_site_url() . '">';
+        $message .= 'PermaSafe';
+        $message .= '</a>';
+        $message .= '</td>';
+        $message .= '</tr>';
+        $message .= '</table>';
+        $message .= '</td>';
+        $message .= '</tr>';
+        $message .= '</table>';
+        $message .= '</div>';
+
+        $email_change['message'] = $message;
+        $email_change['subject'] = 'Notice of Email Change';
+
+        return $email_change;
+    }
+
+
+    // add the filter 
 
     /**
      *  @return string
