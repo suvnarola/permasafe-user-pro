@@ -334,37 +334,40 @@ jQuery(document).ready(function () {
         }
     });  // submit button 
 
-    jQuery(document).on("focusout", ".check-mail", function (e) {
-        jQuery('.error').remove();
-        var email = jQuery(this).val();
-        var email_control = jQuery(this);
-        var data = {
-            action: 'check_email_exist',
-            email: email,
-        };
-        jQuery.ajax({
-            type: 'POST',
-            url: pmAjax.ajaxurl,
-            data: data,
-            success: function (response) {
-                if (response == 0) {
 
-                    email_control.css({ 'border': '1px solid #ff0000', 'border-color': '#ff0000' });
-                    email_control.after("<span class='error'>Email is already exist.</span>");
-                    jQuery('.btn-disabled').attr("disabled", true);
-                }
 
-            },
-            dataType: 'html'
-        });
-    });
 
-    jQuery(document).on("focus", ".check-mail", function (e) {
-        var email_control = jQuery(this);
-        email_control.css({ 'border-color': '#cccccc' });
-        email_control.siblings('.error').remove();
-        jQuery('.btn-disabled').attr("disabled", false);
-    });
+    // jQuery(document).on("focusout", ".check-mail", function (e) {
+    //     jQuery('.error').remove();
+    //     var email = jQuery(this).val();
+    //     var email_control = jQuery(this);
+    //     var data = {
+    //         action: 'check_email_exist',
+    //         email: email,
+    //     };
+    //     jQuery.ajax({
+    //         type: 'POST',
+    //         url: pmAjax.ajaxurl,
+    //         data: data,
+    //         success: function (response) {
+    //             if (response == 0) {
+
+    //                 email_control.css({ 'border': '1px solid #ff0000', 'border-color': '#ff0000' });
+    //                 email_control.after("<span class='error'>Email is already exist.</span>");
+    //                 jQuery('.btn-disabled').attr("disabled", true);
+    //             }
+
+    //         },
+    //         dataType: 'html'
+    //     });
+    // });
+
+    // jQuery(document).on("focus", ".check-mail", function (e) {
+    //     var email_control = jQuery(this);
+    //     email_control.css({ 'border-color': '#cccccc' });
+    //     email_control.siblings('.error').remove();
+    //     jQuery('.btn-disabled').attr("disabled", false);
+    // });
 
     jQuery(document).on("focus", ".check-fname", function (e) {
         var fname_control = jQuery(this);
@@ -421,7 +424,7 @@ jQuery(document).ready(function () {
         var newTextBoxDiv = jQuery(document.createElement('div')).attr("id", 'fname_div' + counter).addClass('is-validate');
 
 
-        newTextBoxDiv.after().html('<h3 style="color:#0065a7">Contact Person\'s Information:<i class="fa fa-trash" id="removeButton_distributor" style="cursor:pointer;color: #fff;float: right;background: #0065a7;padding: 5px;border-radius: 50%;"></i></h3>' + '<div class="nisl-wrap"><label><strong>First Name:</strong></label><input type="text" id="pmsafe_distributor_contact_fname' + counter + '" name="pmsafe_distributor_contact_fname[]" value="" class="widefat check-fname"/></div><div class="nisl-wrap"><label><strong>Last Name:</strong></label><input type="text" id="pmsafe_distributor_contact_lname' + counter + '" name="pmsafe_distributor_contact_lname[]" value="" class="widefat check-lname"/></div><div class="nisl-wrap"><label><strong>Phone Number:</strong></label><input type="text" id="pmsafe_distributor_contact_phone' + counter + '" name="pmsafe_distributor_contact_phone[]" value="" class="widefat check-phone"/></div><div class="nisl-wrap"><label><strong>Email:</strong></label><input type="text" id="pmsafe_distributor_contact_email' + counter + '" name="pmsafe_distributor_contact_email[]" value="" class="widefat check-mail"style="width:35%"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;"> (This will be the Username for this person to Login)</span></div><div class="nisl-wrap"><label><strong>Password:</strong></label><input type="text" rel="gp" name="pmsafe_distributor_contact_password[]" value="" class="widefat check-password" style="width:35%"/><input type="button" value="Generate Password" class="generate_distributor_contact_password" /></div>');
+        newTextBoxDiv.after().html('<h3 style="color:#0065a7">Contact Person\'s Information:<i class="fa fa-trash" id="removeButton_distributor" style="cursor:pointer;color: #fff;float: right;background: #ff0000;padding: 5px;border-radius: 50%;"></i></h3>' + '<div class="nisl-wrap"><label><strong>First Name:</strong></label><input type="text" id="pmsafe_distributor_contact_fname' + counter + '" name="pmsafe_distributor_contact_fname[]" value="" class="widefat check-fname"/></div><div class="nisl-wrap"><label><strong>Last Name:</strong></label><input type="text" id="pmsafe_distributor_contact_lname' + counter + '" name="pmsafe_distributor_contact_lname[]" value="" class="widefat check-lname"/></div><div class="nisl-wrap"><label><strong>Phone Number:</strong></label><input type="text" id="pmsafe_distributor_contact_phone' + counter + '" name="pmsafe_distributor_contact_phone[]" value="" class="widefat check-phone"/></div><div class="nisl-wrap"><label><strong>Email:</strong></label><input type="text" id="pmsafe_distributor_contact_email' + counter + '" name="pmsafe_distributor_contact_email[]" value="" class="widefat check-mail"style="width:35%"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;"> (This will be the Username for this person to Login)</span></div><div class="nisl-wrap"><label><strong>Password:</strong></label><input type="text" rel="gp" name="pmsafe_distributor_contact_password[]" value="" class="widefat check-password" style="width:35%"/><input type="button" value="Generate Password" class="generate_distributor_contact_password" /></div>');
         newTextBoxDiv.appendTo("#fname_divgroup");
         counter++;
     });
@@ -674,22 +677,22 @@ jQuery(document).ready(function () {
         }
 
         //Email     
-        if (jQuery('#pmsafe_dealer_email').val().trim() == '') {
-            jQuery('#pmsafe_dealer_email').css({ 'border': '1px solid #ff0000' });
-            jQuery('#pmsafe_dealer_email').after("<span class='error'>This field is required.</span>");
-            validflag = false;
-        } else {
-            if (jQuery('#pmsafe_dealer_email').val()) {
-                var email = jQuery("#pmsafe_dealer_email").val();
-                if (!(email.match(/^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i))) {
-                    jQuery('#pmsafe_dealer_email').css({ 'border': '1px solid #ff0000' });
-                    jQuery('#pmsafe_dealer_email').after("<span class='error'>Please enter valid email address.</span>");
-                    validflag = false;
-                } else {
-                    jQuery('#pmsafe_dealer_email').css({ 'color': '#333333' });
-                }
-            }
-        }
+        // if (jQuery('#pmsafe_dealer_email').val().trim() == '') {
+        //     jQuery('#pmsafe_dealer_email').css({ 'border': '1px solid #ff0000' });
+        //     jQuery('#pmsafe_dealer_email').after("<span class='error'>This field is required.</span>");
+        //     validflag = false;
+        // } else {
+        //     if (jQuery('#pmsafe_dealer_email').val()) {
+        //         var email = jQuery("#pmsafe_dealer_email").val();
+        //         if (!(email.match(/^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i))) {
+        //             jQuery('#pmsafe_dealer_email').css({ 'border': '1px solid #ff0000' });
+        //             jQuery('#pmsafe_dealer_email').after("<span class='error'>Please enter valid email address.</span>");
+        //             validflag = false;
+        //         } else {
+        //             jQuery('#pmsafe_dealer_email').css({ 'color': '#333333' });
+        //         }
+        //     }
+        // }
 
 
         if (jQuery('#pmsafe_dealer_password').val().trim() == "") {
@@ -840,8 +843,16 @@ jQuery(document).ready(function () {
                     var obj = jQuery.parseJSON(response);
                     // var obj = jQuery.parseJSON(response);
                     if (obj.status == true) {
+                        swal({
+                            title: "Successfully Added!",
+                            text: "User is registered.",
+                            icon: "success",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false,
+                        }).then(function () {
+                            window.location.replace(obj.redirect);
+                        })
 
-                        window.location.replace(obj.redirect);
                     }
                 }
             });// ajax
@@ -873,7 +884,7 @@ jQuery(document).ready(function () {
         var newTextBoxDiv = jQuery(document.createElement('div')).attr("id", 'fname_div' + counter).addClass('is-validate');
 
 
-        newTextBoxDiv.after().html('<h3 style="color:#0065a7">Contact Person\'s Information:<i class="fa fa-trash" id="removeButton_dealer" style="cursor:pointer;color: #fff;float: right;background: #0065a7;padding: 5px;border-radius: 50%;"></i></h3><div class="nisl-wrap"><label><strong>First Name:</strong></label><input type="text" id="pmsafe_dealer_contact_fname' + counter + '" name="pmsafe_dealer_contact_fname[]" value="" class="widefat check-fname"/></div><div class="nisl-wrap"><label><strong>Last Name:</strong></label><input type="text" id="pmsafe_dealer_contact_lname' + counter + '" name="pmsafe_dealer_contact_lname[]" value="" class="widefat check-lname"/></div><div class="nisl-wrap"><label><strong>Phone Number:</strong></label><input type="text" id="pmsafe_dealer_contact_phone' + counter + '" name="pmsafe_dealer_contact_phone[]" value="" class="widefat check-phone"/></div><div class="nisl-wrap"><label><strong>Email:</strong></label><input type="text" id="pmsafe_dealer_contact_email' + counter + '" name="pmsafe_dealer_contact_email[]" value="" class="widefat check-mail" style="width:35%"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;"> (This will be the Username for this person to Login)</span></div><div class="nisl-wrap"><label><strong>Password:</strong></label><input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat check-password" style="width:35%"/><input type="button" value="Generate Password" class="generate_dealer_contact_password" /></div>');
+        newTextBoxDiv.after().html('<h3 style="color:#0065a7">Contact Person\'s Information:<i class="fa fa-trash" id="removeButton_dealer" style="cursor:pointer;color: #fff;float: right;background: #ff0000;padding: 5px;border-radius: 50%;"></i></h3><div class="nisl-wrap"><label><strong>First Name:</strong></label><input type="text" id="pmsafe_dealer_contact_fname' + counter + '" name="pmsafe_dealer_contact_fname[]" value="" class="widefat check-fname"/></div><div class="nisl-wrap"><label><strong>Last Name:</strong></label><input type="text" id="pmsafe_dealer_contact_lname' + counter + '" name="pmsafe_dealer_contact_lname[]" value="" class="widefat check-lname"/></div><div class="nisl-wrap"><label><strong>Phone Number:</strong></label><input type="text" id="pmsafe_dealer_contact_phone' + counter + '" name="pmsafe_dealer_contact_phone[]" value="" class="widefat check-phone"/></div><div class="nisl-wrap"><label><strong>Email:</strong></label><input type="text" id="pmsafe_dealer_contact_email' + counter + '" name="pmsafe_dealer_contact_email[]" value="" class="widefat check-mail" style="width:35%"/></div><div class="nisl-wrap"><label><strong>Password:</strong></label><input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat check-password" style="width:35%"/><input type="button" value="Generate Password" class="generate_dealer_contact_password" /></div>');
         newTextBoxDiv.appendTo("#fname_divgroup");
         counter++;
     });
@@ -946,6 +957,7 @@ jQuery(document).ready(function () {
             var phone = jQuery(this).find('.check-phone').val();
             var mail = jQuery(this).find('.check-mail').val();
             var password = jQuery(this).find('.check-password').val();
+            var uname = jQuery(this).find('.check-uname').val();
             if (fname.trim() != '' || lname.trim() != '' || phone.trim() != '' || mail.trim() != '' || password.trim() != '') {
                 //fname
                 var name = /^[A-Za-z]+$/;
@@ -1026,12 +1038,22 @@ jQuery(document).ready(function () {
                     jQuery(this).find('.check-password').css({ 'color': '#333333' });
                 }
 
+
+                // if (uname.trim() == "") {
+                //     jQuery(this).find('.check-uname').css({ 'border': '1px solid #ff0000' });
+                //     jQuery(this).find('.check-uname').after("<span class='error'>This field is required.</span>");
+                //     validflag = false;
+                // } else {
+                //     jQuery(this).find('.check-uname').css({ 'color': '#333333' });
+                // }
+
             } else {
                 jQuery(this).find('.check-fname').css({ 'border-color': '#DDDDDD' });
                 jQuery(this).find('.check-lname').css({ 'border-color': '#DDDDDD' });
                 jQuery(this).find('.check-phone').css({ 'border-color': '#DDDDDD' });
                 jQuery(this).find('.check-mail').css({ 'border-color': '#DDDDDD' });
                 jQuery(this).find('.check-password').css({ 'border-color': '#DDDDDD' });
+                // jQuery(this).find('.check-uname').css({ 'border-color': '#DDDDDD' });
             }
         });
 
@@ -1057,7 +1079,15 @@ jQuery(document).ready(function () {
                     // var obj = jQuery.parseJSON(response);
                     if (obj.status == true) {
 
-                        window.location.replace(obj.redirect);
+                        swal({
+                            title: "Successfully Updated!",
+                            text: "User is updated.",
+                            icon: "success",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false,
+                        }).then(function () {
+                            window.location.replace(obj.redirect);
+                        })
                     }
 
                 }
@@ -1068,30 +1098,54 @@ jQuery(document).ready(function () {
 
     // delete dealer
     jQuery(document).on("click", "#pmsafe_dealers_delete", function (e) {
-        // alert('in');
+
         e.preventDefault();
 
-        jQuery('.perma-admin-loader').show();
-        var form = jQuery('#perma_delete_dealer_form')[0];
-        var fd = new FormData(form);
-        fd.append('action', 'pmsafe_delete_dealer_form');
+        var pmsafe_dealer_id = jQuery(this).attr('data-id');
 
-        jQuery.ajax({
-            type: 'post',
-            url: pmAjax.ajaxurl,
-            processData: false,
-            contentType: false,
-            data: fd,
-            success: function (response) {
-                jQuery('.perma-admin-loader').hide();
-                var obj = jQuery.parseJSON(response);
-                // var obj = jQuery.parseJSON(response);
-                if (obj.status == true) {
+        var data = {
+            action: 'pmsafe_delete_dealer_form',
+            pmsafe_dealer_id: pmsafe_dealer_id
 
-                    window.location.replace(obj.redirect);
-                }
+        }
+
+        swal({
+            title: "Are you sure?",
+            text: "It will permanently deleted !",
+            icon: "warning",
+            buttons: true,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                jQuery('.perma-admin-loader').show();
+                jQuery.ajax({
+                    type: 'POST',
+                    url: pmAjax.ajaxurl,
+                    data: data,
+                    success: function (response) {
+                        jQuery('.perma-admin-loader').hide();
+                        var obj = jQuery.parseJSON(response);
+                        // var obj = jQuery.parseJSON(response);
+                        if (obj.status == true) {
+                            swal({
+                                title: "Deleted!",
+                                text: "Dealer has been deleted. Press OK button.",
+                                icon: "success",
+                                closeOnClickOutside: false,
+                                closeOnEsc: false,
+                            }).then(function () {
+                                window.location.replace(obj.redirect);
+                            })
+                        }
+                    }
+                });// ajax
+
+            } else {
+                swal("Dealer is not deleted !");
             }
-        });// ajax
+        });
         return false;
 
     });  // delete button 
@@ -1107,24 +1161,47 @@ jQuery(document).ready(function () {
             contact_id: contact_id
         }
 
-        jQuery('.perma-admin-loader').show();
 
 
 
-        jQuery.ajax({
-            type: 'POST',
-            url: pmAjax.ajaxurl,
-            data: data,
-            success: function (response) {
-                jQuery('.perma-admin-loader').hide();
-                var obj = jQuery.parseJSON(response);
-                // var obj = jQuery.parseJSON(response);
-                if (obj.status == true) {
+        swal({
+            title: "Are you sure?",
+            text: "It will permanently deleted !",
+            icon: "warning",
+            buttons: true,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                jQuery('.perma-admin-loader').show();
+                jQuery.ajax({
+                    type: 'POST',
+                    url: pmAjax.ajaxurl,
+                    data: data,
+                    success: function (response) {
+                        jQuery('.perma-admin-loader').hide();
+                        var obj = jQuery.parseJSON(response);
+                        // var obj = jQuery.parseJSON(response);
+                        if (obj.status == true) {
+                            swal({
+                                title: "Deleted!",
+                                text: "Contact user has been deleted. Press OK button.",
+                                icon: "success",
+                                closeOnClickOutside: false,
+                                closeOnEsc: false,
+                            }).then(function () {
+                                location.reload();
+                            })
 
-                    window.location.replace(obj.redirect);
-                }
+                            // window.location.replace(obj.redirect);
+                        }
+                    }
+                });// ajax
+            } else {
+                swal("Contact user is not deleted !");
             }
-        });// ajax
+        });
         return false;
 
     });  // delete button 
@@ -1178,7 +1255,7 @@ jQuery(document).ready(function () {
             dealer_id: nisl_dealer_id
             
         };
-
+     
         jQuery.ajax({
             type: 'POST',
             url: pmAjax.ajaxurl,
@@ -1678,7 +1755,8 @@ jQuery(document).ready(function () {
             text: "It will permanently deleted !",
             icon: "warning",
             buttons: true,
-            allowOutsideClick: false,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
             dangerMode: true,
         }).then((willDelete) => {
             if (willDelete) {
@@ -1695,7 +1773,8 @@ jQuery(document).ready(function () {
                                 title: "Deleted!",
                                 text: "Batch Code has been deleted. Press OK button.",
                                 icon: "success",
-                                allowOutsideClick: false
+                                closeOnClickOutside: false,
+                                closeOnEsc: false,
                             }).then(function () {
                                 window.location.replace(obj.redirect);
                             })
@@ -3302,7 +3381,7 @@ jQuery(document).ready(function () {
         });// ajax
     });
 
-    jQuery(document).on("focus", "#pmsafe_distributor_contact_fname,#pmsafe_distributor_contact_lname,#pmsafe_distributor_contact_phone,#pmsafe_distributor_contact_email,#pmsafe_distributor_contact_password,#pmsafe_dealer_contact_fname,#pmsafe_dealer_contact_lname,#pmsafe_dealer_contact_phone,#pmsafe_dealer_contact_email,#pmsafe_dealer_contact_password,#benefit_packages,#distributor_cost,#dealer_cost,#selling_price,#pmsafe_invitation_prefix,#edit_distributor_cost,#edit_dealer_cost,#edit_selling_price,#edit_dealer_contact_fname,#edit_dealer_contact_lname,#edit_dealer_contact_phone,#edit_distributor_contact_fname,#edit_distributor_contact_lname,#edit_distributor_contact_phone", function (e) {
+    jQuery(document).on("focus", "#pmsafe_distributor_contact_fname,#pmsafe_distributor_contact_lname,#pmsafe_distributor_contact_phone,#pmsafe_distributor_contact_email,#pmsafe_distributor_contact_password,#pmsafe_dealer_contact_fname,#pmsafe_dealer_contact_lname,#pmsafe_dealer_contact_phone,#pmsafe_dealer_contact_email,#pmsafe_dealer_contact_password,#benefit_packages,#distributor_cost,#dealer_cost,#selling_price,#pmsafe_invitation_prefix,#edit_distributor_cost,#edit_dealer_cost,#edit_selling_price,#edit_dealer_contact_fname,#edit_dealer_contact_lname,#edit_dealer_contact_phone,#edit_distributor_contact_fname,#edit_distributor_contact_lname,#edit_distributor_contact_phone,#edit_dealer_contact_email,#edit_dealer_contact_uname", function (e) {
         jQuery(this).css({ 'border-color': '#cccccc' });
         jQuery(this).css({ 'color': '#555' });
         jQuery(this).siblings('.error').remove();
@@ -3350,6 +3429,7 @@ jQuery(document).ready(function () {
                 jQuery('#edit_dealer_contact_lname').val(obj.lname);
                 jQuery('#edit_dealer_contact_phone').val(obj.phone);
                 jQuery('#edit_dealer_contact_email').val(obj.email);
+                jQuery('#edit_dealer_contact_uname').val(obj.uname);
                 jQuery('#contact_person_id').val(obj.contact_id);
 
             }
@@ -3485,7 +3565,15 @@ jQuery(document).ready(function () {
                 dataType: 'html',
                 success: function (response) {
                     jQuery('.perma-admin-loader').hide();
-                    location.reload();
+                    swal({
+                        title: "Successfully Added!",
+                        text: "Contact user is registered.",
+                        icon: "success",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false,
+                    }).then(function () {
+                        location.reload();
+                    })
                 }
             });// ajax
         }
@@ -3502,6 +3590,7 @@ jQuery(document).ready(function () {
         var phone = jQuery('#edit_dealer_contact_phone').val();
         var email = jQuery('#edit_dealer_contact_email').val();
         var password = jQuery('#edit_dealer_contact_password').val();
+        var uname = jQuery('#edit_dealer_contact_uname').val();
 
         var contact_id = jQuery('#contact_person_id').val();
 
@@ -3548,7 +3637,31 @@ jQuery(document).ready(function () {
         }
 
 
+        //Email     
+        if (jQuery('#edit_dealer_contact_email').val().trim() == '') {
+            jQuery('#edit_dealer_contact_email').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_dealer_contact_email').after("<span class='error'>This field is required.</span>");
+            validflag = false;
+        } else {
+            if (jQuery('#edit_dealer_contact_email').val()) {
+                var email = jQuery("#edit_dealer_contact_email").val();
+                if (!(email.match(/^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i))) {
+                    jQuery('#edit_dealer_contact_email').css({ 'border': '1px solid #ff0000' });
+                    jQuery('#edit_dealer_contact_email').after("<span class='error'>Please enter valid email address.</span>");
+                    validflag = false;
+                } else {
+                    jQuery('#edit_dealer_contact_email').css({ 'color': '#333333' });
+                }
+            }
+        }
 
+        if (jQuery('#edit_dealer_contact_uname').val().trim() == "") {
+            jQuery('#edit_dealer_contact_uname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_dealer_contact_uname').after("<span class='error'>This field is required.</span>");
+            validflag = false;
+        } else {
+            jQuery('#edit_dealer_contact_uname').css({ 'color': '#333333' });
+        }
 
         var data = {
             action: 'edit_dealer_contact_information',
@@ -3557,6 +3670,7 @@ jQuery(document).ready(function () {
             phone: phone,
             email: email,
             password: password,
+            uname: uname,
             contact_id: contact_id
         };
 
@@ -3573,7 +3687,15 @@ jQuery(document).ready(function () {
                 dataType: 'html',
                 success: function (response) {
                     jQuery('.perma-admin-loader').hide();
-                    location.reload();
+                    swal({
+                        title: "Successfully Updated!",
+                        text: "Contact user is updated.",
+                        icon: "success",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false,
+                    }).then(function () {
+                        location.reload();
+                    })
                 }
             });// ajax
         }
@@ -3807,7 +3929,7 @@ jQuery(document).ready(function () {
             dataType: 'html',
             success: function (response) {
                 jQuery('.perma-admin-loader').hide();
-                // location.reload();
+                swal("Good job!", "Password Reset Email Succussfully Sent!", "success");
             }
         });// ajax
 
