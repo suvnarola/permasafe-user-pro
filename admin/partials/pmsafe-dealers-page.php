@@ -209,6 +209,7 @@ if ($action == 'view') {
     /*********************** Add Contact Person Modal ******************************************** */
     echo '<div id="contact-person-modal" class="modal">';
     echo '<h3>Add Contact Person Information:<h3>';
+    echo '<hr/>';
     echo '<div class="nisl-wrap">';
     echo '<label><strong>First Name:</strong></label>';
     echo '<input type="text" id="pmsafe_dealer_contact_fname" name="pmsafe_dealer_contact_fname" value="" class="widefat" />';
@@ -230,16 +231,22 @@ if ($action == 'view') {
     echo '</div>';
 
     echo '<div class="nisl-wrap">';
-    echo '<label><strong>Password:</strong></label>';
-    echo '<input type="text" rel="gp" name="pmsafe_dealer_contact_password" id="pmsafe_dealer_contact_password" value="" class="widefat" style="width:35%"/>';
-    echo '<input type="button" value="Generate Password" class="generate_dealer_contact_password" />';
+    echo '<label><strong>Username:</strong></label>';
+    echo '<input type="text" id="pmsafe_dealer_contact_uname" name="pmsafe_dealer_contact_uname" value="" class="widefat" />';
     echo '</div>';
-    echo '<input type="button" value="Add" id="add_new_contact_person" class="btn-disabled"/>';
+
+    echo '<div class="nisl-wrap">';
+    echo '<label><strong>Password:</strong></label>';
+    echo '<input type="text" rel="gp" name="pmsafe_dealer_contact_password" id="pmsafe_dealer_contact_password" value="" class="widefat" style="width:40%"/>';
+    echo '<input type="button" value="Generate Password" class="generate_dealer_contact_password" style="width:30%"/>';
+    echo '</div>';
+    echo '<input type="button" value="Add" id="add_new_contact_person" class="btn-disabled" style="padding:10px 30px;"/>';
     echo '</div>';
 
     /*********************** Edit Contact Person Modal ******************************************** */
     echo '<div id="edit-contact-person-modal" class="modal">';
     echo '<h3>Edit Contact Person Information:<h3>';
+    echo '<hr/>';
     echo '<div class="nisl-wrap">';
     echo '<label><strong>First Name:</strong></label>';
     echo '<input type="hidden" id="contact_person_id" value="" />';
@@ -268,10 +275,10 @@ if ($action == 'view') {
 
     echo '<div class="nisl-wrap">';
     echo '<label><strong>Password:</strong></label>';
-    echo '<input type="text" rel="gp" name="edit_dealer_contact_password" id="edit_dealer_contact_password" value="" class="widefat" style="width:35%"/>';
-    echo '<input type="button" value="Generate Password" class="generate_dealer_contact_password" />';
+    echo '<input type="text" rel="gp" name="edit_dealer_contact_password" id="edit_dealer_contact_password" value="" class="widefat" style="width:40%"/>';
+    echo '<input type="button" value="Generate Password" class="generate_dealer_contact_password" style="width:30%"/>';
     echo '</div>';
-    echo '<input type="button" value="Save" id="edit_new_contact_person" />';
+    echo '<input type="button" value="Save" id="edit_new_contact_person" style="padding:10px 30px;"/>';
     echo '</div>';
 
     echo '</div>';
@@ -459,13 +466,6 @@ if ($action == 'view') {
     echo '<input type="text" id="pmsafe_dealer_fax_number" name="pmsafe_dealer_fax_number" value="' . $fax . '" class="widefat" />';
     echo '</div>';
 
-    // echo '<div id="fax_div">';
-    //     echo '<label><strong>Fax Number</strong></label>';
-    //     echo '<input type="text" id="pmsafe_dealer_fax_number" name="pmsafe_dealer_fax_number" value="'.$fax.'" class="widefat" />';
-    // echo '</div>'; 
-
-    // $dealer_pwd = wp_generate_password();
-
     echo '<div id="password_div">';
     echo '<label><strong>Password</strong></label>';
     echo '<input type="password" id="pmsafe_dealer_password" name="pmsafe_dealer_password" value="" class="widefat" style="display:none;"/>';
@@ -491,105 +491,11 @@ if ($action == 'view') {
     echo '</select>';
     echo '</div>';
 
-    $number = 1;
-    if ($contact_info) {
-        echo '<div id="fname_divgroup">';
-        foreach ($contact_info as $key => $value) {
-            $user_id = $value->user_id;
-            $fname = get_user_meta($user_id, 'contact_fname', true);
-            $lname = get_user_meta($user_id, 'contact_lname', true);
-            $phone = get_user_meta($user_id, 'contact_phone', true);
-            // $number = $key + 1;
-            if ($fname != '') {
-                echo '<div id="fname_div' . $number . '" >';
-                echo '<h3 style="color:#0065a7">Contact Person\'s Information:</h3>';
-                echo '<div class="nisl-wrap">';
-                echo '<label><strong>First Name:</strong></label>';
-                echo '<input type="hidden" id="pmsafe_dealer_contact_id' . $number . '" name="pmsafe_dealer_contact_id[]" value="' . $user_id . '" class="widefat" />';
-                echo '<input type="text" id="pmsafe_dealer_contact_fname' . $number . '" name="pmsafe_dealer_contact_fname[]" value="' . $fname . '" class="widefat check-fname" />';
-                echo '</div>';
-
-                echo '<div class="nisl-wrap">';
-                echo '<label><strong>Last Name:</strong></label>';
-                echo '<input type="text" id="pmsafe_dealer_contact_lname' . $number . '" name="pmsafe_dealer_contact_lname[]" value="' . $lname . '" class="widefat check-lname" />';
-                echo '</div>';
-
-                echo '<div class="nisl-wrap">';
-                echo '<label><strong>Phone Number:</strong></label>';
-                echo '<input type="text" id="pmsafe_dealer_contact_phone' . $number . '" name="pmsafe_dealer_contact_phone[]" value="' . $phone . '" class="widefat check-phone" />';
-                echo '</div>';
-
-                echo '<div class="nisl-wrap">';
-                echo '<label><strong>Email:</strong></label>';
-                echo '<input type="email" id="pmsafe_dealer_contact_email' . $number . '" name="pmsafe_dealer_contact_email[]" value="' . $value->user_email . '" class="widefat" style="width:35%;"/>';
-                echo '</div>';
-
-                echo '<div class="nisl-wrap">';
-                echo '<label><strong>Username:</strong></label>';
-                echo '<input type="email" id="pmsafe_dealer_contact_uname' . $number . '" name="pmsafe_dealer_contact_uname[]" value="' . $value->user_login . '" class="widefat check-uname" style="width:35%;"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;"> (This will be the Username for this person to Login)</span>';
-                echo '</div>';
-
-                echo '<div class="nisl-wrap">';
-                echo '<label><strong>Password:</strong></label>';
-                echo '<input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat check-password" style="width:35%"/>';
-                echo '<input type="button" value="Generate Password" class="generate_dealer_contact_password" />';
-
-                echo '</div>';
-                echo '</div>';
-            }
-            $number++;
-        }
-        echo '</div>';
-    } else {
-        echo '<div id="fname_divgroup">';
-        echo '<div id="fname_div1" class="is-validate">';
-        echo '<h3 style="color:#0065a7">Contact Person\'s Information:</h3>';
-        echo '<div class="nisl-wrap">';
-        echo '<label><strong>First Name:</strong></label>';
-        echo '<input type="text" id="pmsafe_dealer_contact_fname1" name="pmsafe_dealer_contact_fname[]" value="" class="widefat check-fname" />';
-        echo '</div>';
-
-        echo '<div class="nisl-wrap">';
-        echo '<label><strong>Last Name:</strong></label>';
-        echo '<input type="text" id="pmsafe_dealer_contact_lname1" name="pmsafe_dealer_contact_lname[]" value="" class="widefat check-lname" />';
-        echo '</div>';
-
-        echo '<div class="nisl-wrap">';
-        echo '<label><strong>Phone Number:</strong></label>';
-        echo '<input type="text" id="pmsafe_dealer_contact_phone1" name="pmsafe_dealer_contact_phone[]" value="" class="widefat check-phone" />';
-        echo '</div>';
-
-        echo '<div class="nisl-wrap">';
-        echo '<label><strong>Email:</strong></label>';
-        echo '<input type="email" id="pmsafe_dealer_contact_email1" name="pmsafe_dealer_contact_email[]" value="" class="widefat check-mail" style="width:35%;"/><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;"> (This will be the Username for this person to Login)</span>';
-        echo '</div>';
-
-        echo '<div class="nisl-wrap">';
-        echo '<label><strong>Password</strong></label>';
-        echo '<input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat check-password" style="width:35%"/>';
-        echo '<input type="button" value="Change Password" class="generate_dealer_contact_password" />';
-        echo '</div>';
-        echo '</div>';
-        echo '</div>';
-    }
-    echo '<input type="button" value="Add New Contact Information" id="add_new_dealer" />';
-    // echo '<input type="button" value="Remove Contact Information" id="removeButton_dealer" />';
-
     echo '<input type="submit" id="pmsafe_dealers_update" value="Save" class="button button-primary button-large btn-disabled">';
 
     echo '</form>';
     echo '</div>';
-} /*else if ($action == 'delete') {
-    echo '<h1>Delete Dealer</h1>';
-    echo '<form name="perma_delete_dealer" id="perma_delete_dealer_form" method="POST" class="validate">';
-
-    echo '<p>You have specified this user for deletion:</p>';
-    echo 'ID #' . $dealer_id . ': ' . $name . ' (' . $user->user_login . ')';
-    echo '<input type="hidden" id="pmsafe_dealer_id" name="pmsafe_dealer_id" value="' . $dealer_id . '" class="widefat" /><br/><br/>';
-
-    echo '<input type="submit" id="pmsafe_dealers_delete" value="Confirm Deletion" class="button button-primary button-large">';
-    echo '</form>';
-}*/ else if ($action == 'delete_customer_details') {
+} else if ($action == 'delete_customer_details') {
     $user_id = $_GET['id'];
     $fname = get_user_meta($user_id, 'first_name', true);
     $lname = get_user_meta($user_id, 'last_name', true);

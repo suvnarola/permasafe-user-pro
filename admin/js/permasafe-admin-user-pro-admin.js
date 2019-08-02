@@ -2,71 +2,71 @@ jQuery(document).ready(function () {
     var counter = 2;
 
     // for states
-    var availableStates = [
-        "ALABAMA",
-        "ALASKA",
-        "AMERICAN SAMOA",
-        "ARIZONA",
-        "ARKANSAS",
-        "CALIFORNIA",
-        "COLORADO",
-        "CONNECTICUT",
-        "DELAWARE",
-        "DISTRICT OF COLUMBIA",
-        "FEDERATED STATES OF MICRONESIA",
-        "FLORIDA",
-        "GEORGIA",
-        "GUAM GU",
-        "HAWAII",
-        "IDAHO",
-        "ILLINOIS",
-        "INDIANA",
-        "IOWA",
-        "KANSAS",
-        "KENTUCKY",
-        "LOUISIANA",
-        "MAINE",
-        "MARSHALL ISLANDS",
-        "MARYLAND",
-        "MASSACHUSETTS",
-        "MICHIGAN",
-        "MINNESOTA",
-        "MISSISSIPPI",
-        "MISSOURI",
-        "MONTANA",
-        "NEBRASKA",
-        "NEVADA",
-        "NEW HAMPSHIRE",
-        "NEW JERSEY",
-        "NEW MEXICO",
-        "NEW YORK",
-        "NORTH CAROLINA",
-        "NORTH DAKOTA",
-        "NORTHERN MARIANA ISLANDS",
-        "OHIO",
-        "OKLAHOMA",
-        "OREGON",
-        "PALAU",
-        "PENNSYLVANIA",
-        "PUERTO RICO",
-        "RHODE ISLAND",
-        "SOUTH CAROLINA",
-        "SOUTH DAKOTA",
-        "TENNESSEE",
-        "TEXAS",
-        "UTAH",
-        "VERMONT",
-        "VIRGIN ISLANDS",
-        "VIRGINIA",
-        "WASHINGTON",
-        "WEST VIRGINIA",
-        "WISCONSIN",
-        "WYOMING",
-        "ARMED FORCES AFRICA \ CANADA \ EUROPE \ MIDDLE EAST",
-        "ARMED FORCES AMERICA (EXCEPT CANADA)",
-        "ARMED FORCES PACIFIC"
-    ];
 
+    var availableStates = [
+        { label: "ALABAMA", value: "AL" },
+        { label: "ALASKA", value: "AK" },
+        { label: "AMERICAN SAMOA", value: "AS" },
+        { label: "ARIZONA", value: "AZ" },
+        { label: "ARKANSAS", value: "AR" },
+        { label: "CALIFORNIA", value: "CA" },
+        { label: "COLORADO", value: "CO" },
+        { label: "CONNECTICUT", value: "CT" },
+        { label: "DELAWARE", value: "DE" },
+        { label: "DISTRICT OF COLUMBIA", value: "DC" },
+        { label: "FEDERATED STATES OF MICRONESIA", value: "FM" },
+        { label: "FLORIDA", value: "FL" },
+        { label: "GEORGIA", value: "GA" },
+        { label: "GUAM GU", value: "GU" },
+        { label: "HAWAII", value: "HI" },
+        { label: "IDAHO", value: "ID" },
+        { label: "ILLINOIS", value: "IL" },
+        { label: "INDIANA", value: "IN" },
+        { label: "IOWA", value: "IA" },
+        { label: "KANSAS", value: "KS" },
+        { label: "KENTUCKY", value: "KY" },
+        { label: "LOUISIANA", value: "LA" },
+        { label: "MAINE", value: "ME" },
+        { label: "MARSHALL ISLANDS", value: "MH" },
+        { label: "MARYLAND", value: "MD" },
+        { label: "MASSACHUSETTS", value: "MA" },
+        { label: "MICHIGAN", value: "MI" },
+        { label: "MINNESOTA", value: "MN" },
+        { label: "MISSISSIPPI", value: "MS" },
+        { label: "MISSOURI", value: "MO" },
+        { label: "MONTANA", value: "MT" },
+        { label: "NEBRASKA", value: "NE" },
+        { label: "NEVADA", value: "NV" },
+        { label: "NEW HAMPSHIRE", value: "NH" },
+        { label: "NEW JERSEY", value: "NJ" },
+        { label: "NEW MEXICO", value: "NM" },
+        { label: "NEW YORK", value: "NY" },
+        { label: "NORTH CAROLINA", value: "NC" },
+        { label: "NORTH DAKOTA", value: "ND" },
+        { label: "NORTHERN MARIANA ISLANDS", value: "MP" },
+        { label: "OHIO", value: "OH" },
+        { label: "OKLAHOMA", value: "OK" },
+        { label: "OREGON", value: "OR" },
+        { label: "PALAU", value: "PW" },
+        { label: "PENNSYLVANIA", value: "PA" },
+        { label: "PUERTO RICO", value: "PR" },
+        { label: "RHODE ISLAND", value: "RI" },
+        { label: "SOUTH CAROLINA", value: "SC" },
+        { label: "SOUTH DAKOTA", value: "SD" },
+        { label: "TENNESSEE", value: "TN" },
+        { label: "TEXAS", value: "TX" },
+        { label: "UTAH", value: "UT" },
+        { label: "VERMONT", value: "VT" },
+        { label: "VIRGIN ISLANDS", value: "VI" },
+        { label: "VIRGINIA", value: "VA" },
+        { label: "WASHINGTON", value: "WA" },
+        { label: "WEST VIRGINIA", value: "WV" },
+        { label: "WISCONSIN", value: "WI" },
+        { label: "WYOMING", value: "WY" },
+        { label: "ARMED FORCES AFRICA \ CANADA \ EUROPE \ MIDDLE EAST", value: "AE" },
+        { label: "ARMED FORCES AMERICA (EXCEPT CANADA)", value: "AA" },
+        { label: "ARMED FORCES PACIFIC", value: "AP" }
+    ];
 
     var state_options = {
         source: availableStates
@@ -333,69 +333,6 @@ jQuery(document).ready(function () {
             return false;
         }
     });  // submit button 
-
-
-
-
-    // jQuery(document).on("focusout", ".check-mail", function (e) {
-    //     jQuery('.error').remove();
-    //     var email = jQuery(this).val();
-    //     var email_control = jQuery(this);
-    //     var data = {
-    //         action: 'check_email_exist',
-    //         email: email,
-    //     };
-    //     jQuery.ajax({
-    //         type: 'POST',
-    //         url: pmAjax.ajaxurl,
-    //         data: data,
-    //         success: function (response) {
-    //             if (response == 0) {
-
-    //                 email_control.css({ 'border': '1px solid #ff0000', 'border-color': '#ff0000' });
-    //                 email_control.after("<span class='error'>Email is already exist.</span>");
-    //                 jQuery('.btn-disabled').attr("disabled", true);
-    //             }
-
-    //         },
-    //         dataType: 'html'
-    //     });
-    // });
-
-    // jQuery(document).on("focus", ".check-mail", function (e) {
-    //     var email_control = jQuery(this);
-    //     email_control.css({ 'border-color': '#cccccc' });
-    //     email_control.siblings('.error').remove();
-    //     jQuery('.btn-disabled').attr("disabled", false);
-    // });
-
-    jQuery(document).on("focus", ".check-fname", function (e) {
-        var fname_control = jQuery(this);
-        fname_control.css({ 'border-color': '#cccccc' });
-        fname_control.siblings('.error').remove();
-
-    });
-
-    jQuery(document).on("focus", ".check-lname", function (e) {
-        var lname_control = jQuery(this);
-        lname_control.css({ 'border-color': '#cccccc' });
-        lname_control.siblings('.error').remove();
-
-    });
-
-    jQuery(document).on("focus", ".check-phone", function (e) {
-        var phone_control = jQuery(this);
-        phone_control.css({ 'border-color': '#cccccc' });
-        phone_control.siblings('.error').remove();
-
-    });
-
-    jQuery(document).on("focus", ".check-password", function (e) {
-        var password_control = jQuery(this);
-        password_control.css({ 'border-color': '#cccccc' });
-        password_control.siblings('.error').remove();
-
-    });
 
 
     // Focus and blure 
@@ -676,24 +613,6 @@ jQuery(document).ready(function () {
             jQuery('#pmsafe_dealer_name').css({ 'color': '#333333' });
         }
 
-        //Email     
-        // if (jQuery('#pmsafe_dealer_email').val().trim() == '') {
-        //     jQuery('#pmsafe_dealer_email').css({ 'border': '1px solid #ff0000' });
-        //     jQuery('#pmsafe_dealer_email').after("<span class='error'>This field is required.</span>");
-        //     validflag = false;
-        // } else {
-        //     if (jQuery('#pmsafe_dealer_email').val()) {
-        //         var email = jQuery("#pmsafe_dealer_email").val();
-        //         if (!(email.match(/^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i))) {
-        //             jQuery('#pmsafe_dealer_email').css({ 'border': '1px solid #ff0000' });
-        //             jQuery('#pmsafe_dealer_email').after("<span class='error'>Please enter valid email address.</span>");
-        //             validflag = false;
-        //         } else {
-        //             jQuery('#pmsafe_dealer_email').css({ 'color': '#333333' });
-        //         }
-        //     }
-        // }
-
 
         if (jQuery('#pmsafe_dealer_password').val().trim() == "") {
             jQuery('#pmsafe_dealer_password').css({ 'border': '1px solid #ff0000' });
@@ -724,104 +643,6 @@ jQuery(document).ready(function () {
         } else {
             jQuery('#pmsafe_dealer_distributor').css({ 'color': '#333333' });
         }
-
-        //contact-person validation
-        jQuery('.is-validate').each(function () {
-            var fname = jQuery(this).find('.check-fname').val();
-            var lname = jQuery(this).find('.check-lname').val();
-            var phone = jQuery(this).find('.check-phone').val();
-            var mail = jQuery(this).find('.check-mail').val();
-            var password = jQuery(this).find('.check-password').val();
-            if (fname.trim() != '' || lname.trim() != '' || phone.trim() != '' || mail.trim() != '' || password.trim() != '') {
-                //fname
-                var name = /^[A-Za-z]+$/;
-                if (fname.trim() == "") {
-                    jQuery(this).find('.check-fname').css({ 'border': '1px solid #ff0000' });
-                    jQuery(this).find('.check-fname').after("<span class='error'>This field is required.</span>");
-                    validflag = false;
-                } else if (!(fname.match(name))) {
-
-                    jQuery(this).find('.check-fname').css({ 'border': '1px solid #ff0000' });
-                    jQuery(this).find('.check-fname').after("<span class='error'>Please enter valid name.</span>");
-                    validflag = false;
-                } else {
-                    jQuery(this).find('.check-fname').css({ 'border-color': '#cccccc' });
-                }
-
-                //fname
-                var name = /^[A-Za-z]+$/;
-                if (lname.trim() == "") {
-                    jQuery(this).find('.check-lname').css({ 'border': '1px solid #ff0000' });
-                    jQuery(this).find('.check-lname').after("<span class='error'>This field is required.</span>");
-                    validflag = false;
-                } else if (!(lname.match(name))) {
-
-                    jQuery(this).find('.check-lname').css({ 'border': '1px solid #ff0000' });
-                    jQuery(this).find('.check-lname').after("<span class='error'>Please enter valid name.</span>");
-                    validflag = false;
-                } else {
-                    jQuery(this).find('.check-lname').css({ 'border-color': '#cccccc' });
-                }
-
-                //phone
-                var numbers = /^[0-9]{10}$/;
-                if (phone.trim() == "") {
-                    jQuery(this).find('.check-phone').css({ 'border': '1px solid #ff0000' });
-                    jQuery(this).find('.check-phone').after("<span class='error'>This field is required.</span>");
-                    validflag = false;
-                } else if (!(phone.match(numbers))) {
-
-                    jQuery(this).find('.check-phone').css({ 'border': '1px solid #ff0000' });
-                    jQuery(this).find('.check-phone').after("<span class='error'>Please enter 10 digit number.</span>");
-                    validflag = false;
-                } else {
-                    jQuery(this).find('.check-phone').css({ 'color': '#333333' });
-                }
-
-                //email
-                if (mail.trim() == "") {
-                    jQuery(this).find('.check-mail').css({ 'border': '1px solid #ff0000' });
-                    jQuery(this).find('.check-mail').after("<span class='error'>This field is required.</span>");
-                    validflag = false;
-                } else if (mail) {
-                    if (jQuery('#pmsafe_dealer_email').val() == mail.trim()) {
-
-                        jQuery(this).find('.check-mail').css({ 'border': '1px solid #ff0000' });
-                        jQuery(this).find('.check-mail').after("<span class='error'> Dealer and Contact person\'s email should not be same.</span>");
-                        validflag = false;
-                    } else {
-                        var email = jQuery(this).find('.check-mail').val();
-                        if (!(email.match(/^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i))) {
-                            jQuery(this).find('.check-mail').css({ 'border': '1px solid #ff0000' });
-                            jQuery(this).find('.check-mail').after("<span class='error'>Please enter valid email address.</span>");
-                            validflag = false;
-                        }
-                    }
-                } else {
-
-                    jQuery(this).find('.check-mail').css({ 'color': '#333333' });
-                }
-
-
-                //password
-                if (password.trim() == "") {
-                    jQuery(this).find('.check-password').css({ 'border': '1px solid #ff0000' });
-                    jQuery(this).find('.check-password').after("<span class='error'>This field is required.</span>");
-                    validflag = false;
-                } else {
-                    jQuery(this).find('.check-password').css({ 'color': '#333333' });
-                }
-
-            } else {
-                jQuery(this).find('.check-fname').css({ 'border-color': '#DDDDDD' });
-                jQuery(this).find('.check-lname').css({ 'border-color': '#DDDDDD' });
-                jQuery(this).find('.check-phone').css({ 'border-color': '#DDDDDD' });
-                jQuery(this).find('.check-mail').css({ 'border-color': '#DDDDDD' });
-                jQuery(this).find('.check-password').css({ 'border-color': '#DDDDDD' });
-            }
-        });
-
-
 
 
         if (!validflag) {
@@ -854,6 +675,9 @@ jQuery(document).ready(function () {
                         })
 
                     }
+                    if (obj.status == false) {
+                        swal("Error", "", "warning");
+                    }
                 }
             });// ajax
             return false;
@@ -872,36 +696,6 @@ jQuery(document).ready(function () {
     });
 
 
-
-    //add new contact dealers
-    jQuery('#add_new_dealer').click(function () {
-        // var counter = 1;
-        // counter++;
-        if (counter > 10) {
-            alert("Only 10 textboxes allow");
-            return false;
-        }
-        var newTextBoxDiv = jQuery(document.createElement('div')).attr("id", 'fname_div' + counter).addClass('is-validate');
-
-
-        newTextBoxDiv.after().html('<h3 style="color:#0065a7">Contact Person\'s Information:<i class="fa fa-trash" id="removeButton_dealer" style="cursor:pointer;color: #fff;float: right;background: #ff0000;padding: 5px;border-radius: 50%;"></i></h3><div class="nisl-wrap"><label><strong>First Name:</strong></label><input type="text" id="pmsafe_dealer_contact_fname' + counter + '" name="pmsafe_dealer_contact_fname[]" value="" class="widefat check-fname"/></div><div class="nisl-wrap"><label><strong>Last Name:</strong></label><input type="text" id="pmsafe_dealer_contact_lname' + counter + '" name="pmsafe_dealer_contact_lname[]" value="" class="widefat check-lname"/></div><div class="nisl-wrap"><label><strong>Phone Number:</strong></label><input type="text" id="pmsafe_dealer_contact_phone' + counter + '" name="pmsafe_dealer_contact_phone[]" value="" class="widefat check-phone"/></div><div class="nisl-wrap"><label><strong>Email:</strong></label><input type="text" id="pmsafe_dealer_contact_email' + counter + '" name="pmsafe_dealer_contact_email[]" value="" class="widefat check-mail" style="width:35%"/></div><div class="nisl-wrap"><label><strong>Password:</strong></label><input type="text" rel="gp" name="pmsafe_dealer_contact_password[]" value="" class="widefat check-password" style="width:35%"/><input type="button" value="Generate Password" class="generate_dealer_contact_password" /></div>');
-        newTextBoxDiv.appendTo("#fname_divgroup");
-        counter++;
-    });
-
-    //remove textbox
-    jQuery(document).on("click", "#removeButton_dealer", function (e) {
-        // jQuery("#removeButton_dealer").click(function () {
-
-        if (counter == 2) {
-            jQuery("#fname_div" + counter).remove();
-        }
-
-        counter--;
-
-        jQuery("#fname_div" + counter).remove();
-
-    });
 
 
     // update dealer
@@ -949,113 +743,6 @@ jQuery(document).ready(function () {
                 jQuery('#pmsafe_dealer_phone_number').css({ 'border-color': '#cccccc' });
             }
         }
-
-        //contact-person validation
-        jQuery('.is-validate').each(function () {
-            var fname = jQuery(this).find('.check-fname').val();
-            var lname = jQuery(this).find('.check-lname').val();
-            var phone = jQuery(this).find('.check-phone').val();
-            var mail = jQuery(this).find('.check-mail').val();
-            var password = jQuery(this).find('.check-password').val();
-            var uname = jQuery(this).find('.check-uname').val();
-            if (fname.trim() != '' || lname.trim() != '' || phone.trim() != '' || mail.trim() != '' || password.trim() != '') {
-                //fname
-                var name = /^[A-Za-z]+$/;
-                if (fname.trim() == "") {
-                    jQuery(this).find('.check-fname').css({ 'border': '1px solid #ff0000' });
-                    jQuery(this).find('.check-fname').after("<span class='error'>This field is required.</span>");
-                    validflag = false;
-                } else if (!(fname.match(name))) {
-
-                    jQuery(this).find('.check-fname').css({ 'border': '1px solid #ff0000' });
-                    jQuery(this).find('.check-fname').after("<span class='error'>Please enter valid name.</span>");
-                    validflag = false;
-                } else {
-                    jQuery(this).find('.check-fname').css({ 'border-color': '#cccccc' });
-                }
-
-                //fname
-                var name = /^[A-Za-z]+$/;
-                if (lname.trim() == "") {
-                    jQuery(this).find('.check-lname').css({ 'border': '1px solid #ff0000' });
-                    jQuery(this).find('.check-lname').after("<span class='error'>This field is required.</span>");
-                    validflag = false;
-                } else if (!(lname.match(name))) {
-
-                    jQuery(this).find('.check-lname').css({ 'border': '1px solid #ff0000' });
-                    jQuery(this).find('.check-lname').after("<span class='error'>Please enter valid name.</span>");
-                    validflag = false;
-                } else {
-                    jQuery(this).find('.check-lname').css({ 'border-color': '#cccccc' });
-                }
-
-                //phone
-                var numbers = /^[0-9]{10}$/;
-                if (phone.trim() == "") {
-                    jQuery(this).find('.check-phone').css({ 'border': '1px solid #ff0000' });
-                    jQuery(this).find('.check-phone').after("<span class='error'>This field is required.</span>");
-                    validflag = false;
-                } else if (!(phone.match(numbers))) {
-
-                    jQuery(this).find('.check-phone').css({ 'border': '1px solid #ff0000' });
-                    jQuery(this).find('.check-phone').after("<span class='error'>Please enter 10 digit number.</span>");
-                    validflag = false;
-                } else {
-                    jQuery(this).find('.check-phone').css({ 'color': '#333333' });
-                }
-
-                //email
-                if (mail == "") {
-                    jQuery(this).find('.check-mail').css({ 'border': '1px solid #ff0000' });
-                    jQuery(this).find('.check-mail').after("<span class='error'>This field is required.</span>");
-                    validflag = false;
-                } else if (mail) {
-                    if (jQuery('#pmsafe_dealer_email').val() == mail.trim()) {
-
-                        jQuery(this).find('.check-mail').css({ 'border': '1px solid #ff0000' });
-                        jQuery(this).find('.check-mail').after("<span class='error'> Dealer and Contact person\'s email should not be same.</span>");
-                        validflag = false;
-                    } else {
-                        var email = jQuery(this).find('.check-mail').val();
-                        if (!(email.match(/^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i))) {
-                            jQuery(this).find('.check-mail').css({ 'border': '1px solid #ff0000' });
-                            jQuery(this).find('.check-mail').after("<span class='error'>Please enter valid email address.</span>");
-                            validflag = false;
-                        }
-                    }
-                } else {
-
-                    jQuery(this).find('.check-mail').css({ 'color': '#333333' });
-                }
-
-
-                //password
-                if (password.trim() == "") {
-                    jQuery(this).find('.check-password').css({ 'border': '1px solid #ff0000' });
-                    jQuery(this).find('.check-password').after("<span class='error'>This field is required.</span>");
-                    validflag = false;
-                } else {
-                    jQuery(this).find('.check-password').css({ 'color': '#333333' });
-                }
-
-
-                // if (uname.trim() == "") {
-                //     jQuery(this).find('.check-uname').css({ 'border': '1px solid #ff0000' });
-                //     jQuery(this).find('.check-uname').after("<span class='error'>This field is required.</span>");
-                //     validflag = false;
-                // } else {
-                //     jQuery(this).find('.check-uname').css({ 'color': '#333333' });
-                // }
-
-            } else {
-                jQuery(this).find('.check-fname').css({ 'border-color': '#DDDDDD' });
-                jQuery(this).find('.check-lname').css({ 'border-color': '#DDDDDD' });
-                jQuery(this).find('.check-phone').css({ 'border-color': '#DDDDDD' });
-                jQuery(this).find('.check-mail').css({ 'border-color': '#DDDDDD' });
-                jQuery(this).find('.check-password').css({ 'border-color': '#DDDDDD' });
-                // jQuery(this).find('.check-uname').css({ 'border-color': '#DDDDDD' });
-            }
-        });
 
 
         if (!validflag) {
@@ -1238,37 +925,7 @@ jQuery(document).ready(function () {
 
     });  // delete button 
 
-    /*jQuery(document).on("change","#pmsafe_dealer", function(e) {
-       
-          e.preventDefault();
-        var isDisabled = jQuery("#pmsafe_distributor").prop('disabled');
-        if (isDisabled)
-        {
-            jQuery("#pmsafe_distributor").removeAttr('disabled');
-        }
-        
-        var nisl_dealer_id = jQuery(this).val();
-        var nisl_distributor = jQuery('#pmsafe_distributor');
-        // alert('dealer_id->' + dealer_id); 
-        var data = {
-            action: 'get_distributor',
-            dealer_id: nisl_dealer_id
-            
-        };
-     
-        jQuery.ajax({
-            type: 'POST',
-            url: pmAjax.ajaxurl,
-            data: data,
-            success: function (response) {
-                var obj = jQuery.parseJSON(response);
-                nisl_distributor.empty();
-                nisl_distributor.append(jQuery('<option selected></option>').val(obj.username).html(obj.distributor_name + '(' + obj.username + ')' ));
-            },
-            dataType: 'html'
-        });
-        return false;
-    });// select */
+
     jQuery(document).on("change", "#pmsafe_distributor", function (e) {
 
         e.preventDefault();
@@ -3475,6 +3132,7 @@ jQuery(document).ready(function () {
         var lname = jQuery('#pmsafe_dealer_contact_lname').val();
         var phone = jQuery('#pmsafe_dealer_contact_phone').val();
         var email = jQuery('#pmsafe_dealer_contact_email').val();
+        var uname = jQuery('#pmsafe_dealer_contact_uname').val();
         var password = jQuery('#pmsafe_dealer_contact_password').val();
         var dealer_id = jQuery('#pricing_dealer_id').val();
 
@@ -3545,6 +3203,7 @@ jQuery(document).ready(function () {
             jQuery('#pmsafe_dealer_contact_password').css({ 'color': '#333333' });
         }
 
+
         var data = {
             action: 'add_dealer_contact_information',
             fname: fname,
@@ -3552,6 +3211,7 @@ jQuery(document).ready(function () {
             phone: phone,
             email: email,
             password: password,
+            uname: uname,
             dealer_id: dealer_id
         };
         if (!validflag) {
@@ -3562,18 +3222,24 @@ jQuery(document).ready(function () {
                 type: 'POST',
                 url: pmAjax.ajaxurl,
                 data: data,
-                dataType: 'html',
                 success: function (response) {
+
                     jQuery('.perma-admin-loader').hide();
-                    swal({
-                        title: "Successfully Added!",
-                        text: "Contact user is registered.",
-                        icon: "success",
-                        closeOnClickOutside: false,
-                        closeOnEsc: false,
-                    }).then(function () {
-                        location.reload();
-                    })
+                    var obj = jQuery.parseJSON(response);
+                    if (obj.status == true) {
+                        swal({
+                            title: "Successfully Added!",
+                            text: "Contact user is registered.",
+                            icon: "success",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false,
+                        }).then(function () {
+                            location.reload();
+                        })
+                    }
+                    if (obj.status == false) {
+                        swal("Username is already exists.", "Please enter another Username.", "warning");
+                    }
                 }
             });// ajax
         }
@@ -3687,15 +3353,23 @@ jQuery(document).ready(function () {
                 dataType: 'html',
                 success: function (response) {
                     jQuery('.perma-admin-loader').hide();
-                    swal({
-                        title: "Successfully Updated!",
-                        text: "Contact user is updated.",
-                        icon: "success",
-                        closeOnClickOutside: false,
-                        closeOnEsc: false,
-                    }).then(function () {
-                        location.reload();
-                    })
+                    var obj = jQuery.parseJSON(response);
+
+                    if (obj.status == true) {
+                        swal({
+                            title: "Successfully Updated!",
+                            text: "Contact user is updated.",
+                            icon: "success",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false,
+                        }).then(function () {
+                            location.reload();
+                        })
+                    }
+                    if (obj.status == false) {
+                        swal("Username is already exists.", "Please enter another Username.", "warning");
+                    }
+
                 }
             });// ajax
         }
