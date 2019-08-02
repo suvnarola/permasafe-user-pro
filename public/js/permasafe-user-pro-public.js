@@ -1668,23 +1668,7 @@ jQuery(document).ready(function () {
 
         var datepicker2 = jQuery('#datepicker2').val();
         var select = jQuery('#quick_filters').val();
-        // alert(select);
 
-        if (jQuery('#datepicker1').val().trim() == "") {
-            jQuery('#datepicker1').css({ 'border': '1px solid #ff0000', 'color': '#ff0000' });
-            jQuery('#datepicker1').after("<span class='error'>This field is required.</span>");
-            validflag = false;
-        } else {
-            jQuery('#datepicker1').css({ 'color': '#333333' });
-        }
-
-        if (jQuery('#datepicker2').val().trim() == "") {
-            jQuery('#datepicker2').css({ 'border': '1px solid #ff0000', 'color': '#ff0000' });
-            jQuery('#datepicker2').after("<span class='error'>This field is required.</span>");
-            validflag = false;
-        } else {
-            jQuery('#datepicker2').css({ 'color': '#333333' });
-        }
 
         if (jQuery('#quick_filters').val().trim() == "0") {
             jQuery('#quick_filters').css({ 'border': '1px solid #ff0000', 'color': '#ff0000' });
@@ -1931,21 +1915,6 @@ jQuery(document).ready(function () {
                 policy: policy,
                 package: package
             }
-        }
-        if (jQuery('#membership_datepicker1').val().trim() == "") {
-            jQuery('#membership_datepicker1').css({ 'border': '1px solid #ff0000', 'color': '#ff0000' });
-            jQuery('#membership_datepicker1').after("<span class='error'>This field is required.</span>");
-            validflag = false;
-        } else {
-            jQuery('#membership_datepicker1').css({ 'color': '#333333' });
-        }
-
-        if (jQuery('#membership_datepicker2').val().trim() == "") {
-            jQuery('#membership_datepicker2').css({ 'border': '1px solid #ff0000', 'color': '#ff0000' });
-            jQuery('#membership_datepicker2').after("<span class='error'>This field is required.</span>");
-            validflag = false;
-        } else {
-            jQuery('#membership_datepicker2').css({ 'color': '#333333' });
         }
 
         if (policy != '' && package == '') {
@@ -2223,5 +2192,6 @@ jQuery(document).ready(function () {
         });// ajax
 
     });
+
 
 });

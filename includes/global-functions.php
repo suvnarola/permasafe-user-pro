@@ -1952,3 +1952,89 @@ function view_data_reports($id)
     echo '</div>';
     echo '</div>';
 }
+
+function get_code_by_dealer_login($dealer_login)
+{
+    global $wpdb;
+    $invite_args = array(
+        'post_type' => 'pmsafe_invitecode',
+        'post_status' => 'publish',
+        'posts_per_page' => -1,
+        'orderby' => 'date',
+        'order' => 'DESC',
+        'meta_query' => array(
+            // 'relation' => 'AND',
+            array(
+                'key'     => '_pmsafe_dealer',
+                'value'   => $dealer_login,
+                'compare' => '=',
+            ),
+
+        ),
+    );
+    $str = '';
+    $invite_results = get_posts($invite_args);
+    foreach ($invite_results as $invite_result) {
+        $post_id = $invite_result->ID;
+        $str = $post_id . ',' . $str;
+    }
+
+    $str = rtrim($str, ",");
+
+    $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (' . $str . ') ');
+
+
+    foreach ($str_results as $str_result) {
+        $check_array[] = $str_result->meta_value;
+    }
+
+    return $check_array;
+}
+
+function get_code_by_distributor_login($distributor_id)
+{
+    global $wpdb;
+    $dealers =  get_users(
+        array(
+            'meta_key' => 'dealer_distributor_name',
+            'meta_value' => $distributor_id
+        )
+    );
+    foreach ($dealers as $key => $value) {
+        $dealer_login_arr[] = $value->user_login;
+    }
+
+    $invite_args = array(
+        'post_type' => 'pmsafe_invitecode',
+        'post_status' => 'publish',
+        'posts_per_page' => -1,
+        'orderby' => 'date',
+        'order' => 'DESC',
+        'meta_query' => array(
+            // 'relation' => 'AND',
+            array(
+                'key'     => '_pmsafe_dealer',
+                'value'   => $dealer_login_arr,
+                'compare' => 'IN',
+            ),
+
+        ),
+    );
+    $str = '';
+    $invite_results = get_posts($invite_args);
+    foreach ($invite_results as $invite_result) {
+        $post_id = $invite_result->ID;
+        $str = $post_id . ',' . $str;
+    }
+
+    $str = rtrim($str, ",");
+
+    $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (' . $str . ') ');
+
+
+    foreach ($str_results as $str_result) {
+        $check_array[] = $str_result->meta_value;
+    }
+
+    return $check_array;
+}

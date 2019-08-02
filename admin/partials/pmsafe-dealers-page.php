@@ -230,8 +230,9 @@ if ($action == 'view') {
     echo '<input type="email" id="pmsafe_dealer_contact_email" name="pmsafe_dealer_contact_email" value="" class="widefat check-mail" />';
     echo '</div>';
 
+    echo '<hr/>';
     echo '<div class="nisl-wrap">';
-    echo '<label><strong>Username:</strong></label>';
+    echo '<label><strong>Username:</strong><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;font-size: 10px;">(This person will use this as the first field on the Login screen)</span></label>';
     echo '<input type="text" id="pmsafe_dealer_contact_uname" name="pmsafe_dealer_contact_uname" value="" class="widefat" />';
     echo '</div>';
 
@@ -268,8 +269,9 @@ if ($action == 'view') {
     echo '<input type="email" id="edit_dealer_contact_email" name="edit_dealer_contact_email" value="" class="widefat"/>';
     echo '</div>';
 
+    echo '<hr/>';
     echo '<div class="nisl-wrap">';
-    echo '<label><strong>Username:</strong></label>';
+    echo '<label><strong>Username:</strong><span style="color: #b8b0b0;font-style: italic;padding-left: 5px;font-size: 10px;">(This person will use this as the first field on the Login screen)</span></label>';
     echo '<input type="text" id="edit_dealer_contact_uname" name="edit_dealer_contact_uname" value="" class="widefat"/>';
     echo '</div>';
 

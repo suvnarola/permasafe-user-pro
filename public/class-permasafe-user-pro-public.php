@@ -1485,6 +1485,7 @@ class Permasafe_User_Pro_Public
 
                 $customer_arr = get_user_by_dealer($dealer_username);
                 foreach ($customer_arr as $key => $value) {
+
                     $registration_date = $value['registration_date'];
                     $vehicle_expiration_date = $value['expiration_date'];
                     $registered_date = $value['registration_date'];
@@ -1499,6 +1500,7 @@ class Permasafe_User_Pro_Public
                         $total_last_month += count($registered_date);
                     }
                     if ($current_date <= $vehicle_expiration_date) {
+
                         $active_member += count($registration_date);
                     }
                     $total_count += count($registration_date);
@@ -1742,35 +1744,10 @@ class Permasafe_User_Pro_Public
             $login = $current_user->user_login;
 
             if ($role['author'] == 1) {
-                $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value in ( SELECT user_login FROM `wp_users` WHERE ID in (SELECT user_id FROM `wp_usermeta` WHERE meta_key="dealer_distributor_name" AND meta_value = (SELECT ID FROM `wp_users` WHERE user_login = "' . $login . '"))))');
+
                 $users = get_user_by('login', $login);
                 $distributor_id = $users->ID;
-                $dealers =  get_users(
-                    array(
-                        'meta_key' => 'dealer_distributor_name',
-                        'meta_value' => $distributor_id
-                    )
-                );
-                foreach ($dealers as $key => $value) {
-                    $dealer_login_arr[] = $value->user_login;
-                }
-
-                $invite_args = array(
-                    'post_type' => 'pmsafe_invitecode',
-                    'post_status' => 'publish',
-                    'posts_per_page' => -1,
-                    'orderby' => 'date',
-                    'order' => 'DESC',
-                    'meta_query' => array(
-                        // 'relation' => 'AND',
-                        array(
-                            'key'     => '_pmsafe_dealer',
-                            'value'   => $dealer_login_arr,
-                            'compare' => 'IN',
-                        ),
-
-                    ),
-                );
+                $check_array =  get_code_by_distributor_login($distributor_id);
             }
             if ($role['distributor-user'] == 1) {
                 $distributor_user_login = $current_user->user_login;
@@ -1779,55 +1756,13 @@ class Permasafe_User_Pro_Public
                 $distributor_id = get_user_meta($contact_id, 'contact_distributor_id', true);
                 $distributor_user = get_user_by('id', $distributor_id);
                 $distributor_username = $distributor_user->user_login;
-                $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value in ( SELECT user_login FROM `wp_users` WHERE ID in (SELECT user_id FROM `wp_usermeta` WHERE meta_key="dealer_distributor_name" AND meta_value = (SELECT ID FROM `wp_users` WHERE user_login = "' . $distributor_username . '"))))');
 
-                $dealers =  get_users(
-                    array(
-                        'meta_key' => 'dealer_distributor_name',
-                        'meta_value' => $distributor_id
-                    )
-                );
-                foreach ($dealers as $key => $value) {
-                    $dealer_login_arr[] = $value->user_login;
-                }
 
-                $invite_args = array(
-                    'post_type' => 'pmsafe_invitecode',
-                    'post_status' => 'publish',
-                    'posts_per_page' => -1,
-                    'orderby' => 'date',
-                    'order' => 'DESC',
-                    'meta_query' => array(
-                        // 'relation' => 'AND',
-                        array(
-                            'key'     => '_pmsafe_dealer',
-                            'value'   => $dealer_login_arr,
-                            'compare' => 'IN',
-                        ),
-
-                    ),
-                );
+                $check_array =  get_code_by_distributor_login($distributor_id);
             }
             if ($role['contributor'] == 1) {
 
-                $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "' . $login . '")');
-
-                $invite_args = array(
-                    'post_type' => 'pmsafe_invitecode',
-                    'post_status' => 'publish',
-                    'posts_per_page' => -1,
-                    'orderby' => 'date',
-                    'order' => 'DESC',
-                    'meta_query' => array(
-                        // 'relation' => 'AND',
-                        array(
-                            'key'     => '_pmsafe_dealer',
-                            'value'   => $login,
-                            'compare' => '=',
-                        ),
-
-                    ),
-                );
+                $check_array = get_code_by_dealer_login($login);
             }
             if ($role['dealer-user'] == 1) {
                 $dealer_user_login = $current_user->user_login;
@@ -1836,58 +1771,14 @@ class Permasafe_User_Pro_Public
                 $dealer_id = get_user_meta($contact_id, 'contact_dealer_id', true);
                 $dealer_user = get_user_by('id', $dealer_id);
                 $dealer_username = $dealer_user->user_login;
-                $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "' . $dealer_username . '")');
-
-                $invite_args = array(
-                    'post_type' => 'pmsafe_invitecode',
-                    'post_status' => 'publish',
-                    'posts_per_page' => -1,
-                    'orderby' => 'date',
-                    'order' => 'DESC',
-                    'meta_query' => array(
-                        // 'relation' => 'AND',
-                        array(
-                            'key'     => '_pmsafe_dealer',
-                            'value'   => $login,
-                            'compare' => '=',
-                        ),
-
-                    ),
-                );
-            }
-            $str = '';
-            foreach ($user_query as $value_query) {
-                $str = $value_query->meta_value . ',' . $str;
-            }
-
-            $str = rtrim($str, ",");
-            // echo $str;
-            $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (' . $str . ') ');
-            // pr($str_results);
-            // $bulk_array = array();
-            foreach ($str_results as $str_result) {
-                $bulk_array[] = $str_result->meta_value;
-            }
-            // $invite_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (SELECT post_id FROM wp_postmeta WHERE meta_key="_pmsafe_is_invite_code")');
-            // // pr($str_results);
 
 
-
-            $invite_results = get_posts($invite_args);
-            $invite_array = array();
-            foreach ($invite_results as $invite_result) {
-                $post_id = $invite_result->ID;
-                $invite_array[] = get_post_meta($post_id, '_pmsafe_invitation_code', true);
-            }
-            if (empty($invite_array)) {
-                $check_array = $bulk_array;
-            } else if (empty($bulk_array)) {
-                $check_array = $invite_array;
-            } else {
-                $check_array = array_merge($bulk_array, $invite_array);
+                $check_array = get_code_by_dealer_login($dealer_username);
             }
 
 
+            $setStart = ($datepicker1 == '' || !isset($datepicker1)) ? false : true;
+            $setExpire = ($datepicker2 == '' || !isset($datepicker2)) ? false : true;
 
             $sql = "SELECT user_id FROM wp_usermeta WHERE meta_key='pmsafe_vehicle_info'";
             $query = $wpdb->get_results($sql);
@@ -1929,7 +1820,7 @@ class Permasafe_User_Pro_Public
                 // echo $value->user_id.'<br/>';
                 $nickname = get_user_meta($value->user_id, 'nickname', true);
                 if (in_array($nickname, $check_array)) {
-                    // echo $nickname.'<br/>';
+
                     $vehicle_info = get_user_meta($value->user_id, 'pmsafe_vehicle_info', false);
                     $benefits_package = get_post_meta($vehicle_info[0][$nickname]['pmsafe_member_code_id'], '_pmsafe_code_prefix', true);
                     $term_length_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix', $benefits_package);
@@ -1940,7 +1831,12 @@ class Permasafe_User_Pro_Public
                     //expired
                     if ($select == 1) {
                         if ($current_date > $expiration_date) {
-                            // echo $expiration_date.'->'.$value->user_id.'<br/>';
+                            if (!$setStart)
+                                $datepicker1 = $expiration_date;
+
+                            if (!$setExpire)
+                                $datepicker2 = $expiration_date;
+
                             if (($expiration_date >= $datepicker1) && ($expiration_date <= $datepicker2)) {
                                 $html .= '<tr>';
 
@@ -1994,9 +1890,14 @@ class Permasafe_User_Pro_Public
                         $month2 = date('m', $ts2);
 
                         $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
-                        // echo $expiration_date.'->'.$diff.'->'.$value->user_id.'<br/>';
+
                         if ($diff >= 1 && $diff <= 6) {
-                            // echo 'id'.$value->user_id.'<br/>';
+                            if (!$setStart)
+                                $datepicker1 = $expiration_date;
+
+                            if (!$setExpire)
+                                $datepicker2 = $expiration_date;
+
                             if (($expiration_date >= $datepicker1) && ($expiration_date <= $datepicker2)) {
                                 $html .= '<tr>';
 
@@ -2038,6 +1939,13 @@ class Permasafe_User_Pro_Public
                         }
                     } else if ($select == 3) {  // current   
                         if ($current_date <= $expiration_date) {
+
+                            if (!$setStart)
+                                $datepicker1 = $vehicle_registration_date;
+
+                            if (!$setExpire)
+                                $datepicker2 = $vehicle_registration_date;
+
                             if (($vehicle_registration_date >= $datepicker1) && ($vehicle_registration_date <= $datepicker2)) {
                                 $html .= '<tr>';
 
@@ -2305,32 +2213,7 @@ class Permasafe_User_Pro_Public
             if ($role['author'] == 1) {
                 $users = get_user_by('login', $login);
                 $distributor_id = $users->ID;
-                $dealers =  get_users(
-                    array(
-                        'meta_key' => 'dealer_distributor_name',
-                        'meta_value' => $distributor_id
-                    )
-                );
-                foreach ($dealers as $key => $value) {
-                    $dealer_login_arr[] = $value->user_login;
-                }
-
-                $invite_args = array(
-                    'post_type' => 'pmsafe_invitecode',
-                    'post_status' => 'publish',
-                    'posts_per_page' => -1,
-                    'orderby' => 'date',
-                    'order' => 'DESC',
-                    'meta_query' => array(
-                        // 'relation' => 'AND',
-                        array(
-                            'key'     => '_pmsafe_dealer',
-                            'value'   => $dealer_login_arr,
-                            'compare' => 'IN',
-                        ),
-
-                    ),
-                );
+                $check_array = get_code_by_distributor_login($distributor_id);
             }
             if ($role['distributor-user'] == 1) {
                 $distributor_user_login = $login;
@@ -2342,52 +2225,12 @@ class Permasafe_User_Pro_Public
 
 
 
-                $dealers =  get_users(
-                    array(
-                        'meta_key' => 'dealer_distributor_name',
-                        'meta_value' => $distributor_id
-                    )
-                );
-                foreach ($dealers as $key => $value) {
-                    $dealer_login_arr[] = $value->user_login;
-                }
-
-                $invite_args = array(
-                    'post_type' => 'pmsafe_invitecode',
-                    'post_status' => 'publish',
-                    'posts_per_page' => -1,
-                    'orderby' => 'date',
-                    'order' => 'DESC',
-                    'meta_query' => array(
-                        // 'relation' => 'AND',
-                        array(
-                            'key'     => '_pmsafe_dealer',
-                            'value'   => $dealer_login_arr,
-                            'compare' => 'IN',
-                        ),
-
-                    ),
-                );
+                $check_array = get_code_by_distributor_login($distributor_id);
             }
             if ($role['contributor'] == 1) {
 
 
-                $invite_args = array(
-                    'post_type' => 'pmsafe_invitecode',
-                    'post_status' => 'publish',
-                    'posts_per_page' => -1,
-                    'orderby' => 'date',
-                    'order' => 'DESC',
-                    'meta_query' => array(
-                        // 'relation' => 'AND',
-                        array(
-                            'key'     => '_pmsafe_dealer',
-                            'value'   => $login,
-                            'compare' => '=',
-                        ),
-
-                    ),
-                );
+                $check_array = get_code_by_dealer_login($login);
             }
             if ($role['dealer-user'] == 1) {
                 $dealer_user_login = $login;
@@ -2399,39 +2242,9 @@ class Permasafe_User_Pro_Public
 
 
 
-                $invite_args = array(
-                    'post_type' => 'pmsafe_invitecode',
-                    'post_status' => 'publish',
-                    'posts_per_page' => -1,
-                    'orderby' => 'date',
-                    'order' => 'DESC',
-                    'meta_query' => array(
-                        // 'relation' => 'AND',
-                        array(
-                            'key'     => '_pmsafe_dealer',
-                            'value'   => $dealer_username,
-                            'compare' => '=',
-                        ),
-
-                    ),
-                );
-            }
-            $str = '';
-            $invite_results = get_posts($invite_args);
-            foreach ($invite_results as $invite_result) {
-                $post_id = $invite_result->ID;
-                $str = $post_id . ',' . $str;
+                $check_array = get_code_by_dealer_login($dealer_username);
             }
 
-
-
-            $str = rtrim($str, ",");
-
-            $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (' . $str . ') ');
-
-            foreach ($str_results as $str_result) {
-                $check_array[] = $str_result->meta_value;
-            }
             $mysql = 'SELECT distinct(user_id) FROM wp_usermeta';
             $where = '';
             if ($member_code != '') {
@@ -3573,18 +3386,13 @@ class Permasafe_User_Pro_Public
             $dealer = $_SESSION['dealer_login'];
 
 
-            // $a = extract(shortcode_atts(array(
-            //     'dealer' => $dealer,
-            //   ), $atts));
-
             if ($dealer) {
-                $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "' . $dealer . '")');
-                echo '<h2>' . $dealer . '\'s Upgraded Policies</h2>';
+                $dealer_array = get_code_by_dealer_login($dealer);
             } else {
 
                 if ($role['contributor'] == 1) {
 
-                    $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "' . $login . '")');
+                    $dealer_array = get_code_by_dealer_login($login);
                 }
                 if ($role['dealer-user'] == 1) {
                     $dealer_user_login = $current_user->user_login;
@@ -3594,96 +3402,9 @@ class Permasafe_User_Pro_Public
                     $dealer_user = get_user_by('id', $dealer_id);
                     $dealer_username = $dealer_user->user_login;
 
-                    $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "' . $dealer_username . '")');
+                    $dealer_array = get_code_by_dealer_login($dealer_username);
                 }
             }
-            $str = '';
-            foreach ($user_query as $value_query) {
-                $str = $value_query->meta_value . ',' . $str;
-            }
-
-            $str = rtrim($str, ",");
-            // echo $str;
-            $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (' . $str . ') ');
-
-            $check_array = array();
-            foreach ($str_results as $str_result) {
-                $check_array[] = $str_result->meta_value;
-            }
-
-            if ($dealer) {
-                $invite_args = array(
-                    'post_type' => 'pmsafe_invitecode',
-                    'post_status' => 'publish',
-                    'posts_per_page' => -1,
-                    'orderby' => 'date',
-                    'order' => 'DESC',
-                    'meta_query' => array(
-                        // 'relation' => 'AND',
-                        array(
-                            'key'     => '_pmsafe_dealer',
-                            'value'   => $dealer,
-                            'compare' => '=',
-                        ),
-
-                    ),
-                );
-            } else {
-                if ($role['contributor'] == 1) {
-                    $invite_args = array(
-                        'post_type' => 'pmsafe_invitecode',
-                        'post_status' => 'publish',
-                        'posts_per_page' => -1,
-                        'orderby' => 'date',
-                        'order' => 'DESC',
-                        'meta_query' => array(
-                            // 'relation' => 'AND',
-                            array(
-                                'key'     => '_pmsafe_dealer',
-                                'value'   => $login,
-                                'compare' => '=',
-                            ),
-
-                        ),
-                    );
-                }
-                if ($role['dealer-user'] == 1) {
-                    $dealer_user_login = $current_user->user_login;
-                    $user = get_user_by('login', $dealer_user_login);
-                    $contact_id = $user->ID;
-                    $dealer_id = get_user_meta($contact_id, 'contact_dealer_id', true);
-                    $dealer_user = get_user_by('id', $dealer_id);
-                    $dealer_username = $dealer_user->user_login;
-                    $invite_args = array(
-                        'post_type' => 'pmsafe_invitecode',
-                        'post_status' => 'publish',
-                        'posts_per_page' => -1,
-                        'orderby' => 'date',
-                        'order' => 'DESC',
-                        'meta_query' => array(
-                            // 'relation' => 'AND',
-                            array(
-                                'key'     => '_pmsafe_dealer',
-                                'value'   => $dealer_username,
-                                'compare' => '=',
-                            ),
-
-                        ),
-                    );
-                }
-            }
-            $invite_results = get_posts($invite_args);
-            $invite_array = array();
-            foreach ($invite_results as $invite_result) {
-                $post_id = $invite_result->ID;
-                $invite_array[] = get_post_meta($post_id, '_pmsafe_invitation_code', true);
-            }
-            if (empty($invite_array)) {
-                $dealer_array = $check_array;
-            } else {
-                $dealer_array = array_merge($check_array, $invite_array);
-            }
-            // pr($dealer_array);
 
             $html = '';
             $membership_results = $wpdb->get_results('SELECT post_id FROM wp_postmeta WHERE meta_key = "is_upgraded" and meta_value ="1"');
@@ -3840,7 +3561,8 @@ class Permasafe_User_Pro_Public
 
         $view_membership = $_POST['view_membership'];
         if (isset($view_membership)) {
-            $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "' . $view_membership . '")');
+
+            $dealer_array = get_code_by_dealer_login($view_membership);
         } else {
             $current_user = wp_get_current_user();
             $role = (array) $current_user->caps;
@@ -3848,7 +3570,7 @@ class Permasafe_User_Pro_Public
 
             if ($role['contributor'] == 1) {
 
-                $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "' . $login . '")');
+                $dealer_array = get_code_by_dealer_login($login);
             }
             if ($role['dealer-user'] == 1) {
                 $dealer_user_login = $current_user->user_login;
@@ -3858,102 +3580,13 @@ class Permasafe_User_Pro_Public
                 $dealer_user = get_user_by('id', $dealer_id);
                 $dealer_username = $dealer_user->user_login;
 
-                $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "' . $dealer_username . '")');
+                $dealer_array = get_code_by_dealer_login($dealer_username);
             }
         }
-        $str = '';
-        foreach ($user_query as $value_query) {
-            $str = $value_query->meta_value . ',' . $str;
-        }
 
-        $str = rtrim($str, ",");
-        // echo $str;
-        $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (' . $str . ') ');
-        // pr($str_results);
-        $check_array = array();
-        foreach ($str_results as $str_result) {
-            $check_array[] = $str_result->meta_value;
-        }
+        $setStart = ($datepicker1 == '' || !isset($datepicker1)) ? false : true;
+        $setExpire = ($datepicker2 == '' || !isset($datepicker2)) ? false : true;
 
-        if (isset($view_membership)) {
-            $invite_args = array(
-                'post_type' => 'pmsafe_invitecode',
-                'post_status' => 'publish',
-                'posts_per_page' => -1,
-                'orderby' => 'date',
-                'order' => 'DESC',
-                'meta_query' => array(
-                    // 'relation' => 'AND',
-                    array(
-                        'key'     => '_pmsafe_dealer',
-                        'value'   => $dealer,
-                        'compare' => '=',
-                    ),
-
-                ),
-            );
-        } else {
-            $current_user = wp_get_current_user();
-            $role = (array) $current_user->caps;
-            $login = $current_user->user_login;
-
-            if ($role['contributor'] == 1) {
-                $invite_args = array(
-                    'post_type' => 'pmsafe_invitecode',
-                    'post_status' => 'publish',
-                    'posts_per_page' => -1,
-                    'orderby' => 'date',
-                    'order' => 'DESC',
-                    'meta_query' => array(
-                        // 'relation' => 'AND',
-                        array(
-                            'key'     => '_pmsafe_dealer',
-                            'value'   => $login,
-                            'compare' => '=',
-                        ),
-
-                    ),
-                );
-            }
-            if ($role['dealer-user'] == 1) {
-                $dealer_user_login = $current_user->user_login;
-                $user = get_user_by('login', $dealer_user_login);
-                $contact_id = $user->ID;
-                $dealer_id = get_user_meta($contact_id, 'contact_dealer_id', true);
-                $dealer_user = get_user_by('id', $dealer_id);
-                $dealer_username = $dealer_user->user_login;
-                $invite_args = array(
-                    'post_type' => 'pmsafe_invitecode',
-                    'post_status' => 'publish',
-                    'posts_per_page' => -1,
-                    'orderby' => 'date',
-                    'order' => 'DESC',
-                    'meta_query' => array(
-                        // 'relation' => 'AND',
-                        array(
-                            'key'     => '_pmsafe_dealer',
-                            'value'   => $dealer_username,
-                            'compare' => '=',
-                        ),
-
-                    ),
-                );
-            }
-        }
-        $invite_results = get_posts($invite_args);
-        // pr($str_results);
-        $invite_array = array();
-        foreach ($invite_results as $invite_result) {
-            $post_id = $invite_result->ID;
-            $invite_array[] = get_post_meta($post_id, '_pmsafe_invitation_code', true);
-        }
-        if (empty($invite_array)) {
-            $dealer_array = $check_array;
-        } else {
-            $dealer_array = array_merge($check_array, $invite_array);
-        }
-
-        // pr($check_array);
         $membership_results = $wpdb->get_results('SELECT post_id FROM wp_postmeta WHERE meta_key = "is_upgraded" and meta_value ="1"');
 
         foreach ($membership_results as $str) {
@@ -4000,6 +3633,11 @@ class Permasafe_User_Pro_Public
                 $upgraded_by = $admin_name;
             }
             $name = $fname . ' ' . $lname;
+            if (!$setStart)
+                $datepicker1 = $upgraded_date;
+
+            if (!$setExpire)
+                $datepicker2 = $upgraded_date;
 
             if ($upgraded_date >= $datepicker1 && $upgraded_date <= $datepicker2) {
 
@@ -4048,70 +3686,70 @@ class Permasafe_User_Pro_Public
                 }
             }
         }
-        $html .= '<table id="mebership_date_table" class="display nowrap" style="width:100%">';
-        $html .= '<thead>';
-        $html .= '<tr>';
-        $html .= '<th>';
-        $html .= 'Registration Number';
-        $html .= '</th>';
+        echo '<table id="mebership_date_table" class="display nowrap" style="width:100%">';
+        echo '<thead>';
+        echo '<tr>';
+        echo '<th>';
+        echo 'Registration Number';
+        echo '</th>';
 
-        $html .= '<th>';
-        $html .= 'Original Policy';
-        $html .= '</th>';
+        echo '<th>';
+        echo 'Original Policy';
+        echo '</th>';
 
-        $html .= '<th>';
-        $html .= 'Upgraded Policy';
-        $html .= '</th>';
+        echo '<th>';
+        echo 'Upgraded Policy';
+        echo '</th>';
 
-        $html .= '<th>';
-        $html .= 'Upgraded By';
-        $html .= '</th>';
+        echo '<th>';
+        echo 'Upgraded By';
+        echo '</th>';
 
-        $html .= '<th>';
-        $html .= 'Date';
-        $html .= '</th>';
+        echo '<th>';
+        echo 'Date';
+        echo '</th>';
 
-        $html .= '<th>';
-        $html .= 'Customer Name';
-        $html .= '</th>';
+        echo '<th>';
+        echo 'Customer Name';
+        echo '</th>';
 
-        $html .= '</tr>';
-        $html .= '</thead>';
+        echo '</tr>';
+        echo '</thead>';
 
-        $html .= '<tbody id="">';
+        echo '<tbody id="">';
         foreach ($data as $result) {
-            $html .= '<tr>';
+            echo '<tr>';
 
-            $html .= '<td>';
-            $html .= $result['registration_number'];
-            $html .= '</td>';
+            echo '<td>';
+            echo $result['registration_number'];
+            echo '</td>';
 
-            $html .= '<td>';
-            $html .= $result['original_policy'];
-            $html .= '</td>';
+            echo '<td>';
+            echo $result['original_policy'];
+            echo '</td>';
 
-            $html .= '<td>';
-            $html .= $result['upgraded_policy'];
-            $html .= '</td>';
+            echo '<td>';
+            echo $result['upgraded_policy'];
+            echo '</td>';
 
-            $html .= '<td>';
-            $html .= $result['upgraded_by'];
-            $html .= '</td>';
+            echo '<td>';
+            echo $result['upgraded_by'];
+            echo '</td>';
 
-            $html .= '<td>';
-            $html .= $result['upgraded_date'];
-            $html .= '</td>';
+            echo '<td>';
+            echo $result['upgraded_date'];
+            echo '</td>';
 
-            $html .= '<td>';
-            $html .= $result['customer_name'];
-            $html .= '</td>';
+            echo '<td>';
+            echo $result['customer_name'];
+            echo '</td>';
 
-            $html .= '</tr>';
+            echo '</tr>';
         }
-        $html .= '</tbody>';
-        $html .= '</table>';
+        echo '</tbody>';
+        echo '</table>';
 
-        echo $html;
+
         die;
     }
 
