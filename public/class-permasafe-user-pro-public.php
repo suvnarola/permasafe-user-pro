@@ -1360,11 +1360,11 @@ class Permasafe_User_Pro_Public
                             'meta_value' => $distributor_id
                         )
                     );
-
-                    $html = '';
-                    $html .= '<h2 class="text-center">Dealers:</h2>';
-                    $html .= '<div class="card-main-wrapper">';
                     if ($dealers) {
+                        $html = '';
+                        $html .= '<h2 class="text-center">Dealers:</h2>';
+                        $html .= '<div class="card-main-wrapper">';
+
                         foreach ($dealers as $dealer) {
                             $dealer_id = $dealer->ID;
                             $dealer_name = get_user_meta($dealer_id, 'dealer_name', true);
@@ -1386,9 +1386,12 @@ class Permasafe_User_Pro_Public
                             $html .= '</div>';
                             $html .= '</div>';
                         }
-                    } else { }
-                    $html .= '</div>';
-                    return $html;
+
+                        $html .= '</div>';
+                        return $html;
+                    } else {
+                        echo 'No dealers registered.';
+                    }
                 }
             } else {
                 $location = get_site_url() . "/perma-register/";

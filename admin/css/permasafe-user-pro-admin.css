@@ -342,7 +342,7 @@ table.view-dealer-price-tbl thead > tr > th , table.view-dealer-price-tbl thead 
 .swal-icon--success__ring{border: 4px solid hsla(222, 55%, 69%, 0.2) !important;}
 .swal-button--danger,.swal-button--danger:hover{background-color: #df4740 !important;}
 
-.dealer_add_form_div{border: 1px solid #ddd;-moz-box-shadow: 0 0 3px #ccc;-webkit-box-shadow: 0 0 3px #ccc;box-shadow: 0 0 3px #ccc;padding: 20px;}
+.dealer_add_form_div,.distributor_add_form_div{border: 1px solid #ddd;-moz-box-shadow: 0 0 3px #ccc;-webkit-box-shadow: 0 0 3px #ccc;box-shadow: 0 0 3px #ccc;padding: 20px;}
 
 
 
