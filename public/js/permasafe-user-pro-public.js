@@ -1009,8 +1009,7 @@ jQuery(document).ready(function () {
         jQuery('.nisl_fax').prop("disabled", false);
         jQuery('.nisl_phone').prop("disabled", false);
         jQuery(".btn_nisl_dealer_edit").css("display", "none");
-        jQuery("#pmsafe_save_dealer_info").css("display", "block");
-        jQuery("#pmsafe_save_dealer_user_info").css("display", "block");
+
 
     });
 
@@ -1106,7 +1105,7 @@ jQuery(document).ready(function () {
 
 
     /*dealer edit information*/
-    jQuery(document).on("click", "#pmsafe_save_dealer_info", function (e) {
+    jQuery(document).on("click", "#pmsafe_save_dealer_distributor_info", function (e) {
 
 
         e.preventDefault();
@@ -1126,51 +1125,26 @@ jQuery(document).ready(function () {
         }
 
 
-
-        //Address
-        if (jQuery('.nisl_address').val().trim() == "") {
-            jQuery('.nisl_address').css({ 'border': '1px solid #ff0000', 'color': '#ff0000' });
-            jQuery('.nisl_address').after("<span class='error'>This field is required.</span>");
-            validflag = false;
-        } else {
-            jQuery('.nisl_address').css({ 'color': '#333333' });
-        }
-
-        //Address
-        if (jQuery('.nisl_fax').val().trim() == "") {
-            jQuery('.nisl_fax').css({ 'border': '1px solid #ff0000', 'color': '#ff0000' });
-            jQuery('.nisl_fax').after("<span class='error'>This field is required.</span>");
-            validflag = false;
-        } else {
-            jQuery('.nisl_fax').css({ 'color': '#333333' });
-        }
-
-
-
         //Phone
         var numbers = /^[0-9]+$/;
-        if (jQuery('.nisl_phone').val().trim() == '') {
-            jQuery('.nisl_phone').css({ 'border': '1px solid #ff0000', 'color': '#ff0000' });
-            jQuery('.nisl_phone').after("<span class='error'>This field is required.</span>");
-            validflag = false;
-        } else if (!(jQuery('.nisl_phone').val().match(numbers))) {
-            jQuery('.nisl_phone').css({ 'border': '1px solid #ff0000', 'color': '#ff0000' });
-            jQuery('.nisl_phone').after("<span class='error'>Please enter valid phone number.</span>");
-            validflag = false;
-        } else {
-            jQuery('.nisl_phone').css({ 'border-color': '#cccccc' });
+        if (jQuery('#pmsafe_distributor_phone_number').val() != '') {
+            if (!(jQuery('.nisl_phone').val().match(numbers))) {
+                jQuery('.nisl_phone').css({ 'border': '1px solid #ff0000', 'color': '#ff0000' });
+                jQuery('.nisl_phone').after("<span class='error'>Please enter valid phone number.</span>");
+                validflag = false;
+            } else {
+                jQuery('.nisl_phone').css({ 'border-color': '#cccccc' });
+            }
         }
-
-
 
 
         if (!validflag) {
             return validflag;
         } else {
             jQuery('.perma-loader').show();
-            var form = jQuery('#perma_dealer_info_form')[0];
+            var form = jQuery('#perma_dealer_distributor_info_form')[0];
             var fd = new FormData(form);
-            fd.append('action', 'pmsafe_dealer_info_form');
+            fd.append('action', 'perma_dealer_distributor_info_form');
             jQuery.ajax({
                 type: 'post',
                 url: pmAjax.ajaxurl,
@@ -1181,14 +1155,23 @@ jQuery(document).ready(function () {
 
                     jQuery('.perma-loader').hide();
                     var obj = jQuery.parseJSON(response);
-                    console.log(obj);
+
                     if (obj.status == true) {
-
-                        window.location.replace(obj.redirect);
-                        jQuery('#pmsafe-response').hide();
-                    } else {
-
-                        jQuery('#pmsafe-response').html(obj.message);
+                        if (obj.change_password == 1) {
+                            var text = 'You have changed password. So, You need to login again. Press OK button.'
+                        }
+                        if (obj.change_password == 0) {
+                            var text = 'Press OK button.'
+                        }
+                        swal({
+                            title: "Successfully Updated!",
+                            text: text,
+                            icon: "success",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false,
+                        }).then(function () {
+                            location.reload();
+                        })
                     }
                 }
             });
@@ -1197,7 +1180,7 @@ jQuery(document).ready(function () {
     });
 
     /*dealer edit information*/
-    jQuery(document).on("click", "#pmsafe_save_dealer_user_info", function (e) {
+    jQuery(document).on("click", "#pmsafe_save_contact_user_info", function (e) {
 
 
         e.preventDefault();
@@ -1240,6 +1223,23 @@ jQuery(document).ready(function () {
             jQuery('.nisl_phone').css({ 'border-color': '#cccccc' });
         }
 
+        //Email     
+        if (jQuery('#nisl_mail').val().trim() == '') {
+            jQuery('#nisl_mail').css({ 'border': '1px solid #ff0000', 'color': '#ff0000' });
+            jQuery('#nisl_mail').after("<span class='error'>This field is required.</span>");
+            validflag = false;
+        } else {
+            if (jQuery('#nisl_mail').val()) {
+                var email = jQuery("#nisl_mail").val();
+                if (!(email.match(/^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i))) {
+                    jQuery('#nisl_mail').css({ 'border': '1px solid #ff0000', 'color': '#ff0000' });
+                    jQuery('#nisl_mail').after("<span class='error'>Please enter valid email address.</span>");
+                    validflag = false;
+                } else {
+                    jQuery('#nisl_mail').css({ 'color': '#333333' });
+                }
+            }
+        }
 
 
 
@@ -1247,9 +1247,9 @@ jQuery(document).ready(function () {
             return validflag;
         } else {
             jQuery('.perma-loader').show();
-            var form = jQuery('#perma_dealer_user_info_form')[0];
+            var form = jQuery('#perma_contact_user_info_form')[0];
             var fd = new FormData(form);
-            fd.append('action', 'perma_dealer_user_info_form');
+            fd.append('action', 'perma_contact_user_info_form');
             jQuery.ajax({
                 type: 'post',
                 url: pmAjax.ajaxurl,
@@ -1263,11 +1263,21 @@ jQuery(document).ready(function () {
 
                     if (obj.status == true) {
 
-                        window.location.replace(obj.redirect);
-                        jQuery('#pmsafe-response').hide();
-                    } else {
-
-                        jQuery('#pmsafe-response').html(obj.message);
+                        if (obj.change_password == 1) {
+                            var text = 'You have changed password. So, You need to login again. Press OK button.'
+                        }
+                        if (obj.change_password == 0) {
+                            var text = 'Press OK button.'
+                        }
+                        swal({
+                            title: "Successfully Updated!",
+                            text: text,
+                            icon: "success",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false,
+                        }).then(function () {
+                            location.reload();
+                        })
                     }
                 }
             });
@@ -2193,5 +2203,9 @@ jQuery(document).ready(function () {
 
     });
 
+    jQuery(document).on('click', '#contact-popup-close', function () {
+        jQuery('#contact-user-popup').css('display', 'none');
+
+    });
 
 });

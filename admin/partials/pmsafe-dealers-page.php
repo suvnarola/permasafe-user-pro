@@ -108,10 +108,10 @@ if ($action == 'view') {
     echo '<td>' . $name . '</td>';
     echo '</tr>';
 
-    echo '<tr>';
+    /* echo '<tr>';
     echo '<td><strong>Email</strong></td>';
     echo '<td>' . $user->user_email . '</td>';
-    echo '</tr>';
+    echo '</tr>'; */
 
     if ($address) {
         echo '<tr>';

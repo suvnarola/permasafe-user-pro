@@ -101,11 +101,11 @@ class Permasafe_User_Pro_Public
         add_action('wp_ajax_pmsafe_user_info_form', array($this, 'pmsafe_user_info_form_function'));
         add_action('wp_ajax_nopriv_pmsafe_user_info_form', array($this, 'pmsafe_user_info_form_function'));
 
-        add_action('wp_ajax_pmsafe_dealer_info_form', array($this, 'pmsafe_dealer_info_form_function'));
-        add_action('wp_ajax_nopriv_pmsafe_dealer_info_form', array($this, 'pmsafe_dealer_info_form_function'));
+        add_action('wp_ajax_perma_dealer_distributor_info_form', array($this, 'perma_dealer_distributor_info_form_function'));
+        add_action('wp_ajax_nopriv_perma_dealer_distributor_info_form', array($this, 'perma_dealer_distributor_info_form_function'));
 
-        add_action('wp_ajax_perma_dealer_user_info_form', array($this, 'perma_dealer_user_info_form_function'));
-        add_action('wp_ajax_nopriv_perma_dealer_user_info_form', array($this, 'perma_dealer_user_info_form_function'));
+        add_action('wp_ajax_perma_contact_user_info_form', array($this, 'perma_contact_user_info_form_function'));
+        add_action('wp_ajax_nopriv_perma_contact_user_info_form', array($this, 'perma_contact_user_info_form_function'));
 
         add_action('wp_ajax_send_reset_mail', array($this, 'send_reset_mail_function'));
         add_action('wp_ajax_nopriv_send_reset_mail', array($this, 'send_reset_mail_function'));
@@ -171,6 +171,8 @@ class Permasafe_User_Pro_Public
         add_action('wp_ajax_nopriv_add_login_session', array($this, 'add_login_session'));
 
         add_filter('email_change_email', array($this, 'change_email_mail_message'), 10, 3);
+
+        add_shortcode('contact_user_popup', array($this, 'contact_user_popup_function'));
     }
 
     /* Filter Email Change Email Text */
@@ -602,7 +604,7 @@ class Permasafe_User_Pro_Public
         wp_enqueue_script('dt_table_ui_btnprint', plugin_dir_url(__FILE__) . 'js/buttons.print.min.js', array('jquery'), time(), false);
         wp_enqueue_script('dt_table_fixedHeader', plugin_dir_url(__FILE__) . 'js/dataTables.fixedHeader.min.js', array('jquery'), time(), false);
         wp_enqueue_script('jquery-modal',  plugin_dir_url(__FILE__) . 'js/jquery.modal.min.js', array('jquery'), time(), false);
-
+        wp_enqueue_script('sweet_alert', plugin_dir_url(__FILE__) . 'js/sweetalert.min.js', array('jquery'), time(), false);
         wp_localize_script($this->plugin_name, 'pmAjax', array('ajaxurl' => admin_url('admin-ajax.php')));
     }
 
@@ -2966,55 +2968,76 @@ class Permasafe_User_Pro_Public
     /**
      * edit dealer info ajax funcion
      */
-    public function pmsafe_dealer_info_form_function()
+    public function perma_dealer_distributor_info_form_function()
     {
         session_start();
         $user_id = get_current_user_id();
+        $role = $_POST['user_role'];
+        $new_password = $_POST['nisl_password'];
+        $email = $_POST['nisl_mail'];
+        if ($new_password != '') {
+            wp_set_password($new_password, $user_id);
+            $change_password = 1;
+        } else {
+            $change_password = 0;
+        }
 
-        $dealer_name = $_POST['nisl_name'];
-        update_user_meta($user_id, 'dealer_name', $dealer_name);
+        wp_update_user(array('ID' => $user_id, 'user_email' => $email));
 
-        $dealer_store_address = $_POST['nisl_address'];
-        update_user_meta($user_id, 'dealer_store_address', $dealer_store_address);
+        if ($role == 'contributor') {
+            update_user_meta($user_id, 'dealer_name', $_POST['nisl_name']);
+            update_user_meta($user_id, 'dealer_store_address', $_POST['nisl_address']);
+            update_user_meta($user_id, 'dealer_phone_number', $_POST['nisl_phone']);
+            update_user_meta($user_id, 'dealer_fax_number', $_POST['nisl_fax']);
+        }
+        if ($role == 'contributor') {
+            update_user_meta($user_id, 'distributor_name', $_POST['nisl_name']);
+            update_user_meta($user_id, 'distributor_store_address', $_POST['nisl_address']);
+            update_user_meta($user_id, 'distributor_phone_number', $_POST['nisl_phone']);
+            update_user_meta($user_id, 'distributor_fax_number', $_POST['nisl_fax']);
+        }
 
-        $dealer_phone_number = $_POST['nisl_phone'];
-        update_user_meta($user_id, 'dealer_phone_number', $dealer_phone_number);
 
-        $dealer_fax_number = $_POST['nisl_fax'];
-        update_user_meta($user_id, 'dealer_fax_number', $dealer_fax_number);
-
-        $url = get_site_url() . '/dealer-account/';
-        $response = array('status' => true, 'redirect' => $url);
+        $response = array('status' => true, 'change_password' => $change_password);
         echo json_encode($response);
-
-
-
         die;
     }
 
     /**
      * edit dealer user info ajax funcion
      */
-    public function perma_dealer_user_info_form_function()
+    public function perma_contact_user_info_form_function()
     {
         session_start();
         $user_id = get_current_user_id();
+        $role = $_POST['user_role'];
+        $new_password = $_POST['nisl_password'];
+        $email = $_POST['nisl_mail'];
+        if ($new_password != '') {
+            wp_set_password($new_password, $user_id);
+            $get_is_popup = get_user_meta($user_id, 'is_popup', true);
+            if ($get_is_popup != 1) {
+                update_user_meta($user_id, 'is_popup', 1);
+            }
+            $change_password = 1;
+        } else {
+            $change_password = 0;
+        }
 
-        $contact_fname = $_POST['nisl_fname'];
-        update_user_meta($user_id, 'contact_fname', $contact_fname);
+        wp_update_user(array('ID' => $user_id, 'user_email' => $email));
+        if ($role == 'dealer-user') {
+            update_user_meta($user_id, 'contact_fname', $_POST['nisl_fname']);
+            update_user_meta($user_id, 'contact_lname', $_POST['nisl_lname']);
+            update_user_meta($user_id, 'contact_phone', $_POST['nisl_phone']);
+        }
+        if ($role == 'distributor-user') {
+            update_user_meta($user_id, 'distributor_contact_fname', $_POST['nisl_fname']);
+            update_user_meta($user_id, 'distributor_contact_lname', $_POST['nisl_lname']);
+            update_user_meta($user_id, 'distributor_contact_phone', $_POST['nisl_phone']);
+        }
 
-        $contact_lname = $_POST['nisl_lname'];
-        update_user_meta($user_id, 'contact_lname', $contact_lname);
-
-        $contact_phone = $_POST['nisl_phone'];
-        update_user_meta($user_id, 'contact_phone', $contact_phone);
-
-
-        $url = get_site_url() . '/dealer-account/';
-        $response = array('status' => true, 'redirect' => $url);
+        $response = array('status' => true, 'change_password' => $change_password);
         echo json_encode($response);
-
-
 
         die;
     }
@@ -4247,9 +4270,6 @@ class Permasafe_User_Pro_Public
     public function user_info_function()
     {
 
-
-
-
         $html = '';
         if (is_user_logged_in()) {
             $user_id = get_current_user_id();
@@ -4257,10 +4277,10 @@ class Permasafe_User_Pro_Public
             $role = (array) $current_user->caps;
             if ($role['subscriber'] == 1) {
                 $html .= pmsafe_warranty_user_info_card($user_id);
-            } else if ($role['contributor'] == 1) {
-                $html .= pmsafe_dealer_info_card($user_id);
-            } else if ($role['dealer-user'] == 1) {
-                $html .= pmsafe_dealer_user_info_card($user_id);
+            } else if ($role['contributor'] == 1 || $role['author'] == 1) {
+                $html .= pmsafe_dealer_distributor_info_card($user_id);
+            } else if ($role['dealer-user'] == 1 || $role['distributor-user'] == 1) {
+                $html .= pmsafe_contact_user_info_card($user_id);
             }
         } else {
             $location = get_site_url() . "/perma-register/";
@@ -4268,6 +4288,25 @@ class Permasafe_User_Pro_Public
             exit;
         }
         return $html;
+    }
+
+    public function contact_user_popup_function()
+    {
+        $current_user = wp_get_current_user();
+        $user_id = get_current_user_id();
+        $is_popup = get_user_meta($user_id, 'is_popup', true);
+        $role = (array) $current_user->caps;
+        if ($role['dealer-user'] == 1 || $role['distributor-user'] == 1) {
+            if ($is_popup != 1) {
+                echo '<div id="contact-user-popup">';
+                echo '<div>';
+                echo '<i class="fa fa-close" id="contact-popup-close"></i>';
+                echo '<h2>Reset Password</h2>';
+                echo '<p>You are currently using a temporary password. Please set a stronger password <a href="' . get_site_url() . '/perma-account-info">here</a></p>';
+                echo '</div>';
+                echo '</div>';
+            }
+        }
     }
 
     /**

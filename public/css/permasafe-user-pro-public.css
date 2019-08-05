@@ -283,6 +283,22 @@ table.tbl-dealer-info>tbody>tr:nth-of-type(odd) {
     text-decoration: none;
 }
 /*card css end*/
+
+/*sweet alert*/
+.swal-icon--success__line, .swal-button--confirm, .swal-button--confirm:hover{background-color: #0065a7 !important;}
+.swal-icon--success__ring{border: 4px solid hsla(222, 55%, 69%, 0.2) !important;}
+.swal-button--danger,.swal-button--danger:hover{background-color: #df4740 !important;}
+
+/*contact popup*/
+#contact-user-popup{position:relative;}
+#contact-user-popup div{position: absolute;top: -25px;right: -165px;border: 1px solid #ddd;-moz-box-shadow: 0 0 3px #ccc;
+-webkit-box-shadow: 0 0 3px #ccc;box-shadow: 0 0 3px #ccc;padding: 20px;z-index: 999999;background: #ffff;width: 40%;}
+#contact-user-popup #contact-popup-close{color: #fff;background-color: #4778b5;border-radius: 50%;float: right;cursor:pointer;}
+#contact-user-popup h2{color: #4778b5;}
+#contact-user-popup p{color: #333;}
+
+
+
 @media(max-width:1200px){
   .distributor-account-wrap .vc_col-sm-9,
   .distributor-account-wrap .vc_col-sm-3{width: 100% !important;}

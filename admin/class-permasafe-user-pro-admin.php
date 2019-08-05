@@ -638,7 +638,7 @@ class Permasafe_User_Pro_Admin
 					$to = $email;
 					$subject = 'PermaSafe: Your User Account has been updated';
 					$password = $password;
-					send_mail_to_users($to, $password, $subject);
+					send_mail_to_users($to, $password, $subject, '', $uname);
 				}
 				update_user_meta($contact_id, 'distributor_contact_fname', $fname);
 				update_user_meta($contact_id, 'distributor_contact_lname', $lname);
@@ -654,7 +654,7 @@ class Permasafe_User_Pro_Admin
 				$to = $email;
 				$subject = 'PermaSafe: Your User Account has been updated';
 				$password = $password;
-				send_mail_to_users($to, $password, $subject);
+				send_mail_to_users($to, $password, $subject, '', $uname);
 			}
 			update_user_meta($contact_id, 'distributor_contact_fname', $fname);
 			update_user_meta($contact_id, 'distributor_contact_lname', $lname);
@@ -887,7 +887,7 @@ class Permasafe_User_Pro_Admin
 					$to = $email;
 					$password = $password;
 					$subject = 'PermaSafe: Your User Account has been updated';
-					send_mail_to_users($to, $password, $subject);
+					send_mail_to_users($to, $password, $subject, '', $uname);
 				}
 
 				update_user_meta($contact_id, 'contact_fname', $fname);
@@ -907,7 +907,7 @@ class Permasafe_User_Pro_Admin
 				$to = $email;
 				$password = $password;
 				$subject = 'PermaSafe: Your User Account has been updated';
-				send_mail_to_users($to, $password, $subject);
+				send_mail_to_users($to, $password, $subject, '', $uname);
 			}
 
 			update_user_meta($contact_id, 'contact_fname', $fname);

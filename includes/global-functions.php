@@ -386,44 +386,64 @@ function pmsafe_warranty_user_info_card($user_id)
  * @param type $user_id
  * @return string
  */
-function pmsafe_dealer_info_card($user_id)
+function pmsafe_dealer_distributor_info_card($user_id)
 {
     // echo $user_id;
-    $user = get_user_by('ID', $user_id);
+    $user = get_userdata($user_id);
+    $role = $user->caps;
+    if ($role['contributor'] == 1) {
+
+        $name = get_the_author_meta('dealer_name', $user_id);
+        $address = get_the_author_meta('dealer_store_address', $user_id);
+        $phone = get_the_author_meta('dealer_phone_number', $user_id);
+        $fax = get_the_author_meta('dealer_fax_number', $user_id);
+        $role = 'contributor';
+    }
+    if ($role['author'] == 1) {
+        $name = get_the_author_meta('distributor_name', $user_id);
+        $address = get_the_author_meta('distributor_store_address', $user_id);
+        $phone = get_the_author_meta('distributor_phone_number', $user_id);
+        $fax = get_the_author_meta('distributor_fax_number', $user_id);
+        $role = 'author';
+    }
     $html = '';
 
     $html .= '<div id="perma-warranty-wrapper">';
     $html .= '<div id="pmsafe-response"></div>';
     $html .= '<div id="perma-warranty-form">';
-    $html .= '<form name="perma_dealer_info_form" id="perma_dealer_info_form" method="POST">';
-
+    $html .= '<form name="perma_dealer_info_form" id="perma_dealer_distributor_info_form" method="POST">';
+    $html .= '<input type="hidden" name="user_role" id="user_role" value="' . $role . '">';
     $html .= '<div class="perma-customer-info">';
-    $html .= '<div class="pdf-div">';
-    $html .= '<label class="pdf-label">Name:</label> <input class="nisl_name" name="nisl_name" type="text" value="' . esc_attr(get_the_author_meta('dealer_name', $user_id)) . '" disabled autofocus/>';
-    $html .= '</div>';
-    $html .= '<div class="pdf-div">';
-    $address1 = get_the_author_meta('dealer_store_address', $user_id);
-    // $address2 = get_the_author_meta( 'edit_pmsafe_address_2', $user_id );
-    if (!empty($address1)) {
-        $address = $address1;
-    }
-    $html .= '<label class="pdf-label">Store Address:</label><input class="nisl_address" name="nisl_address" type="text" value="' . $address . '" disabled/>';
 
-    $html .= '</div>';
     $html .= '<div class="pdf-div">';
-    $html .= '<label class="pdf-label">Phone:</label> <input class="nisl_phone" name="nisl_phone" type="text" value="' . esc_attr(get_the_author_meta('dealer_phone_number', $user_id)) . '" disabled/>';
+    $html .= '<label class="pdf-label">Name:</label> <input class="nisl_name" name="nisl_name" type="text" value="' . $name . '"/>';
     $html .= '</div>';
+
     $html .= '<div class="pdf-div">';
-    $html .= '<label class="pdf-label">Fax:</label> <input class="nisl_fax" name="nisl_fax" type="text" value="' . esc_attr(get_the_author_meta('dealer_fax_number', $user_id)) . '" disabled/>';
-    $html .= '</div>';
-    $html .= '<div class="pdf-div">';
-    $html .= '<label class="pdf-label">Email:</label> <input type="text" value="' . $user->data->user_email . '" disabled/>';
-    $html .= '</div>';
+    $html .= '<label class="pdf-label">Store Address:</label><input class="nisl_address" name="nisl_address" type="text" value="' . $address . '"/>';
 
     $html .= '</div>';
 
+    $html .= '<div class="pdf-div">';
+    $html .= '<label class="pdf-label">Phone:</label> <input class="nisl_phone" name="nisl_phone" type="text" value="' . $phone . '"/>';
+    $html .= '</div>';
 
-    $html .= '<input type="submit" id="pmsafe_save_dealer_info" value="Submit" style="display:none">';
+    $html .= '<div class="pdf-div">';
+    $html .= '<label class="pdf-label">Fax:</label> <input class="nisl_fax" name="nisl_fax" type="text" value="' . $fax . '"/>';
+    $html .= '</div>';
+
+    $html .= '<div class="pdf-div">';
+    $html .= '<label class="pdf-label">Email:</label> <input type="text" value="' . $user->user_email . '" name="nisl_mail" id="nisl_mail">';
+    $html .= '</div>';
+
+    $html .= '<div class="pdf-div">';
+    $html .= '<label class="pdf-label">Password:</label> <input type="password" value="" name="nisl_password" id="nisl_password"/>';
+    $html .= '</div>';
+
+    $html .= '</div>';
+
+
+    $html .= '<input type="submit" id="pmsafe_save_dealer_distributor_info" value="Submit">';
     $html .= '</form>';
     $html .= '</div>';
 
@@ -433,37 +453,55 @@ function pmsafe_dealer_info_card($user_id)
     return $html;
 }
 
-function pmsafe_dealer_user_info_card($user_id)
+function pmsafe_contact_user_info_card($user_id)
 {
     // echo $user_id;
-    $user = get_user_by('ID', $user_id);
+    $user = get_userdata($user_id);
+    $role = $user->caps;
+    if ($role['dealer-user'] == 1) {
+        $fname = get_the_author_meta('contact_fname', $user_id);
+        $lname = get_the_author_meta('contact_lname', $user_id);
+        $phone = get_the_author_meta('contact_phone', $user_id);
+    }
+    if ($role['distributor-user'] == 1) {
+        $fname = get_the_author_meta('distributor_contact_fname', $user_id);
+        $lname = get_the_author_meta('distributor_contact_lname', $user_id);
+        $phone = get_the_author_meta('distributor_contact_phone', $user_id);
+    }
     $html = '';
 
     $html .= '<div id="perma-warranty-wrapper">';
     $html .= '<div id="pmsafe-response"></div>';
     $html .= '<div id="perma-warranty-form">';
-    $html .= '<form name="perma_dealer_user_info_form" id="perma_dealer_user_info_form" method="POST">';
-
+    $html .= '<form name="perma_dealer_user_info_form" id="perma_contact_user_info_form" method="POST">';
+    $html .= '<input type="hidden" name="user_role" id="user_role" value="' . $role . '">';
     $html .= '<div class="perma-customer-info">';
+
     $html .= '<div class="pdf-div">';
-    $html .= '<label class="pdf-label">First Name:</label> <input class="nisl_fname" name="nisl_fname" type="text" value="' . esc_attr(get_the_author_meta('contact_fname', $user_id)) . '" disabled autofocus/>';
-    $html .= '</div>';
-    $html .= '<div class="pdf-div">';
-    $html .= '<label class="pdf-label">Last Name:</label> <input class="nisl_lname" name="nisl_lname" type="text" value="' . esc_attr(get_the_author_meta('contact_lname', $user_id)) . '" disabled autofocus/>';
+    $html .= '<label class="pdf-label">First Name:</label> <input class="nisl_fname" name="nisl_fname" type="text" value="' . $fname . '"/>';
     $html .= '</div>';
 
     $html .= '<div class="pdf-div">';
-    $html .= '<label class="pdf-label">Phone:</label> <input class="nisl_phone" name="nisl_phone" type="text" value="' . esc_attr(get_the_author_meta('contact_phone', $user_id)) . '" disabled/>';
+    $html .= '<label class="pdf-label">Last Name:</label> <input class="nisl_lname" name="nisl_lname" type="text" value="' . $lname . '"/>';
     $html .= '</div>';
 
     $html .= '<div class="pdf-div">';
-    $html .= '<label class="pdf-label">Email:</label> <input type="text" value="' . $user->data->user_email . '" disabled/>';
+    $html .= '<label class="pdf-label">Phone:</label> <input class="nisl_phone" name="nisl_phone" type="text" value="' . $phone . '"/>';
     $html .= '</div>';
 
+    $html .= '<div class="pdf-div">';
+    $html .= '<label class="pdf-label">Email:</label> <input type="text" value="' . $user->user_email . '" name="nisl_mail" id="nisl_mail"/>';
+    $html .= '</div>';
+
+    $html .= '<div class="pdf-div">';
+    $html .= '<label class="pdf-label">Password:</label> <input type="password" value="" name="nisl_password" id="nisl_password"/>';
     $html .= '</div>';
 
 
-    $html .= '<input type="submit" id="pmsafe_save_dealer_user_info" value="Submit" style="display:none">';
+    $html .= '</div>';
+
+
+    $html .= '<input type="submit" id="pmsafe_save_contact_user_info" value="Submit">';
     $html .= '</form>';
     $html .= '</div>';
 
