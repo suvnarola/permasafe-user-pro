@@ -290,12 +290,14 @@ table.tbl-dealer-info>tbody>tr:nth-of-type(odd) {
 .swal-button--danger,.swal-button--danger:hover{background-color: #df4740 !important;}
 
 /*contact popup*/
-#contact-user-popup{position:relative;}
-#contact-user-popup div{position: absolute;top: -25px;right: -165px;border: 1px solid #ddd;-moz-box-shadow: 0 0 3px #ccc;
--webkit-box-shadow: 0 0 3px #ccc;box-shadow: 0 0 3px #ccc;padding: 20px;z-index: 999999;background: #ffff;width: 40%;}
-#contact-user-popup #contact-popup-close{color: #fff;background-color: #4778b5;border-radius: 50%;float: right;cursor:pointer;}
-#contact-user-popup h2{color: #4778b5;}
-#contact-user-popup p{color: #333;}
+#contact-user-popup {position: absolute;top: 100px;right: 0px;margin: 20px;;z-index: 99;
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);}
+#contact-user-popup div{border: 1px solid #ddd;padding: 15px;
+z-index: 9;background: #ffff;width: 100%;max-width: 500px;position: relative;border-radius: 5px;}
+#contact-user-popup #contact-popup-close{color: #fff;background-color: #365c8a;border-radius: 50%;cursor: pointer;position: absolute;
+right: -12px;top: -11px;font-size: 13px;width: 26px;height: 26px;line-height: 27px;}
+#contact-user-popup h2{color: #4778b5;font-size: 24px;line-height: 24px;}
+#contact-user-popup p{color: #333;padding: 0;    font-size: 14px;}
 
 
 
@@ -314,6 +316,11 @@ table.tbl-dealer-info>tbody>tr:nth-of-type(odd) {
   .search-result-wrap{flex-wrap: wrap; }
   .search-result-wrap .data-result-wrap {  width: 100% !important;}
   .search-result-wrap .tbl-result-wrap {  width: 100% !important;}
+}
+@media(max-width:1000px){
+    #contact-user-popup {
+       top: 80px;
+    }
 }
 @media screen and (max-width:991px){
     .left-side, .right-side,.center-row{width:100%;padding: 0;}
@@ -340,6 +347,7 @@ table.tbl-dealer-info>tbody>tr:nth-of-type(odd) {
   .filter-wrap .input-filter-wrap {  flex-wrap: wrap;}
   .wpb_wrapper .filter-wrap .input-filter-wrap label, .wpb_wrapper .filter-wrap .input-filter-wrap input {width: 100% !important;margin: 3px 0;}
   .filter-wrap .select-filter-wrap, .filter-wrap .input-filter-wrap, .filter-wrap .btn-filter-wrap{    margin: 0 0 15px 0 !important; }
+  table#customertable tbody tr td a.view-data {position: unset;}
 }
 @media screen and (max-width:690px){
     #perma-warranty-form div input, .perma-terms-info div input{width:100%;}

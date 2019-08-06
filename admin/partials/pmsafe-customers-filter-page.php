@@ -1,5 +1,5 @@
 <?php
-$html .= '<h1 class="top-heading">Quick filetrs</h1>'; 
+$html .= '<h1 class="top-heading">Quick Filters</h1>'; 
 $html .= '<div class="filter-wrap">';
 
 $html .= '<div class="filter-up">';
@@ -69,5 +69,3 @@ $html .= '<div class="search-result-wrap">';
     $html .= '</div>';          
 $html .= '</div>'; 
 echo $html;
-
-?>

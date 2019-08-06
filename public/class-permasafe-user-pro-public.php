@@ -172,9 +172,8 @@ class Permasafe_User_Pro_Public
 
         add_filter('email_change_email', array($this, 'change_email_mail_message'), 10, 3);
 
-        add_shortcode('contact_user_popup', array($this, 'contact_user_popup_function'));
+        add_action('wp_footer', array($this, 'contact_user_popup_function'));
     }
-
     /* Filter Email Change Email Text */
 
     public function change_email_mail_message($email_change, $user, $userdata)
@@ -4292,19 +4291,24 @@ class Permasafe_User_Pro_Public
 
     public function contact_user_popup_function()
     {
-        $current_user = wp_get_current_user();
-        $user_id = get_current_user_id();
-        $is_popup = get_user_meta($user_id, 'is_popup', true);
-        $role = (array) $current_user->caps;
-        if ($role['dealer-user'] == 1 || $role['distributor-user'] == 1) {
-            if ($is_popup != 1) {
-                echo '<div id="contact-user-popup">';
-                echo '<div>';
-                echo '<i class="fa fa-close" id="contact-popup-close"></i>';
-                echo '<h2>Reset Password</h2>';
-                echo '<p>You are currently using a temporary password. Please set a stronger password <a href="' . get_site_url() . '/perma-account-info">here</a></p>';
-                echo '</div>';
-                echo '</div>';
+        if (is_user_logged_in()) {
+            $current_user = wp_get_current_user();
+            $user_id = get_current_user_id();
+            $is_popup = get_user_meta($user_id, 'is_popup', true);
+            $role = (array) $current_user->caps;
+
+            if ($role['dealer-user'] == 1 || $role['distributor-user'] == 1) {
+                if (is_page('distributor-account') || is_page('dealer-account')) {
+                    if ($is_popup != 1) {
+                        echo '<div id="contact-user-popup">';
+                        echo '<div>';
+                        echo '<i class="fa fa-close" id="contact-popup-close"></i>';
+                        echo '<h2>Reset Password</h2>';
+                        echo '<p>You are currently using a temporary password. Please set a stronger password <a href="' . get_site_url() . '/perma-account-info">here</a></p>';
+                        echo '</div>';
+                        echo '</div>';
+                    }
+                }
             }
         }
     }
@@ -4318,10 +4322,7 @@ class Permasafe_User_Pro_Public
     {
 
         $user_id = get_current_user_id();
-        // $password = $_SESSION['first_userpwd'];
-        // echo "ID=>".$user_id.'<br/>';
-        // echo "pwd=>".$password.'<br/>';
-        // $membercode = $_GET['membercode'];
+
         $current_user = wp_get_current_user();
         $membercode = $current_user->user_login;
 

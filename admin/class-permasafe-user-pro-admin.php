@@ -932,12 +932,6 @@ class Permasafe_User_Pro_Admin
 	}
 
 
-
-
-
-
-
-
 	//edit customer
 	public function pmsafe_edit_customer_form_function()
 	{

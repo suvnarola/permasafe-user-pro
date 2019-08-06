@@ -1784,6 +1784,13 @@ jQuery(document).ready(function () {
             jQuery('.input-filter-wrap').html('<label>Date: </label><input type="text" id="datepicker1" style="width:auto;"> <input type="text" id="datepicker2" style="width:auto;">');
             jQuery("#datepicker1").datepicker({
                 dateFormat: 'yy-mm-dd',
+                onSelect: function (date) {
+                    var date2 = jQuery('#datepicker1').datepicker('getDate');
+                    date2.setDate(date2.getDate() + 1);
+                    jQuery('#datepicker2').datepicker('setDate', date2);
+                    //sets minDate to dt1 date + 1
+                    jQuery('#datepicker2').datepicker('option', 'minDate', date2);
+                }
 
             });
             jQuery("#datepicker2").datepicker({
@@ -1797,7 +1804,14 @@ jQuery(document).ready(function () {
             jQuery('.input-filter-wrap').html('<label>Date: </label><input type="text" id="datepicker1" style="width:auto;"> <input type="text" id="datepicker2" style="width:auto;">');
             jQuery("#datepicker1").datepicker({
                 dateFormat: 'yy-mm-dd',
-                maxDate: 0
+                maxDate: 0,
+                onSelect: function (date) {
+                    var date2 = jQuery('#datepicker1').datepicker('getDate');
+                    date2.setDate(date2.getDate() + 1);
+                    jQuery('#datepicker2').datepicker('setDate', date2);
+                    //sets minDate to dt1 date + 1
+                    jQuery('#datepicker2').datepicker('option', 'minDate', date2);
+                }
             });
             jQuery("#datepicker2").datepicker({
                 dateFormat: 'yy-mm-dd',
@@ -1809,7 +1823,14 @@ jQuery(document).ready(function () {
             jQuery("#datepicker1").datepicker({
                 dateFormat: 'yy-mm-dd',
                 minDate: 0,
-                maxDate: "+6m"
+                maxDate: "+6m",
+                onSelect: function (date) {
+                    var date2 = jQuery('#datepicker1').datepicker('getDate');
+                    date2.setDate(date2.getDate() + 1);
+                    jQuery('#datepicker2').datepicker('setDate', date2);
+                    //sets minDate to dt1 date + 1
+                    jQuery('#datepicker2').datepicker('option', 'minDate', date2);
+                }
             });
             jQuery("#datepicker2").datepicker({
                 dateFormat: 'yy-mm-dd',
@@ -1821,6 +1842,13 @@ jQuery(document).ready(function () {
             jQuery('.input-filter-wrap').html('<label>Date: </label><input type="text" id="datepicker1" style="width:auto;"> <input type="text" id="datepicker2" style="width:auto;">');
             jQuery("#datepicker1").datepicker({
                 dateFormat: 'yy-mm-dd',
+                onSelect: function (date) {
+                    var date2 = jQuery('#datepicker1').datepicker('getDate');
+                    date2.setDate(date2.getDate() + 1);
+                    jQuery('#datepicker2').datepicker('setDate', date2);
+                    //sets minDate to dt1 date + 1
+                    jQuery('#datepicker2').datepicker('option', 'minDate', date2);
+                }
 
             });
             jQuery("#datepicker2").datepicker({
@@ -1894,7 +1922,16 @@ jQuery(document).ready(function () {
 
     });
 
-    jQuery("#membership_datepicker1").datepicker({ dateFormat: 'yy-mm-dd' });
+    jQuery("#membership_datepicker1").datepicker({
+        dateFormat: 'yy-mm-dd',
+        onSelect: function (date) {
+            var date2 = jQuery('#membership_datepicker1').datepicker('getDate');
+            date2.setDate(date2.getDate() + 1);
+            jQuery('#membership_datepicker2').datepicker('setDate', date2);
+            //sets minDate to dt1 date + 1
+            jQuery('#membership_datepicker2').datepicker('option', 'minDate', date2);
+        }
+    });
     jQuery("#membership_datepicker2").datepicker({ dateFormat: 'yy-mm-dd' });
 
     jQuery(document).on("click", "#membership_date_submit", function (e) {

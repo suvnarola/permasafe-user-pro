@@ -462,11 +462,13 @@ function pmsafe_contact_user_info_card($user_id)
         $fname = get_the_author_meta('contact_fname', $user_id);
         $lname = get_the_author_meta('contact_lname', $user_id);
         $phone = get_the_author_meta('contact_phone', $user_id);
+        $role = 'dealer-user';
     }
     if ($role['distributor-user'] == 1) {
         $fname = get_the_author_meta('distributor_contact_fname', $user_id);
         $lname = get_the_author_meta('distributor_contact_lname', $user_id);
         $phone = get_the_author_meta('distributor_contact_phone', $user_id);
+        $role = 'distributor-user';
     }
     $html = '';
 

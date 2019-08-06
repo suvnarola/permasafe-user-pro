@@ -1746,13 +1746,19 @@ jQuery(document).ready(function () {
                 success: function (response) {
                     jQuery('.perma-admin-loader').hide();
                     var obj = jQuery.parseJSON(response);
-                    // var obj = jQuery.parseJSON(response);
 
                     if (obj.status == true) {
-                        // console.log(obj.redirect);
-                        window.location.replace(obj.redirect);
-                        // location.reload();
-                        jQuery('.notice').css('display', 'block');
+                        swal({
+                            title: "Successfully Updated!",
+                            text: "Customer has been deleted. Press OK button.",
+                            icon: "success",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false,
+                        }).then(function () {
+                            window.location.replace(obj.redirect);
+                            jQuery('.notice').css('display', 'block');
+                        })
+
                     }
                     if (obj.status == false) {
 
@@ -1810,28 +1816,49 @@ jQuery(document).ready(function () {
     jQuery(document).on("click", "#pmsafe_customers_delete", function (e) {
         // alert('in');
         e.preventDefault();
+        var pmsafe_customer_id = jQuery(this).attr('data-id');
+        var data = {
+            action: 'pmsafe_delete_customers_form',
+            pmsafe_customer_id: pmsafe_customer_id
+        }
 
-        jQuery('.perma-admin-loader').show();
-        var form = jQuery('#perma_delete_customers_form')[0];
-        var fd = new FormData(form);
-        fd.append('action', 'pmsafe_delete_customers_form');
+        swal({
+            title: "Are you sure?",
+            text: "It will permanently deleted !",
+            icon: "warning",
+            buttons: true,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                jQuery('.perma-admin-loader').show();
+                jQuery.ajax({
+                    type: 'post',
+                    url: pmAjax.ajaxurl,
+                    data: data,
+                    success: function (response) {
+                        jQuery('.perma-admin-loader').hide();
+                        var obj = jQuery.parseJSON(response);
+                        // var obj = jQuery.parseJSON(response);
+                        if (obj.status == true) {
 
-        jQuery.ajax({
-            type: 'post',
-            url: pmAjax.ajaxurl,
-            processData: false,
-            contentType: false,
-            data: fd,
-            success: function (response) {
-                jQuery('.perma-admin-loader').hide();
-                var obj = jQuery.parseJSON(response);
-                // var obj = jQuery.parseJSON(response);
-                if (obj.status == true) {
-
-                    window.location.replace(obj.redirect);
-                }
+                            swal({
+                                title: "Deleted!",
+                                text: "Customer has been deleted. Press OK button.",
+                                icon: "success",
+                                closeOnClickOutside: false,
+                                closeOnEsc: false,
+                            }).then(function () {
+                                window.location.replace(obj.redirect);
+                            })
+                        }
+                    }
+                });// ajax
+            } else {
+                swal("Customer is not deleted !");
             }
-        });// ajax
+        });
         return false;
 
     });  // delete button
@@ -2206,6 +2233,13 @@ jQuery(document).ready(function () {
             jQuery('.input-filter-wrap').html('<label>Date: </label><input type="text" id="datepicker1" style="width:auto;"> <input type="text" id="datepicker2" style="width:auto;">');
             jQuery("#datepicker1").datepicker({
                 dateFormat: 'yy-mm-dd',
+                onSelect: function (date) {
+                    var date2 = jQuery('#datepicker1').datepicker('getDate');
+                    date2.setDate(date2.getDate() + 1);
+                    jQuery('#datepicker2').datepicker('setDate', date2);
+                    //sets minDate to dt1 date + 1
+                    jQuery('#datepicker2').datepicker('option', 'minDate', date2);
+                }
 
             });
             jQuery("#datepicker2").datepicker({
@@ -2219,7 +2253,14 @@ jQuery(document).ready(function () {
             jQuery('.input-filter-wrap').html('<label>Date: </label><input type="text" id="datepicker1" style="width:auto;"> <input type="text" id="datepicker2" style="width:auto;">');
             jQuery("#datepicker1").datepicker({
                 dateFormat: 'yy-mm-dd',
-                maxDate: 0
+                maxDate: 0,
+                onSelect: function (date) {
+                    var date2 = jQuery('#datepicker1').datepicker('getDate');
+                    date2.setDate(date2.getDate() + 1);
+                    jQuery('#datepicker2').datepicker('setDate', date2);
+                    //sets minDate to dt1 date + 1
+                    jQuery('#datepicker2').datepicker('option', 'minDate', date2);
+                }
             });
             jQuery("#datepicker2").datepicker({
                 dateFormat: 'yy-mm-dd',
@@ -2231,7 +2272,14 @@ jQuery(document).ready(function () {
             jQuery("#datepicker1").datepicker({
                 dateFormat: 'yy-mm-dd',
                 minDate: 0,
-                maxDate: "+6m"
+                maxDate: "+6m",
+                onSelect: function (date) {
+                    var date2 = jQuery('#datepicker1').datepicker('getDate');
+                    date2.setDate(date2.getDate() + 1);
+                    jQuery('#datepicker2').datepicker('setDate', date2);
+                    //sets minDate to dt1 date + 1
+                    jQuery('#datepicker2').datepicker('option', 'minDate', date2);
+                }
             });
             jQuery("#datepicker2").datepicker({
                 dateFormat: 'yy-mm-dd',
@@ -2243,6 +2291,13 @@ jQuery(document).ready(function () {
             jQuery('.input-filter-wrap').html('<label>Date: </label><input type="text" id="datepicker1" style="width:auto;"> <input type="text" id="datepicker2" style="width:auto;">');
             jQuery("#datepicker1").datepicker({
                 dateFormat: 'yy-mm-dd',
+                onSelect: function (date) {
+                    var date2 = jQuery('#datepicker1').datepicker('getDate');
+                    date2.setDate(date2.getDate() + 1);
+                    jQuery('#datepicker2').datepicker('setDate', date2);
+                    //sets minDate to dt1 date + 1
+                    jQuery('#datepicker2').datepicker('option', 'minDate', date2);
+                }
 
             });
             jQuery("#datepicker2").datepicker({
@@ -2379,7 +2434,16 @@ jQuery(document).ready(function () {
         ]
 
     });
-    jQuery("#membership_datepicker1").datepicker({ dateFormat: 'yy-mm-dd' });
+    jQuery("#membership_datepicker1").datepicker({
+        dateFormat: 'yy-mm-dd',
+        onSelect: function (date) {
+            var date2 = jQuery('#membership_datepicker1').datepicker('getDate');
+            date2.setDate(date2.getDate() + 1);
+            jQuery('#membership_datepicker2').datepicker('setDate', date2);
+            //sets minDate to dt1 date + 1
+            jQuery('#membership_datepicker2').datepicker('option', 'minDate', date2);
+        }
+    });
     jQuery("#membership_datepicker2").datepicker({ dateFormat: 'yy-mm-dd' });
 
     jQuery(document).on("click", "#membership_date_submit", function (e) {
@@ -2574,7 +2638,15 @@ jQuery(document).ready(function () {
                         jQuery('<p id="exist-package" style="color:red;">Already Exist.</p>').insertBefore('#add_package_price');
                     }
                     if (response == 1) {
-                        location.reload();
+                        swal({
+                            title: "Successfully Added!",
+                            text: "Pricing package is added for dealer. Press OK button.",
+                            icon: "success",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false,
+                        }).then(function () {
+                            location.reload();
+                        })
                     }
 
 
@@ -2638,7 +2710,15 @@ jQuery(document).ready(function () {
                         jQuery('<p id="exist-package" style="color:red;">Already Exist.</p>').insertBefore('#add_distributor_cost');
                     }
                     if (response == 1) {
-                        location.reload();
+                        swal({
+                            title: "Successfully Added!",
+                            text: "Pricing package is added for distributor. Press OK button.",
+                            icon: "success",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false,
+                        }).then(function () {
+                            location.reload();
+                        })
                     }
 
 
@@ -2663,17 +2743,41 @@ jQuery(document).ready(function () {
             package: package,
             dealer_id: dealer_id
         };
-        jQuery('.perma-admin-loader').show();
-        jQuery.ajax({
-            type: 'POST',
-            url: pmAjax.ajaxurl,
-            data: data,
-            dataType: 'html',
-            success: function (response) {
-                jQuery('.perma-admin-loader').hide();
-                location.reload();
+
+        swal({
+            title: "Are you sure?",
+            text: "It will permanently deleted !",
+            icon: "warning",
+            buttons: true,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                jQuery('.perma-admin-loader').show();
+                jQuery.ajax({
+                    type: 'POST',
+                    url: pmAjax.ajaxurl,
+                    data: data,
+                    dataType: 'html',
+                    success: function (response) {
+                        jQuery('.perma-admin-loader').hide();
+                        swal({
+                            title: "Deleted!",
+                            text: "Pricing package has been deleted. Press OK button.",
+                            icon: "success",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false,
+                        }).then(function () {
+                            location.reload();
+                        })
+
+                    }
+                });// ajax
+            } else {
+                swal("Pricing package is not deleted !");
             }
-        });// ajax
+        });
     });
 
     jQuery(document).on("click", "#edit_price", function (e) {
@@ -2792,7 +2896,15 @@ jQuery(document).ready(function () {
                 dataType: 'html',
                 success: function (response) {
                     jQuery('.perma-admin-loader').hide();
-                    location.reload();
+                    swal({
+                        title: "Successfully Updated!",
+                        text: "Pricing package is updated for dealer. Press OK button.",
+                        icon: "success",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false,
+                    }).then(function () {
+                        location.reload();
+                    })
                 }
             });// ajax
         }
@@ -2836,7 +2948,15 @@ jQuery(document).ready(function () {
                 dataType: 'html',
                 success: function (response) {
                     jQuery('.perma-admin-loader').hide();
-                    location.reload();
+                    swal({
+                        title: "Successfully Updated!",
+                        text: "Pricing package is updated for distributor. Press OK button.",
+                        icon: "success",
+                        closeOnClickOutside: false,
+                        closeOnEsc: false,
+                    }).then(function () {
+                        location.reload();
+                    })
                 }
             });// ajax
         }
@@ -2851,17 +2971,40 @@ jQuery(document).ready(function () {
             package: package,
             distributor_id: distributor_id
         };
-        jQuery('.perma-admin-loader').show();
-        jQuery.ajax({
-            type: 'POST',
-            url: pmAjax.ajaxurl,
-            data: data,
-            dataType: 'html',
-            success: function (response) {
-                jQuery('.perma-admin-loader').hide();
-                location.reload();
+        swal({
+            title: "Are you sure?",
+            text: "It will permanently deleted !",
+            icon: "warning",
+            buttons: true,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                jQuery('.perma-admin-loader').show();
+                jQuery.ajax({
+                    type: 'POST',
+                    url: pmAjax.ajaxurl,
+                    data: data,
+                    dataType: 'html',
+                    success: function (response) {
+                        jQuery('.perma-admin-loader').hide();
+                        swal({
+                            title: "Deleted!",
+                            text: "Pricing package has been deleted. Press OK button.",
+                            icon: "success",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false,
+                        }).then(function () {
+                            location.reload();
+                        })
+                    }
+                });// ajax
+            } else {
+                swal("Pricing package is not deleted !");
             }
-        });// ajax
+        });
+
     });
 
     jQuery(document).on("focus", "#pmsafe_distributor_contact_fname,#pmsafe_distributor_contact_lname,#pmsafe_distributor_contact_phone,#pmsafe_distributor_contact_email,#pmsafe_distributor_contact_password,#pmsafe_dealer_contact_fname,#pmsafe_dealer_contact_lname,#pmsafe_dealer_contact_phone,#pmsafe_dealer_contact_email,#pmsafe_dealer_contact_password,#benefit_packages,#distributor_cost,#dealer_cost,#selling_price,#pmsafe_invitation_prefix,#edit_distributor_cost,#edit_dealer_cost,#edit_selling_price,#edit_dealer_contact_fname,#edit_dealer_contact_lname,#edit_dealer_contact_phone,#edit_distributor_contact_fname,#edit_distributor_contact_lname,#edit_distributor_contact_phone,#edit_dealer_contact_email,#edit_dealer_contact_uname,#edit_distributor_contact_uname", function (e) {
