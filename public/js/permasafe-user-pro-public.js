@@ -1055,7 +1055,7 @@ jQuery(document).ready(function () {
 
 
         //Phone
-        var numbers = /^[0-9]+$/;
+        var numbers = /^[0-9]{10}$/;
         if (jQuery('.nisl_phone').val().trim() == '') {
             jQuery('.nisl_phone').css({ 'border': '1px solid #ff0000', 'color': '#ff0000' });
             jQuery('.nisl_phone').after("<span class='error'>This field is required.</span>");
@@ -1126,7 +1126,7 @@ jQuery(document).ready(function () {
 
 
         //Phone
-        var numbers = /^[0-9]+$/;
+        var numbers = /^[0-9]{10}$/;
         if (jQuery('#pmsafe_distributor_phone_number').val() != '') {
             if (!(jQuery('.nisl_phone').val().match(numbers))) {
                 jQuery('.nisl_phone').css({ 'border': '1px solid #ff0000', 'color': '#ff0000' });
@@ -1159,19 +1159,29 @@ jQuery(document).ready(function () {
                     if (obj.status == true) {
                         if (obj.change_password == 1) {
                             var text = 'You have changed password. So, You need to login again. Press OK button.'
+                            swal({
+                                title: "Successfully Updated!",
+                                text: text,
+                                icon: "success",
+                                closeOnClickOutside: false,
+                                closeOnEsc: false,
+                            }).then(function () {
+                                window.location = obj.redirect;
+                            })
                         }
                         if (obj.change_password == 0) {
                             var text = 'Press OK button.'
+                            swal({
+                                title: "Successfully Updated!",
+                                text: text,
+                                icon: "success",
+                                closeOnClickOutside: false,
+                                closeOnEsc: false,
+                            }).then(function () {
+                                location.reload();
+                            })
                         }
-                        swal({
-                            title: "Successfully Updated!",
-                            text: text,
-                            icon: "success",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false,
-                        }).then(function () {
-                            location.reload();
-                        })
+
                     }
                 }
             });
@@ -1210,7 +1220,7 @@ jQuery(document).ready(function () {
 
 
         //Phone
-        var numbers = /^[0-9]+$/;
+        var numbers = /^[0-9]{10}$/;
         if (jQuery('.nisl_phone').val().trim() == '') {
             jQuery('.nisl_phone').css({ 'border': '1px solid #ff0000', 'color': '#ff0000' });
             jQuery('.nisl_phone').after("<span class='error'>This field is required.</span>");
@@ -1265,19 +1275,29 @@ jQuery(document).ready(function () {
 
                         if (obj.change_password == 1) {
                             var text = 'You have changed password. So, You need to login again. Press OK button.'
+                            swal({
+                                title: "Successfully Updated!",
+                                text: text,
+                                icon: "success",
+                                closeOnClickOutside: false,
+                                closeOnEsc: false,
+                            }).then(function () {
+                                window.location = obj.redirect;
+                            })
                         }
                         if (obj.change_password == 0) {
                             var text = 'Press OK button.'
+                            swal({
+                                title: "Successfully Updated!",
+                                text: text,
+                                icon: "success",
+                                closeOnClickOutside: false,
+                                closeOnEsc: false,
+                            }).then(function () {
+                                location.reload();
+                            })
                         }
-                        swal({
-                            title: "Successfully Updated!",
-                            text: text,
-                            icon: "success",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false,
-                        }).then(function () {
-                            location.reload();
-                        })
+
                     }
                 }
             });
@@ -1859,7 +1879,7 @@ jQuery(document).ready(function () {
         }
     });
 
-    jQuery(document).on("focus", "#datepicker1,#datepicker2,#membership_datepicker1, #membership_datepicker2", function (e) {
+    jQuery(document).on("focus", "#datepicker1,#datepicker2,#membership_datepicker1, #membership_datepicker2,.nisl_phone,.nisl_phone", function (e) {
         jQuery(this).css({ 'border-color': '#cccccc' });
         jQuery(this).css({ 'color': '#555' });
         jQuery(this).siblings('.error').remove();

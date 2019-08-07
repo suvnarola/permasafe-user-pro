@@ -174,6 +174,8 @@ class Permasafe_User_Pro_Public
 
         add_action('wp_footer', array($this, 'contact_user_popup_function'));
     }
+
+
     /* Filter Email Change Email Text */
 
     public function change_email_mail_message($email_change, $user, $userdata)
@@ -2977,8 +2979,11 @@ class Permasafe_User_Pro_Public
         if ($new_password != '') {
             wp_set_password($new_password, $user_id);
             $change_password = 1;
+            $url = get_site_url();
+            $response = array('status' => true, 'change_password' => $change_password, 'redirect' => $url);
         } else {
             $change_password = 0;
+            $response = array('status' => true, 'change_password' => $change_password);
         }
 
         wp_update_user(array('ID' => $user_id, 'user_email' => $email));
@@ -2989,7 +2994,7 @@ class Permasafe_User_Pro_Public
             update_user_meta($user_id, 'dealer_phone_number', $_POST['nisl_phone']);
             update_user_meta($user_id, 'dealer_fax_number', $_POST['nisl_fax']);
         }
-        if ($role == 'contributor') {
+        if ($role == 'author') {
             update_user_meta($user_id, 'distributor_name', $_POST['nisl_name']);
             update_user_meta($user_id, 'distributor_store_address', $_POST['nisl_address']);
             update_user_meta($user_id, 'distributor_phone_number', $_POST['nisl_phone']);
@@ -2997,7 +3002,7 @@ class Permasafe_User_Pro_Public
         }
 
 
-        $response = array('status' => true, 'change_password' => $change_password);
+
         echo json_encode($response);
         die;
     }
@@ -3019,8 +3024,11 @@ class Permasafe_User_Pro_Public
                 update_user_meta($user_id, 'is_popup', 1);
             }
             $change_password = 1;
+            $url = get_site_url();
+            $response = array('status' => true, 'change_password' => $change_password, 'redirect' => $url);
         } else {
             $change_password = 0;
+            $response = array('status' => true, 'change_password' => $change_password);
         }
 
         wp_update_user(array('ID' => $user_id, 'user_email' => $email));
@@ -3035,7 +3043,7 @@ class Permasafe_User_Pro_Public
             update_user_meta($user_id, 'distributor_contact_phone', $_POST['nisl_phone']);
         }
 
-        $response = array('status' => true, 'change_password' => $change_password);
+
         echo json_encode($response);
 
         die;

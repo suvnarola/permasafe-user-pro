@@ -679,7 +679,7 @@ class PMSafe_Bulk_Invitation{
             update_post_meta( $invitation_id, '_pmsafe_dealer', $dealer );
             update_post_meta( $invitation_id, '_pmsafe_distributor', $distributor ); 
             update_post_meta( $invitation_id, '_pmsafe_date_updated', $updated_date ); 
-            // update_post_meta( $invitation_id, '_pmsafe_code_prefix', $benifit_package ); 
+            update_post_meta( $invitation_id, '_pmsafe_code_prefix', $benifit_package ); 
         }
         
         update_post_meta( $post_id, '_pmsafe_user_role', $code_access_level );
