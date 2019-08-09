@@ -675,11 +675,19 @@ class PMSafe_Bulk_Invitation{
         
         foreach ($meta as $key => $value) {
             $invitation_id = $value->post_id;
-            
+            $code_status = get_post_meta($invitation_id,'_pmsafe_code_status',true);
             update_post_meta( $invitation_id, '_pmsafe_dealer', $dealer );
             update_post_meta( $invitation_id, '_pmsafe_distributor', $distributor ); 
             update_post_meta( $invitation_id, '_pmsafe_date_updated', $updated_date ); 
-            update_post_meta( $invitation_id, '_pmsafe_code_prefix', $benifit_package ); 
+            $invite_prefix = get_post_meta($invitation_id,'_pmsafe_invitation_prefix',true);
+            if(empty($invite_prefix)){
+                update_post_meta( $invitation_id, '_pmsafe_invitation_prefix', $benifit_package ); 
+            }
+            if($code_status == 'available'){
+                update_post_meta( $invitation_id, '_pmsafe_code_prefix', $benifit_package ); 
+                update_post_meta( $invitation_id, '_pmsafe_invitation_prefix', $benifit_package ); 
+            }
+            
         }
         
         update_post_meta( $post_id, '_pmsafe_user_role', $code_access_level );
@@ -710,8 +718,8 @@ class PMSafe_Bulk_Invitation{
         update_post_meta($post_id, '_pmsafe_invitation_prefix', $benifit_package );
         
 
-        $url = admin_url('edit.php?post_type=pmsafe_bulk_invi');
-        $response = array('status'=>true,'redirect'=>$url);
+        // $url = admin_url('edit.php?post_type=pmsafe_bulk_invi');
+        $response = array('status'=>true);
         echo json_encode($response);
         die;
     }
@@ -847,6 +855,7 @@ class PMSafe_Bulk_Invitation{
                         add_post_meta($invitecode_id, '_pmsafe_distributor', $_POST['pmsafe_distributor']);
                         add_post_meta($invitecode_id, '_pmsafe_code_create_date', $_POST['pmsafe_code_create_date']);
                         add_post_meta($invitecode_id, '_pmsafe_code_prefix', $prefix);
+                        add_post_meta($invitecode_id, '_pmsafe_invitation_prefix', $prefix);
                     }
                     
                     $updated_name = $_POST['pmsafe_invitation_code_start'].'-'.$_POST['pmsafe_invitation_code_end'].' #'.($i + 1).': '.get_post_meta($invitecode_id, '_pmsafe_invitation_code',true );

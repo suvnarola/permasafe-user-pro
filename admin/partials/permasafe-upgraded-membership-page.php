@@ -169,17 +169,16 @@ echo '<tbody id="">';
 foreach ($membership_results as $str) {
     $post_id = $str->post_id;
     $bulk_id = get_post_meta($post_id, '_pmsafe_bulk_invitation_id', true);
-    if ($bulk_id == '') {
-        $bulk_prefix = get_post_meta($post_id, '_pmsafe_invitation_prefix', true);
-    } else {
-        $bulk_prefix = get_post_meta($bulk_id, '_pmsafe_invitation_prefix', true);
-    }
+
+    $bulk_prefix = get_post_meta($post_id, '_pmsafe_invitation_prefix', true);
+
     // $bulk_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
     $code = get_post_meta($post_id, '_pmsafe_invitation_code', true);
     $upgraded_id = get_post_meta($post_id, 'upgraded_by', true);
     $dealer_name = get_user_meta($upgraded_id, 'dealer_name', true);
     $distributor_name = get_user_meta($upgraded_id, 'distributor_name', true);
-    $contact_fname = get_user_meta($upgraded_id, 'contact_fname', true);
+    $dealer_contact_fname = get_user_meta($upgraded_id, 'contact_fname', true);
+    $distributor_contact_fname = get_user_meta($upgraded_id, 'distributor_contact_fname', true);
     $admin_name = get_user_meta($upgraded_id, 'first_name', true);
     $users = get_user_by('login', $code);
     $user_id = $users->ID;
@@ -218,7 +217,7 @@ foreach ($membership_results as $str) {
             echo '</td>';
 
             echo '<td style="text-align:center;">';
-            echo $bulk_prefix;
+            echo $original_policy;
             echo '</td>';
 
             echo '<td style="text-align:center;">';
@@ -233,8 +232,11 @@ foreach ($membership_results as $str) {
             if ($distributor_name) {
                 echo $distributor_name;
             }
-            if ($contact_fname) {
-                echo $contact_fname;
+            if ($dealer_contact_fname) {
+                echo $dealer_contact_fname;
+            }
+            if ($distributor_contact_fname) {
+                echo $distributor_contact_fname;
             }
             if ($admin_name) {
                 echo $admin_name;
@@ -286,8 +288,11 @@ foreach ($membership_results as $str) {
         if ($distributor_name) {
             echo $distributor_name;
         }
-        if ($contact_fname) {
-            echo $contact_fname;
+        if ($dealer_contact_fname) {
+            echo $dealer_contact_fname;
+        }
+        if ($distributor_contact_fname) {
+            echo $distributor_contact_fname;
         }
         if ($admin_name) {
             echo $admin_name;
@@ -311,5 +316,6 @@ foreach ($membership_results as $str) {
 }
 echo '</tbody>';
 echo '</table>';
+
 echo '</div>';
 echo '</div>';

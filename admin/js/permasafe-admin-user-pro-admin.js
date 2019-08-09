@@ -1165,7 +1165,7 @@ jQuery(document).ready(function () {
                 jQuery('.perma-admin-loader').hide();
                 var obj = jQuery.parseJSON(response);
                 if (obj.status == true) {
-                    window.location.replace(obj.redirect);
+                    location.reload();
                 }
             },
             dataType: 'html'

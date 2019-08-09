@@ -447,13 +447,16 @@ class PMSafe_Invitation_Code {
         
         $key = '_pmsafe_invitation_code';
         $updated_date = current_time( 'mysql' );
-        
+        $code_status = get_post_meta($invitation_id,'_pmsafe_code_status',true);
        
             
         update_post_meta( $invitation_id, '_pmsafe_dealer', $dealer );
         update_post_meta( $invitation_id, '_pmsafe_distributor', $distributor ); 
         update_post_meta( $invitation_id, '_pmsafe_date_updated', $updated_date ); 
-        update_post_meta($invitation_id, '_pmsafe_code_prefix', $benifit_package );
+        if($code_status == 'available'){
+            update_post_meta($invitation_id, '_pmsafe_code_prefix', $benifit_package );
+            update_post_meta($invitation_id, '_pmsafe_invitation_prefix', $benifit_package );
+        }
         if($chk == 1)
         {
             update_post_meta($invitation_id, 'pmsafe_invitation_code_upgradable', 1 );
@@ -592,26 +595,10 @@ class PMSafe_Invitation_Code {
                             echo '';
                         }
                         break;
-//                case 'user_limit':
-//                        if(!empty(get_post_meta( $post_id, '_pmsafe_available_limit', true ))){
-//                            echo get_post_meta( $post_id, '_pmsafe_available_limit', true ).'/';
-//                        }else{
-//                            echo '0/';
-//                        }
-//                        echo get_post_meta( $post_id, '_pmsafe_user_limit', true );
-//                        break;
+
                 case 'member_name':
                         echo get_post_meta( $post_id, '_pmsafe_used_code_user_name', true );
                         break;
-                // case 'member_email_address':
-                //         $user_id = get_post_meta( $post_id, '_pmsafe_used_code_user_id', true );
-                //         if(!empty($user_id)){
-                //             $user_info = get_userdata($user_id);
-                //             echo $user_info->user_email;
-                //         }else{
-                //             echo '';
-                //         }
-                //         break;
                 case 'invitation_code':
                         echo '<code>'.get_post_meta( $post_id, '_pmsafe_invitation_code', true ).'</code>';
                         break;

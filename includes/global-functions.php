@@ -1429,14 +1429,14 @@ function send_mail_to_users($to, $password, $subject, $fname = '', $member_code 
         $message .= 'Thank you for registering with PermaSafe!';
         $message .= '</td>';
         $message .= '</tr>';
-    } else {
-
-        $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
-        $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
-        $message .= 'Here is your <b>Username</b> : <span style="color:#0065a7">' . $member_code . '</span>';
-        $message .= '</td>';
-        $message .= '</tr>';
     }
+
+    $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
+    $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
+    $message .= 'Here is your <b>Username</b> : <span style="color:#0065a7">' . $member_code . '</span>';
+    $message .= '</td>';
+    $message .= '</tr>';
+
 
     $message .= '<tr style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">';
     $message .= '<td class="content-block" style="font-family: Helvetica Neue,Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">';
