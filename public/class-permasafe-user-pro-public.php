@@ -3511,17 +3511,16 @@ class Permasafe_User_Pro_Public
             foreach ($membership_results as $str) {
                 $post_id = $str->post_id;
                 $bulk_id = get_post_meta($post_id, '_pmsafe_bulk_invitation_id', true);
-                if ($bulk_id == '') {
-                    $bulk_prefix = get_post_meta($post_id, '_pmsafe_invitation_prefix', true);
-                } else {
-                    $bulk_prefix = get_post_meta($bulk_id, '_pmsafe_invitation_prefix', true);
-                }
+
+                $bulk_prefix = get_post_meta($post_id, '_pmsafe_invitation_prefix', true);
+
 
                 $code = get_post_meta($post_id, '_pmsafe_invitation_code', true);
                 $upgraded_id = get_post_meta($post_id, 'upgraded_by', true);
                 $dealer_name = get_user_meta($upgraded_id, 'dealer_name', true);
                 $distributor_name = get_user_meta($upgraded_id, 'distributor_name', true);
                 $contact_fname = get_user_meta($upgraded_id, 'contact_fname', true);
+                $distributor_contact_fname = get_user_meta($upgraded_id, 'distributor_contact_fname', true);
                 $admin_name = get_user_meta($upgraded_id, 'first_name', true);
                 $users = get_user_by('login', $code);
                 $user_id = $users->ID;
@@ -3551,6 +3550,9 @@ class Permasafe_User_Pro_Public
                     }
                     if ($contact_fname) {
                         $html .= $contact_fname;
+                    }
+                    if ($distributor_contact_fname) {
+                        $html .= $distributor_contact_fname;
                     }
                     if ($admin_name) {
                         $html .= $admin_name;
@@ -3626,16 +3628,14 @@ class Permasafe_User_Pro_Public
             $post_id = $str->post_id;
             $upgraded_date = get_post_meta($post_id, 'upgraded_date', true);
             $bulk_id = get_post_meta($post_id, '_pmsafe_bulk_invitation_id', true);
-            if ($bulk_id == '') {
-                $bulk_prefix = get_post_meta($post_id, '_pmsafe_invitation_prefix', true);
-            } else {
-                $bulk_prefix = get_post_meta($bulk_id, '_pmsafe_invitation_prefix', true);
-            }
+
+            $bulk_prefix = get_post_meta($post_id, '_pmsafe_invitation_prefix', true);
             $code = get_post_meta($post_id, '_pmsafe_invitation_code', true);
             $upgraded_id = get_post_meta($post_id, 'upgraded_by', true);
             $dealer_name = get_user_meta($upgraded_id, 'dealer_name', true);
             $distributor_name = get_user_meta($upgraded_id, 'distributor_name', true);
             $contact_fname = get_user_meta($upgraded_id, 'contact_fname', true);
+            $distributor_contact_fname = get_user_meta($upgraded_id, 'distributor_contact_fname', true);
             $admin_name = get_user_meta($upgraded_id, 'first_name', true);
             $users = get_user_by('login', $code);
             $user_id = $users->ID;
@@ -3661,6 +3661,9 @@ class Permasafe_User_Pro_Public
             }
             if ($contact_fname) {
                 $upgraded_by = $contact_fname;
+            }
+            if ($distributor_contact_fname) {
+                $upgraded_by = $distributor_contact_fname;
             }
             if ($admin_name) {
                 $upgraded_by = $admin_name;
