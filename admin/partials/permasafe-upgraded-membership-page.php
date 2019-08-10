@@ -202,6 +202,7 @@ foreach ($membership_results as $str) {
     $vehicle_info = get_user_meta($user_id, 'pmsafe_vehicle_info', true);
     $vin = $vehicle_info[$code]['pmsafe_vin'];
     if ($action == 'view_upgraded_policy') {
+
         if (in_array($code, $users_array)) {
             echo '<tr>';
             echo '<td style="text-align:center;">';
@@ -217,7 +218,7 @@ foreach ($membership_results as $str) {
             echo '</td>';
 
             echo '<td style="text-align:center;">';
-            echo $original_policy;
+            echo $bulk_prefix;
             echo '</td>';
 
             echo '<td style="text-align:center;">';
