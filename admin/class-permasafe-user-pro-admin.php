@@ -119,6 +119,7 @@ class Permasafe_User_Pro_Admin
 		wp_enqueue_script('dt_table_fixedHeader', plugin_dir_url(__FILE__) . 'js/dataTables.fixedHeader.min.js', array('jquery'), time(), false);
 		wp_enqueue_script('dt_table_inputjs', plugin_dir_url(__FILE__) . 'js/input.js', array('jquery'), time(), false);
 		wp_enqueue_script('sweet_alert', plugin_dir_url(__FILE__) . 'js/sweetalert.min.js', array('jquery'), time(), false);
+		wp_enqueue_script('natural-js', plugin_dir_url(__FILE__) . 'js/natural.js', array('jquery'), time(), false);
 		// wp_enqueue_script( 'jquery_validation', plugin_dir_url( __FILE__ ) . 'js/jquery.validate.min.js', array( 'jquery' ), time(), false );
 
 
@@ -2660,11 +2661,11 @@ class Permasafe_User_Pro_Admin
 			$code_prefix = get_post_meta($post_id, '_pmsafe_code_prefix', true);
 			$bulk_id = get_post_meta($post_id, '_pmsafe_bulk_invitation_id', true);
 			// $bulk_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
-			if ($bulk_id == '') {
-				$bulk_prefix = get_post_meta($post_id, '_pmsafe_invitation_prefix', true);
-			} else {
-				$bulk_prefix = get_post_meta($bulk_id, '_pmsafe_invitation_prefix', true);
-			}
+			// if ($bulk_id == '') {
+			$bulk_prefix = get_post_meta($post_id, '_pmsafe_invitation_prefix', true);
+			// } else {
+			// 	$bulk_prefix = get_post_meta($bulk_id, '_pmsafe_invitation_prefix', true);
+			// }
 
 			if ($login != '') {
 				if (!$setStart)
@@ -2766,10 +2767,7 @@ class Permasafe_User_Pro_Admin
 			foreach ($original_prefix  as $prefix2) { //PC3,BP1,BP2
 				if ($prefix1 != $prefix2) {
 
-
-					$results = $wpdb->get_results('SELECT post_id FROM wp_postmeta WHERE 
-					meta_key = "_pmsafe_bulk_invitation_id" AND 
-					meta_value IN( SELECT post_id FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_prefix" and meta_value ="' . $prefix1 . '" ) ');
+					$results = $wpdb->get_results('SELECT post_id FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_prefix" and meta_value ="' . $prefix1 . '"');
 					$post_id = array();
 					foreach ($results as $key => $value) {
 						if (in_array($value->post_id, $invite_post_id)) {
@@ -2800,14 +2798,18 @@ class Permasafe_User_Pro_Admin
 
 
 						$posts = get_posts($args);
+
 						if ($posts) {
 
 							$prefix_arr[$prefix1 . '-' . $prefix2] = array();
 							$count_arr = array();
 							foreach ($posts as $key => $value) {
 								$pid = $value->ID;
-								$code = get_post_meta($pid, '_pmsafe_invitation_code', true);
-								array_push($count_arr, $code);
+								$code_status = get_post_meta($pid, '_pmsafe_code_status', true);
+								if ($code_status == 'used') {
+									$code = get_post_meta($pid, '_pmsafe_invitation_code', true);
+									array_push($count_arr, $code);
+								}
 							}
 							array_push($prefix_arr[$prefix1 . '-' . $prefix2], count($count_arr));
 						}
@@ -2815,7 +2817,7 @@ class Permasafe_User_Pro_Admin
 				}
 			}
 		}
-
+		// pr($count_arr);
 		$html = '';
 		echo '<div class="membership-count">';
 		foreach ($prefix_arr as $key => $value) {
@@ -2825,278 +2827,7 @@ class Permasafe_User_Pro_Admin
 			echo '</p>';
 		}
 		echo '</div>';
-		foreach ($membership_results as $str) {
-			$post_id = $str->post_id;
-			$upgraded_date = get_post_meta($post_id, 'upgraded_date', true);
-			$bulk_id = get_post_meta($post_id, '_pmsafe_bulk_invitation_id', true);
-			// $bulk_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
 
-			$bulk_prefix = get_post_meta($post_id, '_pmsafe_invitation_prefix', true);
-
-			$code = get_post_meta($post_id, '_pmsafe_invitation_code', true);
-			$upgraded_id = get_post_meta($post_id, 'upgraded_by', true);
-			$dealer_name = get_user_meta($upgraded_id, 'dealer_name', true);
-			$distributor_name = get_user_meta($upgraded_id, 'distributor_name', true);
-			$dealer_contact_fname = get_user_meta($upgraded_id, 'contact_fname', true);
-			$distributor_contact_fname = get_user_meta($upgraded_id, 'distributor_contact_fname', true);
-			$admin_name = get_user_meta($upgraded_id, 'first_name', true);
-			$users = get_user_by('login', $code);
-			$user_id = $users->ID;
-			$fname = get_user_meta($user_id, 'first_name', true);
-			$lname = get_user_meta($user_id, 'last_name', true);
-
-			$code_prefix = get_post_meta($post_id, '_pmsafe_code_prefix', true);
-
-			$code_dealer_login =  get_post_meta($post_id, '_pmsafe_dealer', true);
-			$dealer_users = get_user_by('login', $code_dealer_login);
-			$dealer_id = $dealer_users->ID;
-			$distributor_id = get_user_meta($dealer_id, 'dealer_distributor_name', true);
-
-			$dealer_price_arr = get_user_meta($dealer_id, 'pricing_package', true);
-			$distributor_price_arr = get_user_meta($distributor_id, 'pricing_package', true);
-			$dealer_cost = $dealer_price_arr[$code_prefix]['dealer_cost'];
-			$distributor_cost = $distributor_price_arr[$code_prefix]['distributor_cost'];
-			$users = get_user_by('login', $code);
-			$user_id = $users->ID;
-			$vehicle_info = get_user_meta($user_id, 'pmsafe_vehicle_info', true);
-			$vin = $vehicle_info[$code]['pmsafe_vin'];
-
-			if ($dealer_name) {
-				$upgraded_by = $dealer_name;
-			}
-			if ($distributor_name) {
-				$upgraded_by = $distributor_name;
-			}
-			if ($dealer_contact_fname) {
-				$upgraded_by = $dealer_contact_fname;
-			}
-			if ($distributor_contact_fname) {
-				$upgraded_by = $distributor_contact_fname;
-			}
-			if ($admin_name) {
-				$upgraded_by = $admin_name;
-			}
-			$name = $fname . ' ' . $lname;
-			if ($login != '') {
-				if (!$setStart)
-					$datepicker1 = $upgraded_date;
-
-				if (!$setExpire)
-					$datepicker2 = $upgraded_date;
-				if ($upgraded_date >= $datepicker1 && $upgraded_date <= $datepicker2) {
-
-					if (in_array($code, $check_array)) {
-
-						if ($policy == "upgraded") {
-
-							if ($code_prefix == $package) {
-								$data[] = array(
-									'registration_number' => $code,
-									'original_policy' => $bulk_prefix,
-									'upgraded_policy' => $code_prefix,
-									'upgraded_by' => $upgraded_by,
-									'upgraded_date' => $upgraded_date,
-									'customer_name' => $name,
-									'dealer_cost' => $dealer_cost,
-									'distributor_cost' => $distributor_cost,
-									'vin' => $vin
-								);
-							}
-						} else if ($policy == "original") {
-							if ($bulk_prefix == $package) {
-								$data[] = array(
-									'registration_number' => $code,
-									'original_policy' => $bulk_prefix,
-									'upgraded_policy' => $code_prefix,
-									'upgraded_by' => $upgraded_by,
-									'upgraded_date' => $upgraded_date,
-									'customer_name' => $name,
-									'dealer_cost' => $dealer_cost,
-									'distributor_cost' => $distributor_cost,
-									'vin' => $vin
-								);
-							}
-						} else {
-
-							$data[] = array(
-								'registration_number' => $code,
-								'original_policy' => $bulk_prefix,
-								'upgraded_policy' => $code_prefix,
-								'upgraded_by' => $upgraded_by,
-								'upgraded_date' => $upgraded_date,
-								'customer_name' => $name,
-								'dealer_cost' => $dealer_cost,
-								'distributor_cost' => $distributor_cost,
-								'vin' => $vin
-							);
-						}
-					}
-				}
-			} else {
-				if ($distributor != '' && $dealer == '') {
-					if (!$setStart)
-						$datepicker1 = $upgraded_date;
-
-					if (!$setExpire)
-						$datepicker2 = $upgraded_date;
-					if ($upgraded_date >= $datepicker1 && $upgraded_date <= $datepicker2) {
-
-						if (in_array($code, $check_array)) {
-
-							if ($policy == "upgraded") {
-
-								if ($code_prefix == $package) {
-									$data[] = array(
-										'registration_number' => $code,
-										'original_policy' => $bulk_prefix,
-										'upgraded_policy' => $code_prefix,
-										'upgraded_by' => $upgraded_by,
-										'upgraded_date' => $upgraded_date,
-										'customer_name' => $name,
-										'dealer_cost' => $dealer_cost,
-										'distributor_cost' => $distributor_cost,
-										'vin' => $vin
-									);
-								}
-							} else if ($policy == "original") {
-								if ($bulk_prefix == $package) {
-									$data[] = array(
-										'registration_number' => $code,
-										'original_policy' => $bulk_prefix,
-										'upgraded_policy' => $code_prefix,
-										'upgraded_by' => $upgraded_by,
-										'upgraded_date' => $upgraded_date,
-										'customer_name' => $name,
-										'dealer_cost' => $dealer_cost,
-										'distributor_cost' => $distributor_cost,
-										'vin' => $vin
-									);
-								}
-							} else {
-
-								$data[] = array(
-									'registration_number' => $code,
-									'original_policy' => $bulk_prefix,
-									'upgraded_policy' => $code_prefix,
-									'upgraded_by' => $upgraded_by,
-									'upgraded_date' => $upgraded_date,
-									'customer_name' => $name,
-									'dealer_cost' => $dealer_cost,
-									'distributor_cost' => $distributor_cost,
-									'vin' => $vin
-								);
-							}
-						}
-					}
-				} else if ($dealer != '' && $distributor != '') {
-					if (!$setStart)
-						$datepicker1 = $upgraded_date;
-
-					if (!$setExpire)
-						$datepicker2 = $upgraded_date;
-					if ($upgraded_date >= $datepicker1 && $upgraded_date <= $datepicker2) {
-
-						if (in_array($code, $check_array)) {
-
-							if ($policy == "upgraded") {
-
-								if ($code_prefix == $package) {
-									$data[] = array(
-										'registration_number' => $code,
-										'original_policy' => $bulk_prefix,
-										'upgraded_policy' => $code_prefix,
-										'upgraded_by' => $upgraded_by,
-										'upgraded_date' => $upgraded_date,
-										'customer_name' => $name,
-										'dealer_cost' => $dealer_cost,
-										'distributor_cost' => $distributor_cost,
-										'vin' => $vin
-									);
-								}
-							} else if ($policy == "original") {
-								if ($bulk_prefix == $package) {
-									$data[] = array(
-										'registration_number' => $code,
-										'original_policy' => $bulk_prefix,
-										'upgraded_policy' => $code_prefix,
-										'upgraded_by' => $upgraded_by,
-										'upgraded_date' => $upgraded_date,
-										'customer_name' => $name,
-										'dealer_cost' => $dealer_cost,
-										'distributor_cost' => $distributor_cost,
-										'vin' => $vin
-									);
-								}
-							} else {
-
-								$data[] = array(
-									'registration_number' => $code,
-									'original_policy' => $bulk_prefix,
-									'upgraded_policy' => $code_prefix,
-									'upgraded_by' => $upgraded_by,
-									'upgraded_date' => $upgraded_date,
-									'customer_name' => $name,
-									'dealer_cost' => $dealer_cost,
-									'distributor_cost' => $distributor_cost,
-									'vin' => $vin
-								);
-							}
-						}
-					}
-				} else {
-					if (!$setStart)
-						$datepicker1 = $upgraded_date;
-
-					if (!$setExpire)
-						$datepicker2 = $upgraded_date;
-					if ($upgraded_date >= $datepicker1 && $upgraded_date <= $datepicker2) {
-						if ($policy == "upgraded") {
-							if ($code_prefix == $package) {
-
-								$data[] = array(
-									'registration_number' => $code,
-									'original_policy' => $bulk_prefix,
-									'upgraded_policy' => $code_prefix,
-									'upgraded_by' => $upgraded_by,
-									'upgraded_date' => $upgraded_date,
-									'customer_name' => $name,
-									'dealer_cost' => $dealer_cost,
-									'distributor_cost' => $distributor_cost,
-									'vin' => $vin
-								);
-							}
-						} else if ($policy == "original") {
-							if ($bulk_prefix == $package) {
-								$data[] = array(
-									'registration_number' => $code,
-									'original_policy' => $bulk_prefix,
-									'upgraded_policy' => $code_prefix,
-									'upgraded_by' => $upgraded_by,
-									'upgraded_date' => $upgraded_date,
-									'customer_name' => $name,
-									'dealer_cost' => $dealer_cost,
-									'distributor_cost' => $distributor_cost,
-									'vin' => $vin
-								);
-							}
-						} else {
-
-							$data[] = array(
-								'registration_number' => $code,
-								'original_policy' => $bulk_prefix,
-								'upgraded_policy' => $code_prefix,
-								'upgraded_by' => $upgraded_by,
-								'upgraded_date' => $upgraded_date,
-								'customer_name' => $name,
-								'dealer_cost' => $dealer_cost,
-								'distributor_cost' => $distributor_cost,
-								'vin' => $vin
-							);
-						}
-					}
-				}
-			}
-		}
 		echo '<div class="table-responsive">';
 
 		echo '<table id="mebership_date_table" class="display nowrap" style="width:100%">';
@@ -3142,48 +2873,290 @@ class Permasafe_User_Pro_Admin
 		echo '</thead>';
 
 		echo '<tbody id="">';
-		$count = 1;
+		if ($login != '') {
+			if (in_array('author', $role)) {
 
-		foreach ($data as $result) {
-			echo '<tr>';
+				$distributors = get_users(array('search' => $login));
+			}
+			if (in_array('contributor', $role)) {
 
-			echo '<td style="text-align:center;">';
-			echo $result['registration_number'];
-			echo '</td>';
+				$dealers = get_user_by('login', $login);
+				$dealer_id = $dealers->ID;
+				$distributor_login = get_user_meta($dealer_id, 'dealer_distributor_name', true);
+				$distributors = get_users(array('search' => $distributor_login));
+			}
+		} else {
+			if ($distributor != '' && $dealer == '') {
 
-			echo '<td>';
-			echo $result['customer_name'];
-			echo '</td>';
+				$distributors = get_users(array('search' => $distributor));
+			} else if ($dealer != '' && $distributor != '') {
 
-			echo '<td style="text-align:center;">';
-			echo $result['vin'];
-			echo '</td>';
+				$dealers = get_user_by('login', $dealer);
+				$dealer_id = $dealers->ID;
+				$distributor_login = get_user_meta($dealer_id, 'dealer_distributor_name', true);
+				$distributors = get_users(array('search' => $distributor_login));
+			} else {
 
-			echo '<td style="text-align:center;">';
-			echo $result['original_policy'];
-			echo '</td>';
+				$distributors = get_users('role=author');
+			}
+		}
+		foreach ($distributors as $distributor) {
+			$distributor_id = $distributor->ID;
+			$distributor_name = get_user_meta($distributor_id, 'distributor_name', true);
+			echo '<tr style="background-color: #0065a7;font-weight: 700;color: #fff;">';
+			echo '<td>' . $distributor_name . '</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>';
+			if ($login != '') {
 
-			echo '<td style="text-align:center;">';
-			echo $result['upgraded_policy'];
-			echo '</td>';
+				if (in_array('contributor', $role)) {
+					$dealers = get_users(array('search' => $login));
+				}
+				if (in_array('author', $role)) {
+					$dealers =  get_users(
+						array(
+							'meta_key' => 'dealer_distributor_name',
+							'meta_value' => $distributor_id
+						)
+					);
+				}
+			} elseif ($dealer != '' && $distributor != '') {
+				$dealers = get_users(array('search' => $dealer));
+			} else {
+				$dealers =  get_users(
+					array(
+						'meta_key' => 'dealer_distributor_name',
+						'meta_value' => $distributor_id
+					)
+				);
+			}
+			foreach ($dealers as $dealer) {
+				$dealer_id = $dealer->ID;
+				$dealer_login = $dealer->user_login;
 
-			echo '<td>';
-			echo $result['upgraded_by'];
-			echo '</td>';
+				$dealer_arr = get_code_by_dealer_login($dealer_login);
+				$dealer_name = get_user_meta($dealer_id, 'dealer_name', true);
+				echo '<tr style="background-color: #008000;font-weight: 700;color: #fff;">';
+				echo '<td>' . $dealer_name . '</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>';
+				echo '</tr>';
+				$membership_results = $wpdb->get_results('SELECT post_id FROM wp_postmeta WHERE meta_key = "is_upgraded" and meta_value ="1"');
+				foreach ($membership_results as $str) {
+					$post_id = $str->post_id;
+					$code_status = get_post_meta($post_id, '_pmsafe_code_status', true);
+					if ($code_status == 'used') {
+						$bulk_id = get_post_meta($post_id, '_pmsafe_bulk_invitation_id', true);
 
-			echo '<td style="text-align:center;">';
-			echo $result['upgraded_date'];
-			echo '</td>';
+						$bulk_prefix = get_post_meta($post_id, '_pmsafe_invitation_prefix', true);
 
-			echo '<td style="text-align:center;">';
-			echo (($result['dealer_cost']) ? '$' . $result['dealer_cost'] : '-');
-			echo '</td>';
+						// $bulk_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
+						$code = get_post_meta($post_id, '_pmsafe_invitation_code', true);
+						$upgraded_id = get_post_meta($post_id, 'upgraded_by', true);
+						$dealer_name = get_user_meta($upgraded_id, 'dealer_name', true);
+						$distributor_name = get_user_meta($upgraded_id, 'distributor_name', true);
+						$dealer_contact_fname = get_user_meta($upgraded_id, 'contact_fname', true);
+						$distributor_contact_fname = get_user_meta($upgraded_id, 'distributor_contact_fname', true);
+						$admin_name = get_user_meta($upgraded_id, 'first_name', true);
+						$users = get_user_by('login', $code);
+						$user_id = $users->ID;
+						$fname = get_user_meta($user_id, 'first_name', true);
+						$lname = get_user_meta($user_id, 'last_name', true);
 
-			echo '<td style="text-align:center;">';
-			echo (($result['distributor_cost']) ? '$' . $result['distributor_cost'] : '-');
-			echo '</td>';
+						$code_prefix = get_post_meta($post_id, '_pmsafe_code_prefix', true);
 
-			echo '</tr>';
+						$code_dealer_login =  get_post_meta($post_id, '_pmsafe_dealer', true);
+						$dealer_users = get_user_by('login', $code_dealer_login);
+						$dealer_id = $dealer_users->ID;
+						$distributor_id = get_user_meta($dealer_id, 'dealer_distributor_name', true);
+
+						$dealer_price_arr = get_user_meta($dealer_id, 'pricing_package', true);
+						$distributor_price_arr = get_user_meta($distributor_id, 'pricing_package', true);
+						$dealer_cost = $dealer_price_arr[$code_prefix]['dealer_cost'];
+						$distributor_cost = $distributor_price_arr[$code_prefix]['distributor_cost'];
+
+						$users = get_user_by('login', $code);
+						$user_id = $users->ID;
+						$vehicle_info = get_user_meta($user_id, 'pmsafe_vehicle_info', true);
+						$vin = $vehicle_info[$code]['pmsafe_vin'];
+
+						$upgraded_date = get_post_meta($post_id, 'upgraded_date', true);
+						if (in_array($code, $dealer_arr)) {
+							if (!$setStart)
+								$datepicker1 = $upgraded_date;
+
+							if (!$setExpire)
+								$datepicker2 = $upgraded_date;
+
+							if ($upgraded_date >= $datepicker1 && $upgraded_date <= $datepicker2) {
+								if ($policy == "upgraded") {
+									if ($code_prefix == $package) {
+										echo '<tr>';
+										echo '<td style="text-align:center;">';
+										echo $code;
+										echo '</td>';
+
+										echo '<td>';
+										echo $fname . ' ' . $lname;
+										echo '</td>';
+
+										echo '<td style="text-align:center;">';
+										echo $vin;
+										echo '</td>';
+
+										echo '<td style="text-align:center;">';
+										echo $bulk_prefix;
+										echo '</td>';
+
+										echo '<td style="text-align:center;">';
+										echo $code_prefix;
+										echo '</td>';
+
+
+										echo '<td>';
+										if ($dealer_name) {
+											echo $dealer_name;
+										}
+										if ($distributor_name) {
+											echo $distributor_name;
+										}
+										if ($dealer_contact_fname) {
+											echo $dealer_contact_fname;
+										}
+										if ($distributor_contact_fname) {
+											echo $distributor_contact_fname;
+										}
+										if ($admin_name) {
+											echo $admin_name;
+										}
+										echo '</td>';
+
+										echo '<td style="text-align:center;">';
+										echo get_post_meta($post_id, 'upgraded_date', true);
+										echo '</td>';
+
+										echo '<td style="text-align:center;">';
+										echo (($dealer_cost) ? '$' . $dealer_cost : '-');
+										echo '</td>';
+
+										echo '<td style="text-align:center;">';
+										echo (($distributor_cost) ? '$' . $distributor_cost : '-');
+										echo '</td>';
+
+										echo '</tr>';
+									}
+								} else if ($policy == "original") {
+									if ($bulk_prefix == $package) {
+										echo '<tr>';
+										echo '<td style="text-align:center;">';
+										echo $code;
+										echo '</td>';
+
+										echo '<td>';
+										echo $fname . ' ' . $lname;
+										echo '</td>';
+
+										echo '<td style="text-align:center;">';
+										echo $vin;
+										echo '</td>';
+
+										echo '<td style="text-align:center;">';
+										echo $bulk_prefix;
+										echo '</td>';
+
+										echo '<td style="text-align:center;">';
+										echo $code_prefix;
+										echo '</td>';
+
+
+										echo '<td>';
+										if ($dealer_name) {
+											echo $dealer_name;
+										}
+										if ($distributor_name) {
+											echo $distributor_name;
+										}
+										if ($dealer_contact_fname) {
+											echo $dealer_contact_fname;
+										}
+										if ($distributor_contact_fname) {
+											echo $distributor_contact_fname;
+										}
+										if ($admin_name) {
+											echo $admin_name;
+										}
+										echo '</td>';
+
+										echo '<td style="text-align:center;">';
+										echo get_post_meta($post_id, 'upgraded_date', true);
+										echo '</td>';
+
+										echo '<td style="text-align:center;">';
+										echo (($dealer_cost) ? '$' . $dealer_cost : '-');
+										echo '</td>';
+
+										echo '<td style="text-align:center;">';
+										echo (($distributor_cost) ? '$' . $distributor_cost : '-');
+										echo '</td>';
+
+										echo '</tr>';
+									}
+								} else {
+									echo '<tr>';
+									echo '<td style="text-align:center;">';
+									echo $code;
+									echo '</td>';
+
+									echo '<td>';
+									echo $fname . ' ' . $lname;
+									echo '</td>';
+
+									echo '<td style="text-align:center;">';
+									echo $vin;
+									echo '</td>';
+
+									echo '<td style="text-align:center;">';
+									echo $bulk_prefix;
+									echo '</td>';
+
+									echo '<td style="text-align:center;">';
+									echo $code_prefix;
+									echo '</td>';
+
+
+									echo '<td>';
+									if ($dealer_name) {
+										echo $dealer_name;
+									}
+									if ($distributor_name) {
+										echo $distributor_name;
+									}
+									if ($dealer_contact_fname) {
+										echo $dealer_contact_fname;
+									}
+									if ($distributor_contact_fname) {
+										echo $distributor_contact_fname;
+									}
+									if ($admin_name) {
+										echo $admin_name;
+									}
+									echo '</td>';
+
+									echo '<td style="text-align:center;">';
+									echo get_post_meta($post_id, 'upgraded_date', true);
+									echo '</td>';
+
+									echo '<td style="text-align:center;">';
+									echo (($dealer_cost) ? '$' . $dealer_cost : '-');
+									echo '</td>';
+
+									echo '<td style="text-align:center;">';
+									echo (($distributor_cost) ? '$' . $distributor_cost : '-');
+									echo '</td>';
+
+									echo '</tr>';
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 		echo '</tbody>';
 		echo '</table>';

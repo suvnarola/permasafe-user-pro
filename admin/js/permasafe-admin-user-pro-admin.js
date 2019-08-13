@@ -1233,22 +1233,40 @@ jQuery(document).ready(function () {
             action: 'delete_invite_codes',
             post_id: post_id,
         };
-        if (confirm('Are you sure to Delete?')) {
-            jQuery('.perma-admin-loader').show();
-            jQuery.ajax({
-                type: 'POST',
-                url: pmAjax.ajaxurl,
-                data: data,
-                success: function (response) {
-                    jQuery('.perma-admin-loader').hide();
-                    location.reload();
-                },
-                dataType: 'html'
-            });
-            return false;
-        } else {
-            alert('Code is not deleted.');
-        }
+        swal({
+            title: "Are you sure?",
+            text: "It will permanently deleted !",
+            icon: "warning",
+            buttons: true,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                jQuery('.perma-admin-loader').show();
+                jQuery.ajax({
+                    type: 'POST',
+                    url: pmAjax.ajaxurl,
+                    data: data,
+                    success: function (response) {
+                        jQuery('.perma-admin-loader').hide();
+                        swal({
+                            title: "Deleted!",
+                            text: "Invitation Code has been deleted. Press OK button.",
+                            icon: "success",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false,
+                        }).then(function () {
+                            location.reload();
+                        })
+                    },
+                    dataType: 'html'
+                });
+                return false;
+            } else {
+                swal("Invitation Code is not deleted !");
+            }
+        });
     });
 
     jQuery(document).on("click", "#delete_code_button", function (e) {
@@ -1328,22 +1346,41 @@ jQuery(document).ready(function () {
             action: 'reset_code',
             post_id: post_id
         };
-        if (confirm('Are you sure to Delete?')) {
-            jQuery.ajax({
-                type: 'POST',
-                url: pmAjax.ajaxurl,
-                data: data,
-                success: function (response) {
-                    alert(response);
-                    location.reload(true);
+        swal({
+            title: "Are you sure?",
+            text: "It will reset code!",
+            icon: "warning",
+            buttons: true,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                jQuery('.perma-admin-loader').show();
+                jQuery.ajax({
+                    type: 'POST',
+                    url: pmAjax.ajaxurl,
+                    data: data,
+                    success: function (response) {
+                        jQuery('.perma-admin-loader').hide();
+                        swal({
+                            title: "Reset Successfully!",
+                            text: "Invitation Code has been Reseted. Press OK button.",
+                            icon: "success",
+                            closeOnClickOutside: false,
+                            closeOnEsc: false,
+                        }).then(function () {
+                            location.reload();
+                        })
 
-                },
-                dataType: 'html'
-            });
-            return false;
-        } else {
-            alert('Code is not deleted.');
-        }
+                    },
+                    dataType: 'html'
+                });
+                return false;
+            } else {
+                swal("Invitaion Code is not reseted !");
+            }
+        });
     });
 
     jQuery(document).on("click", "#search-batch-code", function (e) {
@@ -1519,6 +1556,9 @@ jQuery(document).ready(function () {
         "order": [[17, "desc"]],
         orderCellsTop: true,
         fixedHeader: true,
+        columnDefs: [
+            { type: 'natural-nohtml', targets: 0 }
+        ],
         buttons: [
             {
                 extend: 'csv',
@@ -2386,8 +2426,14 @@ jQuery(document).ready(function () {
         dom: 'Bfrtip',
         responsive: true,
         "pagingType": "input",
+        "pageLength": 20,
         orderCellsTop: true,
         fixedHeader: true,
+        "ordering": false,
+        'columnDefs': [{
+            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8], /* column index */
+            'orderable': false, /* true or false */
+        }],
         buttons: [
             {
 
@@ -2510,8 +2556,14 @@ jQuery(document).ready(function () {
                         dom: 'Bfrtip',
                         "pagingType": "input",
                         responsive: true,
+                        "pageLength": 20,
                         orderCellsTop: true,
                         fixedHeader: true,
+                        "ordering": false,
+                        'columnDefs': [{
+                            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8], /* column index */
+                            'orderable': false, /* true or false */
+                        }],
                         buttons: [
                             {
 
