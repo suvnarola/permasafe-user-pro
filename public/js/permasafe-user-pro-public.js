@@ -991,6 +991,7 @@ jQuery(document).ready(function () {
         jQuery('.nisl_address').prop("disabled", false);
         jQuery('.nisl_state').prop("disabled", false);
         jQuery('.nisl_phone').prop("disabled", false);
+        jQuery('.nisl_password').prop("disabled", false);
         jQuery(".btn_nisl_edit").css("display", "none");
         jQuery("#pmsafe_save_user_info").css("display", "block");
 
@@ -1088,14 +1089,33 @@ jQuery(document).ready(function () {
 
                     jQuery('.perma-loader').hide();
                     var obj = jQuery.parseJSON(response);
-                    console.log(obj);
+
                     if (obj.status == true) {
+                        if (obj.change_password == 1) {
+                            var text = 'You have changed password. So, You need to login again. Press OK button.'
+                            swal({
+                                title: "Successfully Updated!",
+                                text: text,
+                                icon: "success",
+                                closeOnClickOutside: false,
+                                closeOnEsc: false,
+                            }).then(function () {
+                                window.location = obj.redirect;
+                            })
+                        }
+                        if (obj.change_password == 0) {
+                            var text = 'Press OK button.'
+                            swal({
+                                title: "Successfully Updated!",
+                                text: text,
+                                icon: "success",
+                                closeOnClickOutside: false,
+                                closeOnEsc: false,
+                            }).then(function () {
+                                location.reload();
+                            })
+                        }
 
-                        window.location.replace(obj.redirect);
-                        jQuery('#pmsafe-response').hide();
-                    } else {
-
-                        jQuery('#pmsafe-response').html(obj.message);
                     }
                 }
             });

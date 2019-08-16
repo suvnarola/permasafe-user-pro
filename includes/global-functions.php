@@ -366,6 +366,9 @@ function pmsafe_warranty_user_info_card($user_id)
     $html .= '<div class="pdf-div">';
     $html .= '<label class="pdf-label">Email:</label> <input type="text" value="' . $user->data->user_email . '" disabled/>';
     $html .= '</div>';
+    $html .= '<div class="pdf-div">';
+    $html .= '<label class="pdf-label">Password:</label> <input type="password" value="" class="nisl_password" name="nisl_password" id="nisl_password" disabled/>';
+    $html .= '</div>';
 
     $html .= '</div>';
 
@@ -572,14 +575,14 @@ function pmsafe_warranty_card($user_id, $membercode)
     $html .= '<a href="' . get_site_url() . '/perma-warranty-pdf/?membercode=' . $membercode . '" class="download-pdf">Download as a PDF</a>';
     ?>
 
-    <script>
-        function print() {
-            var objFra = document.getElementById('myFrame');
-            objFra.contentWindow.focus();
-            objFra.contentWindow.print();
-        }
-    </script>
-    <?php
+<script>
+    function print() {
+        var objFra = document.getElementById('myFrame');
+        objFra.contentWindow.focus();
+        objFra.contentWindow.print();
+    }
+</script>
+<?php
     $html .= '</div>';
     $html .= '<div class="perma-customer-info">';
     $html .= '<div class="pdf-div">';

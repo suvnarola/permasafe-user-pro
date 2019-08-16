@@ -471,12 +471,15 @@ class Permasafe_User_Pro_Public
         $para_log = $_GET['param'];
         $s14 = 's14';
         $p32 = 'p32';
-
+        $r56 = 'r56';
         if ($para_log == $s14) {
             $translated = str_ireplace('Username or Email Address',  'Dealer Number',  $translating);
             return $translated;
         } elseif ($para_log == $p32) {
             $translated = str_ireplace('Username or Email Address',  'Distributor Number',  $translating);
+            return $translated;
+        } elseif ($para_log == $r56) {
+            $translated = str_ireplace('Username or Email Address',  'Username',  $translating);
             return $translated;
         } else {
             $translated = str_ireplace('Username or Email Address',  'Warrranty Registration Number',  $translating);
@@ -738,33 +741,33 @@ class Permasafe_User_Pro_Public
                     $pdf_link = get_post_meta($code_id, 'pmsafe_pdf_link', true);
 
                     ?>
-                    <div class='message'>
-                        <div class='check'>
-                            &#10003;
-                        </div>
-                        <p>
-                            Success
-                        </p>
-                        <p>
-                            <?php echo 'Registration of Code <span style="color:#357aba">' . $code . '</span> was Successful.' ?>
-                        </p>
-                        <p>
-                            <a href="<?php echo $pdf_link; ?>" target="_blank" id="view-pdf">View PDF</a>
-                            <iframe src="<?php echo $pdf_link; ?>" id="myFrame" frameborder="0" style="border:0;display:none;" width="300" height="300"></iframe>
-                            <input type="button" id="print-pdf" onclick="print()" value="Print PDF" />
-                            <script>
-                                function print() {
-                                    var objFra = document.getElementById('myFrame');
-                                    objFra.contentWindow.focus();
-                                    objFra.contentWindow.print();
-                                }
-                            </script>
-                        </p>
-                        <a href="<?php echo get_site_url(); ?>/dealer-account/" id='ok'>
-                            OK
-                        </a>
-                    </div>
-                <?php
+<div class='message'>
+    <div class='check'>
+        &#10003;
+    </div>
+    <p>
+        Success
+    </p>
+    <p>
+        <?php echo 'Registration of Code <span style="color:#357aba">' . $code . '</span> was Successful.' ?>
+    </p>
+    <p>
+        <a href="<?php echo $pdf_link; ?>" target="_blank" id="view-pdf">View PDF</a>
+        <iframe src="<?php echo $pdf_link; ?>" id="myFrame" frameborder="0" style="border:0;display:none;" width="300" height="300"></iframe>
+        <input type="button" id="print-pdf" onclick="print()" value="Print PDF" />
+        <script>
+            function print() {
+                var objFra = document.getElementById('myFrame');
+                objFra.contentWindow.focus();
+                objFra.contentWindow.print();
+            }
+        </script>
+    </p>
+    <a href="<?php echo get_site_url(); ?>/dealer-account/" id='ok'>
+        OK
+    </a>
+</div>
+<?php
                 }
                 $customer_arr = get_user_by_dealer($dealer_username);
 
@@ -1316,33 +1319,33 @@ class Permasafe_User_Pro_Public
                         $pdf_link = get_post_meta($code_id, 'pmsafe_pdf_link', true);
 
                         ?>
-                        <div class='message'>
-                            <div class='check'>
-                                &#10004;
-                            </div>
-                            <p>
-                                Success
-                            </p>
-                            <p>
-                                <?php echo 'Registration of Code <span style="color:#71c341">' . $code . '</span> was Successful.' ?>
-                            </p>
-                            <p>
-                                <a href="<?php echo $pdf_link; ?>" target="_blank" id="view-pdf">View PDF</a>
-                                <iframe src="<?php echo $pdf_link; ?>" id="myFrame" frameborder="0" style="border:0;display:none;" width="300" height="300"></iframe>
-                                <input type="button" id="print-pdf" onclick="print()" value="Print PDF" />
-                                <script>
-                                    function print() {
-                                        var objFra = document.getElementById('myFrame');
-                                        objFra.contentWindow.focus();
-                                        objFra.contentWindow.print();
-                                    }
-                                </script>
-                            </p>
-                            <a href="<?php echo get_site_url(); ?>/distributor-account/" id='ok'>
-                                OK
-                            </a>
-                        </div>
-                    <?php
+<div class='message'>
+    <div class='check'>
+        &#10004;
+    </div>
+    <p>
+        Success
+    </p>
+    <p>
+        <?php echo 'Registration of Code <span style="color:#71c341">' . $code . '</span> was Successful.' ?>
+    </p>
+    <p>
+        <a href="<?php echo $pdf_link; ?>" target="_blank" id="view-pdf">View PDF</a>
+        <iframe src="<?php echo $pdf_link; ?>" id="myFrame" frameborder="0" style="border:0;display:none;" width="300" height="300"></iframe>
+        <input type="button" id="print-pdf" onclick="print()" value="Print PDF" />
+        <script>
+            function print() {
+                var objFra = document.getElementById('myFrame');
+                objFra.contentWindow.focus();
+                objFra.contentWindow.print();
+            }
+        </script>
+    </p>
+    <a href="<?php echo get_site_url(); ?>/distributor-account/" id='ok'>
+        OK
+    </a>
+</div>
+<?php
                     }
                     if ($role['distributor-user'] == 1) {
                         $distributor_user_login = $current_user->user_login;
@@ -2685,13 +2688,13 @@ class Permasafe_User_Pro_Public
                 echo '<a href="' . esc_attr($vehicle_info['pmsafe_pdf_link']) . '" id="download-pdf" target="_blank" download style="display:none;">Download as a PDF</a>';
 
                 ?>
-                <script type="text/javascript">
-                    jQuery(window).load(function() {
-                        jQuery("#download-pdf")[0].click()
-                        window.location = "<?php echo get_site_url() . '/perma-warranty/' ?>";
-                    });
-                </script>
-            <?php
+<script type="text/javascript">
+    jQuery(window).load(function() {
+        jQuery("#download-pdf")[0].click()
+        window.location = "<?php echo get_site_url() . '/perma-warranty/' ?>";
+    });
+</script>
+<?php
             }
         } else {
             $location = get_site_url() . "/perma-register/";
@@ -2700,27 +2703,27 @@ class Permasafe_User_Pro_Public
         }
 
         ?>
-        <script type="text/javascript">
-            jQuery(document).bind("contextmenu", function(e) {
-                e.preventDefault();
-            });
+<script type="text/javascript">
+    jQuery(document).bind("contextmenu", function(e) {
+        e.preventDefault();
+    });
 
-            document.onkeydown = function(e) {
-                if (event.keyCode == 123) {
-                    return false;
-                }
-                if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
-                    return false;
-                }
-                if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
-                    return false;
-                }
-                if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
-                    return false;
-                }
-            }
-        </script>
-    <?php
+    document.onkeydown = function(e) {
+        if (event.keyCode == 123) {
+            return false;
+        }
+        if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+            return false;
+        }
+        if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+            return false;
+        }
+        if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+            return false;
+        }
+    }
+</script>
+<?php
 
     }
 
@@ -2935,6 +2938,20 @@ class Permasafe_User_Pro_Public
     {
         session_start();
         $user_id = get_current_user_id();
+        $new_password = $_POST['nisl_password'];
+        if ($new_password != '') {
+            wp_set_password($new_password, $user_id);
+            $is_pass_set = get_user_meta($user_id, 'is_pass_reset', true);
+            if ($is_pass_set != 1) {
+                update_user_meta($user_id, 'is_pass_reset', 1);
+            }
+            $change_password = 1;
+            $url = get_site_url();
+            $response = array('status' => true, 'change_password' => $change_password, 'redirect' => $url);
+        } else {
+            $change_password = 0;
+            $response = array('status' => true, 'change_password' => $change_password);
+        }
 
 
         $name = $_POST['nisl_name'];
@@ -2960,8 +2977,8 @@ class Permasafe_User_Pro_Public
         $phone = $_POST['nisl_phone'];
         update_user_meta($user_id, 'edit_pmsafe_phone_number', $phone);
 
-        $url = get_site_url() . '/my-account/';
-        $response = array('status' => true, 'redirect' => $url);
+        // $url = get_site_url() . '/my-account/';
+        // $response = array('status' => true, 'redirect' => $url);
         echo json_encode($response);
         die;
     }
@@ -4405,30 +4422,30 @@ class Permasafe_User_Pro_Public
         // show any error messages after form submission
         $this->perma_show_error_messages(); ?>
 
-        <?php if (isset($_GET['password-reset']) && $_GET['password-reset'] == 'true') { ?>
-            <div class="perma_message success" id="pmsafe-response">
-                <span class="perma-success"><?php _e('Password changed successfully', 'rcp'); ?></span>
-            </div>
-        <?php } ?>
-        <form id="perma_password_form" method="POST" action="<?php echo $current_url; ?>">
-            <fieldset>
-                <p>
-                    <label for="perma_user_pass"><?php _e('New Password', 'rcp'); ?></label>
-                    <input name="perma_user_pass" id="perma_user_pass" class="required" type="password" />
-                </p>
-                <p>
-                    <label for="perma_user_pass_confirm"><?php _e('Password Confirm', 'rcp'); ?></label>
-                    <input name="perma_user_pass_confirm" id="perma_user_pass_confirm" class="required" type="password" />
-                </p>
-                <p>
-                    <input type="hidden" name="perma_action" value="reset-password" />
-                    <input type="hidden" name="perma_redirect" value="<?php echo $redirect; ?>" />
-                    <input type="hidden" name="perma_password_nonce" value="<?php echo wp_create_nonce('rcp-password-nonce'); ?>" />
-                    <input id="perma_password_submit" type="submit" value="<?php _e('Change Password', 'pippin'); ?>" />
-                </p>
-            </fieldset>
-        </form>
-        <?php
+<?php if (isset($_GET['password-reset']) && $_GET['password-reset'] == 'true') { ?>
+<div class="perma_message success" id="pmsafe-response">
+    <span class="perma-success"><?php _e('Password changed successfully', 'rcp'); ?></span>
+</div>
+<?php } ?>
+<form id="perma_password_form" method="POST" action="<?php echo $current_url; ?>">
+    <fieldset>
+        <p>
+            <label for="perma_user_pass"><?php _e('New Password', 'rcp'); ?></label>
+            <input name="perma_user_pass" id="perma_user_pass" class="required" type="password" />
+        </p>
+        <p>
+            <label for="perma_user_pass_confirm"><?php _e('Password Confirm', 'rcp'); ?></label>
+            <input name="perma_user_pass_confirm" id="perma_user_pass_confirm" class="required" type="password" />
+        </p>
+        <p>
+            <input type="hidden" name="perma_action" value="reset-password" />
+            <input type="hidden" name="perma_redirect" value="<?php echo $redirect; ?>" />
+            <input type="hidden" name="perma_password_nonce" value="<?php echo wp_create_nonce('rcp-password-nonce'); ?>" />
+            <input id="perma_password_submit" type="submit" value="<?php _e('Change Password', 'pippin'); ?>" />
+        </p>
+    </fieldset>
+</form>
+<?php
         return ob_get_clean();
     }
 

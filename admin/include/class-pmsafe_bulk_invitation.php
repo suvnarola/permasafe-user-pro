@@ -443,12 +443,15 @@ class PMSafe_Bulk_Invitation{
                             $upgradable_prefix_str = get_post_meta($post_id,'upgradable_prefix',true);
                             $upgradable_prefix_arr = explode(",",$upgradable_prefix_str);
                             $benefit_prefix = pmsafe_get_meta_values( '_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish' );
+                            
                             $get_benifit_package = get_post_meta($post_id,'_pmsafe_invitation_prefix',true);
                                 echo '<select name="pmsafe_invitation_upgradable_prefix[]" id="pmsafe_invitation_upgradable_prefix" multiple="multiple" style="width: 300px">';
                                 foreach ($benefit_prefix as $prefix) {
-                                    
+                                    $post_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                                    $post = get_post($post_id);
+                                    $post_title = $post->post_title;
                                   if($prefix != $get_benifit_package){
-                                        echo '<option value="'.$prefix.'" '.( (in_array($prefix,$upgradable_prefix_arr)) ? "selected"   : "").'>'.$prefix.'</option>';
+                                        echo '<option value="'.$prefix.'" '.( (in_array($prefix,$upgradable_prefix_arr)) ? "selected"   : "").'>'.$post_title.'</option>';
                                   }
                                     // }
                                     // else{
@@ -759,9 +762,13 @@ class PMSafe_Bulk_Invitation{
     public function upgradable_dropdown(){
         $select = $_POST['select_val'];
         $benefit_prefix = pmsafe_get_meta_values( '_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish' );
+        
         foreach ($benefit_prefix as $prefix) {
+            $post_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+            $post = get_post($post_id);
+            $post_title = $post->post_title;
             if($prefix != $select){
-                echo '<option value="'.$prefix.'">'.$prefix.'</option>';
+                echo '<option value="'.$prefix.'">'.$post_title.'</option>';
             }
         }
         
