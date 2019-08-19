@@ -2204,6 +2204,12 @@ jQuery(document).ready(function () {
                     jQuery('#search_tbl').DataTable({
                         dom: 'Bfrtip',
                         "pagingType": "input",
+                        "pageLength": 20,
+                        "ordering": false,
+                        'columnDefs': [{
+                            'targets': [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13], /* column index */
+                            'orderable': false, /* true or false */
+                        }],
                         orderCellsTop: true,
                         fixedHeader: true,
                         buttons: [
@@ -2328,6 +2334,25 @@ jQuery(document).ready(function () {
             });
         }
         if (select == 3) {
+            jQuery('.input-filter-wrap').html('<label>Date: </label><input type="text" id="datepicker1" style="width:auto;"> <input type="text" id="datepicker2" style="width:auto;">');
+            jQuery("#datepicker1").datepicker({
+                dateFormat: 'yy-mm-dd',
+                onSelect: function (date) {
+                    var date2 = jQuery('#datepicker1').datepicker('getDate');
+                    date2.setDate(date2.getDate() + 1);
+                    jQuery('#datepicker2').datepicker('setDate', date2);
+                    //sets minDate to dt1 date + 1
+                    jQuery('#datepicker2').datepicker('option', 'minDate', date2);
+                }
+
+            });
+            jQuery("#datepicker2").datepicker({
+                dateFormat: 'yy-mm-dd',
+
+
+            });
+        }
+        if (select == 4) {
             jQuery('.input-filter-wrap').html('<label>Date: </label><input type="text" id="datepicker1" style="width:auto;"> <input type="text" id="datepicker2" style="width:auto;">');
             jQuery("#datepicker1").datepicker({
                 dateFormat: 'yy-mm-dd',

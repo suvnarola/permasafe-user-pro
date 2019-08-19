@@ -1389,25 +1389,25 @@ class Permasafe_User_Pro_Admin
 	{
 		if (get_post_type(get_the_ID()) == 'pmsafe_bulk_invi') {
 			?>
-			<script type="text/javascript">
-				jQuery(document).ready(function() {
-					jQuery('#search-submit').css('display', 'none');
-					jQuery('#post-search-input').css('display', 'none');
-					jQuery(".search-box").append("<input type='search' id='search-input' value=''><input type='button' id='search-batch-code' class='button' value='Search Batch Member Codes'>");
-				});
-			</script>
-		<?php
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+		jQuery('#search-submit').css('display', 'none');
+		jQuery('#post-search-input').css('display', 'none');
+		jQuery(".search-box").append("<input type='search' id='search-input' value=''><input type='button' id='search-batch-code' class='button' value='Search Batch Member Codes'>");
+	});
+</script>
+<?php
 		}
 		if (get_post_type(get_the_ID()) == 'pmsafe_invitecode') {
 			?>
-			<script type="text/javascript">
-				jQuery(document).ready(function() {
-					jQuery('#search-submit').css('display', 'none');
-					jQuery('#post-search-input').css('display', 'none');
-					jQuery(".search-box").append("<input type='search' id='individual-search-input' value=''><input type='button' id='search-individual-code' class='button' value='Search Member Codes'>");
-				});
-			</script>
-		<?php
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+		jQuery('#search-submit').css('display', 'none');
+		jQuery('#post-search-input').css('display', 'none');
+		jQuery(".search-box").append("<input type='search' id='individual-search-input' value=''><input type='button' id='search-individual-code' class='button' value='Search Member Codes'>");
+	});
+</script>
+<?php
 		}
 	}
 
@@ -2033,23 +2033,10 @@ class Permasafe_User_Pro_Admin
 		$datepicker1 = $_POST['datepicker1'];
 		$datepicker2 = $_POST['datepicker2'];
 		$select = $_POST['select'];
-		$dealer_name = $_POST['dealer_name'];
-		$distributor_name = $_POST['distributor_name'];
-		if ($dealer_name != '') {
-			$dealer_name = trim($dealer_name, ' ');
-
-			$dealer_array = get_code_by_dealer_login($dealer_name);
-		}
+		$dealer_login = $_POST['dealer_name'];
+		$distributor_login = $_POST['distributor_name'];
 
 
-		if ($distributor_name != '') {
-			$distributor_name = trim($distributor_name, ' ');
-
-			$users = get_user_by('login', $distributor_name);
-			$distributor_id = $users->ID;
-			$dis_array =  get_code_by_distributor_login($distributor_id);
-		}
-		// pr($dis_array);
 		$args = array(
 			'role'         => 'subscriber',
 		);
@@ -2066,343 +2053,8 @@ class Permasafe_User_Pro_Admin
 		$setStart = ($datepicker1 == '' || !isset($datepicker1)) ? false : true;
 		$setExpire = ($datepicker2 == '' || !isset($datepicker2)) ? false : true;
 
-		foreach ($query as $key => $value) {
-			$user_id = $value->user_id;
-
-			if (in_array($user_id, $check_array)) {
-
-				$nickname = get_user_meta($value->user_id, 'nickname', true);
-				$vehicle_info = get_user_meta($value->user_id, 'pmsafe_vehicle_info', false);
-				$post_id = $vehicle_info[0][$nickname]['pmsafe_member_code_id'];
-				$benefits_package = get_post_meta($vehicle_info[0][$nickname]['pmsafe_member_code_id'], '_pmsafe_code_prefix', true);
-				$term_length_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix', $benefits_package);
-				$term_length = get_post_meta($term_length_id, '_pmsafe_benefit_term_length', true);
-				$vehicle_registration_date = date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
-				$expiration_date = date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
-				$current_date = date('Y-m-d');
-
-				$posts = get_post($post_id);
-				$post_title = $posts->post_title;
-
-				$post_title = substr($post_title, 0, strpos($post_title, ' '));
-				if ($post_title == '') {
-					$post_title = '-';
-				} else {
-					$post_title = $post_title;
-				}
-
-				$login = get_post_meta($post_id, '_pmsafe_dealer', true);
-				$users = get_user_by('login', $login);
-				$dealer_id = $users->ID;
-				$dealername = get_user_meta($dealer_id, 'dealer_name', true);
-
-				$distributor_login = get_post_meta($post_id, '_pmsafe_distributor', true);
-				$dis_users = get_user_by('login', $distributor_login);
-				$distributor_id = $dis_users->ID;
-				$distributorname = get_user_meta($distributor_id, 'distributor_name', true);
-
-				$address1 = get_user_meta($value->user_id, 'pmsafe_address_1', true);
-				$address2 = get_user_meta($value->user_id, 'pmsafe_address_2', true);
-				$city = get_user_meta($value->user_id, 'pmsafe_city', true);
-				$state = get_user_meta($value->user_id, 'pmsafe_state', true);
-				$zip_code = get_user_meta($value->user_id, 'pmsafe_zip_code', true);
-				$vehicle_info = get_user_meta($value->user_id, 'pmsafe_vehicle_info', false);
-
-				//expired
-				if ($select == 1) {
-					if ($current_date > $expiration_date) {
-						// echo $expiration_date.'->'.$value->user_id.'<br/>';
-						if (!$setStart)
-							$datepicker1 = $expiration_date;
-
-						if (!$setExpire)
-							$datepicker2 = $expiration_date;
-
-						if (($expiration_date >= $datepicker1) && ($expiration_date <= $datepicker2)) {
 
 
-							if ($distributor_name != '') {
-								if ($dealer_name != '') {
-									if (in_array($nickname, $dealer_array)) {
-
-
-										$filter_array[] = array(
-											'user_id' => $user_id,
-											'code' => get_user_meta($user_id, 'nickname', true),
-											'fname' => get_user_meta($user_id, 'first_name', true),
-											'lname' => get_user_meta($user_id, 'last_name', true),
-											'address' => $address1 . ', ' . $address2 . ', ' . $city . ', ' . $state . ', ' . $zip_code,
-											'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
-											'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
-											'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
-											'package' => $benefits_package,
-											'bulk_member' => $post_title,
-											'dealer_name' => $dealername,
-											'distributor_name' => $distributorname,
-											'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
-											'expiration_date' => date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
-										);
-									}
-								} else {
-									if (in_array($nickname, $dis_array)) {
-										$filter_array[] = array(
-											'user_id' => $user_id,
-											'code' => get_user_meta($user_id, 'nickname', true),
-											'fname' => get_user_meta($user_id, 'first_name', true),
-											'lname' => get_user_meta($user_id, 'last_name', true),
-											'address' => $address1 . ', ' . $address2 . ', ' . $city . ', ' . $state . ', ' . $zip_code,
-											'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
-											'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
-											'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
-											'package' => $benefits_package,
-											'bulk_member' => $post_title,
-											'dealer_name' => $dealername,
-											'distributor_name' => $distributorname,
-											'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
-											'expiration_date' => date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
-										);
-									}
-								}
-							} else if ($dealer_name != '') {
-								if (in_array($nickname, $dealer_array)) {
-									$filter_array[] = array(
-										'user_id' => $user_id,
-										'code' => get_user_meta($user_id, 'nickname', true),
-										'fname' => get_user_meta($user_id, 'first_name', true),
-										'lname' => get_user_meta($user_id, 'last_name', true),
-										'address' => $address1 . ', ' . $address2 . ', ' . $city . ', ' . $state . ', ' . $zip_code,
-										'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
-										'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
-										'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
-										'package' => $benefits_package,
-										'bulk_member' => $post_title,
-										'dealer_name' => $dealername,
-										'distributor_name' => $distributorname,
-										'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
-										'expiration_date' => date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
-									);
-								}
-							} else {
-								$filter_array[] = array(
-									'user_id' => $user_id,
-									'code' => get_user_meta($user_id, 'nickname', true),
-									'fname' => get_user_meta($user_id, 'first_name', true),
-									'lname' => get_user_meta($user_id, 'last_name', true),
-									'address' => $address1 . ', ' . $address2 . ', ' . $city . ', ' . $state . ', ' . $zip_code,
-									'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
-									'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
-									'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
-									'package' => $benefits_package,
-									'bulk_member' => $post_title,
-									'dealer_name' => $dealername,
-									'distributor_name' => $distributorname,
-									'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
-									'expiration_date' => date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
-								);
-							}
-						}
-					}
-				} else if ($select == 2) { //expiring
-					$date1 = $current_date;
-					$date2 = $expiration_date;
-
-					$ts1 = strtotime($date1);
-					$ts2 = strtotime($date2);
-
-					$year1 = date('Y', $ts1);
-					$year2 = date('Y', $ts2);
-
-					$month1 = date('m', $ts1);
-					$month2 = date('m', $ts2);
-
-					$diff = (($year2 - $year1) * 12) + ($month2 - $month1);
-
-					if ($diff >= 1 && $diff <= 6) {
-
-
-						if (!$setStart)
-							$datepicker1 = $expiration_date;
-
-						if (!$setExpire)
-							$datepicker2 = $expiration_date;
-
-						if (($expiration_date >= $datepicker1) && ($expiration_date <= $datepicker2)) {
-							if ($distributor_name != '') {
-								if ($dealer_name != '') {
-									if (in_array($nickname, $dealer_array)) {
-										$filter_array[] = array(
-											'user_id' => $user_id,
-											'code' => get_user_meta($user_id, 'nickname', true),
-											'fname' => get_user_meta($user_id, 'first_name', true),
-											'lname' => get_user_meta($user_id, 'last_name', true),
-											'address' => $address1 . ', ' . $address2 . ', ' . $city . ', ' . $state . ', ' . $zip_code,
-											'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
-											'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
-											'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
-											'package' => $benefits_package,
-											'bulk_member' => $post_title,
-											'dealer_name' => $dealername,
-											'distributor_name' => $distributorname,
-											'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
-											'expiration_date' => date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
-										);
-									}
-								} else {
-									if (in_array($nickname, $dis_array)) {
-										$filter_array[] = array(
-											'user_id' => $user_id,
-											'code' => get_user_meta($user_id, 'nickname', true),
-											'fname' => get_user_meta($user_id, 'first_name', true),
-											'lname' => get_user_meta($user_id, 'last_name', true),
-											'address' => $address1 . ', ' . $address2 . ', ' . $city . ', ' . $state . ', ' . $zip_code,
-											'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
-											'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
-											'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
-											'package' => $benefits_package,
-											'bulk_member' => $post_title,
-											'dealer_name' => $dealername,
-											'distributor_name' => $distributorname,
-											'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
-											'expiration_date' => date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
-										);
-									}
-								}
-							} else if ($dealer_name != '') {
-								if (in_array($nickname, $dealer_array)) {
-									$filter_array[] = array(
-										'user_id' => $user_id,
-										'code' => get_user_meta($user_id, 'nickname', true),
-										'fname' => get_user_meta($user_id, 'first_name', true),
-										'lname' => get_user_meta($user_id, 'last_name', true),
-										'address' => $address1 . ', ' . $address2 . ', ' . $city . ', ' . $state . ', ' . $zip_code,
-										'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
-										'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
-										'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
-										'package' => $benefits_package,
-										'bulk_member' => $post_title,
-										'dealer_name' => $dealername,
-										'distributor_name' => $distributorname,
-										'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
-										'expiration_date' => date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
-									);
-								}
-							} else {
-
-								$filter_array[] = array(
-									'user_id' => $user_id,
-									'code' => get_user_meta($user_id, 'nickname', true),
-									'fname' => get_user_meta($user_id, 'first_name', true),
-									'lname' => get_user_meta($user_id, 'last_name', true),
-									'address' => $address1 . ', ' . $address2 . ', ' . $city . ', ' . $state . ', ' . $zip_code,
-									'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
-									'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
-									'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
-									'package' => $benefits_package,
-									'bulk_member' => $post_title,
-									'dealer_name' => $dealername,
-									'distributor_name' => $distributorname,
-									'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
-									'expiration_date' => date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
-								);
-							}
-						}
-					}
-				} else if ($select == 3) {  // current   
-					if ($current_date < $expiration_date) {
-						if (!$setStart)
-							$datepicker1 = $vehicle_registration_date;
-
-						if (!$setExpire)
-							$datepicker2 = $vehicle_registration_date;
-
-						if (($vehicle_registration_date >= $datepicker1 && $vehicle_registration_date <= $datepicker2)) {
-
-							if ($distributor_name != '') {
-
-								if ($dealer_name != '') {
-
-									if (in_array($nickname, $dealer_array)) {
-										$filter_array[] = array(
-											'user_id' => $user_id,
-											'code' => get_user_meta($user_id, 'nickname', true),
-											'fname' => get_user_meta($user_id, 'first_name', true),
-											'lname' => get_user_meta($user_id, 'last_name', true),
-											'address' => $address1 . ', ' . $address2 . ', ' . $city . ', ' . $state . ', ' . $zip_code,
-											'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
-											'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
-											'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
-											'package' => $benefits_package,
-											'bulk_member' => $post_title,
-											'dealer_name' => $dealername,
-											'distributor_name' => $distributorname,
-											'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
-											'expiration_date' => date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
-										);
-									}
-								} else {
-									if (in_array($nickname, $dis_array)) {
-										$filter_array[] = array(
-											'user_id' => $user_id,
-											'code' => get_user_meta($user_id, 'nickname', true),
-											'fname' => get_user_meta($user_id, 'first_name', true),
-											'lname' => get_user_meta($user_id, 'last_name', true),
-											'address' => $address1 . ', ' . $address2 . ', ' . $city . ', ' . $state . ', ' . $zip_code,
-											'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
-											'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
-											'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
-											'package' => $benefits_package,
-											'bulk_member' => $post_title,
-											'dealer_name' => $dealername,
-											'distributor_name' => $distributorname,
-											'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
-											'expiration_date' => date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
-										);
-									}
-								}
-							} else if ($dealer_name != '') {
-								if (in_array($nickname, $dealer_array)) {
-									$filter_array[] = array(
-										'user_id' => $user_id,
-										'code' => get_user_meta($user_id, 'nickname', true),
-										'fname' => get_user_meta($user_id, 'first_name', true),
-										'lname' => get_user_meta($user_id, 'last_name', true),
-										'address' => $address1 . ', ' . $address2 . ', ' . $city . ', ' . $state . ', ' . $zip_code,
-										'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
-										'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
-										'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
-										'package' => $benefits_package,
-										'bulk_member' => $post_title,
-										'dealer_name' => $dealername,
-										'distributor_name' => $distributorname,
-										'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
-										'expiration_date' => date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
-									);
-								}
-							} else {
-
-								$filter_array[] = array(
-									'user_id' => $user_id,
-									'code' => get_user_meta($user_id, 'nickname', true),
-									'fname' => get_user_meta($user_id, 'first_name', true),
-									'lname' => get_user_meta($user_id, 'last_name', true),
-									'address' => $address1 . ', ' . $address2 . ', ' . $city . ', ' . $state . ', ' . $zip_code,
-									'vehicle_information' => $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'],
-									'vin' =>  $vehicle_info[0][$nickname]['pmsafe_vin'],
-									'pdf_link' => $vehicle_info[0][$nickname]['pmsafe_pdf_link'],
-									'package' => $benefits_package,
-									'bulk_member' => $post_title,
-									'dealer_name' => $dealername,
-									'distributor_name' => $distributorname,
-									'registration_date' => date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])),
-									'expiration_date' => date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])))
-								);
-							}
-						}
-					}
-				}
-			}
-		}
-		// pr($query);
 		$html = '';
 		$html .= '<table id="search_tbl">';
 		$html .= '<thead>';
@@ -2480,120 +2132,612 @@ class Permasafe_User_Pro_Admin
 		$html .= '</thead>';
 		$html .= '<tbody>';
 
-		foreach ($filter_array as $key => $value) {
-			$html .= '<tr>';
+		$sql = "SELECT user_id FROM wp_usermeta WHERE meta_key='pmsafe_vehicle_info'";
+		$query = $wpdb->get_results($sql);
 
-			$html .= '<td>';
-			$html .= '<a href="" class="view-data" data-id="' . $value['user_id'] . '">' . $value['code'] . '</a>';
-			$html .= '</td>';
+		if ($distributor_login != '' && $dealer_login == '') {
 
-			$html .= '<td>';
-			$html .= '<a href="" class="view-data" data-id="' . $value['user_id'] . '">' . $value['fname'] . '</a>';
-			$html .= '</td>';
+			$distributors = get_users(array('search' => $distributor_login));
+		} else if ($distributor_login != '' && $dealer_login != '') {
 
-			$html .= '<td>';
-			$html .= '<a href="" class="view-data" data-id="' . $value['user_id'] . '">' . $value['lname'] . '</a>';
-			$html .= '</td>';
+			$dealers = get_user_by('login', $dealer_login);
+			$dealer_id = $dealers->ID;
+			$distributor_login = get_user_meta($dealer_id, 'dealer_distributor_name', true);
+			$distributors = get_users(array('search' => $distributor_login));
+		} else {
 
-			$html .= '<td>';
-			$html .= '<a href="" class="view-data" data-id="' . $value['user_id'] . '">' . $value['address'] . '</a>';
-			$html .= '</td>';
-
-
-			// pr($vehicle_info);
-			$url = get_site_url() . '/wp-includes/images/media/document.png';
-			$html .= '<td>';
-			$html .= '<a href="' . $value['pdf_link'] . '" target="blank"><img src="' . $url . '" class="attachment-thumbnail" style="width:20px !important"/></a>';
-			$html .= '</td>';
-
-			$html .= '<td class="nisl-pdf-link">';
-			$html .= $value['pdf_link'];
-			$html .= '</td>';
-
-			$html .= '<td class="nisl-pdf-link">';
-			$html .= $value['package'];
-			$html .= '</td>';
-
-			$html .= '<td class="nisl-pdf-link">';
-			$html .= $value['bulk_member'];
-			$html .= '</td>';
-
-			$html .= '<td class="nisl-pdf-link">';
-			$html .= $value['dealer_name'];
-			$html .= '</td>';
-
-			$html .= '<td class="nisl-pdf-link">';
-			$html .= $value['distributor_name'];;
-			$html .= '</td>';
-
-			$html .= '<td class="nisl-pdf-link">';
-			$html .= $value['vehicle_information'];
-			$html .= '</td>';
-
-			$html .= '<td class="nisl-pdf-link">';
-			$html .= $value['vin'];
-			$html .= '</td>';
-
-			$html .= '<td class="nisl-pdf-link">';
-			$html .= $value['registration_date'];
-			$html .= '</td>';
-
-
-			$html .= '<td class="nisl-pdf-link">';
-			$html .= $value['expiration_date'];
-			$html .= '</td>';
-
-			$view_customer_details_query_args = array(
-				'page'   => 'customers-lists',
-				'action' => 'view_customer_details',
-				'id'  => $value['user_id'],
-			);
-
-			$actions['view_customer_details'] = sprintf(
-				'<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
-				esc_url(wp_nonce_url(add_query_arg($view_customer_details_query_args, 'admin.php'), 'viewcustomerdetails_' . $value['user_id'])),
-				_x('view details', 'List table row action', 'wp-list-table-example')
-			);
-
-			$html .= '<td class="text-center">';
-			$html .= $actions["view_customer_details"];
-			$html .= '</td>';
-
-
-			$edit_customer_details_query_args = array(
-				'page'   => 'customers-lists',
-				'action' => 'edit_customer_details',
-				'id'  => $value['user_id'],
-			);
-
-			$actions['edit_customer_details'] = sprintf(
-				'<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
-				esc_url(wp_nonce_url(add_query_arg($edit_customer_details_query_args, 'admin.php'), 'editcustomerdetails_' . $value['user_id'])),
-				_x('edit details', 'List table row action', 'wp-list-table-example')
-			);
-
-			$html .= '<td class="text-center">';
-			$html .= $actions["edit_customer_details"];
-			$html .= '</td>';
-
-			$delete_customer_details_query_args = array(
-				'page'   => 'customers-lists',
-				'action' => 'delete_customer_details',
-				'id'  => $value['user_id'],
-			);
-
-			$actions['delete_customer_details'] = sprintf(
-				'<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
-				esc_url(wp_nonce_url(add_query_arg($delete_customer_details_query_args, 'admin.php'), 'deletecustomerdetails_' . $value['user_id'])),
-				_x('delete details', 'List table row action', 'wp-list-table-example')
-			);
-
-			$html .= '<td class="text-center">';
-			$html .= $actions["delete_customer_details"];
-			$html .= '</td>';
-
-			$html .= '</tr>';
+			$distributors = get_users('role=author');
 		}
+		foreach ($distributors as $distributor) {
+
+			$distributor_id = $distributor->ID;
+			$dis_name = get_user_meta($distributor_id, 'distributor_name', true);
+			$html .= '<tr style="background-color: #0065a7;font-weight: 700;color: #fff;">';
+			$html .= '<td>' . $dis_name . '</td><td></td><td></td><td></td><td></td><td class="nisl-pdf-link"></td><td class="nisl-pdf-link"></td><td class="nisl-pdf-link"></td><td class="nisl-pdf-link"></td><td class="nisl-pdf-link"></td><td class="nisl-pdf-link"></td><td class="nisl-pdf-link"></td><td class="nisl-pdf-link"></td><td class="nisl-pdf-link"></td><td></td><td></td><td></td>';
+			if ($dealer_login != '' && $dealer_login == '') {
+				$dealers =  get_users(
+					array(
+						'meta_key' => 'dealer_distributor_name',
+						'meta_value' => $distributor_id
+					)
+				);
+			} else if ($dealer_login != '' && $dealer_login != '') {
+				$dealers = get_users(array('search' => $dealer_login));
+			} else {
+				$dealers =  get_users(
+					array(
+						'meta_key' => 'dealer_distributor_name',
+						'meta_value' => $distributor_id
+					)
+				);
+			}
+
+			foreach ($dealers as $dealer) {
+
+				$dealer_id = $dealer->ID;
+				$deal_login = $dealer->user_login;
+
+				$dealer_arr = get_code_by_dealer_login($deal_login);
+				$deal_name = get_user_meta($dealer_id, 'dealer_name', true);
+				$html .= '<tr style="background-color: #008000;font-weight: 700;color: #fff;">';
+				$html .= '<td>' . $deal_name . '</td><td></td><td></td><td></td><td></td><td class="nisl-pdf-link"></td><td class="nisl-pdf-link"></td><td class="nisl-pdf-link"></td><td class="nisl-pdf-link"></td><td class="nisl-pdf-link"></td><td class="nisl-pdf-link"></td><td class="nisl-pdf-link"></td><td class="nisl-pdf-link"></td><td class="nisl-pdf-link"></td><td></td><td></td><td></td>';
+				$html .= '</tr>';
+
+				foreach ($query as $key => $value) {
+					$user_id = $value->user_id;
+					$nickname = get_user_meta($value->user_id, 'nickname', true);
+					if (in_array($nickname, $dealer_arr)) {
+						$nickname = get_user_meta($value->user_id, 'nickname', true);
+						$vehicle_info = get_user_meta($value->user_id, 'pmsafe_vehicle_info', false);
+						$post_id = $vehicle_info[0][$nickname]['pmsafe_member_code_id'];
+						$benefits_package = get_post_meta($vehicle_info[0][$nickname]['pmsafe_member_code_id'], '_pmsafe_code_prefix', true);
+						$term_length_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix', $benefits_package);
+						$term_length = get_post_meta($term_length_id, '_pmsafe_benefit_term_length', true);
+						$vehicle_registration_date = date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
+						$expiration_date = date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
+						$current_date = date('Y-m-d');
+
+						$posts = get_post($post_id);
+						$post_title = $posts->post_title;
+
+						$post_title = substr($post_title, 0, strpos($post_title, ' '));
+						if ($post_title == '') {
+							$post_title = '-';
+						} else {
+							$post_title = $post_title;
+						}
+
+						$login = get_post_meta($post_id, '_pmsafe_dealer', true);
+						$users = get_user_by('login', $login);
+						$dealer_id = $users->ID;
+						$dealername = get_user_meta($dealer_id, 'dealer_name', true);
+
+						$dis_login = get_post_meta($post_id, '_pmsafe_distributor', true);
+						$dis_users = get_user_by('login', $dis_login);
+						$distributor_id = $dis_users->ID;
+						$distributorname = get_user_meta($distributor_id, 'distributor_name', true);
+
+						$address1 = get_user_meta($value->user_id, 'pmsafe_address_1', true);
+						$address2 = get_user_meta($value->user_id, 'pmsafe_address_2', true);
+						$city = get_user_meta($value->user_id, 'pmsafe_city', true);
+						$state = get_user_meta($value->user_id, 'pmsafe_state', true);
+						$zip_code = get_user_meta($value->user_id, 'pmsafe_zip_code', true);
+						$vehicle_info = get_user_meta($value->user_id, 'pmsafe_vehicle_info', false);
+						$fname = get_user_meta($user_id, 'first_name', true);
+						$lname = get_user_meta($user_id, 'last_name', true);
+						if ($select == 1) {
+							if ($current_date > $expiration_date) {
+								if (!$setStart)
+									$datepicker1 = $expiration_date;
+
+								if (!$setExpire)
+									$datepicker2 = $expiration_date;
+
+								if (($expiration_date >= $datepicker1) && ($expiration_date <= $datepicker2)) {
+									$html .= '<tr>';
+
+									$html .= '<td>';
+									$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $nickname . '</a>';
+									$html .= '</td>';
+
+									$html .= '<td>';
+									$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $fname . '</a>';
+									$html .= '</td>';
+
+									$html .= '<td>';
+									$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $lname . '</a>';
+									$html .= '</td>';
+
+									$html .= '<td>';
+									$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $address1 . ', ' . $address2 . ', ' . $city . ', ' . $state . ', ' . $zip_code . '</a>';
+									$html .= '</td>';
+
+
+									// pr($vehicle_info);
+									$url = get_site_url() . '/wp-includes/images/media/document.png';
+									$html .= '<td>';
+									$html .= '<a href="' . $vehicle_info[0][$nickname]['pmsafe_pdf_link'] . '" target="blank"><img src="' . $url . '" class="attachment-thumbnail" style="width:20px !important"/></a>';
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $vehicle_info[0][$nickname]['pmsafe_pdf_link'];
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $benefits_package;
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $post_title;
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $dealername;
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $distributorname;
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'];
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $vehicle_info[0][$nickname]['pmsafe_vin'];
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .=  date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
+									$html .= '</td>';
+
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .=  date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
+									$html .= '</td>';
+
+									$view_customer_details_query_args = array(
+										'page'   => 'customers-lists',
+										'action' => 'view_customer_details',
+										'id'  => $user_id,
+									);
+
+									$actions['view_customer_details'] = sprintf(
+										'<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
+										esc_url(wp_nonce_url(add_query_arg($view_customer_details_query_args, 'admin.php'), 'viewcustomerdetails_' . $user_id)),
+										_x('view details', 'List table row action', 'wp-list-table-example')
+									);
+
+									$html .= '<td class="text-center">';
+									$html .= $actions["view_customer_details"];
+									$html .= '</td>';
+
+
+									$edit_customer_details_query_args = array(
+										'page'   => 'customers-lists',
+										'action' => 'edit_customer_details',
+										'id'  => $user_id,
+									);
+
+									$actions['edit_customer_details'] = sprintf(
+										'<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
+										esc_url(wp_nonce_url(add_query_arg($edit_customer_details_query_args, 'admin.php'), 'editcustomerdetails_' . $user_id)),
+										_x('edit details', 'List table row action', 'wp-list-table-example')
+									);
+
+									$html .= '<td class="text-center">';
+									$html .= $actions["edit_customer_details"];
+									$html .= '</td>';
+
+									$delete_customer_details_query_args = array(
+										'page'   => 'customers-lists',
+										'action' => 'delete_customer_details',
+										'id'  => $user_id,
+									);
+
+									$actions['delete_customer_details'] = sprintf(
+										'<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
+										esc_url(wp_nonce_url(add_query_arg($delete_customer_details_query_args, 'admin.php'), 'deletecustomerdetails_' . $user_id)),
+										_x('delete details', 'List table row action', 'wp-list-table-example')
+									);
+
+									$html .= '<td class="text-center">';
+									$html .= $actions["delete_customer_details"];
+									$html .= '</td>';
+
+									$html .= '</tr>';
+								}
+							}
+						} else if ($select == 2) {
+							$date1 = $current_date;
+							$date2 = $expiration_date;
+
+							$ts1 = strtotime($date1);
+							$ts2 = strtotime($date2);
+
+							$year1 = date('Y', $ts1);
+							$year2 = date('Y', $ts2);
+
+							$month1 = date('m', $ts1);
+							$month2 = date('m', $ts2);
+
+							$diff = (($year2 - $year1) * 12) + ($month2 - $month1);
+
+							if ($diff >= 1 && $diff <= 6) {
+
+
+								if (!$setStart)
+									$datepicker1 = $expiration_date;
+
+								if (!$setExpire)
+									$datepicker2 = $expiration_date;
+
+								if (($expiration_date >= $datepicker1) && ($expiration_date <= $datepicker2)) {
+									$html .= '<tr>';
+
+									$html .= '<td>';
+									$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $nickname . '</a>';
+									$html .= '</td>';
+
+									$html .= '<td>';
+									$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $fname . '</a>';
+									$html .= '</td>';
+
+									$html .= '<td>';
+									$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $lname . '</a>';
+									$html .= '</td>';
+
+									$html .= '<td>';
+									$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $address1 . ', ' . $address2 . ', ' . $city . ', ' . $state . ', ' . $zip_code . '</a>';
+									$html .= '</td>';
+
+
+									// pr($vehicle_info);
+									$url = get_site_url() . '/wp-includes/images/media/document.png';
+									$html .= '<td>';
+									$html .= '<a href="' . $vehicle_info[0][$nickname]['pmsafe_pdf_link'] . '" target="blank"><img src="' . $url . '" class="attachment-thumbnail" style="width:20px !important"/></a>';
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $vehicle_info[0][$nickname]['pmsafe_pdf_link'];
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $benefits_package;
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $post_title;
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $dealername;
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $distributorname;
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'];
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $vehicle_info[0][$nickname]['pmsafe_vin'];
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .=  date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
+									$html .= '</td>';
+
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .=  date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
+									$html .= '</td>';
+
+									$view_customer_details_query_args = array(
+										'page'   => 'customers-lists',
+										'action' => 'view_customer_details',
+										'id'  => $user_id,
+									);
+
+									$actions['view_customer_details'] = sprintf(
+										'<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
+										esc_url(wp_nonce_url(add_query_arg($view_customer_details_query_args, 'admin.php'), 'viewcustomerdetails_' . $user_id)),
+										_x('view details', 'List table row action', 'wp-list-table-example')
+									);
+
+									$html .= '<td class="text-center">';
+									$html .= $actions["view_customer_details"];
+									$html .= '</td>';
+
+
+									$edit_customer_details_query_args = array(
+										'page'   => 'customers-lists',
+										'action' => 'edit_customer_details',
+										'id'  => $user_id,
+									);
+
+									$actions['edit_customer_details'] = sprintf(
+										'<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
+										esc_url(wp_nonce_url(add_query_arg($edit_customer_details_query_args, 'admin.php'), 'editcustomerdetails_' . $user_id)),
+										_x('edit details', 'List table row action', 'wp-list-table-example')
+									);
+
+									$html .= '<td class="text-center">';
+									$html .= $actions["edit_customer_details"];
+									$html .= '</td>';
+
+									$delete_customer_details_query_args = array(
+										'page'   => 'customers-lists',
+										'action' => 'delete_customer_details',
+										'id'  => $user_id,
+									);
+
+									$actions['delete_customer_details'] = sprintf(
+										'<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
+										esc_url(wp_nonce_url(add_query_arg($delete_customer_details_query_args, 'admin.php'), 'deletecustomerdetails_' . $user_id)),
+										_x('delete details', 'List table row action', 'wp-list-table-example')
+									);
+
+									$html .= '<td class="text-center">';
+									$html .= $actions["delete_customer_details"];
+									$html .= '</td>';
+
+									$html .= '</tr>';
+								}
+							}
+						} else if ($select == 3) {
+							if ($current_date < $expiration_date) {
+								if (!$setStart)
+									$datepicker1 = $vehicle_registration_date;
+
+								if (!$setExpire)
+									$datepicker2 = $vehicle_registration_date;
+
+								if (($vehicle_registration_date >= $datepicker1 && $vehicle_registration_date <= $datepicker2)) {
+									$html .= '<tr>';
+
+									$html .= '<td>';
+									$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $nickname . '</a>';
+									$html .= '</td>';
+
+									$html .= '<td>';
+									$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $fname . '</a>';
+									$html .= '</td>';
+
+									$html .= '<td>';
+									$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $lname . '</a>';
+									$html .= '</td>';
+
+									$html .= '<td>';
+									$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $address1 . ', ' . $address2 . ', ' . $city . ', ' . $state . ', ' . $zip_code . '</a>';
+									$html .= '</td>';
+
+
+									// pr($vehicle_info);
+									$url = get_site_url() . '/wp-includes/images/media/document.png';
+									$html .= '<td>';
+									$html .= '<a href="' . $vehicle_info[0][$nickname]['pmsafe_pdf_link'] . '" target="blank"><img src="' . $url . '" class="attachment-thumbnail" style="width:20px !important"/></a>';
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $vehicle_info[0][$nickname]['pmsafe_pdf_link'];
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $benefits_package;
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $post_title;
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $dealername;
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $distributorname;
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'];
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .= $vehicle_info[0][$nickname]['pmsafe_vin'];
+									$html .= '</td>';
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .=  date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
+									$html .= '</td>';
+
+
+									$html .= '<td class="nisl-pdf-link">';
+									$html .=  date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
+									$html .= '</td>';
+
+									$view_customer_details_query_args = array(
+										'page'   => 'customers-lists',
+										'action' => 'view_customer_details',
+										'id'  => $user_id,
+									);
+
+									$actions['view_customer_details'] = sprintf(
+										'<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
+										esc_url(wp_nonce_url(add_query_arg($view_customer_details_query_args, 'admin.php'), 'viewcustomerdetails_' . $user_id)),
+										_x('view details', 'List table row action', 'wp-list-table-example')
+									);
+
+									$html .= '<td class="text-center">';
+									$html .= $actions["view_customer_details"];
+									$html .= '</td>';
+
+
+									$edit_customer_details_query_args = array(
+										'page'   => 'customers-lists',
+										'action' => 'edit_customer_details',
+										'id'  => $user_id,
+									);
+
+									$actions['edit_customer_details'] = sprintf(
+										'<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
+										esc_url(wp_nonce_url(add_query_arg($edit_customer_details_query_args, 'admin.php'), 'editcustomerdetails_' . $user_id)),
+										_x('edit details', 'List table row action', 'wp-list-table-example')
+									);
+
+									$html .= '<td class="text-center">';
+									$html .= $actions["edit_customer_details"];
+									$html .= '</td>';
+
+									$delete_customer_details_query_args = array(
+										'page'   => 'customers-lists',
+										'action' => 'delete_customer_details',
+										'id'  => $user_id,
+									);
+
+									$actions['delete_customer_details'] = sprintf(
+										'<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
+										esc_url(wp_nonce_url(add_query_arg($delete_customer_details_query_args, 'admin.php'), 'deletecustomerdetails_' . $user_id)),
+										_x('delete details', 'List table row action', 'wp-list-table-example')
+									);
+
+									$html .= '<td class="text-center">';
+									$html .= $actions["delete_customer_details"];
+									$html .= '</td>';
+
+									$html .= '</tr>';
+								}
+							}
+						} else if ($select == 4) {
+							if (!$setStart)
+								$datepicker1 = $vehicle_registration_date;
+
+							if (!$setExpire)
+								$datepicker2 = $vehicle_registration_date;
+
+							if (($vehicle_registration_date >= $datepicker1 && $vehicle_registration_date <= $datepicker2)) {
+								$html .= '<tr>';
+
+								$html .= '<td>';
+								$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $nickname . '</a>';
+								$html .= '</td>';
+
+								$html .= '<td>';
+								$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $fname . '</a>';
+								$html .= '</td>';
+
+								$html .= '<td>';
+								$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $lname . '</a>';
+								$html .= '</td>';
+
+								$html .= '<td>';
+								$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $address1 . ', ' . $address2 . ', ' . $city . ', ' . $state . ', ' . $zip_code . '</a>';
+								$html .= '</td>';
+
+
+								// pr($vehicle_info);
+								$url = get_site_url() . '/wp-includes/images/media/document.png';
+								$html .= '<td>';
+								$html .= '<a href="' . $vehicle_info[0][$nickname]['pmsafe_pdf_link'] . '" target="blank"><img src="' . $url . '" class="attachment-thumbnail" style="width:20px !important"/></a>';
+								$html .= '</td>';
+
+								$html .= '<td class="nisl-pdf-link">';
+								$html .= $vehicle_info[0][$nickname]['pmsafe_pdf_link'];
+								$html .= '</td>';
+
+								$html .= '<td class="nisl-pdf-link">';
+								$html .= $benefits_package;
+								$html .= '</td>';
+
+								$html .= '<td class="nisl-pdf-link">';
+								$html .= $post_title;
+								$html .= '</td>';
+
+								$html .= '<td class="nisl-pdf-link">';
+								$html .= $dealername;
+								$html .= '</td>';
+
+								$html .= '<td class="nisl-pdf-link">';
+								$html .= $distributorname;
+								$html .= '</td>';
+
+								$html .= '<td class="nisl-pdf-link">';
+								$html .= $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . ' ' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'];
+								$html .= '</td>';
+
+								$html .= '<td class="nisl-pdf-link">';
+								$html .= $vehicle_info[0][$nickname]['pmsafe_vin'];
+								$html .= '</td>';
+
+								$html .= '<td class="nisl-pdf-link">';
+								$html .=  date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
+								$html .= '</td>';
+
+
+								$html .= '<td class="nisl-pdf-link">';
+								$html .=  date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
+								$html .= '</td>';
+
+								$view_customer_details_query_args = array(
+									'page'   => 'customers-lists',
+									'action' => 'view_customer_details',
+									'id'  => $user_id,
+								);
+
+								$actions['view_customer_details'] = sprintf(
+									'<a href="%1$s" title="View Details"><i class="fa fa-eye"></i></a>',
+									esc_url(wp_nonce_url(add_query_arg($view_customer_details_query_args, 'admin.php'), 'viewcustomerdetails_' . $user_id)),
+									_x('view details', 'List table row action', 'wp-list-table-example')
+								);
+
+								$html .= '<td class="text-center">';
+								$html .= $actions["view_customer_details"];
+								$html .= '</td>';
+
+
+								$edit_customer_details_query_args = array(
+									'page'   => 'customers-lists',
+									'action' => 'edit_customer_details',
+									'id'  => $user_id,
+								);
+
+								$actions['edit_customer_details'] = sprintf(
+									'<a href="%1$s" title="Edit Details"><i class="fa fa-edit"></i></a>',
+									esc_url(wp_nonce_url(add_query_arg($edit_customer_details_query_args, 'admin.php'), 'editcustomerdetails_' . $user_id)),
+									_x('edit details', 'List table row action', 'wp-list-table-example')
+								);
+
+								$html .= '<td class="text-center">';
+								$html .= $actions["edit_customer_details"];
+								$html .= '</td>';
+
+								$delete_customer_details_query_args = array(
+									'page'   => 'customers-lists',
+									'action' => 'delete_customer_details',
+									'id'  => $user_id,
+								);
+
+								$actions['delete_customer_details'] = sprintf(
+									'<a href="%1$s" title="Delete"><i class="fa fa-trash"></i></a>',
+									esc_url(wp_nonce_url(add_query_arg($delete_customer_details_query_args, 'admin.php'), 'deletecustomerdetails_' . $user_id)),
+									_x('delete details', 'List table row action', 'wp-list-table-example')
+								);
+
+								$html .= '<td class="text-center">';
+								$html .= $actions["delete_customer_details"];
+								$html .= '</td>';
+
+								$html .= '</tr>';
+							}
+						}
+					}
+				} // query
+			} // dealers
+			$html .= '</tr/>';
+		} //distributors
+
 
 		$html .= '</tbody>';
 		$html .= '</table>';
