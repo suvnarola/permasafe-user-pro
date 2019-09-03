@@ -57,14 +57,18 @@ if ($action != 'view_upgraded_policy') {
         'role'         => 'author',
     );
     $distributor_users = get_users($args);
+    foreach ($distributor_users as $key => $value) {
+        $distributor_name = get_user_meta($value->ID, 'distributor_name', true);
+        $distributor_name_arr[$value->user_login] = $distributor_name;
+    }
+    asort($distributor_name_arr);
     echo '<div class="filter-mid">';
     echo '<div class="select-filter-wrap">';
     // echo '<label>Distributot name : </label>';
     echo '<select id="pmsafe_distributor">';
     echo '<option value="">Distributor Name</option>';
-    foreach ($distributor_users as $key => $value) {
-        $distributor_name = get_user_meta($value->ID, 'distributor_name', true);
-        echo '<option value="' . $value->user_login . '">' . $distributor_name . ' (' . $value->user_login . ')' . '</option>';
+    foreach ($distributor_name_arr as $key => $value) {
+        echo  '<option value="' . $key . '">' . $value . ' (' . $key . ')' . '</option>';
     }
     echo '</select>';
     echo '</div>';

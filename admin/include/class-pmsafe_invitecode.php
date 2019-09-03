@@ -327,12 +327,18 @@ class PMSafe_Invitation_Code {
                     
                         echo '<td>';
                             $distributor_users = get_users( array('role' => 'author','fields' => array( 'ID','user_login' )));
+                             foreach ( $distributor_users as $user ) {
+                                $distributor_id = $user->ID;
+                                $distributor_name = get_user_meta( $distributor_id, 'distributor_name' , true );
+                                $distributor_name_arr[$user->user_login] = $distributor_name;
+                            }
+                            asort($distributor_name_arr);
                             echo '<select name="pmsafe_distributor" id="pmsafe_distributor">';
                                 echo '<option value="" disabled selected>Select distributor</option>';
-                                foreach ( $distributor_users as $user ) {
-                                    $distributor_id = $user->ID;
-                                    $distributor_name = get_user_meta( $distributor_id, 'distributor_name' , true );
-                                    echo '<option value="'.$user->user_login.'" '. selected( get_post_meta($post_id,'_pmsafe_distributor',true), $user->user_login, false ) .'>'.$distributor_name .' ('. $user->user_login .')</option>';
+                                foreach ( $distributor_name_arr as $key => $value ) {
+                                    // $distributor_id = $user->ID;
+                                    // $distributor_name = get_user_meta( $distributor_id, 'distributor_name' , true );
+                                    echo '<option value="'.$key.'" '. selected( get_post_meta($post_id,'_pmsafe_distributor',true), $key, false ) .'>'.$value .' ('. $key .')</option>';
                                 }
                             echo '</select>';
                         echo '</td>';
@@ -365,14 +371,18 @@ class PMSafe_Invitation_Code {
 
                             global $wpdb;
                             $dealers = $wpdb->get_results("SELECT * FROM `".$wpdb->usermeta."` WHERE meta_key='".$key."' AND meta_value='".$distributor_id."'");
+                            foreach ( $dealers as $user ) {
+                                $contributor_id = $user->user_id;
+                                $contributor_name = get_user_meta( $contributor_id, 'dealer_name' , true );
+                                $dealer_user = get_user_by( 'ID', $contributor_id );
+                                $username = $dealer_user->data->user_login;
+                                $dealer_name_arr[$username] = $contributor_name;
+                            }
+                            asort($dealer_name_arr);
                             echo '<select name="pmsafe_dealer" id="pmsafe_dealer" >';
                                 echo '<option value="">Select dealer</option>';
-                                foreach ( $dealers as $user ) {
-                                    $contributor_id = $user->user_id;
-                                    $contributor_name = get_user_meta( $contributor_id, 'dealer_name' , true );
-                                    $dealer_user = get_user_by( 'ID', $contributor_id );
-                                    $username = $dealer_user->data->user_login;
-                                    echo '<option value="'.$username.'" '. selected( get_post_meta($post_id,'_pmsafe_dealer',true), $username, false ) .'>'.$contributor_name .' ('. $username .')</option>';
+                                foreach ( $dealer_name_arr as $key => $value ) {
+                                    echo '<option value="'.$key.'" '. selected( get_post_meta($post_id,'_pmsafe_dealer',true), $key, false ) .'>'.$value .' ('. $key .')</option>';
                                 }
                             echo '</select>';
                         

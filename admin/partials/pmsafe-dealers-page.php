@@ -484,10 +484,15 @@ if ($action == 'view') {
     foreach ($distributors as $user) {
         $user_id = $user->ID;
         $name = get_user_meta($user_id, 'distributor_name', true);
-        if ($user_id == $distributor_id) {
-            echo '<option value="' . $user_id . '" selected>' . $name . '</option>';
+        $distributor_name_arr[$user_id] = $name;
+    }
+    asort($distributor_name_arr);
+    foreach ($distributor_name_arr as $key => $value) {
+        
+        if ($key == $distributor_id) {
+            echo '<option value="' . $key . '" selected>' . $value . '</option>';
         } else {
-            echo '<option value="' . $user_id . '">' . $name . '</option>';
+            echo '<option value="' . $key . '">' . $value . '</option>';
         }
     }
     echo '</select>';

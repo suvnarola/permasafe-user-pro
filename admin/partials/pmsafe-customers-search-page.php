@@ -142,16 +142,20 @@ $args = array(
     'role'         => 'author',
 );
 $distributor_users = get_users( $args );
+foreach ($distributor_users as $key => $value) {
+    $distributor_name = get_user_meta($value->ID, 'distributor_name', true);
+  $distributor_name_arr[$value->user_login] = $distributor_name;
+}
+asort($distributor_name_arr);
 $html .= '<div class="reports-wrap-inner">';
     $html .= '<div class="label-input">';	    	
-        $html .= '<label>Distributot name : </label>';
+        $html .= '<label>Distributor name : </label>';
     $html .= '</div>';	    	
     $html .= '<div class="input-div">';	    	
         $html .= '<select id="pmsafe_distributor">';
         $html .= '<option value="">Select Distributor</option>';
-        foreach ($distributor_users as $key => $value) {
-            $distributor_name = get_user_meta($value->ID,'distributor_name',true);
-            $html .= '<option value="'.$value->user_login.'">'.$distributor_name.' ('. $value->user_login .')'.'</option>';
+        foreach ($distributor_name_arr as $key => $value) {
+            $html .= '<option value="' . $key . '">' . $value . ' (' . $key . ')' . '</option>';
         }
             
         $html .= '</select>';

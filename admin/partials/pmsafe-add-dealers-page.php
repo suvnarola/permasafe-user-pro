@@ -56,11 +56,14 @@ if ($action == 'add') {
 } else {
 	echo '<select name="pmsafe_dealer_distributor" id="pmsafe_dealer_distributor">';
 	echo '<option value="">Select Distributor</option>';
-
 	foreach ($distributors as $user) {
 		$user_id = $user->ID;
 		$name = get_user_meta($user_id, 'distributor_name', true);
-		echo '<option value="' . $user_id . '">' . $name . '</option>';
+		$distributor_name_arr[$user_id] = $name;
+	}
+	asort($distributor_name_arr);
+	foreach ($distributor_name_arr as $key => $value) {
+		echo '<option value="' . $key . '">' . $value . '</option>';
 	}
 	echo '</select>';
 }
