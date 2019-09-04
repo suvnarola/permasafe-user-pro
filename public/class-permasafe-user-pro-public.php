@@ -3141,7 +3141,10 @@ class Permasafe_User_Pro_Public
                     $upgradable_prefix = explode(",", $upgradable_prefix_str);
                     $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
                     foreach ($upgradable_prefix as $prefix) {
-                        $option[] = '<option value="' . $prefix . '">' . $prefix . '</option>';
+                        $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                        $post = get_post($pid);
+                        $post_title = $post->post_title;
+                        $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
                     }
                     if ($member_code_id) {
                         // $response = array('status' => true,'code'=>$member_code);
@@ -3161,7 +3164,10 @@ class Permasafe_User_Pro_Public
                         $upgradable_prefix = explode(",", $upgradable_prefix_str);
                         $is_upgradable = get_post_meta($member_code_id, 'pmsafe_invitation_code_upgradable', true);
                         foreach ($upgradable_prefix as $prefix) {
-                            $option[] = '<option value="' . $prefix . '">' . $prefix . '</option>';
+                            $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                            $post = get_post($pid);
+                            $post_title = $post->post_title;
+                            $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
                         }
                         if ($member_code_id) {
 
@@ -3203,7 +3209,10 @@ class Permasafe_User_Pro_Public
                     $upgradable_prefix = explode(",", $upgradable_prefix_str);
                     $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
                     foreach ($upgradable_prefix as $prefix) {
-                        $option[] = '<option value="' . $prefix . '">' . $prefix . '</option>';
+                        $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                        $post = get_post($pid);
+                        $post_title = $post->post_title;
+                        $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
                     }
                     if ($member_code_id) {
                         // $response = array('status' => true,'code'=>$member_code);
@@ -3223,7 +3232,10 @@ class Permasafe_User_Pro_Public
                         $upgradable_prefix = explode(",", $upgradable_prefix_str);
                         $is_upgradable = get_post_meta($member_code_id, 'pmsafe_invitation_code_upgradable', true);
                         foreach ($upgradable_prefix as $prefix) {
-                            $option[] = '<option value="' . $prefix . '">' . $prefix . '</option>';
+                            $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                            $post = get_post($pid);
+                            $post_title = $post->post_title;
+                            $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
                         }
                         if ($member_code_id) {
 
@@ -3265,7 +3277,10 @@ class Permasafe_User_Pro_Public
                     $upgradable_prefix = explode(",", $upgradable_prefix_str);
                     $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
                     foreach ($upgradable_prefix as $prefix) {
-                        $option[] = '<option value="' . $prefix . '">' . $prefix . '</option>';
+                        $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                        $post = get_post($pid);
+                        $post_title = $post->post_title;
+                        $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
                     }
                     if ($member_code_id) {
 
@@ -3286,7 +3301,10 @@ class Permasafe_User_Pro_Public
                         $upgradable_prefix = explode(",", $upgradable_prefix_str);
                         $is_upgradable = get_post_meta($member_code_id, 'pmsafe_invitation_code_upgradable', true);
                         foreach ($upgradable_prefix as $prefix) {
-                            $option[] = '<option value="' . $prefix . '">' . $prefix . '</option>';
+                            $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                            $post = get_post($pid);
+                            $post_title = $post->post_title;
+                            $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
                         }
                         if ($member_code_id) {
 
@@ -3329,7 +3347,10 @@ class Permasafe_User_Pro_Public
                     $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
 
                     foreach ($upgradable_prefix as $prefix) {
-                        $option[] = '<option value="' . $prefix . '">' . $prefix . '</option>';
+                        $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                        $post = get_post($pid);
+                        $post_title = $post->post_title;
+                        $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
                     }
                     if ($member_code_id) {
                         $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_postid);
@@ -3347,7 +3368,10 @@ class Permasafe_User_Pro_Public
                         $upgradable_prefix = explode(",", $upgradable_prefix_str);
                         $is_upgradable = get_post_meta($member_code_id, 'pmsafe_invitation_code_upgradable', true);
                         foreach ($upgradable_prefix as $prefix) {
-                            $option[] = '<option value="' . $prefix . '">' . $prefix . '</option>';
+                            $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                            $post = get_post($pid);
+                            $post_title = $post->post_title;
+                            $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
                         }
                         if ($member_code_id) {
 
@@ -3372,7 +3396,10 @@ class Permasafe_User_Pro_Public
                 $upgradable_prefix = explode(",", $upgradable_prefix_str);
                 $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
                 foreach ($upgradable_prefix as $prefix) {
-                    $option[] = '<option value="' . $prefix . '">' . $prefix . '</option>';
+                    $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                    $post = get_post($pid);
+                    $post_title = $post->post_title;
+                    $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
                 }
                 if ($member_code_id) {
                     $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_postid);
