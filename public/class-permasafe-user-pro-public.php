@@ -23,7 +23,7 @@
 class Permasafe_User_Pro_Public
 {
 
-    /** 
+    /**
      * The ID of this plugin.
      *
      * @since    1.0.0
@@ -110,7 +110,7 @@ class Permasafe_User_Pro_Public
         add_action('wp_ajax_send_reset_mail', array($this, 'send_reset_mail_function'));
         add_action('wp_ajax_nopriv_send_reset_mail', array($this, 'send_reset_mail_function'));
 
-        //dealer 
+        //dealer
         add_shortcode('view_registered_user', array($this, 'view_registered_user_function'));
         add_shortcode('view_available_membercodes', array($this, 'view_available_membercodes_function'));
 
@@ -242,7 +242,7 @@ class Permasafe_User_Pro_Public
     }
 
 
-    // add the filter 
+    // add the filter
 
     /**
      *  @return string
@@ -614,7 +614,7 @@ class Permasafe_User_Pro_Public
 
     /**
      * Create Jquery ajax loader.
-     * 
+     *
      */
 
     public function  perma_wp_footer_load_html()
@@ -628,7 +628,7 @@ class Permasafe_User_Pro_Public
     /**
      * view_available_membercodes shortcode
      * Display available member codes on dealer account page.
-     * 
+     *
      */
     public function view_available_membercodes_function()
     {
@@ -945,9 +945,9 @@ class Permasafe_User_Pro_Public
 
     /**
      * view_reg_user_dist shortcode
-     * 
+     *
      * This function is used to display Batch codes, registered customers, upgraded membership of logged in distributor.
-     * 
+     *
      */
     public function view_reg_user_dist_function()
     {
@@ -1463,7 +1463,7 @@ class Permasafe_User_Pro_Public
 
     /**
      * dealer_total_information shortcode
-     * 
+     *
      * This function is used to total information card at dealer login area.
      * For example: current month total membership, total active membeship and total membrship.
      */
@@ -1570,7 +1570,7 @@ class Permasafe_User_Pro_Public
 
     /**
      * dealer_total_information shortcode
-     * 
+     *
      * This function is used to total information card at distributor login area.
      * For example: current month total membership, total active membeship and total membrship.
      */
@@ -1739,7 +1739,7 @@ class Permasafe_User_Pro_Public
 
     /**
      * ajax function for quick filters
-     * 
+     *
      */
     public function dealer_distributor_quick_filters()
     {
@@ -1946,7 +1946,7 @@ class Permasafe_User_Pro_Public
                                 $html .= '</tr>';
                             }
                         }
-                    } else if ($select == 3) {  // current   
+                    } else if ($select == 3) {  // current
                         if ($current_date <= $expiration_date) {
 
                             if (!$setStart)
@@ -2009,7 +2009,7 @@ class Permasafe_User_Pro_Public
 
     /**
      * reports shortcode
-     * 
+     *
      */
     public function reports_function()
     {
@@ -2404,7 +2404,7 @@ class Permasafe_User_Pro_Public
 
     /**
      * total_range_codes shortcode
-     * 
+     *
      */
     public function total_range_codes()
     {
@@ -2508,7 +2508,7 @@ class Permasafe_User_Pro_Public
 
     /**
      * perma_user_name shortcode
-     * 
+     *
      * @return string
      *
      * Just a quick function to return the user name on login.
@@ -2730,7 +2730,7 @@ class Permasafe_User_Pro_Public
 
     /**
      * perma_register shortcode
-     * 
+     *
      * @return string
      */
     public function perma_register_function()
@@ -2785,7 +2785,7 @@ class Permasafe_User_Pro_Public
 
     /**
      * perma_warranty_cardview shortcode
-     * 
+     *
      * @return string
      */
     public function perma_warranty_cardview_function()
@@ -2819,7 +2819,7 @@ class Permasafe_User_Pro_Public
 
     /**
      * perma_salesperson shortcode
-     * 
+     *
      * @return string
      */
     public function perma_salesperson_function()
@@ -3067,7 +3067,7 @@ class Permasafe_User_Pro_Public
     }
     /**
      * ajax function - sent response on button next click during registration.
-     * 
+     *
      */
     public function pmsafe_registration_code_form_function()
     {
@@ -3098,12 +3098,17 @@ class Permasafe_User_Pro_Public
             if ($role['contributor'] == 1 || $role['author'] == 1 || $role['dealer-user'] == 1  || $role['distributor-user'] == 1) {
 
                 $benefit_prefix = pmsafe_get_meta_values('_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish');
+                array_splice($benefit_prefix, 12, 1);
+                sort($benefit_prefix);
                 $html .= '<div id="salesperson_benefits_package_div">';
                 $html .= '<div class="content-column one_half">';
                 $html .= '<label>Upgradable Packages: ';
                 $html .= '<select id="salesperson_benefits_package">';
                 foreach ($benefit_prefix as $prefix) {
-                    $html .= '<option value="' . $prefix . '">' . $prefix . '</option>';
+                    $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                    $post = get_post($pid);
+                    $post_title = $post->post_title;
+                    $html .= '<option value="' . $prefix . '">' . $post_title . '</option>';
                 }
                 $html .= '</select>';
                 $html .= '</label>';
@@ -3140,6 +3145,7 @@ class Permasafe_User_Pro_Public
                     $upgradable_prefix_str = get_post_meta($bulk_id, 'upgradable_prefix', true);
                     $upgradable_prefix = explode(",", $upgradable_prefix_str);
                     $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
+                    sort($upgradable_prefix);
                     foreach ($upgradable_prefix as $prefix) {
                         $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
                         $post = get_post($pid);
@@ -3163,6 +3169,7 @@ class Permasafe_User_Pro_Public
                         $upgradable_prefix_str = get_post_meta($member_code_id, 'upgradable_prefix', true);
                         $upgradable_prefix = explode(",", $upgradable_prefix_str);
                         $is_upgradable = get_post_meta($member_code_id, 'pmsafe_invitation_code_upgradable', true);
+                        sort($upgradable_prefix);
                         foreach ($upgradable_prefix as $prefix) {
                             $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
                             $post = get_post($pid);
@@ -3208,6 +3215,7 @@ class Permasafe_User_Pro_Public
                     $upgradable_prefix_str = get_post_meta($bulk_id, 'upgradable_prefix', true);
                     $upgradable_prefix = explode(",", $upgradable_prefix_str);
                     $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
+                    sort($upgradable_prefix);
                     foreach ($upgradable_prefix as $prefix) {
                         $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
                         $post = get_post($pid);
@@ -3231,6 +3239,7 @@ class Permasafe_User_Pro_Public
                         $upgradable_prefix_str = get_post_meta($member_code_id, 'upgradable_prefix', true);
                         $upgradable_prefix = explode(",", $upgradable_prefix_str);
                         $is_upgradable = get_post_meta($member_code_id, 'pmsafe_invitation_code_upgradable', true);
+                        sort($upgradable_prefix);
                         foreach ($upgradable_prefix as $prefix) {
                             $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
                             $post = get_post($pid);
@@ -3276,6 +3285,7 @@ class Permasafe_User_Pro_Public
                     $upgradable_prefix_str = get_post_meta($bulk_id, 'upgradable_prefix', true);
                     $upgradable_prefix = explode(",", $upgradable_prefix_str);
                     $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
+                    sort($upgradable_prefix);
                     foreach ($upgradable_prefix as $prefix) {
                         $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
                         $post = get_post($pid);
@@ -3300,6 +3310,7 @@ class Permasafe_User_Pro_Public
                         $upgradable_prefix_str = get_post_meta($member_code_id, 'upgradable_prefix', true);
                         $upgradable_prefix = explode(",", $upgradable_prefix_str);
                         $is_upgradable = get_post_meta($member_code_id, 'pmsafe_invitation_code_upgradable', true);
+                        sort($upgradable_prefix);
                         foreach ($upgradable_prefix as $prefix) {
                             $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
                             $post = get_post($pid);
@@ -3345,7 +3356,7 @@ class Permasafe_User_Pro_Public
                     $upgradable_prefix_str = get_post_meta($bulk_id, 'upgradable_prefix', true);
                     $upgradable_prefix = explode(",", $upgradable_prefix_str);
                     $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
-
+                    sort($upgradable_prefix);
                     foreach ($upgradable_prefix as $prefix) {
                         $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
                         $post = get_post($pid);
@@ -3367,6 +3378,7 @@ class Permasafe_User_Pro_Public
                         $upgradable_prefix_str = get_post_meta($member_code_id, 'upgradable_prefix', true);
                         $upgradable_prefix = explode(",", $upgradable_prefix_str);
                         $is_upgradable = get_post_meta($member_code_id, 'pmsafe_invitation_code_upgradable', true);
+                        sort($upgradable_prefix);
                         foreach ($upgradable_prefix as $prefix) {
                             $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
                             $post = get_post($pid);
@@ -3395,6 +3407,7 @@ class Permasafe_User_Pro_Public
                 $upgradable_prefix_str = get_post_meta($bulk_id, 'upgradable_prefix', true);
                 $upgradable_prefix = explode(",", $upgradable_prefix_str);
                 $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
+                sort($upgradable_prefix);
                 foreach ($upgradable_prefix as $prefix) {
                     $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
                     $post = get_post($pid);
@@ -3841,7 +3854,7 @@ class Permasafe_User_Pro_Public
 
     /**
      * Ajax function for get price for upgradable package.
-     * 
+     *
      */
     public function get_benefit_package_price()
     {
@@ -3964,7 +3977,7 @@ class Permasafe_User_Pro_Public
 
         $member_code = $_POST['member_number'];
         if ($member_code === '00000' || $member_code === '0000' || $member_code === '000' || $member_code === '00' || $member_code === '0') {
-            // echo 'in';die;    
+            // echo 'in';die;
             $sales_person = array(
                 'first_name'                        => $_POST['first_name'],
                 'last_name'                         => $_POST['last_name'],
@@ -4070,6 +4083,12 @@ class Permasafe_User_Pro_Public
                         $vehicle_info_pdf[$member_code]['pmsafe_pdf_link'] = $pdf_link;
                         update_user_meta($user_id, 'pmsafe_vehicle_info', $vehicle_info_pdf);
 
+                        if($login){
+                            update_post_meta($member_code_id,'registered_by',$login);
+                        }else{
+                            update_post_meta($member_code_id,'registered_by',$member_code);
+                        }
+                        
 
                         $to = $_POST['email'];
                         $subject = 'PermaSafe: Your Registration Information';
@@ -4078,16 +4097,6 @@ class Permasafe_User_Pro_Public
                         $member_code = $member_code;
                         $process = 'customer_registration';
                         send_mail_to_users($to, $password, $subject, $fname, $member_code, $process);
-                        // $message = 'Hello '.$_POST["first_name"].',<br/><br/>';
-                        // $message .= 'Thank you for registering with PermaSafe! <br/><br/>';
-                        // $message .= 'Here is your Username : <b>'.$member_code.'</b><br/><br/>';
-                        // $message .= 'Here is your Password : <b>'.$password.'</b><br/><br/>';
-                        // $message .= 'To access your PermaSafe account use this below link. <br/><br/>';
-                        // $message .= '<a href="'.get_site_url().'/wp-login.php" target="_blank">'.Login.'</a><br/><br/>';
-                        // $message .= 'Thank you for choosing PermaSafe.';
-                        // $headers = array('Content-Type: text/html; charset=UTF-8');
-                        // // $headers = array('From: Permasafe','Content-Type: text/html; charset=UTF-8');
-                        // $mail = wp_mail( $to, $subject, $message, $headers );
 
                         if ($role['author'] == 1) {
                             $url = get_site_url() . '/distributor-account/';
@@ -4206,16 +4215,12 @@ class Permasafe_User_Pro_Public
                                 $member_code = $member_code;
                                 $process = 'customer_registration';
                                 send_mail_to_users($to, $password, $subject, $fname, $member_code, $process);
-                                // $message = 'Hello '.$_POST["first_name"].',<br/><br/>';
-                                // $message .= 'Thank you for registering with PermaSafe! <br/><br/>';
-                                // $message .= 'Here is your Username : <b>'.$member_code.'</b><br/><br/>';
-                                // $message .= 'Here is your Password : <b>'.$password.'</b><br/><br/>';
-                                // $message .= 'To access your PermaSafe account use this below link. <br/><br/>';
-                                // $message .= '<a href="'.get_site_url().'/wp-login.php" target="_blank">'.Login.'</a><br/><br/>';
-                                // $message .= 'Thank you for choosing PermaSafe.';
-                                // $headers = array('Content-Type: text/html; charset=UTF-8');
-                                // // $headers = array('From: Permasafe','Content-Type: text/html; charset=UTF-8');
-                                // $mail = wp_mail( $to, $subject, $message, $headers );
+
+                                 if($login){
+                                    update_post_meta($member_code_id,'registered_by',$login);
+                                }else{
+                                    update_post_meta($member_code_id,'registered_by',$member_code);
+                                }
 
                                 if ($role['author'] == 1) {
                                     $url = get_site_url() . '/distributor-account/';
@@ -4243,10 +4248,10 @@ class Permasafe_User_Pro_Public
                                 $response = array('status' => true, 'redirect' => $url, 'code' => $member_code);
                                 echo json_encode($response);
                             } //if userdata
-                        } // if member code id  
+                        } // if member code id
 
                     } //else exist
-                } // if $user_data 
+                } // if $user_data
             } // if member code
             else {
 
@@ -4267,7 +4272,7 @@ class Permasafe_User_Pro_Public
         // echo $member_code;
 
         if ($member_code === '00000' || $member_code === '0000' || $member_code === '000' || $member_code === '00' || $member_code === '0') {
-            // echo 'in';die;    
+            // echo 'in';die;
             $sales_person = array(
                 'first_name'                        => $_POST['first_name'],
                 'last_name'                         => $_POST['last_name'],
@@ -4302,7 +4307,7 @@ class Permasafe_User_Pro_Public
 
     /**
      * Login redirect
-     * 
+     *
      * @param type $url
      * @param type $request
      * @param type $user
@@ -4324,7 +4329,7 @@ class Permasafe_User_Pro_Public
 
     /**
      * user info function
-     * 
+     *
      * @return type
      */
     public function user_info_function()
@@ -4376,7 +4381,7 @@ class Permasafe_User_Pro_Public
 
     /**
      * Warranty function
-     * 
+     *
      * @return type
      */
     public function perma_warranty_function()
@@ -4408,7 +4413,7 @@ class Permasafe_User_Pro_Public
 
     /**
      * password reset form
-     * 
+     *
      * @return type
      */
     public function perma_reset_password_form()
@@ -4424,7 +4429,7 @@ class Permasafe_User_Pro_Public
 
     /**
      * Change password form
-     * 
+     *
      * @global type $post
      * @return type
      */
@@ -4478,7 +4483,7 @@ class Permasafe_User_Pro_Public
 
     /**
      * Reset password
-     * 
+     *
      * @global type $user_ID
      * @return type
      */
@@ -4542,7 +4547,7 @@ class Permasafe_User_Pro_Public
 
     /**
      * used for tracking error messages
-     * 
+     *
      * @staticvar WP_Error $wp_error
      * @return type
      */

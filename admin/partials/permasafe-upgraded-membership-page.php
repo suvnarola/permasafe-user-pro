@@ -127,7 +127,7 @@ echo '</div>';
 
 echo '<div class="membership-result-wrap">';
 echo '<div class="table-responsive">';
-echo '<table id="mebership_info_table" class="display nowrap" style="width:100%">';
+echo '<table id="membership_info_table" class="display nowrap" style="width:100%">';
 echo '<thead>';
 echo '<tr>';
 echo '<th>';

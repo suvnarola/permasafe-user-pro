@@ -3,69 +3,254 @@ jQuery(document).ready(function () {
 
     // for states
 
-    var availableStates = [
-        { label: "ALABAMA", value: "AL" },
-        { label: "ALASKA", value: "AK" },
-        { label: "AMERICAN SAMOA", value: "AS" },
-        { label: "ARIZONA", value: "AZ" },
-        { label: "ARKANSAS", value: "AR" },
-        { label: "CALIFORNIA", value: "CA" },
-        { label: "COLORADO", value: "CO" },
-        { label: "CONNECTICUT", value: "CT" },
-        { label: "DELAWARE", value: "DE" },
-        { label: "DISTRICT OF COLUMBIA", value: "DC" },
-        { label: "FEDERATED STATES OF MICRONESIA", value: "FM" },
-        { label: "FLORIDA", value: "FL" },
-        { label: "GEORGIA", value: "GA" },
-        { label: "GUAM GU", value: "GU" },
-        { label: "HAWAII", value: "HI" },
-        { label: "IDAHO", value: "ID" },
-        { label: "ILLINOIS", value: "IL" },
-        { label: "INDIANA", value: "IN" },
-        { label: "IOWA", value: "IA" },
-        { label: "KANSAS", value: "KS" },
-        { label: "KENTUCKY", value: "KY" },
-        { label: "LOUISIANA", value: "LA" },
-        { label: "MAINE", value: "ME" },
-        { label: "MARSHALL ISLANDS", value: "MH" },
-        { label: "MARYLAND", value: "MD" },
-        { label: "MASSACHUSETTS", value: "MA" },
-        { label: "MICHIGAN", value: "MI" },
-        { label: "MINNESOTA", value: "MN" },
-        { label: "MISSISSIPPI", value: "MS" },
-        { label: "MISSOURI", value: "MO" },
-        { label: "MONTANA", value: "MT" },
-        { label: "NEBRASKA", value: "NE" },
-        { label: "NEVADA", value: "NV" },
-        { label: "NEW HAMPSHIRE", value: "NH" },
-        { label: "NEW JERSEY", value: "NJ" },
-        { label: "NEW MEXICO", value: "NM" },
-        { label: "NEW YORK", value: "NY" },
-        { label: "NORTH CAROLINA", value: "NC" },
-        { label: "NORTH DAKOTA", value: "ND" },
-        { label: "NORTHERN MARIANA ISLANDS", value: "MP" },
-        { label: "OHIO", value: "OH" },
-        { label: "OKLAHOMA", value: "OK" },
-        { label: "OREGON", value: "OR" },
-        { label: "PALAU", value: "PW" },
-        { label: "PENNSYLVANIA", value: "PA" },
-        { label: "PUERTO RICO", value: "PR" },
-        { label: "RHODE ISLAND", value: "RI" },
-        { label: "SOUTH CAROLINA", value: "SC" },
-        { label: "SOUTH DAKOTA", value: "SD" },
-        { label: "TENNESSEE", value: "TN" },
-        { label: "TEXAS", value: "TX" },
-        { label: "UTAH", value: "UT" },
-        { label: "VERMONT", value: "VT" },
-        { label: "VIRGIN ISLANDS", value: "VI" },
-        { label: "VIRGINIA", value: "VA" },
-        { label: "WASHINGTON", value: "WA" },
-        { label: "WEST VIRGINIA", value: "WV" },
-        { label: "WISCONSIN", value: "WI" },
-        { label: "WYOMING", value: "WY" },
-        { label: "ARMED FORCES AFRICA \ CANADA \ EUROPE \ MIDDLE EAST", value: "AE" },
-        { label: "ARMED FORCES AMERICA (EXCEPT CANADA)", value: "AA" },
-        { label: "ARMED FORCES PACIFIC", value: "AP" }
+    var availableStates = [{
+            label: "ALABAMA",
+            value: "AL"
+        },
+        {
+            label: "ALASKA",
+            value: "AK"
+        },
+        {
+            label: "AMERICAN SAMOA",
+            value: "AS"
+        },
+        {
+            label: "ARIZONA",
+            value: "AZ"
+        },
+        {
+            label: "ARKANSAS",
+            value: "AR"
+        },
+        {
+            label: "CALIFORNIA",
+            value: "CA"
+        },
+        {
+            label: "COLORADO",
+            value: "CO"
+        },
+        {
+            label: "CONNECTICUT",
+            value: "CT"
+        },
+        {
+            label: "DELAWARE",
+            value: "DE"
+        },
+        {
+            label: "DISTRICT OF COLUMBIA",
+            value: "DC"
+        },
+        {
+            label: "FEDERATED STATES OF MICRONESIA",
+            value: "FM"
+        },
+        {
+            label: "FLORIDA",
+            value: "FL"
+        },
+        {
+            label: "GEORGIA",
+            value: "GA"
+        },
+        {
+            label: "GUAM GU",
+            value: "GU"
+        },
+        {
+            label: "HAWAII",
+            value: "HI"
+        },
+        {
+            label: "IDAHO",
+            value: "ID"
+        },
+        {
+            label: "ILLINOIS",
+            value: "IL"
+        },
+        {
+            label: "INDIANA",
+            value: "IN"
+        },
+        {
+            label: "IOWA",
+            value: "IA"
+        },
+        {
+            label: "KANSAS",
+            value: "KS"
+        },
+        {
+            label: "KENTUCKY",
+            value: "KY"
+        },
+        {
+            label: "LOUISIANA",
+            value: "LA"
+        },
+        {
+            label: "MAINE",
+            value: "ME"
+        },
+        {
+            label: "MARSHALL ISLANDS",
+            value: "MH"
+        },
+        {
+            label: "MARYLAND",
+            value: "MD"
+        },
+        {
+            label: "MASSACHUSETTS",
+            value: "MA"
+        },
+        {
+            label: "MICHIGAN",
+            value: "MI"
+        },
+        {
+            label: "MINNESOTA",
+            value: "MN"
+        },
+        {
+            label: "MISSISSIPPI",
+            value: "MS"
+        },
+        {
+            label: "MISSOURI",
+            value: "MO"
+        },
+        {
+            label: "MONTANA",
+            value: "MT"
+        },
+        {
+            label: "NEBRASKA",
+            value: "NE"
+        },
+        {
+            label: "NEVADA",
+            value: "NV"
+        },
+        {
+            label: "NEW HAMPSHIRE",
+            value: "NH"
+        },
+        {
+            label: "NEW JERSEY",
+            value: "NJ"
+        },
+        {
+            label: "NEW MEXICO",
+            value: "NM"
+        },
+        {
+            label: "NEW YORK",
+            value: "NY"
+        },
+        {
+            label: "NORTH CAROLINA",
+            value: "NC"
+        },
+        {
+            label: "NORTH DAKOTA",
+            value: "ND"
+        },
+        {
+            label: "NORTHERN MARIANA ISLANDS",
+            value: "MP"
+        },
+        {
+            label: "OHIO",
+            value: "OH"
+        },
+        {
+            label: "OKLAHOMA",
+            value: "OK"
+        },
+        {
+            label: "OREGON",
+            value: "OR"
+        },
+        {
+            label: "PALAU",
+            value: "PW"
+        },
+        {
+            label: "PENNSYLVANIA",
+            value: "PA"
+        },
+        {
+            label: "PUERTO RICO",
+            value: "PR"
+        },
+        {
+            label: "RHODE ISLAND",
+            value: "RI"
+        },
+        {
+            label: "SOUTH CAROLINA",
+            value: "SC"
+        },
+        {
+            label: "SOUTH DAKOTA",
+            value: "SD"
+        },
+        {
+            label: "TENNESSEE",
+            value: "TN"
+        },
+        {
+            label: "TEXAS",
+            value: "TX"
+        },
+        {
+            label: "UTAH",
+            value: "UT"
+        },
+        {
+            label: "VERMONT",
+            value: "VT"
+        },
+        {
+            label: "VIRGIN ISLANDS",
+            value: "VI"
+        },
+        {
+            label: "VIRGINIA",
+            value: "VA"
+        },
+        {
+            label: "WASHINGTON",
+            value: "WA"
+        },
+        {
+            label: "WEST VIRGINIA",
+            value: "WV"
+        },
+        {
+            label: "WISCONSIN",
+            value: "WI"
+        },
+        {
+            label: "WYOMING",
+            value: "WY"
+        },
+        {
+            label: "ARMED FORCES AFRICA \ CANADA \ EUROPE \ MIDDLE EAST",
+            value: "AE"
+        },
+        {
+            label: "ARMED FORCES AMERICA (EXCEPT CANADA)",
+            value: "AA"
+        },
+        {
+            label: "ARMED FORCES PACIFIC",
+            value: "AP"
+        }
     ];
 
     var state_options = {
@@ -162,21 +347,29 @@ jQuery(document).ready(function () {
 
         //Name
         if (jQuery('#pmsafe_distributor_name').val().trim() == "") {
-            jQuery('#pmsafe_distributor_name').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_distributor_name').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_distributor_name').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_distributor_name').css({ 'color': '#333333' });
+            jQuery('#pmsafe_distributor_name').css({
+                'color': '#333333'
+            });
         }
 
 
         //Password 
         if (jQuery('#pmsafe_distributor_password').val().trim() == "") {
-            jQuery('#pmsafe_distributor_password').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_distributor_password').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_distributor_password').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_distributor_password').css({ 'color': '#333333' });
+            jQuery('#pmsafe_distributor_password').css({
+                'color': '#333333'
+            });
         }
 
         //Phone
@@ -185,11 +378,15 @@ jQuery(document).ready(function () {
         if (jQuery('#pmsafe_distributor_phone_number').val() != '') {
             if (!(jQuery('#pmsafe_distributor_phone_number').val().match(numbers))) {
 
-                jQuery('#pmsafe_distributor_phone_number').css({ 'border': '1px solid #ff0000' });
+                jQuery('#pmsafe_distributor_phone_number').css({
+                    'border': '1px solid #ff0000'
+                });
                 jQuery('#pmsafe_distributor_phone_number').after("<span class='error'>Please enter 10 digit phone number.</span>");
                 validflag = false;
             } else {
-                jQuery('#pmsafe_distributor_phone_number').css({ 'border-color': '#cccccc' });
+                jQuery('#pmsafe_distributor_phone_number').css({
+                    'border-color': '#cccccc'
+                });
             }
         }
 
@@ -229,20 +426,26 @@ jQuery(document).ready(function () {
                         swal("Error", "", "warning");
                     }
                 }
-            });// ajax
+            }); // ajax
             return false;
         }
-    });  // submit button 
+    }); // submit button 
 
 
     // Focus and blure 
     jQuery('#pmsafe_distributor_name, #pmsafe_distributor_email, #pmsafe_distributor_password, #pmsafe_distributor_store_address, #pmsafe_distributor_phone_number').focus(function () {
-        jQuery(this).css({ 'border-color': '#cccccc' });
-        jQuery(this).css({ 'color': '#555' });
+        jQuery(this).css({
+            'border-color': '#cccccc'
+        });
+        jQuery(this).css({
+            'color': '#555'
+        });
         jQuery(this).siblings('.error').remove();
     });
     jQuery('#pmsafe_distributor_name, #pmsafe_distributor_email, #pmsafe_distributor_password, #pmsafe_distributor_store_address, #pmsafe_distributor_phone_number').blur(function () {
-        jQuery(this).css({ 'color': '#555' });
+        jQuery(this).css({
+            'color': '#555'
+        });
         jQuery(this).siblings('.error').remove();
     });
 
@@ -303,27 +506,37 @@ jQuery(document).ready(function () {
         var validflag = true;
         //Name
         if (jQuery('#pmsafe_distributor_name').val().trim() == "") {
-            jQuery('#pmsafe_distributor_name').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_distributor_name').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_distributor_name').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_distributor_name').css({ 'color': '#333333' });
+            jQuery('#pmsafe_distributor_name').css({
+                'color': '#333333'
+            });
         }
 
         //Email     
         if (jQuery('#pmsafe_distributor_email').val().trim() == '') {
-            jQuery('#pmsafe_distributor_email').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_distributor_email').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_distributor_email').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
             if (jQuery('#pmsafe_distributor_email').val()) {
                 var email = jQuery("#pmsafe_distributor_email").val();
                 if (!(email.match(/^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i))) {
-                    jQuery('#pmsafe_distributor_email').css({ 'border': '1px solid #ff0000' });
+                    jQuery('#pmsafe_distributor_email').css({
+                        'border': '1px solid #ff0000'
+                    });
                     jQuery('#pmsafe_distributor_email').after("<span class='error'>Please enter valid email address.</span>");
                     validflag = false;
                 } else {
-                    jQuery('#pmsafe_distributor_email').css({ 'color': '#333333' });
+                    jQuery('#pmsafe_distributor_email').css({
+                        'color': '#333333'
+                    });
                 }
             }
         }
@@ -333,11 +546,15 @@ jQuery(document).ready(function () {
         if (jQuery('#pmsafe_distributor_phone_number').val() != '') {
             if (!(jQuery('#pmsafe_distributor_phone_number').val().match(numbers))) {
 
-                jQuery('#pmsafe_distributor_phone_number').css({ 'border': '1px solid #ff0000' });
+                jQuery('#pmsafe_distributor_phone_number').css({
+                    'border': '1px solid #ff0000'
+                });
                 jQuery('#pmsafe_distributor_phone_number').after("<span class='error'>Please enter 10 digit phone number.</span>");
                 validflag = false;
             } else {
-                jQuery('#pmsafe_distributor_phone_number').css({ 'border-color': '#cccccc' });
+                jQuery('#pmsafe_distributor_phone_number').css({
+                    'border-color': '#cccccc'
+                });
             }
         }
 
@@ -372,10 +589,10 @@ jQuery(document).ready(function () {
                         })
                     }
                 }
-            });// ajax
+            }); // ajax
             return false;
         }
-    });  // update button 
+    }); // update button 
 
 
     // delete distributor
@@ -423,14 +640,14 @@ jQuery(document).ready(function () {
                             })
                         }
                     }
-                });// ajax
+                }); // ajax
             } else {
                 swal("Distributor is not deleted !");
             }
         });
         return false;
 
-    });  // delete button 
+    }); // delete button 
 
 
     //add dealer
@@ -442,20 +659,28 @@ jQuery(document).ready(function () {
         var validflag = true;
         //Name
         if (jQuery('#pmsafe_dealer_name').val().trim() == "") {
-            jQuery('#pmsafe_dealer_name').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_dealer_name').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_dealer_name').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_dealer_name').css({ 'color': '#333333' });
+            jQuery('#pmsafe_dealer_name').css({
+                'color': '#333333'
+            });
         }
 
 
         if (jQuery('#pmsafe_dealer_password').val().trim() == "") {
-            jQuery('#pmsafe_dealer_password').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_dealer_password').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_dealer_password').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_dealer_password').css({ 'color': '#333333' });
+            jQuery('#pmsafe_dealer_password').css({
+                'color': '#333333'
+            });
         }
 
         //Phone
@@ -463,21 +688,29 @@ jQuery(document).ready(function () {
         if (jQuery('#pmsafe_dealer_phone_number').val() != '') {
             if (!(jQuery('#pmsafe_dealer_phone_number').val().match(numbers))) {
 
-                jQuery('#pmsafe_dealer_phone_number').css({ 'border': '1px solid #ff0000' });
+                jQuery('#pmsafe_dealer_phone_number').css({
+                    'border': '1px solid #ff0000'
+                });
                 jQuery('#pmsafe_dealer_phone_number').after("<span class='error'>Please enter 10 digit phone number.</span>");
                 validflag = false;
             } else {
-                jQuery('#pmsafe_dealer_phone_number').css({ 'border-color': '#cccccc' });
+                jQuery('#pmsafe_dealer_phone_number').css({
+                    'border-color': '#cccccc'
+                });
             }
         }
 
         //select 
         if (jQuery('#pmsafe_dealer_distributor').val().trim() == "") {
-            jQuery('#pmsafe_dealer_distributor').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_dealer_distributor').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_dealer_distributor').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_dealer_distributor').css({ 'color': '#333333' });
+            jQuery('#pmsafe_dealer_distributor').css({
+                'color': '#333333'
+            });
         }
 
 
@@ -515,19 +748,25 @@ jQuery(document).ready(function () {
                         swal("Error", "", "warning");
                     }
                 }
-            });// ajax
+            }); // ajax
             return false;
         }
-    });  // submit button 
+    }); // submit button 
 
     // Focus and blure dealers
     jQuery('#pmsafe_dealer_name,#pmsafe_dealer_email, #pmsafe_dealer_password, #pmsafe_dealer_store_address, #pmsafe_dealer_phone_number,#pmsafe_dealer_distributor').focus(function () {
-        jQuery(this).css({ 'border-color': '#cccccc' });
-        jQuery(this).css({ 'color': '#555' });
+        jQuery(this).css({
+            'border-color': '#cccccc'
+        });
+        jQuery(this).css({
+            'color': '#555'
+        });
         jQuery(this).siblings('.error').remove();
     });
     jQuery('#pmsafe_dealer_name,#pmsafe_dealer_email, #pmsafe_dealer_password, #pmsafe_dealer_store_address, #pmsafe_dealer_phone_number,#pmsafe_dealer_distributor').blur(function () {
-        jQuery(this).css({ 'color': '#555' });
+        jQuery(this).css({
+            'color': '#555'
+        });
         jQuery(this).siblings('.error').remove();
     });
 
@@ -543,27 +782,37 @@ jQuery(document).ready(function () {
         var validflag = true;
         //Name
         if (jQuery('#pmsafe_dealer_name').val().trim() == "") {
-            jQuery('#pmsafe_dealer_name').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_dealer_name').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_dealer_name').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_dealer_name').css({ 'color': '#333333' });
+            jQuery('#pmsafe_dealer_name').css({
+                'color': '#333333'
+            });
         }
 
         //Email     
         if (jQuery('#pmsafe_dealer_email').val().trim() == '') {
-            jQuery('#pmsafe_dealer_email').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_dealer_email').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_dealer_email').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
             if (jQuery('#pmsafe_dealer_email').val()) {
                 var email = jQuery("#pmsafe_dealer_email").val();
                 if (!(email.match(/^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i))) {
-                    jQuery('#pmsafe_dealer_email').css({ 'border': '1px solid #ff0000' });
+                    jQuery('#pmsafe_dealer_email').css({
+                        'border': '1px solid #ff0000'
+                    });
                     jQuery('#pmsafe_dealer_email').after("<span class='error'>Please enter valid email address.</span>");
                     validflag = false;
                 } else {
-                    jQuery('#pmsafe_dealer_email').css({ 'color': '#333333' });
+                    jQuery('#pmsafe_dealer_email').css({
+                        'color': '#333333'
+                    });
                 }
             }
         }
@@ -572,11 +821,15 @@ jQuery(document).ready(function () {
         if (jQuery('#pmsafe_dealer_phone_number').val() != '') {
             if (!(jQuery('#pmsafe_dealer_phone_number').val().match(numbers))) {
 
-                jQuery('#pmsafe_dealer_phone_number').css({ 'border': '1px solid #ff0000' });
+                jQuery('#pmsafe_dealer_phone_number').css({
+                    'border': '1px solid #ff0000'
+                });
                 jQuery('#pmsafe_dealer_phone_number').after("<span class='error'>Please enter 10 digit phone number.</span>");
                 validflag = false;
             } else {
-                jQuery('#pmsafe_dealer_phone_number').css({ 'border-color': '#cccccc' });
+                jQuery('#pmsafe_dealer_phone_number').css({
+                    'border-color': '#cccccc'
+                });
             }
         }
 
@@ -614,10 +867,10 @@ jQuery(document).ready(function () {
                     }
 
                 }
-            });// ajax
+            }); // ajax
             return false;
         }
-    });  // update button 
+    }); // update button 
 
     // delete dealer
     jQuery(document).on("click", "#pmsafe_dealers_delete", function (e) {
@@ -663,7 +916,7 @@ jQuery(document).ready(function () {
                             })
                         }
                     }
-                });// ajax
+                }); // ajax
 
             } else {
                 swal("Dealer is not deleted !");
@@ -671,7 +924,7 @@ jQuery(document).ready(function () {
         });
         return false;
 
-    });  // delete button 
+    }); // delete button 
 
     // delete dealers contact 
     jQuery(document).on("click", "#pmsafe_dealers_contact_delete", function (e) {
@@ -720,14 +973,14 @@ jQuery(document).ready(function () {
                             // window.location.replace(obj.redirect);
                         }
                     }
-                });// ajax
+                }); // ajax
             } else {
                 swal("Contact user is not deleted !");
             }
         });
         return false;
 
-    });  // delete button 
+    }); // delete button 
 
     jQuery(document).on("click", "#pmsafe_distributors_contact_delete", function (e) {
 
@@ -773,14 +1026,14 @@ jQuery(document).ready(function () {
                             })
                         }
                     }
-                });// ajax
+                }); // ajax
             } else {
                 swal("Contact user is not deleted !");
             }
         });
         return false;
 
-    });  // delete button 
+    }); // delete button 
 
 
     jQuery(document).on("change", "#pmsafe_distributor", function (e) {
@@ -814,7 +1067,7 @@ jQuery(document).ready(function () {
             dataType: 'html'
         });
         return false;
-    });// select 
+    }); // select 
 
     function randomPassword(length) {
         // alert('test');
@@ -1035,15 +1288,13 @@ jQuery(document).ready(function () {
                         if (end == '' || start == '') {
                             jQuery(".code-exist").css("display", "none");
                             jQuery("#publish").attr("disabled", "disabled");
-                        }
-                        else {
+                        } else {
 
                             if (start > end || start == end) {
 
                                 jQuery(".code-range").css("display", "block");
                                 jQuery("#publish").attr("disabled", "disabled");
-                            }
-                            else {
+                            } else {
                                 jQuery("#publish").removeAttr("disabled", "disabled");
                                 jQuery(".code-exist").css("display", "none");
                             }
@@ -1053,8 +1304,7 @@ jQuery(document).ready(function () {
                 },
                 dataType: 'html'
             });
-        }
-        else {
+        } else {
             jQuery("#publish").attr("disabled", "disabled");
         }
         return false;
@@ -1088,8 +1338,7 @@ jQuery(document).ready(function () {
                         if (code == '') {
                             jQuery(".code-exist").css("display", "none");
                             jQuery("#publish").attr("disabled", "disabled");
-                        }
-                        else {
+                        } else {
 
 
                             jQuery("#publish").removeAttr("disabled", "disabled");
@@ -1101,8 +1350,7 @@ jQuery(document).ready(function () {
                 },
                 dataType: 'html'
             });
-        }
-        else {
+        } else {
             jQuery("#publish").attr("disabled", "disabled");
         }
         return false;
@@ -1390,11 +1638,15 @@ jQuery(document).ready(function () {
         var search_val = jQuery('#search-input').val();
 
         if (jQuery('#search-input').val().trim() == "") {
-            jQuery('#search-input').css({ 'border': '1px solid #ff0000' });
+            jQuery('#search-input').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#search-input').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#search-input').css({ 'color': '#333333' });
+            jQuery('#search-input').css({
+                'color': '#333333'
+            });
         }
 
         var data = {
@@ -1428,11 +1680,15 @@ jQuery(document).ready(function () {
         var search_val = jQuery('#individual-search-input').val();
 
         if (jQuery('#individual-search-input').val().trim() == "") {
-            jQuery('#individual-search-input').css({ 'border': '1px solid #ff0000' });
+            jQuery('#individual-search-input').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#individual-search-input').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#individual-search-input').css({ 'color': '#333333' });
+            jQuery('#individual-search-input').css({
+                'color': '#333333'
+            });
         }
 
         var data = {
@@ -1460,8 +1716,12 @@ jQuery(document).ready(function () {
     });
 
     jQuery(document).on("focus", "#search-input,#individual-search-input", function (e) {
-        jQuery(this).css({ 'border-color': '#cccccc' });
-        jQuery(this).css({ 'color': '#555' });
+        jQuery(this).css({
+            'border-color': '#cccccc'
+        });
+        jQuery(this).css({
+            'color': '#555'
+        });
         jQuery(this).siblings('.error').remove();
     });
 
@@ -1476,11 +1736,15 @@ jQuery(document).ready(function () {
             var search_val = jQuery('#search-input').val()
 
             if (jQuery('#search-input').val().trim() == "") {
-                jQuery('#search-input').css({ 'border': '1px solid #ff0000' });
+                jQuery('#search-input').css({
+                    'border': '1px solid #ff0000'
+                });
                 jQuery('#search-input').after("<span class='error'>This field is required.</span>");
                 validflag = false;
             } else {
-                jQuery('#search-input').css({ 'color': '#333333' });
+                jQuery('#search-input').css({
+                    'color': '#333333'
+                });
             }
 
             var data = {
@@ -1517,11 +1781,15 @@ jQuery(document).ready(function () {
             var search_val = jQuery('#individual-search-input').val();
 
             if (jQuery('#individual-search-input').val().trim() == "") {
-                jQuery('#individual-search-input').css({ 'border': '1px solid #ff0000' });
+                jQuery('#individual-search-input').css({
+                    'border': '1px solid #ff0000'
+                });
                 jQuery('#individual-search-input').after("<span class='error'>This field is required.</span>");
                 validflag = false;
             } else {
-                jQuery('#individual-search-input').css({ 'color': '#333333' });
+                jQuery('#individual-search-input').css({
+                    'color': '#333333'
+                });
             }
 
             var data = {
@@ -1553,14 +1821,16 @@ jQuery(document).ready(function () {
         dom: 'Bfrtip',
         responsive: true,
         "pagingType": "input",
-        "order": [[17, "desc"]],
+        "order": [
+            [17, "desc"]
+        ],
         orderCellsTop: true,
         fixedHeader: true,
-        columnDefs: [
-            { type: 'natural-nohtml', targets: 0 }
-        ],
-        buttons: [
-            {
+        columnDefs: [{
+            type: 'natural-nohtml',
+            targets: 0
+        }],
+        buttons: [{
                 extend: 'csv',
                 //Name the CSV
                 filename: 'customer_list',
@@ -1633,78 +1903,109 @@ jQuery(document).ready(function () {
         var validflag = true;
         //Name
         if (jQuery('#pmsafe_customer_fname').val().trim() == "") {
-            jQuery('#pmsafe_customer_fname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_customer_fname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_customer_fname').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_customer_fname').css({ 'color': '#333333' });
+            jQuery('#pmsafe_customer_fname').css({
+                'color': '#333333'
+            });
         }
 
         if (jQuery('#pmsafe_customer_lname').val().trim() == "") {
-            jQuery('#pmsafe_customer_lname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_customer_lname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_customer_lname').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_customer_lname').css({ 'color': '#333333' });
+            jQuery('#pmsafe_customer_lname').css({
+                'color': '#333333'
+            });
         }
 
         if (jQuery('#pmsafe_customer_address1').val().trim() == "") {
-            jQuery('#pmsafe_customer_address1').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_customer_address1').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_customer_address1').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_customer_address1').css({ 'color': '#333333' });
+            jQuery('#pmsafe_customer_address1').css({
+                'color': '#333333'
+            });
         }
 
 
         //city
         if (jQuery('#pmsafe_customer_city').val().trim() == "") {
-            jQuery('#pmsafe_customer_city').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_customer_city').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_customer_city').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_customer_city').css({ 'color': '#333333' });
+            jQuery('#pmsafe_customer_city').css({
+                'color': '#333333'
+            });
         }
 
         //state
         if (jQuery('#pmsafe_customer_state').val().trim() == "") {
-            jQuery('#pmsafe_customer_state').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_customer_state').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_customer_state').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_customer_state').css({ 'color': '#333333' });
+            jQuery('#pmsafe_customer_state').css({
+                'color': '#333333'
+            });
         }
 
 
         //zip code
         var numbers = /^[0-9\-]+$/;
         if (jQuery('#pmsafe_customer_zip').val().trim() == '') {
-            jQuery('#pmsafe_customer_zip').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_customer_zip').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_customer_zip').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else if (!(jQuery('#pmsafe_customer_zip').val().match(numbers))) {
-            jQuery('#pmsafe_customer_zip').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_customer_zip').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_customer_zip').after("<span class='error'>Please enter valid zip code.</span>");
             validflag = false;
-        }
-        else {
-            jQuery('#pmsafe_customer_zip').css({ 'border-color': '#cccccc' });
+        } else {
+            jQuery('#pmsafe_customer_zip').css({
+                'border-color': '#cccccc'
+            });
         }
 
         //Phone
         var numbers = /^[0-9]{10}$/;
         if (jQuery('#pmsafe_customer_phone_number').val().trim() == '') {
             ``
-            jQuery('#pmsafe_customer_phone_number').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_customer_phone_number').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_customer_phone_number').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else if (!(jQuery('#pmsafe_customer_phone_number').val().match(numbers))) {
 
-            jQuery('#pmsafe_customer_phone_number').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_customer_phone_number').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_customer_phone_number').after("<span class='error'>Please enter 10 digit phone number.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_customer_phone_number').css({ 'border-color': '#cccccc' });
+            jQuery('#pmsafe_customer_phone_number').css({
+                'border-color': '#cccccc'
+            });
         }
 
 
@@ -1712,61 +2013,87 @@ jQuery(document).ready(function () {
         //vehicle year
         var numbers = /^[0-9]+$/;
         if (jQuery('#pmsafe_customer_vehicle_year').val().trim() == '') {
-            jQuery('#pmsafe_customer_vehicle_year').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_customer_vehicle_year').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_customer_vehicle_year').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else if (!(jQuery('#pmsafe_customer_vehicle_year').val().match(numbers))) {
-            jQuery('#pmsafe_customer_vehicle_year').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_customer_vehicle_year').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_customer_vehicle_year').after("<span class='error'>Please enter valid Year.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_customer_vehicle_year').css({ 'border-color': '#cccccc' });
+            jQuery('#pmsafe_customer_vehicle_year').css({
+                'border-color': '#cccccc'
+            });
         }
 
         //vehicle mileage
         var numbers = /^[0-9]+$/;
         if (jQuery('#pmsafe_customer_vehicle_mileage').val().trim() == '') {
-            jQuery('#pmsafe_customer_vehicle_mileage').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_customer_vehicle_mileage').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_customer_vehicle_mileage').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else if (!(jQuery('#pmsafe_customer_vehicle_mileage').val().match(numbers))) {
-            jQuery('#pmsafe_customer_vehicle_mileage').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_customer_vehicle_mileage').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_customer_vehicle_mileage').after("<span>Please enter valid mileage.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_customer_vehicle_mileage').css({ 'border-color': '#cccccc' });
+            jQuery('#pmsafe_customer_vehicle_mileage').css({
+                'border-color': '#cccccc'
+            });
         }
 
         //vehicle make
         if (jQuery('#pmsafe_customer_vehicle_make').val().trim() == "") {
-            jQuery('#pmsafe_customer_vehicle_make').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_customer_vehicle_make').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_customer_vehicle_make').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_customer_vehicle_make').css({ 'color': '#333333' });
+            jQuery('#pmsafe_customer_vehicle_make').css({
+                'color': '#333333'
+            });
         }
 
         //vehicle model
         if (jQuery('#pmsafe_customer_vehicle_model').val().trim() == "") {
-            jQuery('#pmsafe_customer_vehicle_model').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_customer_vehicle_model').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_customer_vehicle_model').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_customer_vehicle_model').css({ 'color': '#333333' });
+            jQuery('#pmsafe_customer_vehicle_model').css({
+                'color': '#333333'
+            });
         }
 
         //vehicle vin
         var numbers = /^[0-9A-Z]+$/;
         if (jQuery('#pmsafe_customer_vehicle_vin').val().trim() == '') {
-            jQuery('#pmsafe_customer_vehicle_vin').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_customer_vehicle_vin').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_customer_vehicle_vin').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else if (!(jQuery('#pmsafe_customer_vehicle_vin').val().match(numbers))) {
-            jQuery('#pmsafe_customer_vehicle_vin').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_customer_vehicle_vin').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_customer_vehicle_vin').after("<span class='error'>Please enter valid VIN number.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_customer_vehicle_vin').css({ 'border-color': '#cccccc' });
+            jQuery('#pmsafe_customer_vehicle_vin').css({
+                'border-color': '#cccccc'
+            });
         }
 
         if (!validflag) {
@@ -1805,19 +2132,25 @@ jQuery(document).ready(function () {
                         jQuery('#file_upload').after("<span class='error'>" + obj.error + "</span>");
                     }
                 }
-            });// ajax
+            }); // ajax
             return false;
         }
-    });  // update button 
+    }); // update button 
 
     // Focus and blure 
     jQuery('#pmsafe_customer_fname, #pmsafe_customer_lname, #pmsafe_customer_address1, #pmsafe_customer_address2, #pmsafe_customer_city, #pmsafe_customer_state, #pmsafe_customer_zip, #pmsafe_customer_phone_number, #pmsafe_customer_vehicle_year, #pmsafe_customer_vehicle_make, #pmsafe_customer_vehicle_model, #pmsafe_customer_vehicle_vin, #pmsafe_customer_vehicle_mileage, #pmsafe_customer_password ').focus(function () {
-        jQuery(this).css({ 'border-color': '#cccccc' });
-        jQuery(this).css({ 'color': '#555' });
+        jQuery(this).css({
+            'border-color': '#cccccc'
+        });
+        jQuery(this).css({
+            'color': '#555'
+        });
         jQuery(this).siblings('.error').remove();
     });
     jQuery('#pmsafe_customer_fname, #pmsafe_customer_lname, #pmsafe_customer_address1, #pmsafe_customer_address2, #pmsafe_customer_city, #pmsafe_customer_state, #pmsafe_customer_zip, #pmsafe_customer_phone_number, #pmsafe_customer_vehicle_year, #pmsafe_customer_vehicle_make, #pmsafe_customer_vehicle_model, #pmsafe_customer_vehicle_vin, #pmsafe_customer_vehicle_mileage, #pmsafe_customer_password').blur(function () {
-        jQuery(this).css({ 'color': '#555' });
+        jQuery(this).css({
+            'color': '#555'
+        });
         jQuery(this).siblings('.error').remove();
     });
 
@@ -1847,10 +2180,10 @@ jQuery(document).ready(function () {
                     window.location.replace(obj.redirect);
                 }
             }
-        });// ajax
+        }); // ajax
         return false;
 
-    });  // delete button
+    }); // delete button
 
     // delete customer
     jQuery(document).on("click", "#pmsafe_customers_delete", function (e) {
@@ -1894,14 +2227,14 @@ jQuery(document).ready(function () {
                             })
                         }
                     }
-                });// ajax
+                }); // ajax
             } else {
                 swal("Customer is not deleted !");
             }
         });
         return false;
 
-    });  // delete button
+    }); // delete button
 
     jQuery(document).on("click", "#search_submit", function (e) {
         var dealer_login = jQuery('#dealer_login').val();
@@ -1961,11 +2294,10 @@ jQuery(document).ready(function () {
                     "pagingType": "input",
                     orderCellsTop: true,
                     fixedHeader: true,
-                    buttons: [
-                        {
+                    buttons: [{
                             extend: 'csv',
                             //Name the CSV
-                            filename: 'reports',
+                            filename: 'Search Report',
                             exportOptions: {
                                 columns: [0, 1, 2, 3, 5]
                             },
@@ -1975,7 +2307,7 @@ jQuery(document).ready(function () {
                             text: 'PDF',
                             orientation: 'landscape',
                             pageSize: 'LEGAL',
-                            filename: 'reports',
+                            filename: 'Search Report',
                             exportOptions: {
                                 columns: [0, 1, 2, 3, 5]
                             },
@@ -1983,7 +2315,7 @@ jQuery(document).ready(function () {
                         {
                             extend: 'excel',
                             text: 'EXCEL',
-                            filename: 'reports',
+                            filename: 'Search Report',
                             exportOptions: {
                                 columns: [0, 1, 2, 3, 5]
                             },
@@ -1991,7 +2323,7 @@ jQuery(document).ready(function () {
                         {
                             extend: 'print',
                             text: 'PRINT',
-                            filename: 'reports',
+                            filename: 'Search Report',
                             exportOptions: {
                                 columns: [0, 1, 2, 3, 5]
                             },
@@ -2104,11 +2436,10 @@ jQuery(document).ready(function () {
                     "pagingType": "input",
                     orderCellsTop: true,
                     fixedHeader: true,
-                    buttons: [
-                        {
+                    buttons: [{
                             extend: 'csv',
                             //Name the CSV
-                            filename: 'reports',
+                            filename: 'Search Report',
                             exportOptions: {
                                 columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
                             },
@@ -2118,7 +2449,7 @@ jQuery(document).ready(function () {
                             text: 'PDF',
                             orientation: 'landscape',
                             pageSize: 'LEGAL',
-                            filename: 'reports',
+                            filename: 'Search Report',
                             exportOptions: {
                                 columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
                             },
@@ -2126,7 +2457,7 @@ jQuery(document).ready(function () {
                         {
                             extend: 'excel',
                             text: 'EXCEL',
-                            filename: 'reports',
+                            filename: 'Search Report',
                             exportOptions: {
                                 columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
                             },
@@ -2134,7 +2465,7 @@ jQuery(document).ready(function () {
                         {
                             extend: 'print',
                             text: 'PRINT',
-                            filename: 'reports',
+                            filename: 'Search Report',
                             exportOptions: {
                                 columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
                             },
@@ -2168,11 +2499,15 @@ jQuery(document).ready(function () {
 
 
         if (jQuery('#quick_filters').val().trim() == "0") {
-            jQuery('#quick_filters').css({ 'border': '1px solid #ff0000' });
+            jQuery('#quick_filters').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#quick_filters').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#quick_filters').css({ 'color': '#333333' });
+            jQuery('#quick_filters').css({
+                'color': '#333333'
+            });
         }
 
         var data = {
@@ -2207,16 +2542,17 @@ jQuery(document).ready(function () {
                         "pageLength": 20,
                         "ordering": false,
                         'columnDefs': [{
-                            'targets': [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13], /* column index */
-                            'orderable': false, /* true or false */
+                            'targets': [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                            /* column index */
+                            'orderable': false,
+                            /* true or false */
                         }],
                         orderCellsTop: true,
                         fixedHeader: true,
-                        buttons: [
-                            {
+                        buttons: [{
                                 extend: 'csv',
                                 //Name the CSV
-                                filename: 'quick_filters',
+                                filename: 'Coverage Report',
                                 exportOptions: {
                                     columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
                                 },
@@ -2226,7 +2562,7 @@ jQuery(document).ready(function () {
                                 text: 'PDF',
                                 orientation: 'landscape',
                                 pageSize: 'LEGAL',
-                                filename: 'quick_filters',
+                                filename: 'Coverage Report',
                                 exportOptions: {
                                     columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
                                 },
@@ -2234,7 +2570,7 @@ jQuery(document).ready(function () {
                             {
                                 extend: 'excel',
                                 text: 'EXCEL',
-                                filename: 'quick_filters',
+                                filename: 'Coverage Report',
                                 exportOptions: {
                                     columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
                                 },
@@ -2242,7 +2578,7 @@ jQuery(document).ready(function () {
                             {
                                 extend: 'print',
                                 text: 'PRINT',
-                                filename: 'quick_filters',
+                                filename: 'Coverage Report',
                                 exportOptions: {
                                     columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
                                 },
@@ -2264,8 +2600,12 @@ jQuery(document).ready(function () {
     });
 
     jQuery(document).on("change", "#quick_filters", function (e) {
-        jQuery(this).css({ 'border-color': '#cccccc' });
-        jQuery(this).css({ 'color': '#555' });
+        jQuery(this).css({
+            'border-color': '#cccccc'
+        });
+        jQuery(this).css({
+            'color': '#555'
+        });
         jQuery(this).siblings('.error').remove();
 
         // jQuery('#datepicker1').removeAttr("disabled");
@@ -2374,16 +2714,24 @@ jQuery(document).ready(function () {
     });
 
     jQuery(document).on("focus", "#datepicker1,#membership_datepicker1", function (e) {
-        jQuery(this).css({ 'border-color': '#cccccc' });
-        jQuery(this).css({ 'color': '#555' });
+        jQuery(this).css({
+            'border-color': '#cccccc'
+        });
+        jQuery(this).css({
+            'color': '#555'
+        });
         jQuery(this).siblings('.error').remove();
     });
 
 
 
     jQuery(document).on("focus", "#datepicker2,#membership_datepicker2", function (e) {
-        jQuery(this).css({ 'border-color': '#cccccc' });
-        jQuery(this).css({ 'color': '#555' });
+        jQuery(this).css({
+            'border-color': '#cccccc'
+        });
+        jQuery(this).css({
+            'color': '#555'
+        });
         jQuery(this).siblings('.error').remove();
     });
 
@@ -2418,8 +2766,7 @@ jQuery(document).ready(function () {
 
             });
             jQuery('#upgrade_tr').removeAttr("style");
-        }
-        else {
+        } else {
             jQuery('#upgrade_tr').css("display", "none");
         }
     });
@@ -2447,7 +2794,7 @@ jQuery(document).ready(function () {
         });
     });
 
-    var mebership_info_table = jQuery('#mebership_info_table').DataTable({
+    var mebership_info_table = jQuery('#membership_info_table').DataTable({
         dom: 'Bfrtip',
         responsive: true,
         "pagingType": "input",
@@ -2456,15 +2803,16 @@ jQuery(document).ready(function () {
         fixedHeader: true,
         "ordering": false,
         'columnDefs': [{
-            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8], /* column index */
-            'orderable': false, /* true or false */
+            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8],
+            /* column index */
+            'orderable': false,
+            /* true or false */
         }],
-        buttons: [
-            {
+        buttons: [{
 
                 extend: 'csv',
                 //Name the CSV
-                filename: 'mebership_info',
+                filename: 'Upgrade Report',
                 exportOptions: {
                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                 },
@@ -2472,7 +2820,7 @@ jQuery(document).ready(function () {
             {
                 extend: 'pdfHtml5',
                 text: 'PDF',
-                filename: 'mebership_info',
+                filename: 'Upgrade Report',
                 orientation: 'landscape',
                 pageSize: 'LEGAL',
                 exportOptions: {
@@ -2482,7 +2830,7 @@ jQuery(document).ready(function () {
             {
                 extend: 'excel',
                 text: 'EXCEL',
-                filename: 'mebership_info',
+                filename: 'Upgrade Report',
                 exportOptions: {
                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                 },
@@ -2490,7 +2838,7 @@ jQuery(document).ready(function () {
             {
                 extend: 'print',
                 text: 'PRINT',
-                filename: 'mebership_info',
+                filename: 'Upgrade Report',
 
                 exportOptions: {
                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -2515,7 +2863,9 @@ jQuery(document).ready(function () {
             jQuery('#membership_datepicker2').datepicker('option', 'minDate', date2);
         }
     });
-    jQuery("#membership_datepicker2").datepicker({ dateFormat: 'yy-mm-dd' });
+    jQuery("#membership_datepicker2").datepicker({
+        dateFormat: 'yy-mm-dd'
+    });
 
     jQuery(document).on("click", "#membership_date_submit", function (e) {
         jQuery('.error').remove();
@@ -2556,11 +2906,15 @@ jQuery(document).ready(function () {
 
 
         if (policy != '' && package == '') {
-            jQuery('#benefit_packages').css({ 'border': '1px solid #ff0000' });
+            jQuery('#benefit_packages').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#benefit_packages').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#benefit_packages').css({ 'color': '#333333' });
+            jQuery('#benefit_packages').css({
+                'color': '#333333'
+            });
         }
 
         jQuery('.perma-admin-loader').show();
@@ -2577,7 +2931,7 @@ jQuery(document).ready(function () {
                     jQuery('.perma-admin-loader').hide();
                     jQuery('.membership-result-wrap').html('');
                     jQuery('.membership-result-wrap').html(response);
-                    jQuery('#mebership_date_table').DataTable({
+                    jQuery('#membership_date_table').DataTable({
                         dom: 'Bfrtip',
                         "pagingType": "input",
                         responsive: true,
@@ -2586,15 +2940,16 @@ jQuery(document).ready(function () {
                         fixedHeader: true,
                         "ordering": false,
                         'columnDefs': [{
-                            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8], /* column index */
-                            'orderable': false, /* true or false */
+                            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8],
+                            /* column index */
+                            'orderable': false,
+                            /* true or false */
                         }],
-                        buttons: [
-                            {
+                        buttons: [{
 
                                 extend: 'csv',
                                 //Name the CSV
-                                filename: 'mebership_info',
+                                filename: 'Upgrade Report',
                                 exportOptions: {
                                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                                 },
@@ -2602,7 +2957,7 @@ jQuery(document).ready(function () {
                             {
                                 extend: 'pdfHtml5',
                                 text: 'PDF',
-                                filename: 'mebership_info',
+                                filename: 'Upgrade Report',
                                 orientation: 'landscape',
                                 pageSize: 'LEGAL',
                                 exportOptions: {
@@ -2612,7 +2967,7 @@ jQuery(document).ready(function () {
                             {
                                 extend: 'excel',
                                 text: 'EXCEL',
-                                filename: 'mebership_info',
+                                filename: 'Upgrade Report',
                                 exportOptions: {
                                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                                 },
@@ -2620,7 +2975,7 @@ jQuery(document).ready(function () {
                             {
                                 extend: 'print',
                                 text: 'PRINT',
-                                filename: 'mebership_info',
+                                filename: 'Upgrade Report',
 
                                 exportOptions: {
                                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -2664,27 +3019,39 @@ jQuery(document).ready(function () {
 
 
         if (jQuery('#pmsafe_invitation_prefix').val().trim() == "") {
-            jQuery('#pmsafe_invitation_prefix').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_invitation_prefix').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_invitation_prefix').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_invitation_prefix').css({ 'color': '#333333' });
+            jQuery('#pmsafe_invitation_prefix').css({
+                'color': '#333333'
+            });
         }
 
         if (jQuery('#dealer_cost').val().trim() == "") {
-            jQuery('#dealer_cost').css({ 'border': '1px solid #ff0000' });
+            jQuery('#dealer_cost').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#dealer_cost').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#dealer_cost').css({ 'color': '#333333' });
+            jQuery('#dealer_cost').css({
+                'color': '#333333'
+            });
         }
 
         if (jQuery('#selling_price').val().trim() == "") {
-            jQuery('#selling_price').css({ 'border': '1px solid #ff0000' });
+            jQuery('#selling_price').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#selling_price').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#selling_price').css({ 'color': '#333333' });
+            jQuery('#selling_price').css({
+                'color': '#333333'
+            });
         }
 
         var data = {
@@ -2728,7 +3095,7 @@ jQuery(document).ready(function () {
 
 
                 }
-            });// ajax
+            }); // ajax
             return false;
         }
     });
@@ -2746,20 +3113,28 @@ jQuery(document).ready(function () {
 
 
         if (jQuery('#pmsafe_invitation_prefix').val().trim() == "") {
-            jQuery('#pmsafe_invitation_prefix').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_invitation_prefix').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_invitation_prefix').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_invitation_prefix').css({ 'color': '#333333' });
+            jQuery('#pmsafe_invitation_prefix').css({
+                'color': '#333333'
+            });
         }
 
 
         if (jQuery('#distributor_cost').val().trim() == "") {
-            jQuery('#distributor_cost').css({ 'border': '1px solid #ff0000' });
+            jQuery('#distributor_cost').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#distributor_cost').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#distributor_cost').css({ 'color': '#333333' });
+            jQuery('#distributor_cost').css({
+                'color': '#333333'
+            });
         }
 
         var data = {
@@ -2800,7 +3175,7 @@ jQuery(document).ready(function () {
 
 
                 }
-            });// ajax
+            }); // ajax
             return false;
         }
     });
@@ -2850,7 +3225,7 @@ jQuery(document).ready(function () {
                         })
 
                     }
-                });// ajax
+                }); // ajax
             } else {
                 swal("Pricing package is not deleted !");
             }
@@ -2889,7 +3264,7 @@ jQuery(document).ready(function () {
 
 
             }
-        });// ajax
+        }); // ajax
 
 
     });
@@ -2932,19 +3307,27 @@ jQuery(document).ready(function () {
 
         var validflag = true;
         if (jQuery('#edit_dealer_cost').val().trim() == "") {
-            jQuery('#edit_dealer_cost').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_dealer_cost').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#edit_dealer_cost').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#edit_dealer_cost').css({ 'color': '#333333' });
+            jQuery('#edit_dealer_cost').css({
+                'color': '#333333'
+            });
         }
 
         if (jQuery('#edit_selling_price').val().trim() == "") {
-            jQuery('#edit_selling_price').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_selling_price').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#edit_selling_price').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#edit_selling_price').css({ 'color': '#333333' });
+            jQuery('#edit_selling_price').css({
+                'color': '#333333'
+            });
         }
 
 
@@ -2983,7 +3366,7 @@ jQuery(document).ready(function () {
                         location.reload();
                     })
                 }
-            });// ajax
+            }); // ajax
         }
     });
 
@@ -2999,11 +3382,15 @@ jQuery(document).ready(function () {
 
         var validflag = true;
         if (jQuery('#edit_distributor_cost').val().trim() == "") {
-            jQuery('#edit_distributor_cost').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_distributor_cost').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#edit_distributor_cost').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#edit_distributor_cost').css({ 'color': '#333333' });
+            jQuery('#edit_distributor_cost').css({
+                'color': '#333333'
+            });
         }
 
 
@@ -3035,7 +3422,7 @@ jQuery(document).ready(function () {
                         location.reload();
                     })
                 }
-            });// ajax
+            }); // ajax
         }
     });
 
@@ -3076,7 +3463,7 @@ jQuery(document).ready(function () {
                             location.reload();
                         })
                     }
-                });// ajax
+                }); // ajax
             } else {
                 swal("Pricing package is not deleted !");
             }
@@ -3085,8 +3472,12 @@ jQuery(document).ready(function () {
     });
 
     jQuery(document).on("focus", "#pmsafe_distributor_contact_fname,#pmsafe_distributor_contact_lname,#pmsafe_distributor_contact_phone,#pmsafe_distributor_contact_email,#pmsafe_distributor_contact_password,#pmsafe_dealer_contact_fname,#pmsafe_dealer_contact_lname,#pmsafe_dealer_contact_phone,#pmsafe_dealer_contact_email,#pmsafe_dealer_contact_password,#benefit_packages,#distributor_cost,#dealer_cost,#selling_price,#pmsafe_invitation_prefix,#edit_distributor_cost,#edit_dealer_cost,#edit_selling_price,#edit_dealer_contact_fname,#edit_dealer_contact_lname,#edit_dealer_contact_phone,#edit_distributor_contact_fname,#edit_distributor_contact_lname,#edit_distributor_contact_phone,#edit_dealer_contact_email,#edit_dealer_contact_uname,#edit_distributor_contact_uname", function (e) {
-        jQuery(this).css({ 'border-color': '#cccccc' });
-        jQuery(this).css({ 'color': '#555' });
+        jQuery(this).css({
+            'border-color': '#cccccc'
+        });
+        jQuery(this).css({
+            'color': '#555'
+        });
         jQuery(this).siblings('.error').remove();
     });
 
@@ -3136,7 +3527,7 @@ jQuery(document).ready(function () {
                 jQuery('#contact_person_id').val(obj.contact_id);
 
             }
-        });// ajax
+        }); // ajax
     });
 
     jQuery(document).on("click", "#pmsafe_distributors_contact_edit", function (e) {
@@ -3167,7 +3558,7 @@ jQuery(document).ready(function () {
                 jQuery('#contact_person_id').val(obj.contact_id);
 
             }
-        });// ajax
+        }); // ajax
     });
 
     jQuery(document).on("click", "#add_new_contact_person", function (e) {
@@ -3185,69 +3576,97 @@ jQuery(document).ready(function () {
 
         var name = /^[A-Za-z]+$/;
         if (jQuery('#pmsafe_dealer_contact_fname').val().trim() == "") {
-            jQuery('#pmsafe_dealer_contact_fname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_dealer_contact_fname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_dealer_contact_fname').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else if (!(fname.match(name))) {
 
-            jQuery('#pmsafe_dealer_contact_fname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_dealer_contact_fname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_dealer_contact_fname').after("<span class='error'>Please enter valid name.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_dealer_contact_fname').css({ 'color': '#333333' });
+            jQuery('#pmsafe_dealer_contact_fname').css({
+                'color': '#333333'
+            });
         }
 
         if (jQuery('#pmsafe_dealer_contact_lname').val().trim() == "") {
-            jQuery('#pmsafe_dealer_contact_lname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_dealer_contact_lname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_dealer_contact_lname').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else if (!(lname.match(name))) {
 
-            jQuery('#pmsafe_dealer_contact_lname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_dealer_contact_lname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_dealer_contact_lname').after("<span class='error'>Please enter valid name.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_dealer_contact_lname').css({ 'color': '#333333' });
+            jQuery('#pmsafe_dealer_contact_lname').css({
+                'color': '#333333'
+            });
         }
 
         //Phone
         var numbers = /^[0-9]{10}$/;
         if (jQuery('#pmsafe_dealer_contact_phone').val().trim() == '') {
-            jQuery('#pmsafe_dealer_contact_phone').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_dealer_contact_phone').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_dealer_contact_phone').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else if (!(jQuery('#pmsafe_dealer_contact_phone').val().match(numbers))) {
-            jQuery('#pmsafe_dealer_contact_phone').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_dealer_contact_phone').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_dealer_contact_phone').after("<span class='error'>Please enter 10 digit phone number.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_dealer_contact_phone').css({ 'border-color': '#cccccc' });
+            jQuery('#pmsafe_dealer_contact_phone').css({
+                'border-color': '#cccccc'
+            });
         }
 
         //Email     
         if (jQuery('#pmsafe_dealer_contact_email').val().trim() == '') {
-            jQuery('#pmsafe_dealer_contact_email').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_dealer_contact_email').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_dealer_contact_email').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
             if (jQuery('#pmsafe_dealer_contact_email').val()) {
                 var email = jQuery("#pmsafe_dealer_contact_email").val();
                 if (!(email.match(/^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i))) {
-                    jQuery('#pmsafe_dealer_contact_email').css({ 'border': '1px solid #ff0000' });
+                    jQuery('#pmsafe_dealer_contact_email').css({
+                        'border': '1px solid #ff0000'
+                    });
                     jQuery('#pmsafe_dealer_contact_email').after("<span class='error'>Please enter valid email address.</span>");
                     validflag = false;
                 } else {
-                    jQuery('#pmsafe_dealer_contact_email').css({ 'color': '#333333' });
+                    jQuery('#pmsafe_dealer_contact_email').css({
+                        'color': '#333333'
+                    });
                 }
             }
         }
 
         if (jQuery('#pmsafe_dealer_contact_password').val().trim() == "") {
-            jQuery('#pmsafe_dealer_contact_password').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_dealer_contact_password').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_dealer_contact_password').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_dealer_contact_password').css({ 'color': '#333333' });
+            jQuery('#pmsafe_dealer_contact_password').css({
+                'color': '#333333'
+            });
         }
 
 
@@ -3288,7 +3707,7 @@ jQuery(document).ready(function () {
                         swal("Username is already exists.", "Please enter another Username.", "warning");
                     }
                 }
-            });// ajax
+            }); // ajax
         }
     });
 
@@ -3310,70 +3729,98 @@ jQuery(document).ready(function () {
 
         var name = /^[A-Za-z]+$/;
         if (jQuery('#edit_dealer_contact_fname').val().trim() == "") {
-            jQuery('#edit_dealer_contact_fname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_dealer_contact_fname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#edit_dealer_contact_fname').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else if (!(fname.match(name))) {
 
-            jQuery('#edit_dealer_contact_fname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_dealer_contact_fname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#edit_dealer_contact_fname').after("<span class='error'>Please enter valid name.</span>");
             validflag = false;
         } else {
-            jQuery('#edit_dealer_contact_fname').css({ 'color': '#333333' });
+            jQuery('#edit_dealer_contact_fname').css({
+                'color': '#333333'
+            });
         }
 
         if (jQuery('#edit_dealer_contact_lname').val().trim() == "") {
-            jQuery('#edit_dealer_contact_lname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_dealer_contact_lname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#edit_dealer_contact_lname').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else if (!(lname.match(name))) {
 
-            jQuery('#edit_dealer_contact_lname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_dealer_contact_lname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#edit_dealer_contact_lname').after("<span class='error'>Please enter valid name.</span>");
             validflag = false;
         } else {
-            jQuery('#edit_dealer_contact_lname').css({ 'color': '#333333' });
+            jQuery('#edit_dealer_contact_lname').css({
+                'color': '#333333'
+            });
         }
 
         //Phone
         var numbers = /^[0-9]{10}$/;
         if (jQuery('#edit_dealer_contact_phone').val().trim() == '') {
-            jQuery('#edit_dealer_contact_phone').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_dealer_contact_phone').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#edit_dealer_contact_phone').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else if (!(jQuery('#edit_dealer_contact_phone').val().match(numbers))) {
-            jQuery('#edit_dealer_contact_phone').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_dealer_contact_phone').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#edit_dealer_contact_phone').after("<span class='error'>Please enter 10 digit phone number.</span>");
             validflag = false;
         } else {
-            jQuery('#edit_dealer_contact_phone').css({ 'border-color': '#cccccc' });
+            jQuery('#edit_dealer_contact_phone').css({
+                'border-color': '#cccccc'
+            });
         }
 
 
         //Email     
         if (jQuery('#edit_dealer_contact_email').val().trim() == '') {
-            jQuery('#edit_dealer_contact_email').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_dealer_contact_email').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#edit_dealer_contact_email').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
             if (jQuery('#edit_dealer_contact_email').val()) {
                 var email = jQuery("#edit_dealer_contact_email").val();
                 if (!(email.match(/^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i))) {
-                    jQuery('#edit_dealer_contact_email').css({ 'border': '1px solid #ff0000' });
+                    jQuery('#edit_dealer_contact_email').css({
+                        'border': '1px solid #ff0000'
+                    });
                     jQuery('#edit_dealer_contact_email').after("<span class='error'>Please enter valid email address.</span>");
                     validflag = false;
                 } else {
-                    jQuery('#edit_dealer_contact_email').css({ 'color': '#333333' });
+                    jQuery('#edit_dealer_contact_email').css({
+                        'color': '#333333'
+                    });
                 }
             }
         }
 
         if (jQuery('#edit_dealer_contact_uname').val().trim() == "") {
-            jQuery('#edit_dealer_contact_uname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_dealer_contact_uname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#edit_dealer_contact_uname').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#edit_dealer_contact_uname').css({ 'color': '#333333' });
+            jQuery('#edit_dealer_contact_uname').css({
+                'color': '#333333'
+            });
         }
 
         var data = {
@@ -3418,7 +3865,7 @@ jQuery(document).ready(function () {
                     }
 
                 }
-            });// ajax
+            }); // ajax
         }
     });
 
@@ -3439,69 +3886,97 @@ jQuery(document).ready(function () {
 
         var name = /^[A-Za-z]+$/;
         if (jQuery('#edit_distributor_contact_fname').val().trim() == "") {
-            jQuery('#edit_distributor_contact_fname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_distributor_contact_fname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#edit_distributor_contact_fname').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else if (!(fname.match(name))) {
 
-            jQuery('#edit_distributor_contact_fname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_distributor_contact_fname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#edit_distributor_contact_fname').after("<span class='error'>Please enter valid name.</span>");
             validflag = false;
         } else {
-            jQuery('#edit_distributor_contact_fname').css({ 'color': '#333333' });
+            jQuery('#edit_distributor_contact_fname').css({
+                'color': '#333333'
+            });
         }
 
         if (jQuery('#edit_distributor_contact_lname').val().trim() == "") {
-            jQuery('#edit_distributor_contact_lname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_distributor_contact_lname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#edit_distributor_contact_lname').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else if (!(fname.match(name))) {
 
-            jQuery('#edit_distributor_contact_lname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_distributor_contact_lname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#edit_distributor_contact_lname').after("<span class='error'>Please enter valid name.</span>");
             validflag = false;
         } else {
-            jQuery('#edit_distributor_contact_lname').css({ 'color': '#333333' });
+            jQuery('#edit_distributor_contact_lname').css({
+                'color': '#333333'
+            });
         }
 
         //Phone
         var numbers = /^[0-9]{10}$/;
         if (jQuery('#edit_distributor_contact_phone').val().trim() == '') {
-            jQuery('#edit_distributor_contact_phone').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_distributor_contact_phone').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#edit_distributor_contact_phone').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else if (!(jQuery('#edit_distributor_contact_phone').val().match(numbers))) {
-            jQuery('#edit_distributor_contact_phone').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_distributor_contact_phone').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#edit_distributor_contact_phone').after("<span class='error'>Please enter 10 digit phone number.</span>");
             validflag = false;
         } else {
-            jQuery('#edit_distributor_contact_phone').css({ 'border-color': '#cccccc' });
+            jQuery('#edit_distributor_contact_phone').css({
+                'border-color': '#cccccc'
+            });
         }
 
         //Email     
         if (jQuery('#edit_distributor_contact_email').val().trim() == '') {
-            jQuery('#edit_distributor_contact_email').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_distributor_contact_email').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#edit_distributor_contact_email').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
             if (jQuery('#edit_distributor_contact_email').val()) {
                 var email = jQuery("#edit_distributor_contact_email").val();
                 if (!(email.match(/^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i))) {
-                    jQuery('#edit_distributor_contact_email').css({ 'border': '1px solid #ff0000' });
+                    jQuery('#edit_distributor_contact_email').css({
+                        'border': '1px solid #ff0000'
+                    });
                     jQuery('#edit_distributor_contact_email').after("<span class='error'>Please enter valid email address.</span>");
                     validflag = false;
                 } else {
-                    jQuery('#edit_distributor_contact_email').css({ 'color': '#333333' });
+                    jQuery('#edit_distributor_contact_email').css({
+                        'color': '#333333'
+                    });
                 }
             }
         }
 
         if (jQuery('#edit_distributor_contact_uname').val().trim() == "") {
-            jQuery('#edit_distributor_contact_uname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#edit_distributor_contact_uname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#edit_distributor_contact_uname').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#edit_distributor_contact_uname').css({ 'color': '#333333' });
+            jQuery('#edit_distributor_contact_uname').css({
+                'color': '#333333'
+            });
         }
 
         var data = {
@@ -3545,7 +4020,7 @@ jQuery(document).ready(function () {
                         swal("Username is already exists.", "Please enter another Username.", "warning");
                     }
                 }
-            });// ajax
+            }); // ajax
         }
     });
 
@@ -3565,70 +4040,98 @@ jQuery(document).ready(function () {
 
         var name = /^[A-Za-z]+$/;
         if (jQuery('#pmsafe_distributor_contact_fname').val().trim() == "") {
-            jQuery('#pmsafe_distributor_contact_fname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_distributor_contact_fname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_distributor_contact_fname').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else if (!(fname.match(name))) {
 
-            jQuery('#pmsafe_distributor_contact_fname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_distributor_contact_fname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_distributor_contact_fname').after("<span class='error'>Please enter valid name.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_distributor_contact_fname').css({ 'color': '#333333' });
+            jQuery('#pmsafe_distributor_contact_fname').css({
+                'color': '#333333'
+            });
         }
 
         if (jQuery('#pmsafe_distributor_contact_lname').val().trim() == "") {
-            jQuery('#pmsafe_distributor_contact_lname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_distributor_contact_lname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_distributor_contact_lname').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else if (!(lname.match(name))) {
 
-            jQuery('#pmsafe_distributor_contact_lname').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_distributor_contact_lname').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_distributor_contact_lname').after("<span class='error'>Please enter valid name.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_distributor_contact_lname').css({ 'color': '#333333' });
+            jQuery('#pmsafe_distributor_contact_lname').css({
+                'color': '#333333'
+            });
         }
 
         //Phone
         var numbers = /^[0-9]{10}$/;
         if (jQuery('#pmsafe_distributor_contact_phone').val().trim() == '') {
-            jQuery('#pmsafe_distributor_contact_phone').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_distributor_contact_phone').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_distributor_contact_phone').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else if (!(jQuery('#pmsafe_distributor_contact_phone').val().match(numbers))) {
-            jQuery('#pmsafe_distributor_contact_phone').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_distributor_contact_phone').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_distributor_contact_phone').after("<span class='error'>Please enter 10 digit phone number.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_distributor_contact_phone').css({ 'border-color': '#cccccc' });
+            jQuery('#pmsafe_distributor_contact_phone').css({
+                'border-color': '#cccccc'
+            });
         }
 
         //Email     
         if (jQuery('#pmsafe_distributor_contact_email').val().trim() == '') {
-            jQuery('#pmsafe_distributor_contact_email').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_distributor_contact_email').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_distributor_contact_email').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
             if (jQuery('#pmsafe_distributor_contact_email').val()) {
                 var email = jQuery("#pmsafe_distributor_contact_email").val();
                 if (!(email.match(/^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i))) {
-                    jQuery('#pmsafe_distributor_contact_email').css({ 'border': '1px solid #ff0000' });
+                    jQuery('#pmsafe_distributor_contact_email').css({
+                        'border': '1px solid #ff0000'
+                    });
                     jQuery('#pmsafe_distributor_contact_email').after("<span class='error'>Please enter valid email address.</span>");
                     validflag = false;
                 } else {
-                    jQuery('#pmsafe_distributor_contact_email').css({ 'color': '#333333' });
+                    jQuery('#pmsafe_distributor_contact_email').css({
+                        'color': '#333333'
+                    });
                 }
             }
         }
 
 
         if (jQuery('#pmsafe_distributor_contact_password').val().trim() == "") {
-            jQuery('#pmsafe_distributor_contact_password').css({ 'border': '1px solid #ff0000' });
+            jQuery('#pmsafe_distributor_contact_password').css({
+                'border': '1px solid #ff0000'
+            });
             jQuery('#pmsafe_distributor_contact_password').after("<span class='error'>This field is required.</span>");
             validflag = false;
         } else {
-            jQuery('#pmsafe_distributor_contact_password').css({ 'color': '#333333' });
+            jQuery('#pmsafe_distributor_contact_password').css({
+                'color': '#333333'
+            });
         }
 
         var data = {
@@ -3668,7 +4171,7 @@ jQuery(document).ready(function () {
                         swal("Username is already exists.", "Please enter another Username.", "warning");
                     }
                 }
-            });// ajax
+            }); // ajax
         }
     });
 
@@ -3679,7 +4182,9 @@ jQuery(document).ready(function () {
         "pagingType": "input",
         orderCellsTop: true,
         fixedHeader: true,
-        "order": [[1, "asc"]],
+        "order": [
+            [1, "asc"]
+        ],
 
     });
 
@@ -3689,7 +4194,9 @@ jQuery(document).ready(function () {
         responsive: true,
         orderCellsTop: true,
         fixedHeader: true,
-        "order": [[1, "asc"]],
+        "order": [
+            [1, "asc"]
+        ],
 
     });
 
@@ -3711,9 +4218,114 @@ jQuery(document).ready(function () {
                 jQuery('.perma-admin-loader').hide();
                 swal("Good job!", "Password Reset Email Succussfully Sent!", "success");
             }
-        });// ajax
+        }); // ajax
 
     });
 
-});// ready
 
+    jQuery("#billing_datepicker1").datepicker({
+        dateFormat: 'yy-mm-dd',
+        onSelect: function (date) {
+            var date2 = jQuery('#billing_datepicker1').datepicker('getDate');
+            date2.setDate(date2.getDate() + 1);
+            jQuery('#billing_datepicker2').datepicker('setDate', date2);
+            //sets minDate to dt1 date + 1
+            jQuery('#billing_datepicker2').datepicker('option', 'minDate', date2);
+        }
+    });
+    jQuery("#billing_datepicker2").datepicker({
+        dateFormat: 'yy-mm-dd'
+    });
+
+    jQuery('#pmsafe_dealers').select2();
+
+    jQuery(document).on("click", "#billing_report_submit", function (e) {
+        var billing_date1 = jQuery('#billing_datepicker1').val();
+        var billing_date2 = jQuery('#billing_datepicker2').val();
+        var dealers = jQuery('#pmsafe_dealers').val();
+
+        var data = {
+            action: 'billing_report_function',
+            billing_date1: billing_date1,
+            billing_date2: billing_date2,
+            dealers: dealers
+        };
+        jQuery('.perma-admin-loader').show();
+        jQuery.ajax({
+            type: 'POST',
+            url: pmAjax.ajaxurl,
+            data: data,
+            dataType: 'html',
+            success: function (response) {
+                jQuery('.perma-admin-loader').hide();
+                jQuery('#billing_report_result').html(response);
+                jQuery('#billing_info_table').DataTable({
+                    dom: 'Bfrtip',
+                    responsive: true,
+                    "pagingType": "input",
+                    "pageLength": 20,
+                    orderCellsTop: true,
+                    fixedHeader: true,
+                    "ordering": false,
+                    'columnDefs': [{
+                        'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                        /* column index */
+                        'orderable': false,
+                        /* true or false */
+                    }],
+                    buttons: [{
+
+                            extend: 'csv',
+                            //Name the CSV
+                            filename: 'Billing Report',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                            },
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'PDF',
+                            filename: 'Billing Report',
+                            orientation: 'landscape',
+                            pageSize: 'LEGAL',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                            },
+                        },
+                        {
+                            extend: 'excel',
+                            text: 'EXCEL',
+                            filename: 'Billing Report',
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                            },
+                        },
+                        {
+                            extend: 'print',
+                            text: 'PRINT',
+                            filename: 'Billing Report',
+
+                            exportOptions: {
+                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                            },
+                            customize: function (win) {
+                                jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
+
+                            }
+                        }
+
+
+                    ]
+
+                });
+                // swal("Good job!", "Password Reset Email Succussfully Sent!", "success");
+            }
+        }); // ajax
+    });
+
+
+
+
+
+
+}); // ready
