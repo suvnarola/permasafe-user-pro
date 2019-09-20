@@ -670,19 +670,6 @@ jQuery(document).ready(function () {
             });
         }
 
-
-        if (jQuery('#pmsafe_dealer_password').val().trim() == "") {
-            jQuery('#pmsafe_dealer_password').css({
-                'border': '1px solid #ff0000'
-            });
-            jQuery('#pmsafe_dealer_password').after("<span class='error'>This field is required.</span>");
-            validflag = false;
-        } else {
-            jQuery('#pmsafe_dealer_password').css({
-                'color': '#333333'
-            });
-        }
-
         //Phone
         var numbers = /^[0-9]{10}$/;
         if (jQuery('#pmsafe_dealer_phone_number').val() != '') {
@@ -1370,12 +1357,18 @@ jQuery(document).ready(function () {
     jQuery(document).on("click", "#update_code_button", function (e) {
 
         var post_id = jQuery.urlParam('post');
+
         var code_access_leval = jQuery('select[name="pmsafe_user_role"]').find(":selected").val();
         var benifit_package = jQuery('select[name="pmsafe_invitation_prefix"]').find(":selected").val();
         var dealer = jQuery('select[name="pmsafe_dealer"]').find(":selected").val();
         var distributor = jQuery('select[name="pmsafe_distributor"]').find(":selected").val();
-        var select = jQuery('#pmsafe_invitation_upgradable_prefix').select2('val');
-        // var select =  JSON.stringify(jQuery("#pmsafe_invitation_upgradable_prefix option:selected").text());
+
+        var selectedprefix = new Array();
+        jQuery('input[name="pmsafe_invitation_upgradable_prefix"]:checked').each(function () {
+            selectedprefix.push(this.value);
+        });
+
+
         var chk = jQuery('#pmsafe_invitation_code_upgradable').prop("checked");
         var allow_dealer = jQuery('#pmsafe_code_allow_dealer').prop("checked");
         if (chk == true) {
@@ -1391,7 +1384,7 @@ jQuery(document).ready(function () {
         if (allow_dealer == false) {
             allow_dealer = 0;
         }
-        //  alert(code_access_leval + ' ' + dealer + ' ' + distributor + ' ' + benifit_package + ' ' +select + ' '+chk);
+
 
         var data = {
             action: 'update_batch_codes',
@@ -1400,7 +1393,7 @@ jQuery(document).ready(function () {
             benifit_package: benifit_package,
             dealer: dealer,
             distributor: distributor,
-            select: select,
+            prefix_arr: selectedprefix,
             chk: chk,
             allow_dealer: allow_dealer
         };
@@ -2745,11 +2738,20 @@ jQuery(document).ready(function () {
 
 
             var select_val = jQuery('#pmsafe_invitation_prefix').val();
+            var edit_action = jQuery.urlParam('action');
 
-            var data = {
-                action: 'upgradable_dropdown',
-                select_val: select_val,
-            };
+            if (edit_action != '') {
+                var data = {
+                    action: 'upgradable_dropdown',
+                    select_val: select_val,
+                    edit_action: edit_action
+                };
+            } else {
+                var data = {
+                    action: 'upgradable_dropdown',
+                    select_val: select_val,
+                };
+            }
 
 
             jQuery.ajax({
@@ -2759,8 +2761,11 @@ jQuery(document).ready(function () {
                 dataType: 'html',
                 success: function (response) {
 
-                    jQuery('#pmsafe_invitation_upgradable_prefix').html('');
-                    jQuery('#pmsafe_invitation_upgradable_prefix').append(response);
+                    // jQuery('#pmsafe_invitation_upgradable_prefix').html('');
+                    // jQuery('#pmsafe_invitation_upgradable_prefix').append(response);
+                    jQuery('#upgradable_chklist').html('');
+                    jQuery('#upgradable_chklist').append(response);
+
 
                 },
 
@@ -2773,10 +2778,20 @@ jQuery(document).ready(function () {
 
     jQuery(document).on("change", "#pmsafe_invitation_prefix", function (e) {
         var select_val = jQuery('#pmsafe_invitation_prefix').val();
-        var data = {
-            action: 'upgradable_dropdown',
-            select_val: select_val,
-        };
+        var edit_action = jQuery.urlParam('action');
+
+        if (edit_action != '') {
+            var data = {
+                action: 'upgradable_dropdown',
+                select_val: select_val,
+                edit_action: edit_action
+            };
+        } else {
+            var data = {
+                action: 'upgradable_dropdown',
+                select_val: select_val,
+            };
+        }
 
 
         jQuery.ajax({
@@ -2786,8 +2801,8 @@ jQuery(document).ready(function () {
             dataType: 'html',
             success: function (response) {
 
-                jQuery('#pmsafe_invitation_upgradable_prefix').html('');
-                jQuery('#pmsafe_invitation_upgradable_prefix').append(response);
+                jQuery('#upgradable_chklist').html('');
+                jQuery('#upgradable_chklist').append(response);
 
             },
 
@@ -3042,17 +3057,7 @@ jQuery(document).ready(function () {
             });
         }
 
-        if (jQuery('#selling_price').val().trim() == "") {
-            jQuery('#selling_price').css({
-                'border': '1px solid #ff0000'
-            });
-            jQuery('#selling_price').after("<span class='error'>This field is required.</span>");
-            validflag = false;
-        } else {
-            jQuery('#selling_price').css({
-                'color': '#333333'
-            });
-        }
+
 
         var data = {
             action: 'add_dealer_benefits_package_price',
@@ -3314,18 +3319,6 @@ jQuery(document).ready(function () {
             validflag = false;
         } else {
             jQuery('#edit_dealer_cost').css({
-                'color': '#333333'
-            });
-        }
-
-        if (jQuery('#edit_selling_price').val().trim() == "") {
-            jQuery('#edit_selling_price').css({
-                'border': '1px solid #ff0000'
-            });
-            jQuery('#edit_selling_price').after("<span class='error'>This field is required.</span>");
-            validflag = false;
-        } else {
-            jQuery('#edit_selling_price').css({
                 'color': '#333333'
             });
         }
@@ -3615,22 +3608,18 @@ jQuery(document).ready(function () {
 
         //Phone
         var numbers = /^[0-9]{10}$/;
-        if (jQuery('#pmsafe_dealer_contact_phone').val().trim() == '') {
-            jQuery('#pmsafe_dealer_contact_phone').css({
-                'border': '1px solid #ff0000'
-            });
-            jQuery('#pmsafe_dealer_contact_phone').after("<span class='error'>This field is required.</span>");
-            validflag = false;
-        } else if (!(jQuery('#pmsafe_dealer_contact_phone').val().match(numbers))) {
-            jQuery('#pmsafe_dealer_contact_phone').css({
-                'border': '1px solid #ff0000'
-            });
-            jQuery('#pmsafe_dealer_contact_phone').after("<span class='error'>Please enter 10 digit phone number.</span>");
-            validflag = false;
-        } else {
-            jQuery('#pmsafe_dealer_contact_phone').css({
-                'border-color': '#cccccc'
-            });
+        if (jQuery('#pmsafe_dealer_contact_phone').val().trim() != '') {
+            if (!(jQuery('#pmsafe_dealer_contact_phone').val().match(numbers))) {
+                jQuery('#pmsafe_dealer_contact_phone').css({
+                    'border': '1px solid #ff0000'
+                });
+                jQuery('#pmsafe_dealer_contact_phone').after("<span class='error'>Please enter 10 digit phone number.</span>");
+                validflag = false;
+            } else {
+                jQuery('#pmsafe_dealer_contact_phone').css({
+                    'border-color': '#cccccc'
+                });
+            }
         }
 
         //Email     
@@ -3768,22 +3757,18 @@ jQuery(document).ready(function () {
 
         //Phone
         var numbers = /^[0-9]{10}$/;
-        if (jQuery('#edit_dealer_contact_phone').val().trim() == '') {
-            jQuery('#edit_dealer_contact_phone').css({
-                'border': '1px solid #ff0000'
-            });
-            jQuery('#edit_dealer_contact_phone').after("<span class='error'>This field is required.</span>");
-            validflag = false;
-        } else if (!(jQuery('#edit_dealer_contact_phone').val().match(numbers))) {
-            jQuery('#edit_dealer_contact_phone').css({
-                'border': '1px solid #ff0000'
-            });
-            jQuery('#edit_dealer_contact_phone').after("<span class='error'>Please enter 10 digit phone number.</span>");
-            validflag = false;
-        } else {
-            jQuery('#edit_dealer_contact_phone').css({
-                'border-color': '#cccccc'
-            });
+        if (jQuery('#edit_dealer_contact_phone').val().trim() != '') {
+            if (!(jQuery('#edit_dealer_contact_phone').val().match(numbers))) {
+                jQuery('#edit_dealer_contact_phone').css({
+                    'border': '1px solid #ff0000'
+                });
+                jQuery('#edit_dealer_contact_phone').after("<span class='error'>Please enter 10 digit phone number.</span>");
+                validflag = false;
+            } else {
+                jQuery('#edit_dealer_contact_phone').css({
+                    'border-color': '#cccccc'
+                });
+            }
         }
 
 

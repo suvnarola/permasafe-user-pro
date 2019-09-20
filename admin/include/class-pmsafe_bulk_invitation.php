@@ -86,8 +86,6 @@ class PMSafe_Bulk_Invitation{
             if($export == '1'){
                 echo '<style type="text/css">.page-title-action { display:none; }</style>';
                 $views['my-button'] = '<input type="submit" id="export-dealer-csv" title="CSV" value="Export to CSV"  style="margin:5px" /><input type="hidden" id="hdn_dealer_login" value="'.$dealer_login.'"><input type="hidden" id="hdn_dealer_name" value="'.$dealer_name.'">';
-                // $views['pdf-button'] = '<button onclick="javascript:pdfExport();">PDF</button>';
-                
                 return $views;
             }
             else{
@@ -140,7 +138,7 @@ class PMSafe_Bulk_Invitation{
     public function total_range_codes ($views){
         $dealer_login = $_GET['dealer_list'];
         
-        if($_GET['filter_action'] == 'Filter'){
+        if($_GET['filter_action'] == 'Filter' || $_GET['export'] == '1'){
                          $dealer_user = get_user_by('login',$dealer_login);
                         $dealer_id = $dealer_user->data->ID;
                         $dealer_name = get_user_meta( $dealer_id, 'dealer_name' , true );
@@ -173,9 +171,11 @@ class PMSafe_Bulk_Invitation{
                                     $available = $data['total'] - $data['used'];
                                     $total += $data['total'];
                                     $total_used += $data['used'];
+                                    $total_available += $available;
                                 }
-                                $views['used-code'] = 'Total Used code <span>('.$total_used.')</span>';
-                                $views['total-code'] .= 'Total Used & Unused code <span>('.$total.')</span>';
+                                $views['total-code'] .= 'Total Codes Assigned: <span>'.$total.'</span>';
+                                $views['used-code'] = 'Total Registered: <span>'.$total_used.'</span>';
+                                $views['unused-code'] = 'Total Unregistered: <span>'.$total_available.'</span>';
                             }
             return $views;
         }
@@ -445,21 +445,26 @@ class PMSafe_Bulk_Invitation{
                             $benefit_prefix = pmsafe_get_meta_values( '_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish' );
                             
                             $get_benifit_package = get_post_meta($post_id,'_pmsafe_invitation_prefix',true);
-                                echo '<select name="pmsafe_invitation_upgradable_prefix[]" id="pmsafe_invitation_upgradable_prefix" multiple="multiple" style="width: 300px">';
+                            
+                            echo '<div id="upgradable_chklist">';
+                            
+                                // echo '<select name="pmsafe_invitation_upgradable_prefix[]" id="pmsafe_invitation_upgradable_prefix" multiple="multiple" style="width: 300px">';
+                                echo '<ul class="chklist-wrap">';
                                 foreach ($benefit_prefix as $prefix) {
                                     $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
                                     $post = get_post($pid);
                                     $post_title = $post->post_title;
-                                  if($prefix != $get_benifit_package){
-                                        echo '<option value="'.$prefix.'" '.( (in_array($prefix,$upgradable_prefix_arr)) ? "selected"   : "").'>'.$post_title.'</option>';
-                                  }
-                                    // }
-                                    // else{
-                                    //     echo '<option value="'.$upgradable_prefix.'">'.$upgradable_prefix.'</option>';
-                                    // }
+                                    if($prefix != $get_benifit_package){
+                                        echo '<li>';
+                                        // echo '<option value="'.$prefix.'" '.( (in_array($prefix,$upgradable_prefix_arr)) ? "selected"   : "").'>'.$post_title.'</option>';
+                                        echo '<input type="checkbox" name="pmsafe_invitation_upgradable_prefix" value="'.$prefix.'" '.( (in_array($prefix,$upgradable_prefix_arr)) ? "checked"   : "").'>';
+                                        echo '<span>'.$post_title.'</span>';
+                                        echo '</li>';
+                                    }
                                 }
-                                echo '</select>';
-                            
+                                echo '</ul>';
+                                // echo '</select>';
+                            echo '</div>';
                                 
                             echo '</td>';
                         echo '</tr>';
@@ -473,8 +478,11 @@ class PMSafe_Bulk_Invitation{
                             
                             
                                 
-                                    echo '<select name="pmsafe_invitation_upgradable_prefix[]" id="pmsafe_invitation_upgradable_prefix" multiple="multiple" style="width: 300px">';
-                                    echo '</select>';
+                                    // echo '<select name="pmsafe_invitation_upgradable_prefix[]" id="pmsafe_invitation_upgradable_prefix" multiple="multiple" style="width: 300px">';
+                                    // echo '</select>';
+                            
+                            echo '<div id="upgradable_chklist">';
+                            echo '</div>';
                             
                                 
                             echo '</td>';
@@ -491,8 +499,11 @@ class PMSafe_Bulk_Invitation{
                     
                     
                         
-                            echo '<select name="pmsafe_invitation_upgradable_prefix[]" id="pmsafe_invitation_upgradable_prefix" multiple="multiple" style="width: 300px">';
-                            echo '</select>';
+                            // echo '<select name="pmsafe_invitation_upgradable_prefix[]" id="pmsafe_invitation_upgradable_prefix" multiple="multiple" style="width: 300px">';
+                            // echo '</select>';
+                            
+                             echo '<div id="upgradable_chklist">';
+                            echo '</div>';
                     
                         
                     echo '</td>';
@@ -675,7 +686,8 @@ class PMSafe_Bulk_Invitation{
         $benifit_package = $_POST['benifit_package'];
         $dealer = $_POST['dealer'];
         $distributor = $_POST['distributor'];
-        $select = $_POST['select'];
+        $select = $_POST['prefix_arr'];
+        
         $chk = $_POST['chk'];
         $allow_dealer = $_POST['allow_dealer'];
         $upgradable_prefix_str = implode(",",$select);
@@ -770,17 +782,28 @@ class PMSafe_Bulk_Invitation{
 
     public function upgradable_dropdown(){
         $select = $_POST['select_val'];
+        $edit_action = $_POST['edit_action'];
         $benefit_prefix = pmsafe_get_meta_values( '_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish' );
-        
+        echo '<ul class="chklist-wrap">';
         foreach ($benefit_prefix as $prefix) {
             $post_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
             $post = get_post($post_id);
             $post_title = $post->post_title;
+            
             if($prefix != $select){
-                echo '<option value="'.$prefix.'">'.$post_title.'</option>';
+                // echo '<option value="'.$prefix.'">'.$post_title.'</option>';
+                echo '<li>';
+                if($edit_action){
+                    echo '<input type="checkbox" name="pmsafe_invitation_upgradable_prefix" value="'.$prefix.'">';
+                    echo '<span>'.$post_title.'</span>';
+                }else{
+                   echo '<input type="checkbox" name="pmsafe_invitation_upgradable_prefix[]" value="'.$prefix.'">';
+                   echo '<span>'.$post_title.'</span>';
+                }
+                echo '</li>';
             }
         }
-        
+        echo '</ul>';
         die;
     }
 

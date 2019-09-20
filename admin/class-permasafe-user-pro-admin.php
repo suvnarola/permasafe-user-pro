@@ -721,7 +721,11 @@ class Permasafe_User_Pro_Admin
 			$dealer_email = $dealer_email;
 		}
 		$dealer_password = $_POST['pmsafe_dealer_password'];
-
+		if($dealer_password == ''){
+			$dealer_password = wp_generate_password();
+		}else{
+			$dealer_password = $dealer_password;
+		}
 
 		$dealer_store_address = $_POST['pmsafe_dealer_store_address'];
 		$dealer_phone_number = $_POST['pmsafe_dealer_phone_number'];

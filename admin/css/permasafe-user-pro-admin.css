@@ -526,12 +526,29 @@ table.view-customer-details-tbl tr:nth-child(even) {
     color: #0065a7 !important;
 }
 
-.total-code span {
+.total-code span,
+.used-code span,
+.unused-code span {
     color: #555d66;
+    color: #ffffff;
+    background-color: #0065a7;
+    border-radius: 50%;
+    padding: 3px;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background: #2a6dba;
+    line-height: 30px;
+    text-align: center;
+    color: #fff;
+    font-size: 13px;
 }
 
-.used-code span {
-    color: #555d66;
+li.total-code,
+li.used-code,
+li.unused-code {
+    font-size: 15px;
+    font-weight: 500;
 }
 
 .reports-wrap {
@@ -1033,6 +1050,23 @@ table#billing_info_table thead th {
 
 .billing-summary-wrap .summary-inner-wrap h4 {
     font-weight: 700;
+}
+
+ul.subsubsub li.my-button {
+    display: none;
+}
+
+.chklist-wrap input[type=checkbox] {
+    margin-top: auto;
+}
+
+ul.chklist-wrap {
+    -moz-column-count: 4;
+    -moz-column-gap: 20px;
+    -webkit-column-count: 4;
+    -webkit-column-gap: 20px;
+    column-count: 3;
+
 }
 
 /******** Responsive **********/

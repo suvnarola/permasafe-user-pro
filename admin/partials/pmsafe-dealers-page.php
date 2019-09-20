@@ -190,7 +190,7 @@ if ($action == 'view') {
 
             echo '<tr>';
             echo '<td>Phone Number</td>';
-            echo '<td>' . phone_number_format($phone) . '</td>';
+            echo '<td>' . (($phone)?phone_number_format($phone):'-') . '</td>';
             echo '</tr>';
 
             echo '<tr>';
