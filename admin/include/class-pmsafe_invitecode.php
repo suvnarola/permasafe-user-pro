@@ -232,16 +232,28 @@ class PMSafe_Invitation_Code {
                             $upgradable_prefix_arr = explode(",",$upgradable_prefix_str);
                             $benefit_prefix = pmsafe_get_meta_values( '_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish' );
                             $get_benifit_package = get_post_meta($post_id,'_pmsafe_invitation_prefix',true);
-                                echo '<select name="pmsafe_invitation_upgradable_prefix[]" id="pmsafe_invitation_upgradable_prefix" multiple="multiple" style="width: 300px">';
+                                // echo '<div name="pmsafe_invitation_upgradable_prefix[]" id="pmsafe_invitation_upgradable_prefix" multiple="multiple" style="width: 300px">';
+                                 echo '<div id="upgradable_chklist">';
+                                  echo '<ul class="chklist-wrap">';
                                 foreach ($benefit_prefix as $prefix) {
-                                    
+                                     $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                                    $post = get_post($pid);
+                                    $post_title = $post->post_title;
                                 if($prefix != $get_benifit_package){
-                                        echo '<option value="'.$prefix.'" '.( (in_array($prefix,$upgradable_prefix_arr)) ? "selected"   : "").'>'.$prefix.'</option>';
+                                        // echo '<option value="'.$prefix.'" '.( (in_array($prefix,$upgradable_prefix_arr)) ? "selected"   : "").'>'.$prefix.'</option>';
+                                        
+                                         echo '<li>';
+                                             echo '<input type="checkbox" id="chk-'.$i.'" name="pmsafe_invitation_upgradable_prefix" value="'.$prefix.'" '.( (in_array($prefix,$upgradable_prefix_arr)) ? "checked"   : "").'>';
+                                            echo '<label for="chk-'.$i.'">'.$post_title.'</label>';
+                                         echo '</li>';
+                                         $i++;
                                 }
                                     
                                 }
-                                echo '</select>';
+                                 echo '</ul>';
+                                echo '</div>';
                             
+                                
                                 
                             echo '</td>';
                         echo '</tr>';
@@ -252,13 +264,8 @@ class PMSafe_Invitation_Code {
                             echo '</th>';
                             
                             echo '<td>';
-                            
-                            
-                                
-                                    echo '<select name="pmsafe_invitation_upgradable_prefix[]" id="pmsafe_invitation_upgradable_prefix" multiple="multiple" style="width: 300px">';
-                                    echo '</select>';
-                            
-                                
+                                echo '<div id="upgradable_chklist">';
+                                echo '</div>';
                             echo '</td>';
                         echo '</tr>';
                         }
@@ -270,13 +277,8 @@ class PMSafe_Invitation_Code {
                     echo '</th>';
 
                     echo '<td>';
-
-
-                        
-                            echo '<select name="pmsafe_invitation_upgradable_prefix[]" id="pmsafe_invitation_upgradable_prefix" multiple="multiple" style="width: 300px">';
-                            echo '</select>';
-
-                        
+                            echo '<div id="upgradable_chklist">';
+                            echo '</div>';
                     echo '</td>';
                     echo '</tr>';
                     }
@@ -450,7 +452,7 @@ class PMSafe_Invitation_Code {
         $benifit_package = $_POST['benifit_package'];
         $dealer = $_POST['dealer'];
         $distributor = $_POST['distributor'];
-        $select = $_POST['select'];
+        $select = $_POST['prefix_arr'];
         $chk = $_POST['chk'];
         $allow_dealer = $_POST['allow_dealer'];
         $upgradable_prefix_str = implode(",",$select);

@@ -1421,7 +1421,11 @@ jQuery(document).ready(function () {
         var benifit_package = jQuery('select[name="pmsafe_invitation_prefix"]').find(":selected").val();
         var dealer = jQuery('select[name="pmsafe_dealer"]').find(":selected").val();
         var distributor = jQuery('select[name="pmsafe_distributor"]').find(":selected").val();
-        var select = jQuery('#pmsafe_invitation_upgradable_prefix').select2('val');
+        // var select = jQuery('#pmsafe_invitation_upgradable_prefix').select2('val');
+        var selectedprefix = new Array();
+        jQuery('input[name="pmsafe_invitation_upgradable_prefix"]:checked').each(function () {
+            selectedprefix.push(this.value);
+        });
 
         var chk = jQuery('#pmsafe_invitation_code_upgradable').prop("checked");
         var allow_dealer = jQuery('#pmsafe_code_allow_dealer').prop("checked");
@@ -1444,9 +1448,9 @@ jQuery(document).ready(function () {
             benifit_package: benifit_package,
             dealer: dealer,
             distributor: distributor,
-            select: select,
             chk: chk,
-            allow_dealer: allow_dealer
+            allow_dealer: allow_dealer,
+            prefix_arr: selectedprefix
         };
         jQuery('.perma-admin-loader').show();
         jQuery.ajax({

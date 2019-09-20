@@ -445,10 +445,8 @@ class PMSafe_Bulk_Invitation{
                             $benefit_prefix = pmsafe_get_meta_values( '_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish' );
                             
                             $get_benifit_package = get_post_meta($post_id,'_pmsafe_invitation_prefix',true);
-                            
+                            $i=1;
                             echo '<div id="upgradable_chklist">';
-                            
-                                // echo '<select name="pmsafe_invitation_upgradable_prefix[]" id="pmsafe_invitation_upgradable_prefix" multiple="multiple" style="width: 300px">';
                                 echo '<ul class="chklist-wrap">';
                                 foreach ($benefit_prefix as $prefix) {
                                     $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
@@ -456,14 +454,15 @@ class PMSafe_Bulk_Invitation{
                                     $post_title = $post->post_title;
                                     if($prefix != $get_benifit_package){
                                         echo '<li>';
-                                        // echo '<option value="'.$prefix.'" '.( (in_array($prefix,$upgradable_prefix_arr)) ? "selected"   : "").'>'.$post_title.'</option>';
-                                        echo '<input type="checkbox" name="pmsafe_invitation_upgradable_prefix" value="'.$prefix.'" '.( (in_array($prefix,$upgradable_prefix_arr)) ? "checked"   : "").'>';
-                                        echo '<span>'.$post_title.'</span>';
+                                        
+                                        echo '<input type="checkbox" id="chk-'.$i.'" name="pmsafe_invitation_upgradable_prefix" value="'.$prefix.'" '.( (in_array($prefix,$upgradable_prefix_arr)) ? "checked"   : "").'>';
+                                        echo '<label for="chk-'.$i.'">'.$post_title.'</label>';
                                         echo '</li>';
+                                        $i++;
                                     }
                                 }
                                 echo '</ul>';
-                                // echo '</select>';
+                                
                             echo '</div>';
                                 
                             echo '</td>';
@@ -475,11 +474,6 @@ class PMSafe_Bulk_Invitation{
                             echo '</th>';
                             
                             echo '<td>';
-                            
-                            
-                                
-                                    // echo '<select name="pmsafe_invitation_upgradable_prefix[]" id="pmsafe_invitation_upgradable_prefix" multiple="multiple" style="width: 300px">';
-                                    // echo '</select>';
                             
                             echo '<div id="upgradable_chklist">';
                             echo '</div>';
@@ -496,16 +490,8 @@ class PMSafe_Bulk_Invitation{
                     echo '</th>';
                     
                     echo '<td>';
-                    
-                    
-                        
-                            // echo '<select name="pmsafe_invitation_upgradable_prefix[]" id="pmsafe_invitation_upgradable_prefix" multiple="multiple" style="width: 300px">';
-                            // echo '</select>';
-                            
                              echo '<div id="upgradable_chklist">';
                             echo '</div>';
-                    
-                        
                     echo '</td>';
                 echo '</tr>';
                 }
@@ -785,6 +771,7 @@ class PMSafe_Bulk_Invitation{
         $edit_action = $_POST['edit_action'];
         $benefit_prefix = pmsafe_get_meta_values( '_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish' );
         echo '<ul class="chklist-wrap">';
+        $i = 1;
         foreach ($benefit_prefix as $prefix) {
             $post_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
             $post = get_post($post_id);
@@ -794,13 +781,14 @@ class PMSafe_Bulk_Invitation{
                 // echo '<option value="'.$prefix.'">'.$post_title.'</option>';
                 echo '<li>';
                 if($edit_action){
-                    echo '<input type="checkbox" name="pmsafe_invitation_upgradable_prefix" value="'.$prefix.'">';
-                    echo '<span>'.$post_title.'</span>';
+                    echo '<input type="checkbox" name="pmsafe_invitation_upgradable_prefix" id="chk-'.$i.'" value="'.$prefix.'">';
+                    echo '<label for="chk-'.$i.'">'.$post_title.'</label>';
                 }else{
-                   echo '<input type="checkbox" name="pmsafe_invitation_upgradable_prefix[]" value="'.$prefix.'">';
-                   echo '<span>'.$post_title.'</span>';
+                   echo '<input type="checkbox" name="pmsafe_invitation_upgradable_prefix[]" id="chk-'.$i.'" value="'.$prefix.'">';
+                   echo '<label for="chk-'.$i.'">'.$post_title.'</label>';
                 }
                 echo '</li>';
+                $i++;
             }
         }
         echo '</ul>';
