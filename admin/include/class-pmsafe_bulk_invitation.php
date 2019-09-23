@@ -54,7 +54,16 @@ class PMSafe_Bulk_Invitation{
             add_action( 'admin_head-edit.php', array ( $this, 'move_export_dealer_csv_function' ));
             // add_action( 'admin_footer', array ( $this, 'pdfscript' ));
             add_action('admin_footer',array($this, 'disable_enter_key_event'));
+            // add_filter('publish_post',array($this, 'redirect_to_post_on_publish_or_save'));
     }
+
+    
+    // public function redirect_to_post_on_publish_or_save($ID, $post ){
+    //     die('testinggggg');
+    //     $pl = 'www.google.com'.$ID;
+    //     wp_redirect($pl);
+    //     exit;
+    // }
 
     public function disable_enter_key_event(){
         $post_type = $_GET['post_type']; 
@@ -86,6 +95,9 @@ class PMSafe_Bulk_Invitation{
             if($export == '1'){
                 echo '<style type="text/css">.page-title-action { display:none; }</style>';
                 $views['my-button'] = '<input type="submit" id="export-dealer-csv" title="CSV" value="Export to CSV"  style="margin:5px" /><input type="hidden" id="hdn_dealer_login" value="'.$dealer_login.'"><input type="hidden" id="hdn_dealer_name" value="'.$dealer_name.'">';
+
+                $views['btn-code-redirect'] = '<a id="back_link" href="'.admin_url('admin.php?page=dealers-lists&action=view&dealer='.$dealer_id).'">Back to Dealer</a>';
+
                 return $views;
             }
             else{
@@ -197,6 +209,7 @@ class PMSafe_Bulk_Invitation{
             jQuery(document).ready( function(jQuery) 
             {
                 jQuery('#export-dealer-csv').prependTo('span.displaying-num');    
+                jQuery('#back_link').prependTo('span.displaying-num');    
             });     
         </script>
         <?php 
@@ -824,30 +837,26 @@ class PMSafe_Bulk_Invitation{
             $post_title = $_POST['pmsafe_invitation_code_start'].'-'.$_POST['pmsafe_invitation_code_end'];
            
             $prefix = $_POST['pmsafe_invitation_prefix'];
-            // $str = implode(",",$prefix);
-            // echo 'testing'.$str;
-            // pr($prefix);
+         
             $upgradable_prefix = $_POST['pmsafe_invitation_upgradable_prefix'];
             $upgradable_prefix_str = implode(",",$upgradable_prefix);
             
             
 
-            //Array ( [0] => PC3 [1] => BP1 ) 
             if(!empty($prefix)){
                 $post_title = $prefix.' : '.$post_title;
             }
-//            die;
+
             
             $timestamp = time();
-//            if(!empty($_POST['post_title']) && !empty($_POST['pmsafe_no_of_invitation_code']) ){
+
             if(!empty($_POST['pmsafe_invitation_code_start']) && !empty($_POST['pmsafe_invitation_code_end']) ){
                 
-//                $no_of_code = $_POST['pmsafe_no_of_invitation_code'];
+
                 $invitation_code_start = $_POST['pmsafe_invitation_code_start'];
                 $invitation_code_end = $_POST['pmsafe_invitation_code_end'];
                 $invitation_id = array();
                 for ($invitation_code_start; $invitation_code_start<=$invitation_code_end; $invitation_code_start++) {
-//                    $name = sprintf('%s #%d at %s', $post_title, ($i + 1), Date('Y-m-d H:i:s', $timestamp));                    
                     $name = sprintf('%s #%d', $post_title, ($invitation_code_start));
                     $invitecode_id = wp_insert_post(array (
                         'post_type' => 'pmsafe_invitecode',
@@ -855,24 +864,11 @@ class PMSafe_Bulk_Invitation{
                         'post_status' => 'publish',
                     ));
                     if($invitecode_id){
-                        // insert post meta
-//                        if(!empty($prefix)){
-//                            add_post_meta($invitecode_id, '_pmsafe_invitation_code',$prefix.($invitation_code_start) );
-//                        }
+                        
                         
                         add_post_meta($invitecode_id, '_pmsafe_invitation_code',$invitation_code_start );
                         
-//                        if(!empty($_POST['pmsafe_expiration_date'])){
-//                            add_post_meta($invitecode_id, '_pmsafe_expiration_date', $_POST['pmsafe_expiration_date']);
-//                        }else{
-//                            add_post_meta($invitecode_id, '_pmsafe_expiration_date', 'never');
-//                        }
-//                        if(!empty($_POST['pmsafe_user_limit'])){
-//                            add_post_meta($invitecode_id, '_pmsafe_user_limit', $_POST['pmsafe_user_limit']);
-//                        }
-//                        if(!empty($_POST['pmsafe_email_verification'])){
-//                            add_post_meta($invitecode_id, '_pmsafe_email_verification', $_POST['pmsafe_email_verification']);
-//                        }
+
                         if(!empty($_POST['pmsafe_user_role'])){
                             add_post_meta($invitecode_id, '_pmsafe_user_role', $_POST['pmsafe_user_role']);
                         }
@@ -893,6 +889,7 @@ class PMSafe_Bulk_Invitation{
                     wp_update_post( $update_post );
                      
                     $invitation_id[] = $invitecode_id;
+                    
                 }
                 
                 
@@ -902,7 +899,7 @@ class PMSafe_Bulk_Invitation{
                 
             }
             
-//            $invitation_meta['_pmsafe_no_of_invitation_code'] = $_POST['pmsafe_no_of_invitation_code'];
+
             $invitation_meta['_pmsafe_invitation_code_start'] = $_POST['pmsafe_invitation_code_start'];
             $invitation_meta['_pmsafe_invitation_code_end'] = $_POST['pmsafe_invitation_code_end'];
             $invitation_meta['_pmsafe_dealer'] = $_POST['pmsafe_dealer'];
@@ -917,9 +914,6 @@ class PMSafe_Bulk_Invitation{
             $invitation_meta['_pmsafe_code_create_date'] = $_POST['pmsafe_code_create_date'];
             $invitation_meta['upgradable_prefix'] = $upgradable_prefix_str;
 
-//            $invitation_meta['_pmsafe_expiration_date'] = $_POST['pmsafe_expiration_date'];
-//            $invitation_meta['_pmsafe_user_limit'] = $_POST['pmsafe_user_limit'];
-//            $invitation_meta['_pmsafe_email_verification'] = $_POST['pmsafe_email_verification'];
             $invitation_meta['_pmsafe_user_role'] = $_POST['pmsafe_user_role'];
             $invitation_meta['_pmsafe_invitation_ids'] = $invitation_id;
 
@@ -935,6 +929,12 @@ class PMSafe_Bulk_Invitation{
                 }
                 if(!$value) delete_post_meta($post->ID, $key); // Delete if blank
             }
+
+            $dealer_users = get_user_by('login',$_POST['pmsafe_dealer']);
+            $dealer_id = $dealer_users->ID;
+            $url = 'admin.php?page=dealers-lists&action=view&dealer='.$dealer_id;
+            wp_redirect($url);
+            exit;
      
     }
 

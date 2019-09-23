@@ -14,8 +14,11 @@ global $wpdb;
 
 if ($action == 'view_upgraded_policy') {
     if ($dealer_login) {
+        $dealer_users = get_user_by('login',$dealer_login);
+        $dealer_id = $dealer_users->ID;
         echo '<div class="top-head">';
         echo '<h1 class="top-heading">View <span style="color:#0065a7">' . $dealer_name . ' (' . $dealer_login . ')</span> Upgraded Membership</h1>';
+        echo '<a id="back_link" href="'.admin_url('admin.php?page=dealers-lists&action=view&dealer='.$dealer_id).'">Back to Dealer</a>';
         echo '</div>';
 
         $users_array = get_code_by_dealer_login($dealer_login);

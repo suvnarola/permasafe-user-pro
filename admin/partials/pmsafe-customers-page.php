@@ -159,8 +159,9 @@ if ($action == 'view_customer_details') {
     );
 
     echo '<div class="top-head">';
-    echo '<h1 class="top-heading">' . $dealer_name . ' ( ' . $user->user_login . ' )\'s ' . 'Registered Customers</h1>';
+    echo '<h1 class="top-heading"><span style="color:#0065a7">' . $dealer_name . ' ( ' . $user->user_login . ' )\'s ' . '</span>Registered Customers</h1>';
     echo $actions["search_customer_details"];
+    echo '<a id="back_link" href="'.admin_url('admin.php?page=dealers-lists&action=view&dealer='.$dealer_id).'">Back to Dealer</a>';
     echo '</div>';
     // $args = array(
     //     'post_type' => 'pmsafe_bulk_invi',

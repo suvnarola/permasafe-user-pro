@@ -815,8 +815,8 @@ div#search_tbl_wrapper {
     margin-bottom: 20px;
 }
 
-#mebership_info_table_filter input,
-#mebership_date_table_filter input,
+#membership_info_table_filter input,
+#membership_date_table_filter input,
 #billing_info_table_filter input,
 #search_tbl_filter input {
     margin-bottom: 10px;
@@ -929,8 +929,8 @@ table.view-dealer-price-tbl thead>tr>th p {
     text-decoration: none;
 }
 
-#mebership_info_table_wrapper thead tr th span,
-#mebership_date_table_wrapper thead tr th span {
+#membership_info_table_wrapper thead tr th span,
+#membership_date_table_wrapper thead tr th span {
     right: -18px !important;
 }
 
@@ -1052,7 +1052,8 @@ table#billing_info_table thead th {
     font-weight: 700;
 }
 
-ul.subsubsub li.my-button {
+ul.subsubsub li.my-button,
+ul.subsubsub li.btn-code-redirect {
     display: none;
 }
 
@@ -1067,6 +1068,16 @@ ul.chklist-wrap {
     -webkit-column-gap: 20px;
     column-count: 3;
 
+}
+
+.post-type-pmsafe_bulk_invi .tablenav .tablenav-pages {
+    height: auto !important;
+}
+
+a#back_link {
+    background-color: #0065a7;
+    color: #fff;
+    padding: 5px;
 }
 
 /******** Responsive **********/
