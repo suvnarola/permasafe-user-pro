@@ -4370,7 +4370,7 @@ class Permasafe_User_Pro_Public
                         echo '<div>';
                         echo '<i class="fa fa-close" id="contact-popup-close"></i>';
                         echo '<h2>Reset Password</h2>';
-                        echo '<p>You are currently using a temporary password. Please set a stronger password <a href="' . get_site_url() . '/perma-account-info">here</a></p>';
+                        echo '<p>You are currently using a temporary password. Please set a stronger password. click <a href="' . get_site_url() . '/perma-account-info">here</a></p>';
                         echo '</div>';
                         echo '</div>';
                     }

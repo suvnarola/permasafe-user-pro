@@ -479,6 +479,12 @@ class Permasafe_User_Pro_Admin
 			$distributor_email = $distributor_email;
 		}
 		$distributor_password = $_POST['pmsafe_distributor_password'];
+		if($distributor_password == ''){
+			$distributor_password = wp_generate_password();
+		}else{
+			$distributor_password = $distributor_password;
+		}
+
 		$distributor_store_address = $_POST['pmsafe_distributor_store_address'];
 		$distributor_phone_number = $_POST['pmsafe_distributor_phone_number'];
 		$distributor_fax_number = $_POST['pmsafe_distributor_fax_number'];

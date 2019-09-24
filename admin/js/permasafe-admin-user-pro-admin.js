@@ -358,20 +358,6 @@ jQuery(document).ready(function () {
             });
         }
 
-
-        //Password 
-        if (jQuery('#pmsafe_distributor_password').val().trim() == "") {
-            jQuery('#pmsafe_distributor_password').css({
-                'border': '1px solid #ff0000'
-            });
-            jQuery('#pmsafe_distributor_password').after("<span class='error'>This field is required.</span>");
-            validflag = false;
-        } else {
-            jQuery('#pmsafe_distributor_password').css({
-                'color': '#333333'
-            });
-        }
-
         //Phone
         var numbers = /^[0-9]{10}$/;
 
@@ -411,16 +397,7 @@ jQuery(document).ready(function () {
                     var obj = jQuery.parseJSON(response);
 
                     if (obj.status == true) {
-                        swal({
-                            title: "Successfully Added!",
-                            text: "User is registered.",
-                            icon: "success",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false,
-                        }).then(function () {
-                            window.location.replace(obj.redirect);
-                        })
-
+                        window.location.replace(obj.redirect);
                     }
                     if (obj.status == false) {
                         swal("Error", "", "warning");
@@ -578,15 +555,7 @@ jQuery(document).ready(function () {
                     var obj = jQuery.parseJSON(response);
 
                     if (obj.status == true) {
-                        swal({
-                            title: "Successfully Updated!",
-                            text: "User is updated.",
-                            icon: "success",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false,
-                        }).then(function () {
-                            window.location.replace(obj.redirect);
-                        })
+                        window.location.replace(obj.redirect);
                     }
                 }
             }); // ajax
@@ -720,16 +689,7 @@ jQuery(document).ready(function () {
                     var obj = jQuery.parseJSON(response);
                     // var obj = jQuery.parseJSON(response);
                     if (obj.status == true) {
-                        swal({
-                            title: "Successfully Added!",
-                            text: "User is registered.",
-                            icon: "success",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false,
-                        }).then(function () {
-                            window.location.replace(obj.redirect);
-                        })
-
+                        window.location.replace(obj.redirect);
                     }
                     if (obj.status == false) {
                         swal("Error", "", "warning");
@@ -841,16 +801,7 @@ jQuery(document).ready(function () {
                     var obj = jQuery.parseJSON(response);
                     // var obj = jQuery.parseJSON(response);
                     if (obj.status == true) {
-
-                        swal({
-                            title: "Successfully Updated!",
-                            text: "User is updated.",
-                            icon: "success",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false,
-                        }).then(function () {
-                            window.location.replace(obj.redirect);
-                        })
+                        window.location.replace(obj.redirect);
                     }
 
                 }
@@ -1895,7 +1846,7 @@ jQuery(document).ready(function () {
 
 
 
-    // update dealer
+    // update customer
     jQuery(document).on("click", "#pmsafe_customer_update", function (e) {
         // alert('in');
         e.preventDefault();
@@ -2116,17 +2067,8 @@ jQuery(document).ready(function () {
                     var obj = jQuery.parseJSON(response);
 
                     if (obj.status == true) {
-                        swal({
-                            title: "Successfully Updated!",
-                            text: "Customer has been deleted. Press OK button.",
-                            icon: "success",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false,
-                        }).then(function () {
-                            window.location.replace(obj.redirect);
-                            jQuery('.notice').css('display', 'block');
-                        })
-
+                        window.location.replace(obj.redirect);
+                        jQuery('.notice').css('display', 'block');
                     }
                     if (obj.status == false) {
 
@@ -3028,6 +2970,8 @@ jQuery(document).ready(function () {
             // showClose: false
         });
     });
+
+    //add dealer package price
     jQuery(document).on("click", "#add_package_price", function (e) {
 
         e.preventDefault();
@@ -3095,25 +3039,15 @@ jQuery(document).ready(function () {
                         jQuery('<p id="exist-package" style="color:red;">Already Exist.</p>').insertBefore('#add_package_price');
                     }
                     if (response == 1) {
-                        swal({
-                            title: "Successfully Added!",
-                            text: "Pricing package is added for dealer. Press OK button.",
-                            icon: "success",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false,
-                        }).then(function () {
-                            location.reload();
-                        })
+                        location.reload();
                     }
-
-
                 }
             }); // ajax
             return false;
         }
     });
 
-
+    // add distributor package price
     jQuery(document).on("click", "#add_distributor_cost", function (e) {
 
         e.preventDefault();
@@ -3175,18 +3109,8 @@ jQuery(document).ready(function () {
                         jQuery('<p id="exist-package" style="color:red;">Already Exist.</p>').insertBefore('#add_distributor_cost');
                     }
                     if (response == 1) {
-                        swal({
-                            title: "Successfully Added!",
-                            text: "Pricing package is added for distributor. Press OK button.",
-                            icon: "success",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false,
-                        }).then(function () {
-                            location.reload();
-                        })
+                        location.reload();
                     }
-
-
                 }
             }); // ajax
             return false;
@@ -3245,11 +3169,11 @@ jQuery(document).ready(function () {
         });
     });
 
+    // edit dealer package price
     jQuery(document).on("click", "#edit_price", function (e) {
         jQuery("#edit-price-modal").modal({
             escapeClose: false,
             clickClose: false,
-            // showClose: false
         });
         var package = jQuery(this).attr('data-id');
         var dealer_id = jQuery('#pricing_dealer_id').val();
@@ -3282,6 +3206,7 @@ jQuery(document).ready(function () {
 
     });
 
+    // edit distributor package price
     jQuery(document).on("click", "#edit_distributor_price", function (e) {
         jQuery("#edit-price-modal").modal({
             escapeClose: false,
@@ -3314,6 +3239,7 @@ jQuery(document).ready(function () {
         });
     });
 
+    // update dealer package price
     jQuery(document).on("click", "#update_package_price", function (e) {
         e.preventDefault();
         jQuery('.error').remove();
@@ -3357,20 +3283,13 @@ jQuery(document).ready(function () {
                 dataType: 'html',
                 success: function (response) {
                     jQuery('.perma-admin-loader').hide();
-                    swal({
-                        title: "Successfully Updated!",
-                        text: "Pricing package is updated for dealer. Press OK button.",
-                        icon: "success",
-                        closeOnClickOutside: false,
-                        closeOnEsc: false,
-                    }).then(function () {
-                        location.reload();
-                    })
+                    location.reload();
                 }
             }); // ajax
         }
     });
 
+    // update distributor pacakge price
     jQuery(document).on("click", "#update_distributor_cost", function (e) {
         e.preventDefault();
         jQuery('.error').remove();
@@ -3413,15 +3332,7 @@ jQuery(document).ready(function () {
                 dataType: 'html',
                 success: function (response) {
                     jQuery('.perma-admin-loader').hide();
-                    swal({
-                        title: "Successfully Updated!",
-                        text: "Pricing package is updated for distributor. Press OK button.",
-                        icon: "success",
-                        closeOnClickOutside: false,
-                        closeOnEsc: false,
-                    }).then(function () {
-                        location.reload();
-                    })
+                    location.reload();
                 }
             }); // ajax
         }
@@ -3690,15 +3601,7 @@ jQuery(document).ready(function () {
                     jQuery('.perma-admin-loader').hide();
                     var obj = jQuery.parseJSON(response);
                     if (obj.status == true) {
-                        swal({
-                            title: "Successfully Added!",
-                            text: "Contact user is registered.",
-                            icon: "success",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false,
-                        }).then(function () {
-                            location.reload();
-                        })
+                        location.reload();
                     }
                     if (obj.status == false) {
                         swal("Username is already exists.", "Please enter another Username.", "warning");
@@ -3843,15 +3746,7 @@ jQuery(document).ready(function () {
                     var obj = jQuery.parseJSON(response);
 
                     if (obj.status == true) {
-                        swal({
-                            title: "Successfully Updated!",
-                            text: "Contact user is updated.",
-                            icon: "success",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false,
-                        }).then(function () {
-                            location.reload();
-                        })
+                        location.reload();
                     }
                     if (obj.status == false) {
                         swal("Username is already exists.", "Please enter another Username.", "warning");
@@ -3918,22 +3813,18 @@ jQuery(document).ready(function () {
 
         //Phone
         var numbers = /^[0-9]{10}$/;
-        if (jQuery('#edit_distributor_contact_phone').val().trim() == '') {
-            jQuery('#edit_distributor_contact_phone').css({
-                'border': '1px solid #ff0000'
-            });
-            jQuery('#edit_distributor_contact_phone').after("<span class='error'>This field is required.</span>");
-            validflag = false;
-        } else if (!(jQuery('#edit_distributor_contact_phone').val().match(numbers))) {
-            jQuery('#edit_distributor_contact_phone').css({
-                'border': '1px solid #ff0000'
-            });
-            jQuery('#edit_distributor_contact_phone').after("<span class='error'>Please enter 10 digit phone number.</span>");
-            validflag = false;
-        } else {
-            jQuery('#edit_distributor_contact_phone').css({
-                'border-color': '#cccccc'
-            });
+        if (jQuery('#edit_distributor_contact_phone').val().trim() != '') {
+            if (!(jQuery('#edit_distributor_contact_phone').val().match(numbers))) {
+                jQuery('#edit_distributor_contact_phone').css({
+                    'border': '1px solid #ff0000'
+                });
+                jQuery('#edit_distributor_contact_phone').after("<span class='error'>Please enter 10 digit phone number.</span>");
+                validflag = false;
+            } else {
+                jQuery('#edit_distributor_contact_phone').css({
+                    'border-color': '#cccccc'
+                });
+            }
         }
 
         //Email     
@@ -3999,15 +3890,7 @@ jQuery(document).ready(function () {
                     var obj = jQuery.parseJSON(response);
 
                     if (obj.status == true) {
-                        swal({
-                            title: "Successfully Updated!",
-                            text: "Contact user is updated.",
-                            icon: "success",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false,
-                        }).then(function () {
-                            location.reload();
-                        })
+                        location.reload();
                     }
                     if (obj.status == false) {
                         swal("Username is already exists.", "Please enter another Username.", "warning");
@@ -4072,24 +3955,19 @@ jQuery(document).ready(function () {
 
         //Phone
         var numbers = /^[0-9]{10}$/;
-        if (jQuery('#pmsafe_distributor_contact_phone').val().trim() == '') {
-            jQuery('#pmsafe_distributor_contact_phone').css({
-                'border': '1px solid #ff0000'
-            });
-            jQuery('#pmsafe_distributor_contact_phone').after("<span class='error'>This field is required.</span>");
-            validflag = false;
-        } else if (!(jQuery('#pmsafe_distributor_contact_phone').val().match(numbers))) {
-            jQuery('#pmsafe_distributor_contact_phone').css({
-                'border': '1px solid #ff0000'
-            });
-            jQuery('#pmsafe_distributor_contact_phone').after("<span class='error'>Please enter 10 digit phone number.</span>");
-            validflag = false;
-        } else {
-            jQuery('#pmsafe_distributor_contact_phone').css({
-                'border-color': '#cccccc'
-            });
+        if (jQuery('#pmsafe_distributor_contact_phone').val().trim() != '') {
+            if (!(jQuery('#pmsafe_distributor_contact_phone').val().match(numbers))) {
+                jQuery('#pmsafe_distributor_contact_phone').css({
+                    'border': '1px solid #ff0000'
+                });
+                jQuery('#pmsafe_distributor_contact_phone').after("<span class='error'>Please enter 10 digit phone number.</span>");
+                validflag = false;
+            } else {
+                jQuery('#pmsafe_distributor_contact_phone').css({
+                    'border-color': '#cccccc'
+                });
+            }
         }
-
         //Email     
         if (jQuery('#pmsafe_distributor_contact_email').val().trim() == '') {
             jQuery('#pmsafe_distributor_contact_email').css({
@@ -4150,15 +4028,7 @@ jQuery(document).ready(function () {
                     jQuery('.perma-admin-loader').hide();
                     var obj = jQuery.parseJSON(response);
                     if (obj.status == true) {
-                        swal({
-                            title: "Successfully Added!",
-                            text: "Contact user is registered.",
-                            icon: "success",
-                            closeOnClickOutside: false,
-                            closeOnEsc: false,
-                        }).then(function () {
-                            location.reload();
-                        })
+                        location.reload();
                     }
                     if (obj.status == false) {
                         swal("Username is already exists.", "Please enter another Username.", "warning");
@@ -4306,19 +4176,12 @@ jQuery(document).ready(function () {
 
                             }
                         }
-
-
                     ]
 
                 });
-                // swal("Good job!", "Password Reset Email Succussfully Sent!", "success");
+
             }
         }); // ajax
     });
-
-
-
-
-
 
 }); // ready
