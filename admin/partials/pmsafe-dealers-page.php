@@ -448,7 +448,7 @@ if ($action == 'view') {
     echo '<input type="text" id="pmsafe_dealer_name" name="pmsafe_dealer_name" value="' . $name . '" class="widefats" />';
     echo '</div>';
 
-    echo '<div id="email_div">';
+    echo '<div id="email_div" style="display:none;">';
     echo '<label><strong>Email</strong></label>';
     echo '<input type="email" id="pmsafe_dealer_email" name="pmsafe_dealer_email" value="' . $user->user_email . '" class="widefat" />';
     echo '</div>';
@@ -468,7 +468,7 @@ if ($action == 'view') {
     echo '<input type="text" id="pmsafe_dealer_fax_number" name="pmsafe_dealer_fax_number" value="' . $fax . '" class="widefat" />';
     echo '</div>';
 
-    echo '<div id="password_div">';
+    echo '<div id="password_div" style="display:none;">';
     echo '<label><strong>Password</strong></label>';
     echo '<input type="password" id="pmsafe_dealer_password" name="pmsafe_dealer_password" value="" class="widefat" style="display:none;"/>';
     echo '<input type="button" value="Generate New Password" id="generate_dealer_password" />';

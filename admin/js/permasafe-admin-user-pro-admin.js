@@ -1372,7 +1372,7 @@ jQuery(document).ready(function () {
         var benifit_package = jQuery('select[name="pmsafe_invitation_prefix"]').find(":selected").val();
         var dealer = jQuery('select[name="pmsafe_dealer"]').find(":selected").val();
         var distributor = jQuery('select[name="pmsafe_distributor"]').find(":selected").val();
-        // var select = jQuery('#pmsafe_invitation_upgradable_prefix').select2('val');
+
         var selectedprefix = new Array();
         jQuery('input[name="pmsafe_invitation_upgradable_prefix"]:checked').each(function () {
             selectedprefix.push(this.value);
@@ -4091,7 +4091,7 @@ jQuery(document).ready(function () {
         onSelect: function (date) {
             var date2 = jQuery('#billing_datepicker1').datepicker('getDate');
             date2.setDate(date2.getDate() + 1);
-            jQuery('#billing_datepicker2').datepicker('setDate', date2);
+            // jQuery('#billing_datepicker2').datepicker('setDate', date2);
             //sets minDate to dt1 date + 1
             jQuery('#billing_datepicker2').datepicker('option', 'minDate', date2);
         }
@@ -4100,7 +4100,9 @@ jQuery(document).ready(function () {
         dateFormat: 'yy-mm-dd'
     });
 
-    jQuery('#pmsafe_dealers').select2();
+    jQuery('#pmsafe_dealers').select2({
+        closeOnSelect: false
+    });
 
     jQuery(document).on("click", "#billing_report_submit", function (e) {
         var billing_date1 = jQuery('#billing_datepicker1').val();

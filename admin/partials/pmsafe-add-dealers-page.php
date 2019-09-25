@@ -14,14 +14,14 @@ echo '<label><strong>Dealer Name</strong></label>';
 echo '<input type="text" id="pmsafe_dealer_name" name="pmsafe_dealer_name" value="" class="widefat" />';
 echo '</div>';
 
-echo '<div id="email_div">';
+echo '<div id="email_div" style="display:none;">';
 echo '<label><strong>Email</strong></label>';
 echo '<input type="email" id="pmsafe_dealer_email" name="pmsafe_dealer_email" value="" class="widefat" />';
 
 echo '</div>';
 
 
-echo '<div id="password_div">';
+echo '<div id="password_div" style="display:none;">';
 echo '<label><strong>Password</strong></label>';
 echo '<input type="password" id="pmsafe_dealer_password" name="pmsafe_dealer_password" value="" class="widefat" style="display:none;"/>';
 echo '<input type="button" value="Generate Password" id="generate_dealer_password" />';

@@ -451,8 +451,7 @@ class Permasafe_User_Pro_Admin
 	// add distributor
 	public function pmsafe_register_distributor_form_function()
 	{
-		// session_start();
-		// echo "session val->".$_SESSION['pmsafe_last_id'];
+		
 		$user_prefix = 'P';
 		$distributors = get_users('role=author&orderby=ID&order=DESC');
 		$last_id = $distributors[0]->user_login;
@@ -465,25 +464,17 @@ class Permasafe_User_Pro_Admin
 			$numbers = substr($last_id, 1);
 			$numbers = $numbers + 1;
 			$distributor_code = $user_prefix . $numbers;
-			// $distributor_code = 'P1001';
-
 		}
 		$distributor_name = $_POST['pmsafe_distributor_name'];
-		$distributor_email = $_POST['pmsafe_distributor_email'];
-		if (empty($distributor_email)) {
+	
 			$permitted_chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 			$random_char = substr(str_shuffle($permitted_chars), 0, 4);
 
 			$distributor_email = $random_char . '@permasafe.com';
-		} else {
-			$distributor_email = $distributor_email;
-		}
-		$distributor_password = $_POST['pmsafe_distributor_password'];
-		if($distributor_password == ''){
+	
+	
 			$distributor_password = wp_generate_password();
-		}else{
-			$distributor_password = $distributor_password;
-		}
+	
 
 		$distributor_store_address = $_POST['pmsafe_distributor_store_address'];
 		$distributor_phone_number = $_POST['pmsafe_distributor_phone_number'];
@@ -498,8 +489,6 @@ class Permasafe_User_Pro_Admin
 			update_user_meta($user_id, 'distributor_store_address', $distributor_store_address);
 			update_user_meta($user_id, 'distributor_phone_number', $distributor_phone_number);
 			update_user_meta($user_id, 'distributor_fax_number', $distributor_fax_number);
-
-
 
 			$redirect_url = admin_url('admin.php?page=distributors-lists&action=view&distributor=' . $user_id);
 			$response = array('status' => true, 'redirect' => $redirect_url);
@@ -718,20 +707,11 @@ class Permasafe_User_Pro_Admin
 
 		$dealer_name = $_POST['pmsafe_dealer_name'];
 		$dealer_email = $_POST['pmsafe_dealer_email'];
-		if (empty($dealer_email)) {
+
 			$permitted_chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 			$random_char = substr(str_shuffle($permitted_chars), 0, 4);
-
 			$dealer_email = $random_char . '@permasafe.com';
-		} else {
-			$dealer_email = $dealer_email;
-		}
-		$dealer_password = $_POST['pmsafe_dealer_password'];
-		if($dealer_password == ''){
 			$dealer_password = wp_generate_password();
-		}else{
-			$dealer_password = $dealer_password;
-		}
 
 		$dealer_store_address = $_POST['pmsafe_dealer_store_address'];
 		$dealer_phone_number = $_POST['pmsafe_dealer_phone_number'];

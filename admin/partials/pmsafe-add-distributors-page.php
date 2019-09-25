@@ -12,13 +12,13 @@ echo '<label><strong>Distributor Name</strong></label>';
 echo '<input type="text" id="pmsafe_distributor_name" name="pmsafe_distributor_name" value="" class="widefat" />';
 echo '</div>';
 
-echo '<div id="email_div">';
+echo '<div id="email_div" style="display:none;">';
 echo '<label><strong>Email</strong></label>';
 echo '<input type="email" id="pmsafe_distributor_email" name="pmsafe_distributor_email" value="" class="widefat" />';
 echo '</div>';
 
 // $distributor_pwd = wp_generate_password();
-echo '<div id="password_div">';
+echo '<div id="password_div" style="display:none;">';
 echo '<label><strong>Password</strong></label>';
 echo '<input type="password" id="pmsafe_distributor_password" name="pmsafe_distributor_password" value="" class="widefat" style="display:none;"/>';
 echo '<input type="button" value="Generate Password" id="generate_distributor_password" />';

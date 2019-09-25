@@ -382,7 +382,7 @@ if ($action == 'view') {
     echo '<input type="text" id="pmsafe_distributor_name" name="pmsafe_distributor_name" value="' . $name . '" class="widefat" />';
     echo '</div>';
 
-    echo '<div id="email_div">';
+    echo '<div id="email_div" style="display:none;">';
     echo '<label><strong>Email</strong></label>';
     echo '<input type="email" id="pmsafe_distributor_email" name="pmsafe_distributor_email" value="' . $user->user_email . '" class="widefat" />';
     echo '</div>';
@@ -403,7 +403,7 @@ if ($action == 'view') {
     echo '</div>';
 
 
-    echo '<div id="password_div">';
+    echo '<div id="password_div" style="display:none;">';
     echo '<label><strong>Password</strong></label>';
     echo '<input type="password" id="pmsafe_distributor_password" name="pmsafe_distributor_password" value="" class="widefat" style="display:none;"/>';
     echo '<input type="button" value="Generate New Password" id="generate_distributor_password" />';
