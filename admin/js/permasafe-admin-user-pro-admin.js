@@ -2781,6 +2781,7 @@ jQuery(document).ready(function () {
                 exportOptions: {
                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                 },
+
             },
             {
                 extend: 'pdfHtml5',
@@ -2791,6 +2792,7 @@ jQuery(document).ready(function () {
                 exportOptions: {
                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                 },
+                title: 'UPGRADE REPORT'
             },
             {
                 extend: 'excel',
@@ -2799,6 +2801,8 @@ jQuery(document).ready(function () {
                 exportOptions: {
                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                 },
+                title: 'UPGRADE REPORT'
+
             },
             {
                 extend: 'print',
@@ -2808,6 +2812,7 @@ jQuery(document).ready(function () {
                 exportOptions: {
                     columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
                 },
+                title: 'UPGRADE REPORT',
                 customize: function (win) {
                     jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
 
@@ -2823,7 +2828,7 @@ jQuery(document).ready(function () {
         onSelect: function (date) {
             var date2 = jQuery('#membership_datepicker1').datepicker('getDate');
             date2.setDate(date2.getDate() + 1);
-            jQuery('#membership_datepicker2').datepicker('setDate', date2);
+            // jQuery('#membership_datepicker2').datepicker('setDate', date2);
             //sets minDate to dt1 date + 1
             jQuery('#membership_datepicker2').datepicker('option', 'minDate', date2);
         }
@@ -2838,11 +2843,14 @@ jQuery(document).ready(function () {
 
         var datepicker1 = jQuery('#membership_datepicker1').val();
         var datepicker2 = jQuery('#membership_datepicker2').val();
-        var dealer = jQuery('#pmsafe_dealer').val();
-        var distributor = jQuery('#pmsafe_distributor').val();
+        var dealer = jQuery('#filter_dealers').val();
+
+        var distributor = jQuery('#filter_distributors').val();
         var policy = jQuery('#policy').val();
         var package = jQuery('#benefit_packages').val();
         var login = jQuery('#membership_login').val();
+
+
 
 
         if (login === undefined) {
@@ -2891,11 +2899,34 @@ jQuery(document).ready(function () {
                 type: 'POST',
                 url: pmAjax.ajaxurl,
                 data: data,
-                dataType: 'html',
+                // dataType: 'html',
                 success: function (response) {
                     jQuery('.perma-admin-loader').hide();
+                    var obj = jQuery.parseJSON(response);
                     jQuery('.membership-result-wrap').html('');
-                    jQuery('.membership-result-wrap').html(response);
+
+                    jQuery('.membership-result-wrap').html('<h3 style="text-align:center;">' + obj.toptitle + '</h3>' + obj.dttable);
+                    if (jQuery("input:radio").is(":checked")) {
+                        var radioValue = jQuery("input[name='show_hide']:checked").val();
+                        if (radioValue == 'hide_dealer') {
+                            jQuery('.dealer-hide').addClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 8';
+                        }
+                        if (radioValue == 'hide_distributor') {
+                            jQuery('.distributor-hide').addClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7';
+                        }
+                        if (radioValue == 'no_cost') {
+                            jQuery('.dealer-hide').addClass('nisl-pdf-link');
+                            jQuery('.distributor-hide').addClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6';
+                        }
+                        if (radioValue == 'show_cost') {
+                            jQuery('.dealer-hide').removeClass('nisl-pdf-link');
+                            jQuery('.distributor-hide').removeClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8';
+                        }
+                    }
                     jQuery('#membership_date_table').DataTable({
                         dom: 'Bfrtip',
                         "pagingType": "input",
@@ -2914,41 +2945,44 @@ jQuery(document).ready(function () {
 
                                 extend: 'csv',
                                 //Name the CSV
-                                filename: 'Upgrade Report',
+                                filename: obj.toptitle,
                                 exportOptions: {
-                                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                                    columns: [columntarget]
                                 },
                             },
                             {
                                 extend: 'pdfHtml5',
                                 text: 'PDF',
-                                filename: 'Upgrade Report',
+                                filename: obj.toptitle,
                                 orientation: 'landscape',
                                 pageSize: 'LEGAL',
                                 exportOptions: {
-                                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                                    columns: [columntarget]
                                 },
+                                title: obj.toptitle
                             },
                             {
                                 extend: 'excel',
                                 text: 'EXCEL',
-                                filename: 'Upgrade Report',
+                                filename: obj.toptitle,
                                 exportOptions: {
-                                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                                    columns: [columntarget]
                                 },
+                                title: obj.toptitle
                             },
                             {
                                 extend: 'print',
                                 text: 'PRINT',
                                 filename: 'Upgrade Report',
-
                                 exportOptions: {
-                                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                                    columns: [columntarget]
                                 },
+                                title: obj.toptitle,
                                 customize: function (win) {
                                     jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
 
                                 }
+
                             }
 
 
@@ -2962,6 +2996,39 @@ jQuery(document).ready(function () {
         }
 
     });
+
+    jQuery('#filter_dealers').select2({
+        closeOnSelect: false,
+        placeholder: 'Select Dealers'
+    });
+    jQuery('#filter_distributors').select2({
+        closeOnSelect: false,
+        placeholder: 'Select Distributors'
+    });
+
+    jQuery(document).on("change", "#filter_distributors", function (e) {
+        var distributor_login = jQuery(this).val();
+
+
+        var data = {
+            action: 'get_dealers_from_distributors',
+            distributor_login: distributor_login
+
+        };
+
+        jQuery.ajax({
+            type: 'POST',
+            url: pmAjax.ajaxurl,
+            data: data,
+            success: function (response) {
+                jQuery('#filter_dealers').html('');
+                jQuery('#filter_dealers').html(response);
+
+            },
+            dataType: 'html'
+        });
+        return false;
+    }); // select 
 
     jQuery(document).on("click", "#add_price", function (e) {
         jQuery("#price-modal").modal({

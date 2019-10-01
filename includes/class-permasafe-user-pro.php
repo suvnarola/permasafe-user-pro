@@ -283,6 +283,12 @@ class Permasafe_User_Pro
 
 		$this->loader->add_action('wp_ajax_send_reset_mail', $plugin_admin, 'send_reset_mail');
 		$this->loader->add_action('wp_ajax_nopriv_send_reset_mail', $plugin_admin, 'send_reset_mail');
+		
+		$this->loader->add_action('wp_ajax_billing_report_function', $plugin_admin, 'billing_report_function');
+		$this->loader->add_action('wp_ajax_nopriv_billing_report_function', $plugin_admin, 'billing_report_function');
+
+		$this->loader->add_action('wp_ajax_get_dealers_from_distributors', $plugin_admin, 'get_dealers_from_distributors');
+		$this->loader->add_action('wp_ajax_nopriv_get_dealers_from_distributors', $plugin_admin, 'get_dealers_from_distributors');
 	}
 
 	/**
