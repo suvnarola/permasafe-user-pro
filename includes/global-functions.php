@@ -1824,6 +1824,12 @@ function view_data_reports($id)
     $users = get_user_by('login', $login);
     $dealer_id = $users->ID;
     $dealername = get_user_meta($dealer_id, 'dealer_name', true);
+
+    $distributor_login = get_post_meta($post_id, '_pmsafe_distributor', true);
+    $distributor_users = get_user_by('login', $distributor_login);
+    $distributor_id = $distributor_users->ID;
+    $distributorname = get_user_meta($distributor_id, 'distributor_name', true);
+
     $expiration_date = date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
     // $expiration_date = '2019-04-07';
     $current_date = date('Y-m-d');
@@ -1832,167 +1838,180 @@ function view_data_reports($id)
     echo '<div class="view-data-wrap">';
     echo '<h3>Customer Details</h3>';
     echo '<p class="expired">EXPIRED ON ' . $expiration_date . '</p>';
-    echo '<div class="view-data-wrap-inner">';
-    echo '<div class="label-input">';
-    echo '<label>Member Code : </label>';
-    echo '</div>';
-    echo '<div class="input-div">';
-    echo '<p>' . get_user_meta($user_id, 'nickname', true) . '</p>';
-    echo '</div>';
-    echo '</div>';
 
-    echo '<div class="view-data-wrap-inner">';
-    echo '<div class="label-input">';
-    echo '<label>First Name : </label>';
-    echo '</div>';
-    echo '<div class="input-div">';
-    echo '<p>' . get_user_meta($user_id, 'first_name', true) . '</p>';
-    echo '</div>';
-    echo '</div>';
+    echo '<div class="coverage-wrap">';
+    
+        echo '<div class="view-data-wrap-inner">';
+        echo '<div class="label-input">';
+        echo '<label>Member Code : </label>';
+        echo '</div>';
+        echo '<div class="input-div">';
+        echo '<p>' . get_user_meta($user_id, 'nickname', true) . '</p>';
+        echo '</div>';
+        echo '</div>';
 
-    echo '<div class="view-data-wrap-inner">';
-    echo '<div class="label-input">';
-    echo '<label>Last Name : </label>';
-    echo '</div>';
-    echo '<div class="input-div">';
-    echo '<p>' . get_user_meta($user_id, 'last_name', true) . '</p>';
-    echo '</div>';
-    echo '</div>';
+        echo '<div class="view-data-wrap-inner">';
+        echo '<div class="label-input">';
+        echo '<label>First Name : </label>';
+        echo '</div>';
+        echo '<div class="input-div">';
+        echo '<p>' . get_user_meta($user_id, 'first_name', true) . '</p>';
+        echo '</div>';
+        echo '</div>';
 
-    $address1 = get_user_meta($user_id, 'pmsafe_address_1', true);
-    $address2 = get_user_meta($user_id, 'pmsafe_address_2', true);
+        echo '<div class="view-data-wrap-inner">';
+        echo '<div class="label-input">';
+        echo '<label>Last Name : </label>';
+        echo '</div>';
+        echo '<div class="input-div">';
+        echo '<p>' . get_user_meta($user_id, 'last_name', true) . '</p>';
+        echo '</div>';
+        echo '</div>';
 
-    echo '<div class="view-data-wrap-inner">';
-    echo '<div class="label-input">';
-    echo '<label>Address : </label>';
-    echo '</div>';
-    echo '<div class="input-div">';
-    echo '<p>' . $address1 . ' ' . $address2 . '</p>';
-    echo '</div>';
-    echo '</div>';
+        $address1 = get_user_meta($user_id, 'pmsafe_address_1', true);
+        $address2 = get_user_meta($user_id, 'pmsafe_address_2', true);
 
-    echo '<div class="view-data-wrap-inner">';
-    echo '<div class="label-input">';
-    echo '<label>City : </label>';
-    echo '</div>';
-    echo '<div class="input-div">';
-    echo '<p>' . get_user_meta($user_id, 'pmsafe_city', true) . '</p>';
-    echo '</div>';
-    echo '</div>';
+        echo '<div class="view-data-wrap-inner">';
+        echo '<div class="label-input">';
+        echo '<label>Address : </label>';
+        echo '</div>';
+        echo '<div class="input-div">';
+        echo '<p>' . $address1 . ' ' . $address2 . '</p>';
+        echo '</div>';
+        echo '</div>';
 
-    echo '<div class="view-data-wrap-inner">';
-    echo '<div class="label-input">';
-    echo '<label>State : </label>';
-    echo '</div>';
-    echo '<div class="input-div">';
-    echo '<p>' . get_user_meta($user_id, 'pmsafe_state', true) . '</p>';
-    echo '</div>';
-    echo '</div>';
+        echo '<div class="view-data-wrap-inner">';
+        echo '<div class="label-input">';
+        echo '<label>City : </label>';
+        echo '</div>';
+        echo '<div class="input-div">';
+        echo '<p>' . get_user_meta($user_id, 'pmsafe_city', true) . '</p>';
+        echo '</div>';
+        echo '</div>';
 
-    echo '<div class="view-data-wrap-inner">';
-    echo '<div class="label-input">';
-    echo '<label>Zip Code : </label>';
-    echo '</div>';
-    echo '<div class="input-div">';
-    echo '<p>' . get_user_meta($user_id, 'pmsafe_zip_code', true) . '</p>';
-    echo '</div>';
-    echo '</div>';
+        echo '<div class="view-data-wrap-inner">';
+        echo '<div class="label-input">';
+        echo '<label>State : </label>';
+        echo '</div>';
+        echo '<div class="input-div">';
+        echo '<p>' . get_user_meta($user_id, 'pmsafe_state', true) . '</p>';
+        echo '</div>';
+        echo '</div>';
 
-    echo '<div class="view-data-wrap-inner">';
-    echo '<div class="label-input">';
-    echo '<label>Phone : </label>';
-    echo '</div>';
-    echo '<div class="input-div">';
-    echo '<p>' . phone_number_format(get_user_meta($user_id, 'pmsafe_phone_number', true)) . '</p>';
-    echo '</div>';
-    echo '</div>';
+        echo '<div class="view-data-wrap-inner">';
+        echo '<div class="label-input">';
+        echo '<label>Zip Code : </label>';
+        echo '</div>';
+        echo '<div class="input-div">';
+        echo '<p>' . get_user_meta($user_id, 'pmsafe_zip_code', true) . '</p>';
+        echo '</div>';
+        echo '</div>';
 
-    echo '<div class="view-data-wrap-inner">';
-    echo '<div class="label-input">';
-    echo '<label>Email : </label>';
-    echo '</div>';
-    echo '<div class="input-div">';
-    echo '<p>' . get_user_meta($user_id, 'pmsafe_email', true) . '</p>';
-    echo '</div>';
-    echo '</div>';
+        echo '<div class="view-data-wrap-inner">';
+        echo '<div class="label-input">';
+        echo '<label>Phone : </label>';
+        echo '</div>';
+        echo '<div class="input-div">';
+        echo '<p>' . phone_number_format(get_user_meta($user_id, 'pmsafe_phone_number', true)) . '</p>';
+        echo '</div>';
+        echo '</div>';
 
-    echo '<div class="view-data-wrap-inner">';
-    echo '<div class="label-input">';
-    echo '<label>Dealer </label>';
-    echo '</div>';
-    echo '<div class="input-div">';
-    echo '<p>' . $dealername . ' ( ' . $login . ' )' . '</p>';
-    echo '</div>';
-    echo '</div>';
+        echo '<div class="view-data-wrap-inner">';
+        echo '<div class="label-input">';
+        echo '<label>Email : </label>';
+        echo '</div>';
+        echo '<div class="input-div">';
+        echo '<p>' . get_user_meta($user_id, 'pmsafe_email', true) . '</p>';
+        echo '</div>';
+        echo '</div>';
+
+        echo '<div class="view-data-wrap-inner">';
+        echo '<div class="label-input">';
+        echo '<label>Dealer </label>';
+        echo '</div>';
+        echo '<div class="input-div">';
+        echo '<p>' . $dealername . ' ( ' . $login . ' )' . '</p>';
+        echo '</div>';
+        echo '</div>';
+
+        echo '<div class="view-data-wrap-inner">';
+        echo '<div class="label-input">';
+        echo '<label>Dealer </label>';
+        echo '</div>';
+        echo '<div class="input-div">';
+        echo '<p>' . $distributorname . ' ( ' . $distributor_login . ' )' . '</p>';
+        echo '</div>';
+        echo '</div>';
 
 
-    echo '<div class="view-data-wrap-inner">';
-    echo '<div class="label-input">';
-    echo '<label>Vehicle Year : </label>';
-    echo '</div>';
-    echo '<div class="input-div">';
-    echo '<p>' . $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . '</p>';
-    echo '</div>';
-    echo '</div>';
+        echo '<div class="view-data-wrap-inner">';
+        echo '<div class="label-input">';
+        echo '<label>Vehicle Year : </label>';
+        echo '</div>';
+        echo '<div class="input-div">';
+        echo '<p>' . $vehicle_info[0][$nickname]['pmsafe_vehicle_year'] . '</p>';
+        echo '</div>';
+        echo '</div>';
 
-    echo '<div class="view-data-wrap-inner">';
-    echo '<div class="label-input">';
-    echo '<label>Vehicle Make : </label>';
-    echo '</div>';
-    echo '<div class="input-div">';
-    echo '<p>' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . '</p>';
-    echo '</div>';
-    echo '</div>';
+        echo '<div class="view-data-wrap-inner">';
+        echo '<div class="label-input">';
+        echo '<label>Vehicle Make : </label>';
+        echo '</div>';
+        echo '<div class="input-div">';
+        echo '<p>' . $vehicle_info[0][$nickname]['pmsafe_vehicle_make'] . '</p>';
+        echo '</div>';
+        echo '</div>';
 
-    echo '<div class="view-data-wrap-inner">';
-    echo '<div class="label-input">';
-    echo '<label>Vehicle Model : </label>';
-    echo '</div>';
-    echo '<div class="input-div">';
-    echo '<p>' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'] . '</p>';
-    echo '</div>';
-    echo '</div>';
+        echo '<div class="view-data-wrap-inner">';
+        echo '<div class="label-input">';
+        echo '<label>Vehicle Model : </label>';
+        echo '</div>';
+        echo '<div class="input-div">';
+        echo '<p>' . $vehicle_info[0][$nickname]['pmsafe_vehicle_model'] . '</p>';
+        echo '</div>';
+        echo '</div>';
 
-    echo '<div class="view-data-wrap-inner">';
-    echo '<div class="label-input">';
-    echo '<label>Vehicle VIN : </label>';
-    echo '</div>';
-    echo '<div class="input-div">';
-    echo '<p>' . $vehicle_info[0][$nickname]['pmsafe_vin'] . '</p>';
-    echo '</div>';
-    echo '</div>';
+        echo '<div class="view-data-wrap-inner">';
+        echo '<div class="label-input">';
+        echo '<label>Vehicle VIN : </label>';
+        echo '</div>';
+        echo '<div class="input-div">';
+        echo '<p>' . $vehicle_info[0][$nickname]['pmsafe_vin'] . '</p>';
+        echo '</div>';
+        echo '</div>';
 
-    echo '<div class="view-data-wrap-inner">';
-    echo '<div class="label-input">';
-    echo '<label>Registration Date : </label>';
-    echo '</div>';
-    echo '<div class="input-div">';
-    echo '<p>' . date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])) . '</p>';
-    echo '</div>';
-    echo '</div>';
+        echo '<div class="view-data-wrap-inner">';
+        echo '<div class="label-input">';
+        echo '<label>Registration Date : </label>';
+        echo '</div>';
+        echo '<div class="input-div">';
+        echo '<p>' . date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])) . '</p>';
+        echo '</div>';
+        echo '</div>';
 
-    echo '<div class="view-data-wrap-inner">';
-    echo '<div class="label-input">';
-    echo '<label>Plan ID : </label>';
-    echo '</div>';
-    echo '<div class="input-div">';
-    echo '<p>' . get_post_meta($post_id, '_pmsafe_code_prefix', true) . '</p>';
-    echo '</div>';
-    echo '</div>';
+        echo '<div class="view-data-wrap-inner">';
+        echo '<div class="label-input">';
+        echo '<label>Plan ID : </label>';
+        echo '</div>';
+        echo '<div class="input-div">';
+        echo '<p>' . get_post_meta($post_id, '_pmsafe_code_prefix', true) . '</p>';
+        echo '</div>';
+        echo '</div>';
 
-    echo '<div class="view-data-wrap-inner">';
-    echo '<div class="label-input">';
-    echo '<label>Status : </label>';
-    echo '</div>';
-    echo '<div class="input-div">';
-    if ($current_date > $expiration_date) {
+        echo '<div class="view-data-wrap-inner">';
+        echo '<div class="label-input">';
+        echo '<label>Status : </label>';
+        echo '</div>';
+        echo '<div class="input-div">';
+        if ($current_date > $expiration_date) {
 
-        echo '<p class="expired">Expired</p>';
-    } else {
-        echo '<p class="active">Active</p>';
-    }
-    echo '</div>';
-    echo '</div>';
+            echo '<p class="expired">Expired</p>';
+        } else {
+            echo '<p class="active">Active</p>';
+        }
+        echo '</div>';
+        echo '</div>';
+        echo '</div>';
     echo '</div>';
 }
 

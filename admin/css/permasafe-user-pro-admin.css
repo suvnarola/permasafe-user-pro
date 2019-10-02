@@ -739,7 +739,7 @@ div#search_tbl_wrapper {
     width: 100%;
     align-items: flex-start;
     box-shadow: 0 0 9px #ccc;
-    padding: 20px 0 20px 0px;
+    padding: 20px 10px 20px 10px;
     border: 1px solid white;
     margin-bottom: 20px;
 }
@@ -1133,6 +1133,19 @@ a#back_link {
 
 .inner-wrap.upgraded-class .filter-dropdown-wrap>div {
     width: inherit;
+}
+
+.coverage-report-wrap {
+    flex-wrap: wrap;
+}
+
+.coverage-report-wrap .tbl-result-wrap,
+.coverage-report-wrap .data-result-wrap,
+.coverage-report-wrap table#search_tbl {
+    width: 100% !important;
+}
+.coverage-report-wrap .coverage-wrap {
+    columns: 2;
 }
 
 /******** Responsive **********/

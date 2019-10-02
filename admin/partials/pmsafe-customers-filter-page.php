@@ -31,8 +31,8 @@ asort($distributor_name_arr);
 $html .= '<div class="filter-mid">';
 $html .= '<div class="select-filter-wrap">';
 // $html .= '<label>Distributot name : </label>';
-$html .= '<select id="pmsafe_distributor">';
-$html .= '<option value="">Select Distributor</option>';
+$html .= '<select id="filter_distributors" name="filter_distributors[]" multiple="multiple">';
+
 foreach ($distributor_name_arr as $key => $value) {
     $html .= '<option value="' . $key . '">' . $value . ' (' . $key . ')' . '</option>';
 }
@@ -45,15 +45,18 @@ $args = array(
     'role'         => 'contributor',
 );
 $dealer_users = get_users($args);
+foreach ($dealer_users as $key => $value) {
+    $dealer_name = get_user_meta($value->ID, 'dealer_name', true);
+    $dealer_name_arr[$value->user_login] = $dealer_name;
+}
+asort($dealer_name_arr);
 $html .= '<div class="filter-down">';
 $html .= '<div class="select-filter-wrap">';
 // $html .= '<label>Dealer name : </label>';
-$html .= '<select id="pmsafe_dealer">';
-$html .= '<option value="">Select Dealer</option>';
-// foreach ($dealer_users as $key => $value) {
-//     $dealer_name = get_user_meta($value->ID,'dealer_name',true);
-//     $html .= '<option value="'.$value->user_login.'">'.$dealer_name.'</option>';
-// }
+$html .= '<select id="filter_dealers" name="filter_dealers[]" multiple="multiple">';
+foreach ($dealer_name_arr as $key => $value) {
+    $html .=  '<option value="' . $key . '">' . $value . ' (' . $key . ')' . '</option>';
+}
 $html .= '</select>';
 $html .= '</div>';
 $html .= '</div>';
@@ -62,10 +65,10 @@ $html .= '</div>';
 // Submit
 
 $html .= '<div class="btn-filter-wrap">';
-$html .= '<input type="button" id="date_submit" value="submit"/>';
+$html .= '<input type="button" id="date_submit" value="Submit"/>';
 $html .= '</div>';
 $html .= '</div>';
-$html .= '<div class="search-result-wrap">';
+$html .= '<div class="search-result-wrap coverage-report-wrap">';
 $html .= '<div class="tbl-result-wrap">';
 
 $html .= '</div>';

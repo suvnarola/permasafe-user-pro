@@ -2437,8 +2437,8 @@ jQuery(document).ready(function () {
         var datepicker2 = jQuery('#datepicker2').val();
         var select = jQuery('#quick_filters').val();
         var select = jQuery('#quick_filters').val();
-        var dealer_name = jQuery('#pmsafe_dealer').val();
-        var distributor_name = jQuery('#pmsafe_distributor').val();
+        var dealer_name = jQuery('#filter_dealers').val();
+        var distributor_name = jQuery('#filter_distributors').val();
 
 
         if (jQuery('#quick_filters').val().trim() == "0") {
@@ -2540,6 +2540,13 @@ jQuery(document).ready(function () {
             return false;
         }
         // alert(datepicker1 + ' ' + datepicker2 + ' ' + select);
+    });
+
+    // jQuery('.coverage-report-wrap .view-data').click(function () {
+    jQuery(document).on("click", ".coverage-report-wrap .view-data", function (e) {
+        jQuery('html, body').animate({
+            scrollTop: jQuery(".coverage-report-wrap .data-result-wrap").offset().top
+        }, 1000)
     });
 
     jQuery(document).on("change", "#quick_filters", function (e) {
@@ -2844,7 +2851,6 @@ jQuery(document).ready(function () {
         var datepicker1 = jQuery('#membership_datepicker1').val();
         var datepicker2 = jQuery('#membership_datepicker2').val();
         var dealer = jQuery('#filter_dealers').val();
-
         var distributor = jQuery('#filter_distributors').val();
         var policy = jQuery('#policy').val();
         var package = jQuery('#benefit_packages').val();
