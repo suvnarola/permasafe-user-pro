@@ -2777,6 +2777,14 @@ class Permasafe_User_Pro_Admin
 				$get_dealer_id = $get_dealers->ID;
 				$get_dealer_name = get_user_meta($get_dealer_id,'dealer_name',true);
 				$title .= ' | '.$get_dealer_name;
+
+				$input_dealers[] = $login;
+				$dealer_id = $get_dealer_id;
+				$distributor_login = get_user_meta($dealer_id, 'dealer_distributor_name', true);
+				$distributors = get_users(array('search' => $distributor_login));
+				$distributor_id = $distributors->ID;
+				$distributor_name = get_user_meta($distributor_id,'distributor_name',true);	
+				$dis_arr[$login] = array('id'=>$distributor_id,'name'=>$distributor_name);
 			}
 			if (in_array('author', $role)) {
 
@@ -2785,49 +2793,72 @@ class Permasafe_User_Pro_Admin
 				$check_array =  get_code_by_distributor_login($distributor_id);
 				$get_distributor_name = get_user_meta($distributor_id,'distributor_name',true);
 				$title .= ' | '.$get_distributor_name;
+
+                $distributors = get_users(array('search' => $login));
+			
+				$dis_arr[$login] = array('id'=>$distributor_id,'name'=>$get_distributor_name);
+
+					$login_dealers =  get_users(
+						array(
+							'meta_key' => 'dealer_distributor_name',
+							'meta_value' => $distributor_id
+						)
+					);
+					foreach ($login_dealers as $login_dealer) {
+							$input_dealers[] = $login_dealer->user_login;
+				
+					}
 			}
 		} else {
-			if(!empty($dealer) && empty($distributor)){
-				foreach ($dealer as $key => $value) {
-					$dealer_arr[] = get_code_by_dealer_login($value);
-					$get_dealers  = get_user_by('login',$value);
-					$get_dealer_id = $get_dealers->ID;
-					$get_dealer_name[] = get_user_meta($get_dealer_id,'dealer_name',true);
+			if(!empty($dealer) && empty($distributor) || !empty($distributor) && !empty($dealer)){
+				
+                $input_dealers = $dealer;
+				foreach ($input_dealers as $loop_dealer) {
+					$dealer_users = get_user_by('login', $loop_dealer);
+					$dealer_arr[] = get_code_by_dealer_login($loop_dealer);
+					$dealer_id = $dealer_users->ID;
+					$get_dealer_name[] = get_user_meta($dealer_id,'dealer_name',true);
+					$distributor_login = get_user_meta($dealer_id, 'dealer_distributor_name', true);
+					$distributors = get_users(array('search' => $distributor_login));
+					foreach ($distributors as $distributor) {
+						if($distributor->user_login != $distributor_login){
+							$distributor_name = get_user_meta($distributor->ID, 'distributor_name', true);
+							$dis_arr[$distributor->user_login] = array('id'=>$distributor->ID,'name'=>$distributor_name);
+						}
+					}
 				}
+				
+
 				$get_dealer_name = implode(' | ',$get_dealer_name);
 				$title .= ' | '.$get_dealer_name;
 				$check_array = array_flatten($dealer_arr);
+                
 			}
+			
 			if(!empty($distributor) && empty($dealer)){
 				foreach ($distributor as $key => $value) {
 					$users = get_user_by('login', $value);
 					$distributor_id = $users->ID;
 					$distributor_arr[] =  get_code_by_distributor_login($distributor_id);
 					$get_distributor_name[] = get_user_meta($distributor_id,'distributor_name',true);
+                    $dealers =  get_users(
+						array(
+							'meta_key' => 'dealer_distributor_name',
+							'meta_value' => $distributor_id
+						)
+					);
+					foreach ($dealers as $user) {
+						$input_dealers[] = $user->user_login;
+					}
+                    $distributor_name = get_user_meta($distributor_id,'distributor_name',true);
+                    $dis_arr[$value] = array('id'=>$distributor_id,'name'=>$distributor_name);
 				}
 				$get_distributor_name = implode(' | ',$get_distributor_name);
 				$title .= ' | '.$get_distributor_name;
 				$check_array = array_flatten($distributor_arr);
 			}
-			if(!empty($distributor) && !empty($dealer)){
-				foreach ($dealer as $key => $value) {
-					$dealer_arr[] = get_code_by_dealer_login($value);
-					$get_dealers  = get_user_by('login',$value);
-					$get_dealer_id = $get_dealers->ID;
-					$get_dealer_name[] = get_user_meta($get_dealer_id,'dealer_name',true);
-				}
-				$get_dealer_name = implode(' | ',$get_dealer_name);
-				foreach ($distributor as $key => $value) {
-					$users = get_user_by('login', $value);
-					$distributor_id = $users->ID;
-					$distributor_arr[] =  get_code_by_distributor_login($distributor_id);
-					$get_distributor_name[] = get_user_meta($distributor_id,'distributor_name',true);
-				}
-				$get_distributor_name = implode(' | ',$get_distributor_name);
-				$title .= ' | '.$get_distributor_name.' | '.$get_dealer_name;
-				$check_array = array_flatten($dealer_arr);
-			}
 		}
+		
 
 		if(!empty($datepicker1)){
 			$title .= ' | '.$datepicker1;
@@ -3066,65 +3097,6 @@ class Permasafe_User_Pro_Admin
 		$html .= '</thead>';
 
 		$html .= '<tbody id="">';
-		if ($login != '') {
-			if (in_array('author', $role)) {
-				$distributors = get_users(array('search' => $login));
-				$detail_distributors = get_user_by('login',$login);
-				$distributor_id = $detail_distributors->ID;
-				$distributor_name = get_user_meta($distributor_id,'distributor_name',true);
-				$dis_arr[$login] = array('id'=>$distributor_id,'name'=>$distributor_name);
-
-					$login_dealers =  get_users(
-						array(
-							'meta_key' => 'dealer_distributor_name',
-							'meta_value' => $distributor_id
-						)
-					);
-					foreach ($login_dealers as $login_dealer) {
-							$input_dealers[] = $login_dealer->user_login;
-				
-					}
-			}
-			if (in_array('contributor', $role)) {
-
-				$dealers = get_user_by('login', $login);
-				$input_dealers[] = $login;
-				$dealer_id = $dealers->ID;
-				$distributor_login = get_user_meta($dealer_id, 'dealer_distributor_name', true);
-				$distributors = get_users(array('search' => $distributor_login));
-				$distributor_id = $distributors->ID;
-				$distributor_name = get_user_meta($distributor_id,'distributor_name',true);	
-				$dis_arr[$login] = array('id'=>$distributor_id,'name'=>$distributor_name);
-				
-			}
-		} else {
-			if(empty($dealer)){
-				
-				$dealer_all_users = get_users('role=contributor');
-				foreach ($dealer_all_users as $user) {
-					$input_dealers[] = $user->user_login;
-				}
-				
-			}else{
-				
-				$input_dealers = $dealer;			
-			}
-
-			foreach ($input_dealers as $loop_dealer) {
-				$dealer_users = get_user_by('login', $loop_dealer);
-				$dealer_id = $dealer_users->ID;
-				$distributor_login = get_user_meta($dealer_id, 'dealer_distributor_name', true);
-				$distributors = get_users(array('search' => $distributor_login));
-				foreach ($distributors as $distributor) {
-					if($distributor->user_login != $distributor_login){
-						$distributor_name = get_user_meta($distributor->ID, 'distributor_name', true);
-						$dis_arr[$distributor->user_login] = array('id'=>$distributor->ID,'name'=>$distributor_name);
-					}
-				}
-			}
-		
-		}
-		
 		
 		foreach ($dis_arr as $key => $value) {
 			
@@ -3156,12 +3128,11 @@ class Permasafe_User_Pro_Admin
 					$dealers =  get_users(
 						array(
 							'meta_key' => 'dealer_distributor_name',
-							// 'meta_value' => 364
 							'meta_value' => $distributor_id
 						)
 					);
 			}
-			// pr($dealers);
+			
 			foreach ($dealers as $in_dealer) {
 			
 				
@@ -3190,7 +3161,7 @@ class Permasafe_User_Pro_Admin
 
 							$bulk_prefix = get_post_meta($post_id, '_pmsafe_invitation_prefix', true);
 
-							// $bulk_prefix = get_post_meta($bulk_id,'_pmsafe_invitation_prefix',true);
+							
 							$code = get_post_meta($post_id, '_pmsafe_invitation_code', true);
 							$upgraded_id = get_post_meta($post_id, 'upgraded_by', true);
 							$dealer_name = get_user_meta($upgraded_id, 'dealer_name', true);
@@ -3232,10 +3203,8 @@ class Permasafe_User_Pro_Admin
 									$datepicker2 = $upgraded_date;
 								}
 									
-								// echo 'date is->'.$upgraded_date .'>='. $datepicker1 .'&&' .$upgraded_date .'<=' .$datepicker2;
+								
 								if ($upgraded_date >= $datepicker1 && $upgraded_date <= $datepicker2) {
-									// echo 'in date';
-									
 
 									if ($policy == "upgraded") {
 										if ($code_prefix == $package) {
