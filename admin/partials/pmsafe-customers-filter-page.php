@@ -77,7 +77,8 @@ echo '<div class="filter-wrap coverage-main">';
     echo '</div>';
 
     echo '<div class="btn-filter-wrap">';
-    echo '<input type="button" id="date_submit" value="Submit"/>';
+    echo '<input type="button" id="date_submit" value="Submit" style="cursor:pointer;"/>';
+    echo '<input type="button" name="reset" id="search_reset" value="Reset" style="background-color: #f1f1f1;width:200px;cursor:pointer;">';
     echo '</div>';
 echo '</div>';
 
