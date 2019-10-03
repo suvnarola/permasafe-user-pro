@@ -1144,8 +1144,46 @@ a#back_link {
 .coverage-report-wrap table#search_tbl {
     width: 100% !important;
 }
+
 .coverage-report-wrap .coverage-wrap {
     columns: 2;
+}
+
+.coverage-report-wrap .view-data-wrap {
+    margin-left: 0px !important;
+}
+
+.coverage-main .coverage-inner-one {
+    width: 100%;
+    display: flex;
+}
+
+.coverage-main .coverage-inner-two {
+    width: 100%;
+    margin: 15px 0;
+    display: flex;
+}
+
+.coverage-main .filter-mid,
+.coverage-main .filter-down {
+    width: 40%;
+}
+
+.coverage-main .coverage-main .select2-container,
+.coverage-main .select2-search__field,
+.coverage-main .radio-wrap {
+    width: 100% !important;
+}
+
+.coverage-main .btn-filter-wrap {
+    width: 100%;
+    margin-right: 15px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.coverage-main .btn-filter-wrap input#date_submit {
+    max-width: 200px;
 }
 
 /******** Responsive **********/

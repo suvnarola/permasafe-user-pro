@@ -2472,12 +2472,37 @@ jQuery(document).ready(function () {
                 type: 'POST',
                 url: pmAjax.ajaxurl,
                 data: data,
-                dataType: 'html',
+                // dataType: 'html',
                 success: function (response) {
                     jQuery('.perma-admin-loader').hide();
+                    var obj = jQuery.parseJSON(response);
                     jQuery('.tbl-result-wrap').html('');
                     jQuery('.data-result-wrap').html('');
-                    jQuery('.tbl-result-wrap').html(response);
+                    jQuery('.tbl-result-wrap').html('<h3 style="text-align:center;">' + obj.toptitle + '</h3>' + obj.dttable);
+
+                    if (jQuery("input:radio").is(":checked")) {
+                        var radioValue = jQuery("input[name='show_hide']:checked").val();
+                        if (radioValue == 'hide_dealer') {
+                            jQuery('.dealer-hide').addClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 8';
+                        }
+                        if (radioValue == 'hide_distributor') {
+                            jQuery('.distributor-hide').addClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7';
+                        }
+                        if (radioValue == 'no_cost') {
+                            jQuery('.dealer-hide').addClass('nisl-pdf-link');
+                            jQuery('.distributor-hide').addClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6';
+                        }
+                        if (radioValue == 'show_cost') {
+                            jQuery('.dealer-hide').removeClass('nisl-pdf-link');
+                            jQuery('.distributor-hide').removeClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8';
+                        }
+                    }
+
+                    // jQuery('.tbl-result-wrap').html(response);
 
                     jQuery('#search_tbl').DataTable({
                         dom: 'Bfrtip',
@@ -2485,7 +2510,7 @@ jQuery(document).ready(function () {
                         "pageLength": 20,
                         "ordering": false,
                         'columnDefs': [{
-                            'targets': [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8],
                             /* column index */
                             'orderable': false,
                             /* true or false */
@@ -2495,9 +2520,10 @@ jQuery(document).ready(function () {
                         buttons: [{
                                 extend: 'csv',
                                 //Name the CSV
-                                filename: 'Coverage Report',
+                                filename: obj.toptitle,
+                                title: obj.toptitle,
                                 exportOptions: {
-                                    columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                                    columns: [columntarget]
                                 },
                             },
                             {
@@ -2505,25 +2531,28 @@ jQuery(document).ready(function () {
                                 text: 'PDF',
                                 orientation: 'landscape',
                                 pageSize: 'LEGAL',
-                                filename: 'Coverage Report',
+                                filename: obj.toptitle,
+                                title: obj.toptitle,
                                 exportOptions: {
-                                    columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                                    columns: [columntarget]
                                 },
                             },
                             {
                                 extend: 'excel',
                                 text: 'EXCEL',
-                                filename: 'Coverage Report',
+                                filename: obj.toptitle,
+                                title: obj.toptitle,
                                 exportOptions: {
-                                    columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                                    columns: [columntarget]
                                 },
                             },
                             {
                                 extend: 'print',
                                 text: 'PRINT',
-                                filename: 'Coverage Report',
+                                filename: obj.toptitle,
+                                title: obj.toptitle,
                                 exportOptions: {
-                                    columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                                    columns: [columntarget]
                                 },
                                 customize: function (win) {
                                     jQuery(win.document.body).find('table').addClass('display').css('font-size', '15px');

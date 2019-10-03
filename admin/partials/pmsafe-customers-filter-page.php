@@ -1,79 +1,92 @@
 <?php
-$html .= '<h1 class="top-heading">Quick Filters</h1>';
-$html .= '<div class="filter-wrap">';
+echo '<h1 class="top-heading">Quick Filters</h1>';
+echo '<div class="filter-wrap coverage-main">';
 
-$html .= '<div class="filter-up">';
-$html .= '<div class="select-filter-wrap">';
-$html .= '<select id="quick_filters">';
-$html .= '<option value="0">Quick Filters</option>';
-$html .= '<option value="1">Expired Members</option>';
-$html .= '<option value="2">Expiring Members</option>';
-$html .= '<option value="3">Current Members</option>';
-$html .= '<option value="4">New Members</option>';
-$html .= '</select>';
-$html .= '</div>';
-$html .= '</div>';
+    echo '<div class="coverage-inner-one">'; 
+        echo '<div class="filter-up">';
+            echo '<div class="select-filter-wrap">';
+                echo '<select id="quick_filters">';
+                echo '<option value="0">Quick Filters</option>';
+                echo '<option value="1">Expired Members</option>';
+                echo '<option value="2">Expiring Members</option>';
+                echo '<option value="3">Current Members</option>';
+                echo '<option value="4">New Members</option>';
+                echo '</select>';
+            echo '</div>';
+        echo '</div>';
 
-$html .= '<div class="input-filter-wrap">';
-$html .= '<label>Date: </label><input type="text" id="datepicker1" style="width:auto;" disabled> <input type="text" id="datepicker2" style="width:auto;" disabled>';
-$html .= '</div>';
+        echo '<div class="input-filter-wrap">';
+            echo '<label>Date: </label><input type="text" id="datepicker1" style="width:auto;" disabled> <input type="text" id="datepicker2" style="width:auto;" disabled>';
+        echo '</div>';
+    echo '</div>';
 
-//Distributor name
-$args = array(
-    'role'         => 'author',
-);
-$distributor_users = get_users($args);
-foreach ($distributor_users as $key => $value) {
-    $distributor_name = get_user_meta($value->ID, 'distributor_name', true);
-  $distributor_name_arr[$value->user_login] = $distributor_name;
-}
-asort($distributor_name_arr);
-$html .= '<div class="filter-mid">';
-$html .= '<div class="select-filter-wrap">';
-// $html .= '<label>Distributot name : </label>';
-$html .= '<select id="filter_distributors" name="filter_distributors[]" multiple="multiple">';
+    echo '<div class="coverage-inner-two">'; 
+      //Distributor name
+        $args = array(
+            'role'         => 'author',
+        );
+        $distributor_users = get_users($args);
+        foreach ($distributor_users as $key => $value) {
+            $distributor_name = get_user_meta($value->ID, 'distributor_name', true);
+        $distributor_name_arr[$value->user_login] = $distributor_name;
+        }
+        asort($distributor_name_arr);
+        echo '<div class="filter-mid">';
+            echo '<div class="select-filter-wrap">';
+                echo '<select id="filter_distributors" name="filter_distributors[]" multiple="multiple">';
 
-foreach ($distributor_name_arr as $key => $value) {
-    $html .= '<option value="' . $key . '">' . $value . ' (' . $key . ')' . '</option>';
-}
-$html .= '</select>';
-$html .= '</div>';
-$html .= '</div>';
+                foreach ($distributor_name_arr as $key => $value) {
+                    echo '<option value="' . $key . '">' . $value . ' (' . $key . ')' . '</option>';
+                }
+                echo '</select>';
+            echo '</div>';
+        echo '</div>';
 
-//Dealer name
-$args = array(
-    'role'         => 'contributor',
-);
-$dealer_users = get_users($args);
-foreach ($dealer_users as $key => $value) {
-    $dealer_name = get_user_meta($value->ID, 'dealer_name', true);
-    $dealer_name_arr[$value->user_login] = $dealer_name;
-}
-asort($dealer_name_arr);
-$html .= '<div class="filter-down">';
-$html .= '<div class="select-filter-wrap">';
-// $html .= '<label>Dealer name : </label>';
-$html .= '<select id="filter_dealers" name="filter_dealers[]" multiple="multiple">';
-foreach ($dealer_name_arr as $key => $value) {
-    $html .=  '<option value="' . $key . '">' . $value . ' (' . $key . ')' . '</option>';
-}
-$html .= '</select>';
-$html .= '</div>';
-$html .= '</div>';
+        //Dealer name
+        $args = array(
+            'role'         => 'contributor',
+        );
+        $dealer_users = get_users($args);
+        foreach ($dealer_users as $key => $value) {
+            $dealer_name = get_user_meta($value->ID, 'dealer_name', true);
+            $dealer_name_arr[$value->user_login] = $dealer_name;
+        }
+        asort($dealer_name_arr);
+        echo '<div class="filter-down">';
+            echo '<div class="select-filter-wrap">';
+            echo '<select id="filter_dealers" name="filter_dealers[]" multiple="multiple">';
+                foreach ($dealer_name_arr as $key => $value) {
+                    echo  '<option value="' . $key . '">' . $value . ' (' . $key . ')' . '</option>';
+                }
+                echo '</select>';
+            echo '</div>';
+        echo '</div>';
+    echo '</div>';
 
 
 // Submit
 
-$html .= '<div class="btn-filter-wrap">';
-$html .= '<input type="button" id="date_submit" value="Submit"/>';
-$html .= '</div>';
-$html .= '</div>';
-$html .= '<div class="search-result-wrap coverage-report-wrap">';
-$html .= '<div class="tbl-result-wrap">';
+    echo '<div class="radio-wrap">';
+            echo '<div class="">';
+            echo '<label>Hide/Show Cost Column</label>';
+            echo '<input type="radio" name="show_hide" id="distributor_cost_show" value="hide_dealer">Show Distributor Cost Only';
+            echo '<input type="radio" name="show_hide" id="dealer_cost_show" value="hide_distributor">Show Dealer Cost Only';
+            echo '<input type="radio" name="show_hide" id="cost_show" value="show_cost">Show Distributor & Dealer Cost';
+            echo '<input type="radio" name="show_hide" id="cost_hide" value="no_cost">No Pricing';
+            echo '</div>';
+    echo '</div>';
 
-$html .= '</div>';
-$html .= '<div class="data-result-wrap">';
+    echo '<div class="btn-filter-wrap">';
+    echo '<input type="button" id="date_submit" value="Submit"/>';
+    echo '</div>';
+echo '</div>';
 
-$html .= '</div>';
-$html .= '</div>';
-echo $html;
+echo '<div class="search-result-wrap coverage-report-wrap">';
+echo '<div class="tbl-result-wrap">';
+
+echo '</div>';
+echo '<div class="data-result-wrap">';
+
+echo '</div>';
+echo '</div>';
+
