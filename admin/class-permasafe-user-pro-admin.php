@@ -82,6 +82,7 @@ class Permasafe_User_Pro_Admin
 		wp_enqueue_style('pmsafe_dt_css', plugin_dir_url(__FILE__) . 'css/dataTables.jqueryui.min.css', array(), time(), 'all');
 		wp_enqueue_style('pmsafe_dt_fixedHeader', plugin_dir_url(__FILE__) . 'css/fixedHeader.dataTables.min.css', array(), time(), 'all');
 		wp_enqueue_style('select2-css', plugin_dir_url(__FILE__) . 'css/select2.min.css', array(), time(), 'all');
+		wp_enqueue_style('jtoggler-css', plugin_dir_url(__FILE__) . 'css/jtoggler.styles.css', array(), time(), 'all');
 	}
 
 	/**
@@ -120,7 +121,8 @@ class Permasafe_User_Pro_Admin
 		wp_enqueue_script('dt_table_inputjs', plugin_dir_url(__FILE__) . 'js/input.js', array('jquery'), time(), false);
 		wp_enqueue_script('sweet_alert', plugin_dir_url(__FILE__) . 'js/sweetalert.min.js', array('jquery'), time(), false);
 		wp_enqueue_script('natural-js', plugin_dir_url(__FILE__) . 'js/natural.js', array('jquery'), time(), false);
-		// wp_enqueue_script( 'jquery_validation', plugin_dir_url( __FILE__ ) . 'js/jquery.validate.min.js', array( 'jquery' ), time(), false );
+		wp_enqueue_script('jtoggler-js', plugin_dir_url(__FILE__) . 'js/jtoggler.js', array('jquery'), time(), false);
+		
 
 
 	}
@@ -2373,11 +2375,11 @@ class Permasafe_User_Pro_Admin
 										$html .= '</td>';
 
 										$html .= '<td class="dealer-hide text-center">';
-										$html .=  (($dealer_cost_final_policy)?$dealer_cost_final_policy:'-');
+										$html .=  (($dealer_cost_final_policy)?'$'.$dealer_cost_final_policy:'-');
 										$html .= '</td>';
 
 										$html .= '<td class="distributor-hide text-center">';
-										$html .=  (($distributor_cost_final_policy)?$distributor_cost_final_policy:'-');
+										$html .=  (($distributor_cost_final_policy)?'$'.$distributor_cost_final_policy:'-');
 										$html .= '</td>';
 
 
@@ -2535,11 +2537,11 @@ class Permasafe_User_Pro_Admin
 										$html .= '</td>';
 
 										$html .= '<td class="dealer-hide text-center">';
-										$html .=  (($dealer_cost_final_policy)?$dealer_cost_final_policy:'-');
+										$html .=  (($dealer_cost_final_policy)?'$'.$dealer_cost_final_policy:'-');
 										$html .= '</td>';
 
 										$html .= '<td class="distributor-hide text-center">';
-										$html .=  (($distributor_cost_final_policy)?$distributor_cost_final_policy:'-');
+										$html .=  '$'.(($distributor_cost_final_policy)?'$'.$distributor_cost_final_policy:'-');
 										$html .= '</td>';
 
 
@@ -2683,11 +2685,11 @@ class Permasafe_User_Pro_Admin
 										$html .= '</td>';
 
 										$html .= '<td class="dealer-hide text-center">';
-										$html .=  (($dealer_cost_final_policy)?$dealer_cost_final_policy:'-');
+										$html .=  (($dealer_cost_final_policy)?'$'.$dealer_cost_final_policy:'-');
 										$html .= '</td>';
 
 										$html .= '<td class="distributor-hide text-center">';
-										$html .=  (($distributor_cost_final_policy)?$distributor_cost_final_policy:'-');
+										$html .=  (($distributor_cost_final_policy)?'$'.$distributor_cost_final_policy:'-');
 										$html .= '</td>';
 
 
@@ -2832,11 +2834,11 @@ class Permasafe_User_Pro_Admin
 										$html .= '</td>';
 
 										$html .= '<td class="dealer-hide text-center">';
-										$html .=  (($dealer_cost_final_policy)?$dealer_cost_final_policy:'-');
+										$html .=  (($dealer_cost_final_policy)?'$'.$dealer_cost_final_policy:'-');
 										$html .= '</td>';
 
 										$html .= '<td class="distributor-hide text-center">';
-										$html .=  (($distributor_cost_final_policy)?$distributor_cost_final_policy:'-');
+										$html .=  (($distributor_cost_final_policy)?'$'.$distributor_cost_final_policy:'-');
 										$html .= '</td>';
 
 
@@ -4411,6 +4413,42 @@ class Permasafe_User_Pro_Admin
 		foreach ($dealer_name_arr as $key => $value) {
 			echo '<option value="'.$key.'">'.$value.' ('. $key .')'.'</option>';
 		}
+		die;
+	}
+
+	public function active_inactive_code_function(){
+		$post_id = $_POST['post_id'];
+		$is_checked = $_POST['is_checked'];
+		$post_type = $_POST['post_type']; 
+		$invitation_ids = get_post_meta($post_id, '_pmsafe_invitation_ids', true);
+		$invitation_id = explode(',', $invitation_ids);
+		if(!empty($post_type)){
+			if($is_checked == 'true'){
+				update_post_meta($post_id,'code_active_inactive',1);		
+			}
+			if($is_checked == 'false'){
+				update_post_meta($post_id,'code_active_inactive',0);
+			}
+			$chk_post_type = $post_type;
+		}else{
+			if($is_checked == 'true'){
+				update_post_meta($post_id,'code_active_inactive',1);
+				foreach ($invitation_id as $id) {
+					update_post_meta($id,'code_active_inactive',1);		
+				}
+				$data = 'disabled';
+			}
+			if($is_checked == 'false'){
+				update_post_meta($post_id,'code_active_inactive',0);
+				foreach ($invitation_id as $id) {
+					update_post_meta($id,'code_active_inactive',0);
+				}
+				$data = 'enabled';
+			}
+			$chk_post_type = 'bulk';
+		}
+		// $response = array('data'=>$data,'chk_post_type'=>$chk_post_type);
+		// echo json_encode($response);
 		die;
 	}
 }

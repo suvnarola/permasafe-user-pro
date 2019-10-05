@@ -289,6 +289,9 @@ class Permasafe_User_Pro
 
 		$this->loader->add_action('wp_ajax_get_dealers_from_distributors', $plugin_admin, 'get_dealers_from_distributors');
 		$this->loader->add_action('wp_ajax_nopriv_get_dealers_from_distributors', $plugin_admin, 'get_dealers_from_distributors');
+
+		$this->loader->add_action('wp_ajax_active_inactive_code_function', $plugin_admin, 'active_inactive_code_function');
+		$this->loader->add_action('wp_ajax_nopriv_active_inactive_code_function', $plugin_admin, 'active_inactive_code_function');
 	}
 
 	/**

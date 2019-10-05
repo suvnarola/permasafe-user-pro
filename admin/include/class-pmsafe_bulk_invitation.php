@@ -952,8 +952,7 @@ class PMSafe_Bulk_Invitation{
         $columns['count_unused_code']       = __( 'Count unused', '' );
         $columns['edit_code']       = __( 'Edit', '' );
         $columns['delete_code']       = __( 'Delete', '' );
-        // $columns['role']                    = __( 'Role', '' );
-//        $columns['expiration_date']       = __( 'Expiration date', '' );
+        $columns['active_inactive']       = __( 'Active/Inactive', '' );
 
         return $columns;
     }
@@ -961,29 +960,6 @@ class PMSafe_Bulk_Invitation{
     public function custom_columns( $column, $post_id ) {
             switch ( $column ) {
 
-                // case 'role':
-                //         $role =  get_post_meta( $post_id, '_pmsafe_user_role', true );
-                //         if($role == 'subscriber'){
-                //             echo 'Customer';
-                //         }elseif($role == 'editor'){
-                //             echo 'Editor';
-                //         }elseif($role == 'contributor'){
-                //             echo 'Dealer';
-                //         }elseif($role == 'author'){
-                //             echo 'Distributor';
-                //         }elseif($role == 'administrator'){
-                //             echo 'Administrator';
-                //         }else{
-                //             echo $role;
-                //         }
-                //         break;
-//                case 'expiration_date':
-//                        if(!empty(get_post_meta( $post_id, '_pmsafe_expiration_date', true ))){                            
-//                            echo get_post_meta( $post_id, '_pmsafe_expiration_date', true ); 
-//                        }else{
-//                            echo 'Never';
-//                        }
-//                        break;
                 case 'count_unused_code':
                         $data = pmsafe_unused_code_count($post_id);
                         echo '<a href="#" title="'.$data['used'].' used out of '.$data['total'].'"><b><span style="color:red;">'.$data['used'].'</span>/<span style="color:green;">'.$data['total'].'</span></b></a>';
@@ -1022,6 +998,10 @@ class PMSafe_Bulk_Invitation{
                 break;
                 case 'delete_code':
                         echo '<i class="fa fa-trash" id="delete_code_button" style="cursor:pointer;color:#ff0000;font-size:18px;" data-id="'.$post_id.'"></i>';
+                break;
+                case 'active_inactive':
+                        $is_active = get_post_meta($post_id,'code_active_inactive',true);
+                        echo '<input type="checkbox" '.(($is_active==1)?'checked':'').' title="'.(($is_active==1)?'Active':'Inactive').'" class="jtoggler" data-id="'.$post_id.'">';
                 break;
                
             }

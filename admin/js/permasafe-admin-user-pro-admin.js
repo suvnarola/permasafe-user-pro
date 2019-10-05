@@ -2480,8 +2480,8 @@ jQuery(document).ready(function () {
                     jQuery('.data-result-wrap').html('');
                     jQuery('.tbl-result-wrap').html('<h3 style="text-align:center;">' + obj.toptitle + '</h3>' + obj.dttable);
 
+                    var radioValue = jQuery("input[name='show_hide']:checked").val();
                     if (jQuery("input:radio").is(":checked")) {
-                        var radioValue = jQuery("input[name='show_hide']:checked").val();
                         if (radioValue == 'hide_dealer') {
                             jQuery('.dealer-hide').addClass('nisl-pdf-link');
                             var columntarget = '0, 1, 2, 3, 4, 5, 6, 8';
@@ -2500,6 +2500,8 @@ jQuery(document).ready(function () {
                             jQuery('.distributor-hide').removeClass('nisl-pdf-link');
                             var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8';
                         }
+                    } else {
+                        var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8';
                     }
 
                     // jQuery('.tbl-result-wrap').html(response);
@@ -2941,8 +2943,8 @@ jQuery(document).ready(function () {
                     jQuery('.membership-result-wrap').html('');
 
                     jQuery('.membership-result-wrap').html('<h3 style="text-align:center;">' + obj.toptitle + '</h3>' + obj.dttable);
+                    var radioValue = jQuery("input[name='show_hide']:checked").val();
                     if (jQuery("input:radio").is(":checked")) {
-                        var radioValue = jQuery("input[name='show_hide']:checked").val();
                         if (radioValue == 'hide_dealer') {
                             jQuery('.dealer-hide').addClass('nisl-pdf-link');
                             var columntarget = '0, 1, 2, 3, 4, 5, 6, 8';
@@ -2961,6 +2963,8 @@ jQuery(document).ready(function () {
                             jQuery('.distributor-hide').removeClass('nisl-pdf-link');
                             var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8';
                         }
+                    } else {
+                        var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8';
                     }
                     jQuery('#membership_date_table').DataTable({
                         dom: 'Bfrtip',
@@ -4286,6 +4290,46 @@ jQuery(document).ready(function () {
 
             }
         }); // ajax
+    });
+
+    jQuery('.jtoggler').jtoggler();
+
+    jQuery(document).on('jt:toggled', function (event, target) {
+
+        var post_id = jQuery(target).attr('data-id');
+        var is_checked = jQuery(target).prop('checked');
+        var post_type = jQuery.urlParam('post_type');
+
+        if (post_type == 'pmsafe_invitecode') {
+            var data = {
+                action: 'active_inactive_code_function',
+                post_id: post_id,
+                is_checked: is_checked,
+                post_type: post_type
+            };
+        } else {
+            var data = {
+                action: 'active_inactive_code_function',
+                post_id: post_id,
+                is_checked: is_checked
+            };
+        }
+        jQuery.ajax({
+            type: 'POST',
+            url: pmAjax.ajaxurl,
+            data: data,
+
+            success: function (response) {
+                // var obj = jQuery.parseJSON(response);
+                // if (obj.chk_post_type != 'bulk') {
+                //     if (obj.data == 'disabled') {
+                //         jQuery('.invite-toggle').attr('disabled', 'disabled');
+                //     } else {
+                //         jQuery('.invite-toggle').removeAttr('disabled');
+                //     }
+                // }
+            }
+        })
     });
 
 }); // ready

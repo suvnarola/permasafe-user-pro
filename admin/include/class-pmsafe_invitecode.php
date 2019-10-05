@@ -584,6 +584,8 @@ class PMSafe_Invitation_Code {
         $columns['date_used']               = __( 'Date Used', '' );
         $columns['pdf']                     = __( 'PDF', '' );
         $columns['reset']                   = __( 'Reset Code', '' );
+        $columns['reset']                   = __( 'Reset Code', '' );
+        $columns['active_inactive']       = __( 'Active/Inactive', '' );
 
         return $columns;
     }
@@ -646,7 +648,17 @@ class PMSafe_Invitation_Code {
                         break;
                 case 'reset':
                         echo '<i class="fa fa-undo" style="font-size:20px;cursor:pointer;color:#0065a7;" title="reset" id="reset-code" data-id="'.$post_id.'"></i>';
-                    break;
+                      break;
+                case 'active_inactive':
+                        $is_active = get_post_meta($post_id,'code_active_inactive',true);
+                        $bulk_id = get_post_meta($post_id,'_pmsafe_bulk_invitation_id',true);
+                        $bulk_active_inactive = get_post_meta($bulk_id,'code_active_inactive',true);
+                        if($bulk_active_inactive == 1){
+                            echo '<input type="checkbox" '.(($is_active==1)?'checked':'').' disabled title="'.(($is_active==1)?'Active':'Inactive').'" class="jtoggler" data-id="'.$post_id.'">';
+                        }else{
+                            echo '<input type="checkbox" '.(($is_active==1)?'checked':'').' title="'.(($is_active==1)?'Active':'Inactive').'" class="jtoggler" data-id="'.$post_id.'">';
+                        }
+                break;
             }
     }
     

@@ -1001,6 +1001,9 @@ input#billing_report_submit {
     margin-top: 15px;
 }
 
+#search_tbl_info,
+#membership_date_table_info,
+#membership_info_table_info,
 #billing_info_table_info {
     display: none;
 }
