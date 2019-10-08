@@ -585,7 +585,7 @@ class PMSafe_Invitation_Code {
         $columns['pdf']                     = __( 'PDF', '' );
         $columns['reset']                   = __( 'Reset Code', '' );
         $columns['reset']                   = __( 'Reset Code', '' );
-        $columns['active_inactive']       = __( 'Active/Inactive', '' );
+        $columns['active_inactive']       = __( 'Active/<br/>Inactive', '' );
 
         return $columns;
     }
@@ -649,14 +649,37 @@ class PMSafe_Invitation_Code {
                 case 'reset':
                         echo '<i class="fa fa-undo" style="font-size:20px;cursor:pointer;color:#0065a7;" title="reset" id="reset-code" data-id="'.$post_id.'"></i>';
                       break;
-                case 'active_inactive':
+                case 'active_inactive':// 0 = Inactive 1 = Active 
                         $is_active = get_post_meta($post_id,'code_active_inactive',true);
+                      
                         $bulk_id = get_post_meta($post_id,'_pmsafe_bulk_invitation_id',true);
                         $bulk_active_inactive = get_post_meta($bulk_id,'code_active_inactive',true);
-                        if($bulk_active_inactive == 1){
-                            echo '<input type="checkbox" '.(($is_active==1)?'checked':'').' disabled title="'.(($is_active==1)?'Active':'Inactive').'" class="jtoggler" data-id="'.$post_id.'">';
+                        if($bulk_id != $post_id){
+                            if($bulk_active_inactive == 0){
+                                echo '<input type="checkbox"  disabled class="jtoggler" data-id="'.$post_id.'" data-val="'.$is_active.'">';
+                            
+                            }
+                            if($bulk_active_inactive == 2){
+                                echo '<input type="checkbox" disabled checked class="jtoggler" data-id="'.$post_id.'" data-val="'.$is_active.'">';
+                            }
+                            if($bulk_active_inactive == 1){
+                                if($is_active == 0){
+                                    echo '<input type="checkbox" class="jtoggler" data-id="'.$post_id.'" data-val="'.$is_active.'">';
+                                }
+                                if($is_active == 1){
+                                    echo '<input type="checkbox" checked class="jtoggler" data-id="'.$post_id.'" data-val="'.$is_active.'">';
+                                }
+                            }
                         }else{
-                            echo '<input type="checkbox" '.(($is_active==1)?'checked':'').' title="'.(($is_active==1)?'Active':'Inactive').'" class="jtoggler" data-id="'.$post_id.'">';
+                            $is_invite = get_post_meta($post_id,'_pmsafe_is_invite_code',true);
+                            if($is_invite == 1){
+                                if($is_active == 0){
+                                    echo '<input type="checkbox" class="jtoggler" data-id="'.$post_id.'" data-val="'.$is_active.'">';
+                                }
+                                if($is_active == 1){
+                                    echo '<input type="checkbox" checked class="jtoggler" data-id="'.$post_id.'" data-val="'.$is_active.'">';
+                                }
+                            }
                         }
                 break;
             }

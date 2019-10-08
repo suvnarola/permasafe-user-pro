@@ -4419,6 +4419,7 @@ class Permasafe_User_Pro_Admin
 	public function active_inactive_code_function(){
 		$post_id = $_POST['post_id'];
 		$is_checked = $_POST['is_checked'];
+		
 		$post_type = $_POST['post_type']; 
 		$invitation_ids = get_post_meta($post_id, '_pmsafe_invitation_ids', true);
 		$invitation_id = explode(',', $invitation_ids);
@@ -4431,24 +4432,35 @@ class Permasafe_User_Pro_Admin
 			}
 			$chk_post_type = $post_type;
 		}else{
-			if($is_checked == 'true'){
-				update_post_meta($post_id,'code_active_inactive',1);
-				foreach ($invitation_id as $id) {
-					update_post_meta($id,'code_active_inactive',1);		
-				}
-				$data = 'disabled';
-			}
-			if($is_checked == 'false'){
+			// if($is_checked == 'true'){
+				echo 'in';
+			if($is_checked == 0){
+				echo 'ischeck';
 				update_post_meta($post_id,'code_active_inactive',0);
 				foreach ($invitation_id as $id) {
 					update_post_meta($id,'code_active_inactive',0);
 				}
-				$data = 'enabled';
+			
 			}
+			if($is_checked == 1){
+				update_post_meta($post_id,'code_active_inactive',1);
+				// foreach ($invitation_id as $id) {
+				// 	update_post_meta($id,'code_active_inactive',1);		
+				// }
+				// $data = 'disabled';
+			}
+			if($is_checked == 2){
+				update_post_meta($post_id,'code_active_inactive',2);
+				foreach ($invitation_id as $id) {
+					update_post_meta($id,'code_active_inactive',1);		
+				}
+			
+			}
+			// if($is_checked == 'false'){
+			
 			$chk_post_type = 'bulk';
 		}
-		// $response = array('data'=>$data,'chk_post_type'=>$chk_post_type);
-		// echo json_encode($response);
+		
 		die;
 	}
 }

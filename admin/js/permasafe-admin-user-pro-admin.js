@@ -4294,40 +4294,109 @@ jQuery(document).ready(function () {
 
     jQuery('.jtoggler').jtoggler();
 
-    jQuery(document).on('jt:toggled', function (event, target) {
+    jQuery(document).on('jt:toggled:multi', function (event, target) {
 
-        var post_id = jQuery(target).attr('data-id');
-        var is_checked = jQuery(target).prop('checked');
-        var post_type = jQuery.urlParam('post_type');
+        var post_id = jQuery(target).parents('.jtoggler-wrapper-multistate').find('.jtoggler').data('id');
 
-        if (post_type == 'pmsafe_invitecode') {
-            var data = {
-                action: 'active_inactive_code_function',
-                post_id: post_id,
-                is_checked: is_checked,
-                post_type: post_type
-            };
+        var is_checked = jQuery(target).parent().index();
+        if (is_checked == 1) {
+            jQuery(target).parents('.jtoggler-control').addClass('mixed-state');
+            // jQuery('.jtoggler-wrapper').append('<span style="color:#ffa500">Mixed</span>');
         } else {
-            var data = {
-                action: 'active_inactive_code_function',
-                post_id: post_id,
-                is_checked: is_checked
-            };
+            jQuery(target).parents('.jtoggler-control').removeClass('mixed-state');
         }
+        var data = {
+            action: 'active_inactive_code_function',
+            post_id: post_id,
+            is_checked: is_checked
+        };
+
         jQuery.ajax({
             type: 'POST',
             url: pmAjax.ajaxurl,
             data: data,
 
             success: function (response) {
-                // var obj = jQuery.parseJSON(response);
-                // if (obj.chk_post_type != 'bulk') {
-                //     if (obj.data == 'disabled') {
-                //         jQuery('.invite-toggle').attr('disabled', 'disabled');
-                //     } else {
-                //         jQuery('.invite-toggle').removeAttr('disabled');
-                //     }
-                // }
+                jQuery(target).parents('.jtoggler-wrapper-multistate').find('span').css('display', 'none');
+                if (is_checked == 0) {
+                    jQuery(target).parents('.jtoggler-wrapper-multistate').append('<span style="color:#ff0000">Inactive</span>');
+                }
+                if (is_checked == 1) {
+                    jQuery(target).parents('.jtoggler-wrapper-multistate').append('<span style="color:#ffa500">Mixed</span>');
+                }
+                if (is_checked == 2) {
+                    jQuery(target).parents('.jtoggler-wrapper-multistate').append('<span style="color:#008000">Active</span>');
+                }
+            }
+        })
+    });
+
+    jQuery('tr.status-publish .active_inactive .jtoggler-wrapper').each(function () {
+
+        var post_type = jQuery.urlParam('post_type');
+        if (post_type == 'pmsafe_bulk_invi') {
+            if (jQuery(this).find('.jtoggler').data('val') == 0) {
+                jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
+
+                jQuery(this).find('.jtoggler-btn-wrapper:nth-child(1)').addClass('is-active');
+                jQuery(this).find('.jtoggler-btn-wrapper:nth-child(2)').removeClass('is-active');
+                jQuery(this).find('.jtoggler-btn-wrapper:nth-child(3)').removeClass('is-active');
+            }
+            if (jQuery(this).find('.jtoggler').data('val') == 1) {
+                jQuery(this).append('<span style="color:#ffa500">Mixed</span>');
+
+                jQuery(this).find('.jtoggler-control').addClass('mixed-state');
+                jQuery(this).find('.jtoggler-btn-wrapper:nth-child(1)').removeClass('is-active');
+                jQuery(this).find('.jtoggler-btn-wrapper:nth-child(2)').addClass('is-active');
+                jQuery(this).find('.jtoggler-btn-wrapper:nth-child(3)').removeClass('is-active');
+            }
+            if (jQuery(this).find('.jtoggler').data('val') == 2) {
+                jQuery(this).append('<span style="color:#008000">Active</span>');
+
+                jQuery(this).find('.jtoggler-control').addClass('is-fully-active');
+                jQuery(this).find('.jtoggler-btn-wrapper:nth-child(1)').removeClass('is-active');
+                jQuery(this).find('.jtoggler-btn-wrapper:nth-child(2)').removeClass('is-active');
+                jQuery(this).find('.jtoggler-btn-wrapper:nth-child(3)').addClass('is-active');
+            }
+        }
+        if (post_type == 'pmsafe_invitecode') {
+            if (jQuery(this).find('.jtoggler').data('val') == 0) {
+                jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
+            }
+            if (jQuery(this).find('.jtoggler').data('val') == 1) {
+                jQuery(this).append('<span style="color:#008000">Active</span>');
+            }
+        }
+
+    });
+    jQuery(document).on('jt:toggled', function (event, target) {
+
+        var post_id = jQuery(target).attr('data-id');
+        var is_checked = jQuery(target).prop('checked');
+        var post_type = jQuery.urlParam('post_type');
+
+
+        var data = {
+            action: 'active_inactive_code_function',
+            post_id: post_id,
+            is_checked: is_checked,
+            post_type: post_type
+        };
+
+        jQuery.ajax({
+            type: 'POST',
+            url: pmAjax.ajaxurl,
+            data: data,
+
+            success: function (response) {
+                jQuery(target).parent('.jtoggler-wrapper').find('span').css('display', 'none');
+                if (is_checked == 0) {
+                    jQuery(target).parent('.jtoggler-wrapper').append('<span style="color:#ff0000">Inactive</span>');
+                }
+
+                if (is_checked == 1) {
+                    jQuery(target).parent('.jtoggler-wrapper').append('<span style="color:#008000">Active</span>');
+                }
             }
         })
     });

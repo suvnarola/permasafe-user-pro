@@ -999,9 +999,9 @@ class PMSafe_Bulk_Invitation{
                 case 'delete_code':
                         echo '<i class="fa fa-trash" id="delete_code_button" style="cursor:pointer;color:#ff0000;font-size:18px;" data-id="'.$post_id.'"></i>';
                 break;
-                case 'active_inactive':
+                case 'active_inactive':// 0 = Inactive 1 = Mixed 2 = Active
                         $is_active = get_post_meta($post_id,'code_active_inactive',true);
-                        echo '<input type="checkbox" '.(($is_active==1)?'checked':'').' title="'.(($is_active==1)?'Active':'Inactive').'" class="jtoggler" data-id="'.$post_id.'">';
+                        echo '<input type="checkbox" class="jtoggler" data-id="'.$post_id.'" data-val="'.$is_active.'" data-jtmulti-state>';
                 break;
                
             }

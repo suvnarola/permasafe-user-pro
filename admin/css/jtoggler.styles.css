@@ -22,15 +22,17 @@
 
 .jtoggler-control {
     position: relative;
-
     width: 50px;
     height: 18px;
-
     background: #e57c7c;
     border-radius: 30px;
     box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.25);
 
     transition: background-color 0.3s;
+}
+
+.mixed-state {
+    background: #ffa500;
 }
 
 .jtoggler-control:hover {
@@ -66,7 +68,7 @@
 }
 
 .jtoggler-radio {
-    display: none;
+    display: none !important;
 }
 
 .jtoggler-btn-wrapper {
@@ -84,7 +86,7 @@
 }
 
 .jtoggler-wrapper-multistate .jtoggler-control.is-fully-active {
-    background: #4a89dc;
+    background: #569d56;
 }
 
 .jtoggler-wrapper-multistate .jtoggler:disabled+.jtoggler-control:hover .jtoggler-btn-wrapper {
@@ -97,10 +99,9 @@
 
 .jtoggler-btn-wrapper:nth-child(2).is-active~.jtoggler-handle {
     left: 30px;
-
-    background: #4a89dc;
+    background: #fff;
 }
 
 .jtoggler-btn-wrapper:nth-child(3).is-active~.jtoggler-handle {
-    left: 62px;
+    left: 65px;
 }

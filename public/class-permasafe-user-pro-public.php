@@ -3072,381 +3072,388 @@ class Permasafe_User_Pro_Public
     public function pmsafe_registration_code_form_function()
     {
         $member_code = $_POST['member_number'];
-        global $wpdb;
-        $current_user = wp_get_current_user();
-        $role = (array) $current_user->caps;
+        $member_code_postid = get_post_id_by_meta_key_and_value('_pmsafe_invitation_code', $member_code);
+        $is_active = get_post_meta($member_code_postid,'code_active_inactive',true);
+        if($is_active == 1){
+            global $wpdb;
+            $current_user = wp_get_current_user();
+            $role = (array) $current_user->caps;
 
-        if ($role['dealer-user'] == 1) {
-            $dealer_user_login = $current_user->user_login;
-            $user = get_user_by('login', $dealer_user_login);
-            $contact_id = $user->ID;
-            $dealer_id = get_user_meta($contact_id, 'contact_dealer_id', true);
-            $dealer_user = get_user_by('id', $dealer_id);
-            $login = $dealer_user->user_login;
-        } else if ($role['distributor-user'] == 1) {
-            $distributor_user_login = $current_user->user_login;
-            $user = get_user_by('login', $distributor_user_login);
-            $contact_id = $user->ID;
-            $distributor_id = get_user_meta($contact_id, 'contact_distributor_id', true);
-            $distributor_user = get_user_by('id', $distributor_id);
-            $login = $distributor_user->user_login;
-        } else {
-            $login = $current_user->user_login;
-        }
-        if ($member_code === '00000' || $member_code === '0000' || $member_code === '000' || $member_code === '00' || $member_code === '0') {
-
-            if ($role['contributor'] == 1 || $role['author'] == 1 || $role['dealer-user'] == 1  || $role['distributor-user'] == 1) {
-
-                $benefit_prefix = pmsafe_get_meta_values('_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish');
-                array_splice($benefit_prefix, 12, 1);
-                sort($benefit_prefix);
-                $html .= '<div id="salesperson_benefits_package_div">';
-                $html .= '<div class="content-column one_half">';
-                $html .= '<label>Upgradable Packages: ';
-                $html .= '<select id="salesperson_benefits_package">';
-                foreach ($benefit_prefix as $prefix) {
-                    $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
-                    $post = get_post($pid);
-                    $post_title = $post->post_title;
-                    $html .= '<option value="' . $prefix . '">' . $post_title . '</option>';
-                }
-                $html .= '</select>';
-                $html .= '</label>';
-                $html .= '<input type="button" id="salesperson_update_prefix" value="Update" style="margin-top:10px;">';
-                $html .= '</div>';
-                $html .= '</div>';
-            }
-
-            $response = array('status' => true, 'code' => $member_code, 'html' => $html);
-            echo json_encode($response);
-        } else {
-            if ($role['author'] == 1) {
-                $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value in ( SELECT user_login FROM `wp_users` WHERE ID in (SELECT user_id FROM `wp_usermeta` WHERE meta_key="dealer_distributor_name" AND meta_value = (SELECT ID FROM `wp_users` WHERE user_login = "' . $login . '"))))');
-                $str = '';
-                foreach ($user_query as $value_query) {
-                    $str = $value_query->meta_value . ',' . $str;
-                }
-
-                $str = rtrim($str, ",");
-                // echo $str;
-                $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (' . $str . ') ');
-                // pr($str_results);
-                $check_array = array();
-                foreach ($str_results as $str_result) {
-                    $check_array[] = $str_result->meta_value;
-                }
-                // pr($check_array);
-                // die;
-                if (in_array($member_code, $check_array)) {
-                    $member_code_id = pmsafe_if_code_exist($member_code);
-                    $member_code_postid = get_post_id_by_meta_key_and_value('_pmsafe_invitation_code', $member_code);
-                    $bulk_id = get_post_meta($member_code_postid, '_pmsafe_bulk_invitation_id', true);
-                    $package = get_post_meta($member_code_postid, '_pmsafe_code_prefix', true);
-                    $upgradable_prefix_str = get_post_meta($bulk_id, 'upgradable_prefix', true);
-                    $upgradable_prefix = explode(",", $upgradable_prefix_str);
-                    $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
-                    sort($upgradable_prefix);
-                    foreach ($upgradable_prefix as $prefix) {
-                        $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
-                        $post = get_post($pid);
-                        $post_title = $post->post_title;
-                        $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
-                    }
-                    if ($member_code_id) {
-                        // $response = array('status' => true,'code'=>$member_code);
-                        $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_postid);
-                        echo json_encode($response);
-                    } else {
-                        $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
-                        echo json_encode($response);
-                    }
-                } else {
-                    $member_code_id = pmsafe_if_code_exist($member_code);
-                    // $invite_code_dealer = get_post_meta($member_code_id,'_pmsafe_dealer',true);
-                    $invite_code_distributor = get_post_meta($member_code_id, '_pmsafe_distributor', true);
-                    if ($invite_code_distributor == $login) {
-                        $package = get_post_meta($member_code_id, '_pmsafe_code_prefix', true);
-                        $upgradable_prefix_str = get_post_meta($member_code_id, 'upgradable_prefix', true);
-                        $upgradable_prefix = explode(",", $upgradable_prefix_str);
-                        $is_upgradable = get_post_meta($member_code_id, 'pmsafe_invitation_code_upgradable', true);
-                        sort($upgradable_prefix);
-                        foreach ($upgradable_prefix as $prefix) {
-                            $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
-                            $post = get_post($pid);
-                            $post_title = $post->post_title;
-                            $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
-                        }
-                        if ($member_code_id) {
-
-                            $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_id);
-
-                            echo json_encode($response);
-                        } else {
-                            $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
-                            echo json_encode($response);
-                        }
-                    } else {
-                        $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is other distributor\'s code. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
-                        echo json_encode($response);
-                    }
-                }
+            if ($role['dealer-user'] == 1) {
+                $dealer_user_login = $current_user->user_login;
+                $user = get_user_by('login', $dealer_user_login);
+                $contact_id = $user->ID;
+                $dealer_id = get_user_meta($contact_id, 'contact_dealer_id', true);
+                $dealer_user = get_user_by('id', $dealer_id);
+                $login = $dealer_user->user_login;
             } else if ($role['distributor-user'] == 1) {
-                $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value in ( SELECT user_login FROM `wp_users` WHERE ID in (SELECT user_id FROM `wp_usermeta` WHERE meta_key="dealer_distributor_name" AND meta_value = (SELECT ID FROM `wp_users` WHERE user_login = "' . $login . '"))))');
-                $str = '';
-                foreach ($user_query as $value_query) {
-                    $str = $value_query->meta_value . ',' . $str;
-                }
-
-                $str = rtrim($str, ",");
-                // echo $str;
-                $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (' . $str . ') ');
-                // pr($str_results);
-                $check_array = array();
-                foreach ($str_results as $str_result) {
-                    $check_array[] = $str_result->meta_value;
-                }
-                // pr($check_array);
-                // die;
-                if (in_array($member_code, $check_array)) {
-                    $member_code_id = pmsafe_if_code_exist($member_code);
-                    $member_code_postid = get_post_id_by_meta_key_and_value('_pmsafe_invitation_code', $member_code);
-                    $bulk_id = get_post_meta($member_code_postid, '_pmsafe_bulk_invitation_id', true);
-                    $package = get_post_meta($member_code_postid, '_pmsafe_code_prefix', true);
-                    $upgradable_prefix_str = get_post_meta($bulk_id, 'upgradable_prefix', true);
-                    $upgradable_prefix = explode(",", $upgradable_prefix_str);
-                    $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
-                    sort($upgradable_prefix);
-                    foreach ($upgradable_prefix as $prefix) {
-                        $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
-                        $post = get_post($pid);
-                        $post_title = $post->post_title;
-                        $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
-                    }
-                    if ($member_code_id) {
-                        // $response = array('status' => true,'code'=>$member_code);
-                        $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_postid);
-                        echo json_encode($response);
-                    } else {
-                        $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
-                        echo json_encode($response);
-                    }
-                } else {
-                    $member_code_id = pmsafe_if_code_exist($member_code);
-                    // $invite_code_dealer = get_post_meta($member_code_id,'_pmsafe_dealer',true);
-                    $invite_code_distributor = get_post_meta($member_code_id, '_pmsafe_distributor', true);
-                    if ($invite_code_distributor == $login) {
-                        $package = get_post_meta($member_code_id, '_pmsafe_code_prefix', true);
-                        $upgradable_prefix_str = get_post_meta($member_code_id, 'upgradable_prefix', true);
-                        $upgradable_prefix = explode(",", $upgradable_prefix_str);
-                        $is_upgradable = get_post_meta($member_code_id, 'pmsafe_invitation_code_upgradable', true);
-                        sort($upgradable_prefix);
-                        foreach ($upgradable_prefix as $prefix) {
-                            $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
-                            $post = get_post($pid);
-                            $post_title = $post->post_title;
-                            $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
-                        }
-                        if ($member_code_id) {
-
-                            $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_id);
-
-                            echo json_encode($response);
-                        } else {
-                            $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
-                            echo json_encode($response);
-                        }
-                    } else {
-                        $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is other distributor\'s code. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
-                        echo json_encode($response);
-                    }
-                }
-            } else if ($role['contributor'] == 1) {
-                $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "' . $login . '")');
-                $str = '';
-                foreach ($user_query as $value_query) {
-                    $str = $value_query->meta_value . ',' . $str;
-                }
-
-                $str = rtrim($str, ",");
-                // echo $str;
-                $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (' . $str . ') ');
-                // pr($str_results);
-                $check_array = array();
-                foreach ($str_results as $str_result) {
-                    $check_array[] = $str_result->meta_value;
-                }
-                // pr($check_array);
-                // die;
-                if (in_array($member_code, $check_array)) {
-                    $member_code_id = pmsafe_if_code_exist($member_code);
-                    $member_code_postid = get_post_id_by_meta_key_and_value('_pmsafe_invitation_code', $member_code);
-                    $bulk_id = get_post_meta($member_code_postid, '_pmsafe_bulk_invitation_id', true);
-                    $package = get_post_meta($member_code_id, '_pmsafe_code_prefix', true);
-                    $upgradable_prefix_str = get_post_meta($bulk_id, 'upgradable_prefix', true);
-                    $upgradable_prefix = explode(",", $upgradable_prefix_str);
-                    $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
-                    sort($upgradable_prefix);
-                    foreach ($upgradable_prefix as $prefix) {
-                        $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
-                        $post = get_post($pid);
-                        $post_title = $post->post_title;
-                        $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
-                    }
-                    if ($member_code_id) {
-
-                        $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_postid);
-
-                        echo json_encode($response);
-                    } else {
-                        $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
-                        echo json_encode($response);
-                    }
-                } else {
-
-                    $member_code_id = pmsafe_if_code_exist($member_code);
-                    $invite_code_dealer = get_post_meta($member_code_id, '_pmsafe_dealer', true);
-                    if ($invite_code_dealer == $login) {
-                        $package = get_post_meta($member_code_id, '_pmsafe_code_prefix', true);
-                        $upgradable_prefix_str = get_post_meta($member_code_id, 'upgradable_prefix', true);
-                        $upgradable_prefix = explode(",", $upgradable_prefix_str);
-                        $is_upgradable = get_post_meta($member_code_id, 'pmsafe_invitation_code_upgradable', true);
-                        sort($upgradable_prefix);
-                        foreach ($upgradable_prefix as $prefix) {
-                            $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
-                            $post = get_post($pid);
-                            $post_title = $post->post_title;
-                            $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
-                        }
-                        if ($member_code_id) {
-
-                            $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_id);
-
-                            echo json_encode($response);
-                        } else {
-                            $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
-                            echo json_encode($response);
-                        }
-                    } else {
-                        $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is other dealer\'s code. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
-                        echo json_encode($response);
-                    }
-                }
-            } else if ($role['dealer-user'] == 1) {
-                $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "' . $login . '")');
-                $str = '';
-                foreach ($user_query as $value_query) {
-                    $str = $value_query->meta_value . ',' . $str;
-                }
-
-                $str = rtrim($str, ",");
-                // echo $str;
-                $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (' . $str . ') ');
-                // pr($str_results);
-                $check_array = array();
-                foreach ($str_results as $str_result) {
-                    $check_array[] = $str_result->meta_value;
-                }
-                // pr($check_array);
-                // die;
-                if (in_array($member_code, $check_array)) {
-                    $member_code_id = pmsafe_if_code_exist($member_code);
-                    $member_code_postid = get_post_id_by_meta_key_and_value('_pmsafe_invitation_code', $member_code);
-                    $bulk_id = get_post_meta($member_code_postid, '_pmsafe_bulk_invitation_id', true);
-                    $package = get_post_meta($member_code_postid, '_pmsafe_code_prefix', true);
-                    $upgradable_prefix_str = get_post_meta($bulk_id, 'upgradable_prefix', true);
-                    $upgradable_prefix = explode(",", $upgradable_prefix_str);
-                    $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
-                    sort($upgradable_prefix);
-                    foreach ($upgradable_prefix as $prefix) {
-                        $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
-                        $post = get_post($pid);
-                        $post_title = $post->post_title;
-                        $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
-                    }
-                    if ($member_code_id) {
-                        $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_postid);
-                        echo json_encode($response);
-                    } else {
-                        $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
-                        echo json_encode($response);
-                    }
-                } else {
-                    $member_code_id = pmsafe_if_code_exist($member_code);
-                    $invite_code_dealer = get_post_meta($member_code_id, '_pmsafe_dealer', true);
-                    if ($invite_code_dealer == $login) {
-                        $package = get_post_meta($member_code_id, '_pmsafe_code_prefix', true);
-                        $upgradable_prefix_str = get_post_meta($member_code_id, 'upgradable_prefix', true);
-                        $upgradable_prefix = explode(",", $upgradable_prefix_str);
-                        $is_upgradable = get_post_meta($member_code_id, 'pmsafe_invitation_code_upgradable', true);
-                        sort($upgradable_prefix);
-                        foreach ($upgradable_prefix as $prefix) {
-                            $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
-                            $post = get_post($pid);
-                            $post_title = $post->post_title;
-                            $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
-                        }
-                        if ($member_code_id) {
-
-                            $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_id);
-
-                            echo json_encode($response);
-                        } else {
-                            $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
-                            echo json_encode($response);
-                        }
-                    } else {
-                        $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is other dealer\'s code. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
-                        echo json_encode($response);
-                    }
-                }
-            } else if ($role['administrator'] == 1) {
-                $member_code_id = pmsafe_if_code_exist($member_code);
-                $member_code_postid = get_post_id_by_meta_key_and_value('_pmsafe_invitation_code', $member_code);
-                $bulk_id = get_post_meta($member_code_postid, '_pmsafe_bulk_invitation_id', true);
-                $package = get_post_meta($member_code_postid, '_pmsafe_code_prefix', true);
-                $upgradable_prefix_str = get_post_meta($bulk_id, 'upgradable_prefix', true);
-                $upgradable_prefix = explode(",", $upgradable_prefix_str);
-                $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
-                sort($upgradable_prefix);
-                foreach ($upgradable_prefix as $prefix) {
-                    $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
-                    $post = get_post($pid);
-                    $post_title = $post->post_title;
-                    $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
-                }
-                if ($member_code_id) {
-                    $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_postid);
-                    echo json_encode($response);
-                } else {
-
-                    $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
-                    echo json_encode($response);
-                }
+                $distributor_user_login = $current_user->user_login;
+                $user = get_user_by('login', $distributor_user_login);
+                $contact_id = $user->ID;
+                $distributor_id = get_user_meta($contact_id, 'contact_distributor_id', true);
+                $distributor_user = get_user_by('id', $distributor_id);
+                $login = $distributor_user->user_login;
             } else {
+                $login = $current_user->user_login;
+            }
+            if ($member_code === '00000' || $member_code === '0000' || $member_code === '000' || $member_code === '00' || $member_code === '0') {
 
-                $member_code_id = pmsafe_if_code_exist($member_code);
-                $bulk_id =  get_post_meta($member_code_id, '_pmsafe_bulk_invitation_id', true);
-                $is_allow_dealer = get_post_meta($bulk_id, 'pmsafe_code_allow_dealer', true);
-                $invitation_prefix = get_post_meta($bulk_id, '_pmsafe_invitation_prefix', true);
-                $package_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix', $invitation_prefix);
-                $no_coverage = get_post_meta($package_id, '_pmsafe_no_coverage_benefit', true);
-                if ($no_coverage == 1) {
-                    $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong> This Registration Number does not come with a Warranty and does not require registration. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
-                    echo json_encode($response);
-                } else if ($is_allow_dealer == 1) {
-                    $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong> You do not have permission to register this code. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
-                    echo json_encode($response);
-                } else {
+                if ($role['contributor'] == 1 || $role['author'] == 1 || $role['dealer-user'] == 1  || $role['distributor-user'] == 1) {
+
+                    $benefit_prefix = pmsafe_get_meta_values('_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish');
+                    array_splice($benefit_prefix, 12, 1);
+                    sort($benefit_prefix);
+                    $html .= '<div id="salesperson_benefits_package_div">';
+                    $html .= '<div class="content-column one_half">';
+                    $html .= '<label>Upgradable Packages: ';
+                    $html .= '<select id="salesperson_benefits_package">';
+                    foreach ($benefit_prefix as $prefix) {
+                        $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                        $post = get_post($pid);
+                        $post_title = $post->post_title;
+                        $html .= '<option value="' . $prefix . '">' . $post_title . '</option>';
+                    }
+                    $html .= '</select>';
+                    $html .= '</label>';
+                    $html .= '<input type="button" id="salesperson_update_prefix" value="Update" style="margin-top:10px;">';
+                    $html .= '</div>';
+                    $html .= '</div>';
+                }
+
+                $response = array('status' => true, 'code' => $member_code, 'html' => $html);
+                echo json_encode($response);
+            } else {
+                if ($role['author'] == 1) {
+                    $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value in ( SELECT user_login FROM `wp_users` WHERE ID in (SELECT user_id FROM `wp_usermeta` WHERE meta_key="dealer_distributor_name" AND meta_value = (SELECT ID FROM `wp_users` WHERE user_login = "' . $login . '"))))');
+                    $str = '';
+                    foreach ($user_query as $value_query) {
+                        $str = $value_query->meta_value . ',' . $str;
+                    }
+
+                    $str = rtrim($str, ",");
+                    // echo $str;
+                    $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (' . $str . ') ');
+                    // pr($str_results);
+                    $check_array = array();
+                    foreach ($str_results as $str_result) {
+                        $check_array[] = $str_result->meta_value;
+                    }
+                    // pr($check_array);
+                    // die;
+                    if (in_array($member_code, $check_array)) {
+                        $member_code_id = pmsafe_if_code_exist($member_code);
+                        $member_code_postid = get_post_id_by_meta_key_and_value('_pmsafe_invitation_code', $member_code);
+                        $bulk_id = get_post_meta($member_code_postid, '_pmsafe_bulk_invitation_id', true);
+                        $package = get_post_meta($member_code_postid, '_pmsafe_code_prefix', true);
+                        $upgradable_prefix_str = get_post_meta($bulk_id, 'upgradable_prefix', true);
+                        $upgradable_prefix = explode(",", $upgradable_prefix_str);
+                        $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
+                        sort($upgradable_prefix);
+                        foreach ($upgradable_prefix as $prefix) {
+                            $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                            $post = get_post($pid);
+                            $post_title = $post->post_title;
+                            $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
+                        }
+                        if ($member_code_id) {
+                            // $response = array('status' => true,'code'=>$member_code);
+                            $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_postid);
+                            echo json_encode($response);
+                        } else {
+                            $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
+                            echo json_encode($response);
+                        }
+                    } else {
+                        $member_code_id = pmsafe_if_code_exist($member_code);
+                        // $invite_code_dealer = get_post_meta($member_code_id,'_pmsafe_dealer',true);
+                        $invite_code_distributor = get_post_meta($member_code_id, '_pmsafe_distributor', true);
+                        if ($invite_code_distributor == $login) {
+                            $package = get_post_meta($member_code_id, '_pmsafe_code_prefix', true);
+                            $upgradable_prefix_str = get_post_meta($member_code_id, 'upgradable_prefix', true);
+                            $upgradable_prefix = explode(",", $upgradable_prefix_str);
+                            $is_upgradable = get_post_meta($member_code_id, 'pmsafe_invitation_code_upgradable', true);
+                            sort($upgradable_prefix);
+                            foreach ($upgradable_prefix as $prefix) {
+                                $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                                $post = get_post($pid);
+                                $post_title = $post->post_title;
+                                $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
+                            }
+                            if ($member_code_id) {
+
+                                $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_id);
+
+                                echo json_encode($response);
+                            } else {
+                                $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
+                                echo json_encode($response);
+                            }
+                        } else {
+                            $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is other distributor\'s code. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
+                            echo json_encode($response);
+                        }
+                    }
+                } else if ($role['distributor-user'] == 1) {
+                    $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value in ( SELECT user_login FROM `wp_users` WHERE ID in (SELECT user_id FROM `wp_usermeta` WHERE meta_key="dealer_distributor_name" AND meta_value = (SELECT ID FROM `wp_users` WHERE user_login = "' . $login . '"))))');
+                    $str = '';
+                    foreach ($user_query as $value_query) {
+                        $str = $value_query->meta_value . ',' . $str;
+                    }
+
+                    $str = rtrim($str, ",");
+                    // echo $str;
+                    $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (' . $str . ') ');
+                    // pr($str_results);
+                    $check_array = array();
+                    foreach ($str_results as $str_result) {
+                        $check_array[] = $str_result->meta_value;
+                    }
+                    // pr($check_array);
+                    // die;
+                    if (in_array($member_code, $check_array)) {
+                        $member_code_id = pmsafe_if_code_exist($member_code);
+                        $member_code_postid = get_post_id_by_meta_key_and_value('_pmsafe_invitation_code', $member_code);
+                        $bulk_id = get_post_meta($member_code_postid, '_pmsafe_bulk_invitation_id', true);
+                        $package = get_post_meta($member_code_postid, '_pmsafe_code_prefix', true);
+                        $upgradable_prefix_str = get_post_meta($bulk_id, 'upgradable_prefix', true);
+                        $upgradable_prefix = explode(",", $upgradable_prefix_str);
+                        $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
+                        sort($upgradable_prefix);
+                        foreach ($upgradable_prefix as $prefix) {
+                            $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                            $post = get_post($pid);
+                            $post_title = $post->post_title;
+                            $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
+                        }
+                        if ($member_code_id) {
+                            // $response = array('status' => true,'code'=>$member_code);
+                            $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_postid);
+                            echo json_encode($response);
+                        } else {
+                            $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
+                            echo json_encode($response);
+                        }
+                    } else {
+                        $member_code_id = pmsafe_if_code_exist($member_code);
+                        // $invite_code_dealer = get_post_meta($member_code_id,'_pmsafe_dealer',true);
+                        $invite_code_distributor = get_post_meta($member_code_id, '_pmsafe_distributor', true);
+                        if ($invite_code_distributor == $login) {
+                            $package = get_post_meta($member_code_id, '_pmsafe_code_prefix', true);
+                            $upgradable_prefix_str = get_post_meta($member_code_id, 'upgradable_prefix', true);
+                            $upgradable_prefix = explode(",", $upgradable_prefix_str);
+                            $is_upgradable = get_post_meta($member_code_id, 'pmsafe_invitation_code_upgradable', true);
+                            sort($upgradable_prefix);
+                            foreach ($upgradable_prefix as $prefix) {
+                                $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                                $post = get_post($pid);
+                                $post_title = $post->post_title;
+                                $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
+                            }
+                            if ($member_code_id) {
+
+                                $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_id);
+
+                                echo json_encode($response);
+                            } else {
+                                $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
+                                echo json_encode($response);
+                            }
+                        } else {
+                            $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is other distributor\'s code. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
+                            echo json_encode($response);
+                        }
+                    }
+                } else if ($role['contributor'] == 1) {
+                    $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "' . $login . '")');
+                    $str = '';
+                    foreach ($user_query as $value_query) {
+                        $str = $value_query->meta_value . ',' . $str;
+                    }
+
+                    $str = rtrim($str, ",");
+                    // echo $str;
+                    $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (' . $str . ') ');
+                    // pr($str_results);
+                    $check_array = array();
+                    foreach ($str_results as $str_result) {
+                        $check_array[] = $str_result->meta_value;
+                    }
+                    // pr($check_array);
+                    // die;
+                    if (in_array($member_code, $check_array)) {
+                        $member_code_id = pmsafe_if_code_exist($member_code);
+                        $member_code_postid = get_post_id_by_meta_key_and_value('_pmsafe_invitation_code', $member_code);
+                        $bulk_id = get_post_meta($member_code_postid, '_pmsafe_bulk_invitation_id', true);
+                        $package = get_post_meta($member_code_id, '_pmsafe_code_prefix', true);
+                        $upgradable_prefix_str = get_post_meta($bulk_id, 'upgradable_prefix', true);
+                        $upgradable_prefix = explode(",", $upgradable_prefix_str);
+                        $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
+                        sort($upgradable_prefix);
+                        foreach ($upgradable_prefix as $prefix) {
+                            $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                            $post = get_post($pid);
+                            $post_title = $post->post_title;
+                            $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
+                        }
+                        if ($member_code_id) {
+
+                            $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_postid);
+
+                            echo json_encode($response);
+                        } else {
+                            $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
+                            echo json_encode($response);
+                        }
+                    } else {
+
+                        $member_code_id = pmsafe_if_code_exist($member_code);
+                        $invite_code_dealer = get_post_meta($member_code_id, '_pmsafe_dealer', true);
+                        if ($invite_code_dealer == $login) {
+                            $package = get_post_meta($member_code_id, '_pmsafe_code_prefix', true);
+                            $upgradable_prefix_str = get_post_meta($member_code_id, 'upgradable_prefix', true);
+                            $upgradable_prefix = explode(",", $upgradable_prefix_str);
+                            $is_upgradable = get_post_meta($member_code_id, 'pmsafe_invitation_code_upgradable', true);
+                            sort($upgradable_prefix);
+                            foreach ($upgradable_prefix as $prefix) {
+                                $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                                $post = get_post($pid);
+                                $post_title = $post->post_title;
+                                $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
+                            }
+                            if ($member_code_id) {
+
+                                $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_id);
+
+                                echo json_encode($response);
+                            } else {
+                                $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
+                                echo json_encode($response);
+                            }
+                        } else {
+                            $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is other dealer\'s code. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
+                            echo json_encode($response);
+                        }
+                    }
+                } else if ($role['dealer-user'] == 1) {
+                    $user_query = $wpdb->get_results('SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_ids" and post_id in( SELECT wp.ID FROM wp_posts wp , wp_postmeta wm WHERE wp.ID = wm.post_id and wp.post_status = "publish" and wm.meta_key = "_pmsafe_dealer" and wm.meta_value = "' . $login . '")');
+                    $str = '';
+                    foreach ($user_query as $value_query) {
+                        $str = $value_query->meta_value . ',' . $str;
+                    }
+
+                    $str = rtrim($str, ",");
+                    // echo $str;
+                    $str_results = $wpdb->get_results(' SELECT meta_value FROM wp_postmeta WHERE meta_key = "_pmsafe_invitation_code" and post_id in (' . $str . ') ');
+                    // pr($str_results);
+                    $check_array = array();
+                    foreach ($str_results as $str_result) {
+                        $check_array[] = $str_result->meta_value;
+                    }
+                    // pr($check_array);
+                    // die;
+                    if (in_array($member_code, $check_array)) {
+                        $member_code_id = pmsafe_if_code_exist($member_code);
+                        $member_code_postid = get_post_id_by_meta_key_and_value('_pmsafe_invitation_code', $member_code);
+                        $bulk_id = get_post_meta($member_code_postid, '_pmsafe_bulk_invitation_id', true);
+                        $package = get_post_meta($member_code_postid, '_pmsafe_code_prefix', true);
+                        $upgradable_prefix_str = get_post_meta($bulk_id, 'upgradable_prefix', true);
+                        $upgradable_prefix = explode(",", $upgradable_prefix_str);
+                        $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
+                        sort($upgradable_prefix);
+                        foreach ($upgradable_prefix as $prefix) {
+                            $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                            $post = get_post($pid);
+                            $post_title = $post->post_title;
+                            $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
+                        }
+                        if ($member_code_id) {
+                            $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_postid);
+                            echo json_encode($response);
+                        } else {
+                            $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
+                            echo json_encode($response);
+                        }
+                    } else {
+                        $member_code_id = pmsafe_if_code_exist($member_code);
+                        $invite_code_dealer = get_post_meta($member_code_id, '_pmsafe_dealer', true);
+                        if ($invite_code_dealer == $login) {
+                            $package = get_post_meta($member_code_id, '_pmsafe_code_prefix', true);
+                            $upgradable_prefix_str = get_post_meta($member_code_id, 'upgradable_prefix', true);
+                            $upgradable_prefix = explode(",", $upgradable_prefix_str);
+                            $is_upgradable = get_post_meta($member_code_id, 'pmsafe_invitation_code_upgradable', true);
+                            sort($upgradable_prefix);
+                            foreach ($upgradable_prefix as $prefix) {
+                                $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                                $post = get_post($pid);
+                                $post_title = $post->post_title;
+                                $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
+                            }
+                            if ($member_code_id) {
+
+                                $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_id);
+
+                                echo json_encode($response);
+                            } else {
+                                $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
+                                echo json_encode($response);
+                            }
+                        } else {
+                            $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is other dealer\'s code. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
+                            echo json_encode($response);
+                        }
+                    }
+                } else if ($role['administrator'] == 1) {
+                    $member_code_id = pmsafe_if_code_exist($member_code);
+                    $member_code_postid = get_post_id_by_meta_key_and_value('_pmsafe_invitation_code', $member_code);
+                    $bulk_id = get_post_meta($member_code_postid, '_pmsafe_bulk_invitation_id', true);
+                    $package = get_post_meta($member_code_postid, '_pmsafe_code_prefix', true);
+                    $upgradable_prefix_str = get_post_meta($bulk_id, 'upgradable_prefix', true);
+                    $upgradable_prefix = explode(",", $upgradable_prefix_str);
+                    $is_upgradable = get_post_meta($bulk_id, 'pmsafe_invitation_code_upgradable', true);
+                    sort($upgradable_prefix);
+                    foreach ($upgradable_prefix as $prefix) {
+                        $pid = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix',$prefix);
+                        $post = get_post($pid);
+                        $post_title = $post->post_title;
+                        $option[] = '<option value="' . $prefix . '">' . $post_title . '</option>';
+                    }
                     if ($member_code_id) {
-                        $response = array('status' => true, 'code' => $member_code);
+                        $response = array('status' => true, 'code' => $member_code, 'option' => $option, 'is_upgradable' => $is_upgradable, 'package' => $package, 'code_id' => $member_code_postid);
                         echo json_encode($response);
                     } else {
 
                         $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
                         echo json_encode($response);
+                    }
+                } else {
+
+                    $member_code_id = pmsafe_if_code_exist($member_code);
+                    $bulk_id =  get_post_meta($member_code_id, '_pmsafe_bulk_invitation_id', true);
+                    $is_allow_dealer = get_post_meta($bulk_id, 'pmsafe_code_allow_dealer', true);
+                    $invitation_prefix = get_post_meta($bulk_id, '_pmsafe_invitation_prefix', true);
+                    $package_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix', $invitation_prefix);
+                    $no_coverage = get_post_meta($package_id, '_pmsafe_no_coverage_benefit', true);
+                    if ($no_coverage == 1) {
+                        $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong> This Registration Number does not come with a Warranty and does not require registration. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
+                        echo json_encode($response);
+                    } else if ($is_allow_dealer == 1) {
+                        $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong> You do not have permission to register this code. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
+                        echo json_encode($response);
+                    } else {
+                        if ($member_code_id) {
+                            $response = array('status' => true, 'code' => $member_code);
+                            echo json_encode($response);
+                        } else {
+
+                            $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not valid. Please check your code and try again. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
+                            echo json_encode($response);
+                        }
                     }
                 }
             }
+        }else{
+            $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not Active. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
+            echo json_encode($response);
         }
         die;
     }

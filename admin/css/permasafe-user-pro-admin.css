@@ -1189,6 +1189,19 @@ a#back_link {
     max-width: 200px;
 }
 
+.jtoggler-wrapper {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.jtoggler-wrapper span {
+    font-weight: 700;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
 /******** Responsive **********/
 
 
