@@ -4433,7 +4433,7 @@ class Permasafe_User_Pro_Admin
 			$chk_post_type = $post_type;
 		}else{
 			// if($is_checked == 'true'){
-				echo 'in';
+
 			if($is_checked == 0){
 				echo 'ischeck';
 				update_post_meta($post_id,'code_active_inactive',0);
