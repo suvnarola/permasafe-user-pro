@@ -4419,23 +4419,29 @@ class Permasafe_User_Pro_Admin
 	public function active_inactive_code_function(){
 		$post_id = $_POST['post_id'];
 		$is_checked = $_POST['is_checked'];
-		
-		$post_type = $_POST['post_type']; 
+		$param = $_POST['param']; 
+		$user_id = $_POST['user_id'];
 		$invitation_ids = get_post_meta($post_id, '_pmsafe_invitation_ids', true);
 		$invitation_id = explode(',', $invitation_ids);
-		if(!empty($post_type)){
+
+		if($param == 'pmsafe_invitecode'){
 			if($is_checked == 'true'){
 				update_post_meta($post_id,'code_active_inactive',1);		
 			}
 			if($is_checked == 'false'){
 				update_post_meta($post_id,'code_active_inactive',0);
 			}
-			$chk_post_type = $post_type;
+		
+		}else if($param == 'customers-lists'){
+			if($is_checked == 'true'){
+				update_user_meta($user_id,'user_active_inactive',1);		
+			}
+			if($is_checked == 'false'){
+				update_user_meta($user_id,'user_active_inactive',0);
+			}
 		}else{
-			// if($is_checked == 'true'){
 
 			if($is_checked == 0){
-				echo 'ischeck';
 				update_post_meta($post_id,'code_active_inactive',0);
 				foreach ($invitation_id as $id) {
 					update_post_meta($id,'code_active_inactive',0);
@@ -4444,10 +4450,6 @@ class Permasafe_User_Pro_Admin
 			}
 			if($is_checked == 1){
 				update_post_meta($post_id,'code_active_inactive',1);
-				// foreach ($invitation_id as $id) {
-				// 	update_post_meta($id,'code_active_inactive',1);		
-				// }
-				// $data = 'disabled';
 			}
 			if($is_checked == 2){
 				update_post_meta($post_id,'code_active_inactive',2);
@@ -4456,9 +4458,8 @@ class Permasafe_User_Pro_Admin
 				}
 			
 			}
-			// if($is_checked == 'false'){
 			
-			$chk_post_type = 'bulk';
+			
 		}
 		
 		die;

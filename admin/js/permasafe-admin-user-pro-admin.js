@@ -1829,6 +1829,24 @@ jQuery(document).ready(function () {
         // filename: 'dealer_list',
     });
 
+    jQuery('#view_customer_table').on('page.dt', function () {
+
+        setTimeout(function () {
+            jQuery('.jtoggler').jtoggler();
+            jQuery('.jtoggler-wrapper').each(function () {
+                jQuery(this).find('span').css('display', 'none');
+                if (jQuery(this).find('.jtoggler').data('val') == 0) {
+                    jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
+                }
+                if (jQuery(this).find('.jtoggler').data('val') == 1) {
+                    jQuery(this).append('<span style="color:#008000">Active</span>');
+                }
+            });
+        }, 100);
+
+    });
+
+
     // search fileter for view_customer_table
     jQuery('#view_customer_table_filter input').unbind().bind('keyup', function () {
         var colIndex = document.querySelector('#view-customer-table-select').selectedIndex;
@@ -4331,9 +4349,10 @@ jQuery(document).ready(function () {
         })
     });
 
-    jQuery('tr.status-publish .active_inactive .jtoggler-wrapper').each(function () {
+    jQuery('.jtoggler-wrapper').each(function () {
 
         var post_type = jQuery.urlParam('post_type');
+        var page_param = jQuery.urlParam('page');
         if (post_type == 'pmsafe_bulk_invi') {
             if (jQuery(this).find('.jtoggler').data('val') == 0) {
                 jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
@@ -4359,7 +4378,7 @@ jQuery(document).ready(function () {
                 jQuery(this).find('.jtoggler-btn-wrapper:nth-child(3)').addClass('is-active');
             }
         }
-        if (post_type == 'pmsafe_invitecode') {
+        if (post_type == 'pmsafe_invitecode' || page_param == 'customers-lists') {
             if (jQuery(this).find('.jtoggler').data('val') == 0) {
                 jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
             }
@@ -4371,17 +4390,28 @@ jQuery(document).ready(function () {
     });
     jQuery(document).on('jt:toggled', function (event, target) {
 
-        var post_id = jQuery(target).attr('data-id');
+        var target_id = jQuery(target).attr('data-id');
         var is_checked = jQuery(target).prop('checked');
         var post_type = jQuery.urlParam('post_type');
+        var page_param = jQuery.urlParam('page');
 
-
-        var data = {
-            action: 'active_inactive_code_function',
-            post_id: post_id,
-            is_checked: is_checked,
-            post_type: post_type
-        };
+        if (post_type) {
+            var data = {
+                action: 'active_inactive_code_function',
+                post_id: target_id,
+                is_checked: is_checked,
+                param: post_type
+            };
+        } else {
+            if (page_param == 'customers-lists') {
+                var data = {
+                    action: 'active_inactive_code_function',
+                    user_id: target_id,
+                    is_checked: is_checked,
+                    param: page_param
+                };
+            }
+        }
 
         jQuery.ajax({
             type: 'POST',

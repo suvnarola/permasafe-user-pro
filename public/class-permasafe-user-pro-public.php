@@ -173,8 +173,19 @@ class Permasafe_User_Pro_Public
         add_filter('email_change_email', array($this, 'change_email_mail_message'), 10, 3);
 
         add_action('wp_footer', array($this, 'contact_user_popup_function'));
+        add_filter( 'wp_authenticate_user',  array($this,'chk_active_user'),100,2);
     }
 
+  
+    function chk_active_user ($user) 
+    {
+        if (get_user_meta($user->ID, 'user_active_inactive', true) == 1) {
+            return $user;
+        }
+            $msg = 'This account is not activated. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>';
+        return new WP_Error('Account Not Active...',$msg);
+        
+    }
 
     /* Filter Email Change Email Text */
 
@@ -3452,7 +3463,7 @@ class Permasafe_User_Pro_Public
                 }
             }
         }else{
-            $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  The member code you have provided is not Active. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
+            $response = array('status' => false, 'message' => '<span class="perma-error"><strong>Error!</strong>  This code is not activated for registration. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>.</span>');
             echo json_encode($response);
         }
         die;

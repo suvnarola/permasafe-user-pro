@@ -1190,9 +1190,8 @@ a#back_link {
 }
 
 .jtoggler-wrapper {
-    display: flex;
+    display: inline-block !important;
     align-items: center;
-    flex-wrap: wrap;
     justify-content: center;
 }
 
@@ -1200,6 +1199,9 @@ a#back_link {
     font-weight: 700;
     font-size: 13px;
     margin-top: 5px;
+    width: 100%;
+    text-align: center;
+    display: block;
 }
 
 /******** Responsive **********/

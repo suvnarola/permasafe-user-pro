@@ -163,24 +163,12 @@ if ($action == 'view_customer_details') {
     echo $actions["search_customer_details"];
     echo '<a id="back_link" href="'.admin_url('admin.php?page=dealers-lists&action=view&dealer='.$dealer_id).'">Back to Dealer</a>';
     echo '</div>';
-    // $args = array(
-    //     'post_type' => 'pmsafe_bulk_invi',
-    //     'post_status' => 'publish',
-    //     'order'            => 'ASC',
-    //     'posts_per_page' => -1,
-    //     'meta_query' => array(
-    //         // 'relation' => 'AND',
-    //         array(
-    //             'key'     => '_pmsafe_dealer',
-    //             'value'   => $user->user_login,
-    //             'compare' => '=',
-    //         ),
-    //     ),
-    // );
+  
+  
     $dealer_login = $user->user_login;
     $customer_arr = get_user_by_dealer($dealer_login);
 
-    // pr($posts);
+
     $html = '';
     $html .= '<div id="perma-warranty-wrapper">';
     $html .= '<div class="filter-main-wrapper">';
@@ -264,7 +252,11 @@ if ($action == 'view_customer_details') {
     $html .= '</th>';
 
     $html .= '<th class="nisl-pdf-link">';
-    $html .= 'date time';
+    $html .= 'Date Time';
+    $html .= '</th>';
+
+    $html .= '<th>';
+    $html .= 'Active/Inactive';
     $html .= '</th>';
 
 
@@ -393,6 +385,16 @@ if ($action == 'view_customer_details') {
 
         $html .= '<td class="nisl-pdf-link">';
         $html .= $value['date_time'];
+        $html .= '</td>';
+
+        $html .= '<td class="text-center">';
+            $is_active = get_user_meta($value['user_id'],'user_active_inactive',true);
+            if($is_active == 0){
+                $html .= '<input type="checkbox" class="jtoggler" data-id="'.$value['user_id'].'" data-val="'.$is_active.'">';
+            }
+            if($is_active == 1){
+                $html .= '<input type="checkbox" checked class="jtoggler" data-id="'.$value['user_id'].'" data-val="'.$is_active.'">';
+            }
         $html .= '</td>';
 
         $html .= '</tr>';
@@ -609,11 +611,15 @@ if ($action == 'view_customer_details') {
     $html .= '</th>';
 
     $html .= '<th class="nisl-pdf-link">';
-    $html .= 'date time';
+    $html .= 'Date Time';
+    $html .= '</th>';
+    
+    $html .= '<th>';
+    $html .= 'Active/Inactive';
     $html .= '</th>';
 
-
     $html .= '</tr>';
+
     $html .= '</thead>';
 
     $html .= '<tbody id="">';
@@ -659,19 +665,11 @@ if ($action == 'view_customer_details') {
             $posts = get_post($post_id);
             $post_title = $posts->post_title;
             $post_title = substr($post_title, 0, strpos($post_title, ' '));
-            // $code_start = get_post_meta($post_id, '_pmsafe_invitation_code_start', true);
 
-            // $code_end = get_post_meta($post_id,'_pmsafe_invitation_code_end',true);
-
-            // $post_title =  $code_start.'-'.$code_end;
-
-
-            // pr($vehicle_information);
             $html .= '<tr>';
             $html .= '<td>';
             $html .= $customer_user->user_login;
             $html .= '</td>';
-
 
             $html .= '<td>';
             $html .= $customer_name;
@@ -780,7 +778,16 @@ if ($action == 'view_customer_details') {
             $html .= '<td class="nisl-pdf-link">';
             $html .= $vehicle_information[$login]['pmsafe_registration_date'];
             $html .= '</td>';
-
+         
+            $html .= '<td class="text-center">';
+            $is_active = get_user_meta($customer_user->ID,'user_active_inactive',true);
+            if($is_active == 0){
+                $html .= '<input type="checkbox" class="jtoggler" data-id="'.$customer_user->ID.'" data-val="'.$is_active.'">';
+            }
+            if($is_active == 1){
+                $html .= '<input type="checkbox" checked class="jtoggler" data-id="'.$customer_user->ID.'" data-val="'.$is_active.'">';
+            }
+            $html .= '</td>';
 
             $html .= '</tr>';
         }
