@@ -17,7 +17,7 @@ if ($action == 'view_upgraded_policy') {
         $dealer_users = get_user_by('login',$dealer_login);
         $dealer_id = $dealer_users->ID;
         echo '<div class="top-head">';
-        echo '<h1 class="top-heading">View <span style="color:#0065a7">' . $dealer_name . ' (' . $dealer_login . ')</span> Upgraded Membership</h1>';
+        echo '<h1 class="top-heading">View <span style="color:#0065a7">' . $dealer_name . ' (' . $dealer_login . ')</span> Upgrade Report</h1>';
         echo '<a id="back_link" href="'.admin_url('admin.php?page=dealers-lists&action=view&dealer='.$dealer_id).'">Back to Dealer</a>';
         echo '</div>';
 
@@ -25,7 +25,7 @@ if ($action == 'view_upgraded_policy') {
     }
     if ($distributor_login) {
         echo '<div class="top-head">';
-        echo '<h1 class="top-heading">View <span style="color:#0065a7">' . $distributor_name . ' (' . $distributor_login . ')</span> Upgraded Membership</h1>';
+        echo '<h1 class="top-heading">View <span style="color:#0065a7">' . $distributor_name . ' (' . $distributor_login . ')</span> Upgrade Report</h1>';
         echo '</div>';
 
         $users = get_user_by('login', $distributor_login);
@@ -34,7 +34,7 @@ if ($action == 'view_upgraded_policy') {
     }
 } else {
     echo '<div class="top-head">';
-    echo '<h1 class="top-heading">View Upgraded Membership</h1>';
+    echo '<h1 class="top-heading">Upgrade Report</h1>';
     echo '</div>';
 }
 
@@ -211,7 +211,7 @@ if ($action == 'view_upgraded_policy') {
 foreach ($distributors as $distributor) {
     $distributor_id = $distributor->ID;
     $distributor_name = get_user_meta($distributor_id, 'distributor_name', true);
-    echo '<tr style="background-color: #0065a7;font-weight: 700;color: #fff;">';
+    echo '<tr style="background-color: #A0CEEF;font-weight: 700;color: #000000;">';
     echo '<td>' . $distributor_name . '</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>';
     if ($action == 'view_upgraded_policy' && isset($_GET['dealer'])) {
         $dealers = get_users(array('search' => $_GET['dealer']));
@@ -231,7 +231,7 @@ foreach ($distributors as $distributor) {
 
         $dealer_arr = get_code_by_dealer_login($dealer_login);
         $dealer_name = get_user_meta($dealer_id, 'dealer_name', true);
-        echo '<tr style="background-color: #008000;font-weight: 700;color: #fff;">';
+        echo '<tr style="background-color: #B5D777;font-weight: 700;color: #000000;">';
         echo '<td>' . $dealer_name . '</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>';
         echo '</tr>';
         $membership_results = $wpdb->get_results('SELECT post_id FROM wp_postmeta WHERE meta_key = "is_upgraded" and meta_value ="1"');
@@ -249,8 +249,11 @@ foreach ($distributors as $distributor) {
                 $dealer_name = get_user_meta($upgraded_id, 'dealer_name', true);
                 $distributor_name = get_user_meta($upgraded_id, 'distributor_name', true);
                 $dealer_contact_fname = get_user_meta($upgraded_id, 'contact_fname', true);
+                $dealer_contact_lname = get_user_meta($upgraded_id, 'contact_lname', true);
                 $distributor_contact_fname = get_user_meta($upgraded_id, 'distributor_contact_fname', true);
-                $admin_name = get_user_meta($upgraded_id, 'first_name', true);
+                $distributor_contact_lname = get_user_meta($upgraded_id, 'distributor_contact_lname', true);
+                $admin_fname = get_user_meta($upgraded_id, 'first_name', true);
+                $admin_lname = get_user_meta($upgraded_id, 'last_name', true);
                 $users = get_user_by('login', $code);
                 $user_id = $users->ID;
                 $fname = get_user_meta($user_id, 'first_name', true);
@@ -268,8 +271,8 @@ foreach ($distributors as $distributor) {
                 $dealer_cost = $dealer_price_arr[$code_prefix]['dealer_cost'];
                 $distributor_cost = $distributor_price_arr[$code_prefix]['distributor_cost'];
 
-                $users = get_user_by('login', $code);
-                $user_id = $users->ID;
+                // $users = get_user_by('login', $code);
+                // $user_id = $users->ID;
                 $vehicle_info = get_user_meta($user_id, 'pmsafe_vehicle_info', true);
                 $vin = $vehicle_info[$code]['pmsafe_vin'];
 
@@ -304,18 +307,18 @@ foreach ($distributors as $distributor) {
                         echo $distributor_name;
                     }
                     if ($dealer_contact_fname) {
-                        echo $dealer_contact_fname;
+                        echo $dealer_contact_fname.' '.$dealer_contact_lname;
                     }
                     if ($distributor_contact_fname) {
-                        echo $distributor_contact_fname;
+                        echo $distributor_contact_fname.' '.$distributor_contact_lname;
                     }
                     if ($admin_name) {
-                        echo $admin_name;
+                        echo $admin_fame.' '.$admin_lame;
                     }
                     echo '</td>';
 
                     echo '<td style="text-align:center;">';
-                    echo get_post_meta($post_id, 'upgraded_date', true);
+                    echo  date('m-d-Y', strtotime(get_post_meta($post_id, 'upgraded_date', true)));
                     echo '</td>';
 
                     echo '<td style="text-align:center;">';

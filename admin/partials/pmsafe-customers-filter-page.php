@@ -1,5 +1,5 @@
 <?php
-echo '<h1 class="top-heading">Quick Filters</h1>';
+echo '<h1 class="top-heading">Coverage Report</h1>';
 echo '<div class="filter-wrap coverage-main">';
 
     echo '<div class="coverage-inner-one">'; 

@@ -2502,24 +2502,24 @@ jQuery(document).ready(function () {
                     if (jQuery("input:radio").is(":checked")) {
                         if (radioValue == 'hide_dealer') {
                             jQuery('.dealer-hide').addClass('nisl-pdf-link');
-                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 8';
+                            var columntarget = '0, 1, 2, 3, 4, 6';
                         }
                         if (radioValue == 'hide_distributor') {
                             jQuery('.distributor-hide').addClass('nisl-pdf-link');
-                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7';
+                            var columntarget = '0, 1, 2, 3, 4, 5';
                         }
                         if (radioValue == 'no_cost') {
                             jQuery('.dealer-hide').addClass('nisl-pdf-link');
                             jQuery('.distributor-hide').addClass('nisl-pdf-link');
-                            var columntarget = '0, 1, 2, 3, 4, 5, 6';
+                            var columntarget = '0, 1, 2, 3, 4';
                         }
                         if (radioValue == 'show_cost') {
                             jQuery('.dealer-hide').removeClass('nisl-pdf-link');
                             jQuery('.distributor-hide').removeClass('nisl-pdf-link');
-                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8';
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6';
                         }
                     } else {
-                        var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8';
+                        var columntarget = '0, 1, 2, 3, 4, 5, 6';
                     }
 
                     // jQuery('.tbl-result-wrap').html(response);
@@ -2530,7 +2530,7 @@ jQuery(document).ready(function () {
                         "pageLength": 20,
                         "ordering": false,
                         'columnDefs': [{
-                            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8],
+                            'targets': [0, 1, 2, 3, 4, 5, 6],
                             /* column index */
                             'orderable': false,
                             /* true or false */
