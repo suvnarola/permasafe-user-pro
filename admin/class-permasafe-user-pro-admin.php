@@ -2206,6 +2206,7 @@ class Permasafe_User_Pro_Admin
 
 		
 		foreach ($dis_arr as $key => $value) {
+			$total_distributor_members = 0;
 
 			$distributor_id = $value['id'];
 			$dis_name = get_user_meta($distributor_id, 'distributor_name', true);
@@ -2786,13 +2787,14 @@ class Permasafe_User_Pro_Admin
 						
 					} // query
 					
+					
 					if($packTotal){
 					foreach ($packTotal as $key => $value) {
 				
 							$html .= '<tr style="background-color: #F0CF65;font-weight: 700;color: #000000;">';
 								$html .= '<td>Total '.$key.'</td><td></td><td class="text-center">'.$value.'</td><td></td><td></td><td class="dealer-hide"></td><td class="distributor-hide"></td><td></td><td></td><td></td>';
 							$html .= '</tr>'; 
-							
+						$dis_packTotal[$key] += $value;  		
 						}
 					}
 
@@ -2800,8 +2802,26 @@ class Permasafe_User_Pro_Admin
 							$html .= '<td>Total '.$select_option.' - '.$deal_name.'</td><td></td><td class="text-center">'.$total_members.'</td><td></td><td></td><td class="dealer-hide text-center">$'.$total_dealer_cost.'</td><td class="distributor-hide text-center"> $'.$total_distributor_cost.'</td><td></td><td></td><td></td>';
 					$html .= '</tr>'; 
 				}
+					$total_distributor_members += $total_members;
+					
 				} // dealers
+				
 				$html .= '</tr/>';
+
+				if($dis_packTotal){
+				foreach ($dis_packTotal as $key => $value) {
+			
+						$html .= '<tr style="background-color: #86abc6;font-weight: 700;color: #000000;">';
+							$html .= '<td>Total '.$key.'</td><td></td><td class="text-center">'.$value.'</td><td></td><td></td><td class="dealer-hide"></td><td class="distributor-hide"></td><td></td><td></td><td></td>';
+						$html .= '</tr>'; 
+					
+					}
+				}
+				unset($dis_packTotal);
+				$html .= '<tr style="background-color: #86abc6;font-weight: 700;color: #000000;">';
+						$html .= '<td>Total '.$select_option.' - '.$dis_name.'</td><td></td><td class="text-center">'.$total_distributor_members.'</td><td></td><td></td><td class="dealer-hide text-center"></td><td class="distributor-hide text-center"></td><td></td><td></td><td></td>';
+				$html .= '</tr>'; 
+
 		} //distributors
 
 
@@ -3186,9 +3206,9 @@ class Permasafe_User_Pro_Admin
 		foreach ($dis_arr as $key => $value) {
 			
 			$distributor_id = $value['id'];
-			$distributor_name = get_user_meta($distributor_id, 'distributor_name', true);
+			$distributor_names = get_user_meta($distributor_id, 'distributor_name', true);
 			$html .= '<tr style="background-color: #A0CEEF;font-weight: 700;color: #000000;">';
-			$html .= '<td>' . $distributor_name . '</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="dealer-hide"></td><td class="distributor-hide"></td>';
+			$html .= '<td>' . $distributor_names . '</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="dealer-hide"></td><td class="distributor-hide"></td>';
 			if ($login != '') {
 			
 
@@ -3217,8 +3237,9 @@ class Permasafe_User_Pro_Admin
 						)
 					);
 			}
-			
+			$total_distributor_upgrades = 0;
 			foreach ($dealers as $in_dealer) {
+			
 			
 				
 				$total_upgrades = 0;
@@ -3232,12 +3253,13 @@ class Permasafe_User_Pro_Admin
 				$dealer_arr = get_code_by_dealer_login($dealer_login);
 				if(in_array($dealer_login,$input_dealers)){
 					
-					$dealer_name = get_user_meta($dealer_id, 'dealer_name', true);
+					$dealer_names = get_user_meta($dealer_id, 'dealer_name', true);
 					$html .= '<tr style="background-color: #B5D777;font-weight: 700;color: #000000;">';
-					$html .= '<td>' . $dealer_name . '</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="dealer-hide"></td><td class="distributor-hide"></td>';
+					$html .= '<td>' . $dealer_names . '</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="dealer-hide"></td><td class="distributor-hide"></td>';
 					$html .= '</tr>';
 					$membership_results = $wpdb->get_results('SELECT post_id FROM wp_postmeta WHERE meta_key = "is_upgraded" and meta_value ="1"');
 					$packTotal = array();
+					
 					foreach ($membership_results as $str) {
 						$post_id = $str->post_id;
 						$code_status = get_post_meta($post_id, '_pmsafe_code_status', true);
@@ -3502,16 +3524,30 @@ class Permasafe_User_Pro_Admin
 							$html .= '<tr style="background-color: #F0CF65;font-weight: 700;color: #000000;">';
 								$html .= '<td>Total '.$key.'</td><td></td><td></td><td></td><td class="text-center">'. $value.'</td><td></td><td></td><td class="dealer-hide"></td><td class="distributor-hide"></td>';
 							$html .= '</tr>'; 
-							
+							$dis_packTotal[$key] += $value;
 						}
 					}
 				
 					$html .= '<tr style="background-color: #F0CF65;font-weight: 700;color: #000000;">';
-					$html .= '<td>Total Upgrades '.$dealer_name.'</td><td></td><td></td><td></td><td class="text-center">'.$total_upgrades.'</td><td></td><td></td><td class="text-center dealer-hide">$'.$total_dealer_cost.'</td><td class="text-center distributor-hide">$'.$total_distributor_cost.'</td>';
+					$html .= '<td>Total Upgrades - '.$dealer_names.'</td><td></td><td></td><td></td><td class="text-center">'.$total_upgrades.'</td><td></td><td></td><td class="text-center dealer-hide">$'.$total_dealer_cost.'</td><td class="text-center distributor-hide">$'.$total_distributor_cost.'</td>';
 					$html .= '</tr>'; 
 				
 				}
+				$total_distributor_upgrades += $total_upgrades; 
 			}
+			if($dis_packTotal){
+				foreach ($dis_packTotal as $key => $value) {
+			
+					$html .= '<tr style="background-color: #86abc6;font-weight: 700;color: #000000;">';
+						$html .= '<td>Total '.$key.'</td><td></td><td></td><td></td><td class="text-center">'. $value.'</td><td></td><td></td><td class="dealer-hide"></td><td class="distributor-hide"></td>';
+					$html .= '</tr>'; 
+					
+				}
+			}
+			unset($dis_packTotal);
+			$html .= '<tr style="background-color: #86abc6;font-weight: 700;color: #000000;">';
+			$html .= '<td>Total Upgrades - '.$distributor_names.'</td><td></td><td></td><td></td><td class="text-center">'.$total_distributor_upgrades.'</td><td></td><td></td><td class="text-center dealer-hide"></td><td class="text-center distributor-hide"></td>';
+			$html .= '</tr>'; 
 		}
 		$html .= '</tbody>';
 		$html .= '</table>';

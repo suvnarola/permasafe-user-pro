@@ -879,6 +879,7 @@ class PMSafe_Bulk_Invitation{
                         add_post_meta($invitecode_id, '_pmsafe_code_create_date', $_POST['pmsafe_code_create_date']);
                         add_post_meta($invitecode_id, '_pmsafe_code_prefix', $prefix);
                         add_post_meta($invitecode_id, '_pmsafe_invitation_prefix', $prefix);
+                        add_post_meta($invitecode_id,'code_active_inactive',1);
                     }
                     
                     $updated_name = $_POST['pmsafe_invitation_code_start'].'-'.$_POST['pmsafe_invitation_code_end'].' #'.($i + 1).': '.get_post_meta($invitecode_id, '_pmsafe_invitation_code',true );
@@ -905,6 +906,7 @@ class PMSafe_Bulk_Invitation{
             $invitation_meta['_pmsafe_dealer'] = $_POST['pmsafe_dealer'];
             $invitation_meta['_pmsafe_distributor'] = $_POST['pmsafe_distributor'];
             $invitation_meta['_pmsafe_invitation_prefix'] = $_POST['pmsafe_invitation_prefix'];
+            $invitation_meta['code_active_inactive'] = 2;
             if(isset($_POST['pmsafe_invitation_code_upgradable'])){
                 $invitation_meta['pmsafe_invitation_code_upgradable'] = 1;
             }

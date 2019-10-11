@@ -179,11 +179,17 @@ class Permasafe_User_Pro_Public
   
     function chk_active_user ($user) 
     {
-        if (get_user_meta($user->ID, 'user_active_inactive', true) == 1) {
+        $user_meta=get_userdata($user->ID);
+        $user_roles=$user_meta->roles;
+        if (in_array("subscriber", $user_roles) || in_array("contributor", $user_roles) || in_array("author", $user_roles) || in_array("dealer-user", $user_roles) || in_array("distributor-user", $user_roles)){
+            if (get_user_meta($user->ID, 'user_active_inactive', true) == 1) {
+                return $user;
+            }
+                $msg = 'This account is not activated. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>';
+            return new WP_Error('Account Not Active...',$msg);
+        }else{
             return $user;
         }
-            $msg = 'This account is not activated. If you believe this is an error, please contact us <a href="' . get_site_url() . '/contact">here</a>';
-        return new WP_Error('Account Not Active...',$msg);
         
     }
 
@@ -4077,6 +4083,7 @@ class Permasafe_User_Pro_Public
                         update_user_meta($user_id, 'edit_pmsafe_zip_code', $_POST['zip_code']);
                         update_user_meta($user_id, 'pmsafe_email', $_POST['email']);
                         update_user_meta($user_id, 'pmsafe_signature', $_POST['signature']);
+                        update_user_meta($user_id, 'user_active_inactive', 1);
 
                         $vehicle_info = array();
 
@@ -4200,6 +4207,7 @@ class Permasafe_User_Pro_Public
 
                                 update_user_meta($user_id, 'pmsafe_email', $_POST['email']);
                                 update_user_meta($user_id, 'pmsafe_signature', $_POST['signature']);
+                                update_user_meta($user_id, 'user_active_inactive', 1);
 
 
                                 $vehicle_info = array();
