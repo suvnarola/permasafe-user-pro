@@ -4174,6 +4174,22 @@ jQuery(document).ready(function () {
         ],
 
     });
+    jQuery('#tbl_distributors').on('page.dt', function () {
+
+        setTimeout(function () {
+            jQuery('.jtoggler').jtoggler();
+            jQuery('.jtoggler-wrapper').each(function () {
+                jQuery(this).find('span').css('display', 'none');
+                if (jQuery(this).find('.jtoggler').data('val') == 0) {
+                    jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
+                }
+                if (jQuery(this).find('.jtoggler').data('val') == 1) {
+                    jQuery(this).append('<span style="color:#008000">Active</span>');
+                }
+            });
+        }, 100);
+
+    });
 
     var tbl_dealers = jQuery('#tbl_dealers').DataTable({
         dom: 'Bfrtip',
@@ -4184,6 +4200,23 @@ jQuery(document).ready(function () {
         "order": [
             [1, "asc"]
         ],
+
+    });
+
+    jQuery('#tbl_dealers').on('page.dt', function () {
+
+        setTimeout(function () {
+            jQuery('.jtoggler').jtoggler();
+            jQuery('.jtoggler-wrapper').each(function () {
+                jQuery(this).find('span').css('display', 'none');
+                if (jQuery(this).find('.jtoggler').data('val') == 0) {
+                    jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
+                }
+                if (jQuery(this).find('.jtoggler').data('val') == 1) {
+                    jQuery(this).append('<span style="color:#008000">Active</span>');
+                }
+            });
+        }, 100);
 
     });
 
@@ -4378,7 +4411,7 @@ jQuery(document).ready(function () {
                 jQuery(this).find('.jtoggler-btn-wrapper:nth-child(3)').addClass('is-active');
             }
         }
-        if (post_type == 'pmsafe_invitecode' || page_param == 'customers-lists') {
+        if (post_type == 'pmsafe_invitecode' || page_param == 'customers-lists' || page_param == 'dealers-lists' || page_param == 'distributors-lists') {
             if (jQuery(this).find('.jtoggler').data('val') == 0) {
                 jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
             }
@@ -4411,6 +4444,14 @@ jQuery(document).ready(function () {
                     param: page_param
                 };
             }
+            if (page_param == 'dealers-lists' || page_param == 'distributors-lists') {
+                var data = {
+                    action: 'active_inactive_code_function',
+                    user_id: target_id,
+                    is_checked: is_checked,
+                    param: page_param
+                };
+            }
         }
 
         jQuery.ajax({
@@ -4421,10 +4462,12 @@ jQuery(document).ready(function () {
             success: function (response) {
                 jQuery(target).parent('.jtoggler-wrapper').find('span').css('display', 'none');
                 if (is_checked == 0) {
+                    jQuery(target).data('val', 0);
                     jQuery(target).parent('.jtoggler-wrapper').append('<span style="color:#ff0000">Inactive</span>');
                 }
 
                 if (is_checked == 1) {
+                    jQuery(target).data('val', 1);
                     jQuery(target).parent('.jtoggler-wrapper').append('<span style="color:#008000">Active</span>');
                 }
             }

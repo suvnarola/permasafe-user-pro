@@ -1204,6 +1204,21 @@ a#back_link {
     display: block;
 }
 
+.view-dealer-contacts-tbl b,
+.view-distributor-contacts-tbl b {
+    margin-right: 10px;
+}
+
+.view-dealer-contacts-tbl .jtoggler-wrapper,
+.view-distributor-contacts-tbl .jtoggler-wrapper {
+    display: inline-flex !important;
+}
+
+.view-dealer-contacts-tbl .jtoggler-control,
+.view-distributor-contacts-tbl .jtoggler-control {
+    width: 90px;
+}
+
 /******** Responsive **********/
 
 

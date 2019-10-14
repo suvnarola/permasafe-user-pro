@@ -491,6 +491,7 @@ class Permasafe_User_Pro_Admin
 			update_user_meta($user_id, 'distributor_store_address', $distributor_store_address);
 			update_user_meta($user_id, 'distributor_phone_number', $distributor_phone_number);
 			update_user_meta($user_id, 'distributor_fax_number', $distributor_fax_number);
+			update_user_meta($user_id, 'user_active_inactive', 1);
 
 			$redirect_url = admin_url('admin.php?page=distributors-lists&action=view&distributor=' . $user_id);
 			$response = array('status' => true, 'redirect' => $redirect_url);
@@ -598,6 +599,7 @@ class Permasafe_User_Pro_Admin
 			update_user_meta($contact_id, 'distributor_contact_lname', $lname);
 			update_user_meta($contact_id, 'distributor_contact_phone', $phone);
 			update_user_meta($contact_id, 'contact_distributor_id', $distributor_id);
+			update_user_meta($contact_id, 'user_active_inactive', 1);
 
 			$to = $email;
 			$subject = 'PermaSafe: Your User Account Registration Information';
@@ -731,6 +733,8 @@ class Permasafe_User_Pro_Admin
 			update_user_meta($user_id, 'dealer_phone_number', $dealer_phone_number);
 			update_user_meta($user_id, 'dealer_fax_number', $dealer_fax_number);
 			update_user_meta($user_id, 'dealer_distributor_name', $dealer_distributor);
+			update_user_meta($user_id, 'user_active_inactive', 1);
+			
 
 			$redirect_url = admin_url('admin.php?page=dealers-lists&action=view&dealer=' . $user_id);
 			$response = array('status' => true, 'redirect' => $redirect_url);
@@ -840,7 +844,7 @@ class Permasafe_User_Pro_Admin
 			update_user_meta($contact_id, 'contact_lname', $lname);
 			update_user_meta($contact_id, 'contact_phone', $phone);
 			update_user_meta($contact_id, 'contact_dealer_id', $dealer_id);
-
+			update_user_meta($contact_id, 'user_active_inactive', 1);
 			$to = $email;
 			$password = $password;
 			$subject = 'PermaSafe: Your User Account Registration Information';
@@ -4340,13 +4344,14 @@ class Permasafe_User_Pro_Admin
 	}
 
 	public function active_inactive_code_function(){
+		global $wpdb;
 		$post_id = $_POST['post_id'];
 		$is_checked = $_POST['is_checked'];
 		$param = $_POST['param']; 
 		$user_id = $_POST['user_id'];
 		$invitation_ids = get_post_meta($post_id, '_pmsafe_invitation_ids', true);
 		$invitation_id = explode(',', $invitation_ids);
-
+	
 		if($param == 'pmsafe_invitecode'){
 			if($is_checked == 'true'){
 				update_post_meta($post_id,'code_active_inactive',1);		
@@ -4362,7 +4367,151 @@ class Permasafe_User_Pro_Admin
 			if($is_checked == 'false'){
 				update_user_meta($user_id,'user_active_inactive',0);
 			}
-		}else{
+		}else if($param == 'dealers-lists'){
+			$contact_info = $wpdb->get_results('SELECT wum.user_id,wu.user_email,wu.user_login FROM wp_users wu, wp_usermeta wum WHERE wu.ID = wum.user_id AND wum.meta_key = "contact_dealer_id" AND wum.meta_value =' . $user_id);	
+			
+			$dealer_users = get_user_by('ID',$user_id);
+			$dealer_login = $dealer_users->user_login;
+			
+			$bulk_args = array(
+					'post_type' => 'pmsafe_bulk_invi',
+					'post_status' => 'publish',
+					'posts_per_page' => -1,
+					'orderby' => 'date',
+					'order' => 'DESC',
+					'meta_query' => array(
+						// 'relation' => 'AND',
+						array(
+							'key'     => '_pmsafe_dealer',
+							'value'   => $dealer_login,
+							'compare' => '=',
+						),
+
+					),
+				);
+				
+				$bulk_results = get_posts($bulk_args);
+				
+				$invite_args = array(
+					'post_type' => 'pmsafe_invitecode',
+					'post_status' => 'publish',
+					'posts_per_page' => -1,
+					'orderby' => 'date',
+					'order' => 'DESC',
+					'meta_query' => array(
+						'relation' => 'AND',
+						array(
+							'key'     => '_pmsafe_dealer',
+							'value'   => $dealer_login,
+							'compare' => '=',
+						),
+						array(
+							'key'     => '_pmsafe_is_invite_code',
+							'value'   => 1,
+							'compare' => '=',
+						),
+
+					),
+				);
+				
+				$invite_results = get_posts($invite_args);
+				
+
+			if($is_checked == 'true'){
+				update_user_meta($user_id,'user_active_inactive',1);	
+				
+				foreach ($bulk_results as $bulk_result) {
+					$post_id = $bulk_result->ID;
+					$invitation_id = get_post_meta($post_id, '_pmsafe_invitation_ids', true);
+					$invitation_id = explode(',', $invitation_id);
+					
+					$data = pmsafe_unused_code_count($post_id);
+					if($data['used'] == 0 || $data['used'] == $data['total']){
+						update_post_meta($post_id,'code_active_inactive',2);
+						foreach ($invitation_id as $id) {
+							update_post_meta($id,'code_active_inactive',1);
+							 
+						}
+					}else{
+						update_post_meta($post_id,'code_active_inactive',1);
+						foreach ($invitation_id as $id) {
+							
+								update_post_meta($id,'code_active_inactive',1);
+						}
+					}
+				}
+				foreach ($invite_results as $invite_result) {
+					$post_id = $invite_result->ID;
+					$code_status = get_post_meta($id, '_pmsafe_code_status', true);
+					if($code_status == 'available'){
+						update_post_meta($post_id,'code_active_inactive',1);
+					}
+				}
+				 foreach ($contact_info as $key => $value) {
+					$contact_id = $value->user_id;	
+					update_user_meta($contact_id,'user_active_inactive',1);	
+				 }
+			}
+			if($is_checked == 'false'){
+				update_user_meta($user_id,'user_active_inactive',0);
+				foreach ($contact_info as $key => $value) {
+					$contact_id = $value->user_id;	
+					update_user_meta($contact_id,'user_active_inactive',0);	
+				 }
+				 foreach ($bulk_results as $bulk_result) {
+					$post_id = $bulk_result->ID;
+					$invitation_id = get_post_meta($post_id, '_pmsafe_invitation_ids', true);
+					$invitation_id = explode(',', $invitation_id);
+					
+					$data = pmsafe_unused_code_count($post_id);
+					if($data['used'] == 0){
+						update_post_meta($post_id,'code_active_inactive',0);
+						foreach ($invitation_id as $id) {
+							update_post_meta($id,'code_active_inactive',0);
+							 
+						}
+					}else if($data['used'] == $data['total']){
+						update_post_meta($post_id,'code_active_inactive',2);
+						foreach ($invitation_id as $id) {
+							update_post_meta($id,'code_active_inactive',1);
+							 
+						}
+					}else{
+						update_post_meta($post_id,'code_active_inactive',1);
+						foreach ($invitation_id as $id) {
+							$code_status = get_post_meta($id, '_pmsafe_code_status', true);
+							if ($code_status != 'used') {
+								update_post_meta($id,'code_active_inactive',0);
+							}
+						}
+					}
+				}
+				foreach ($invite_results as $invite_result) {
+					$post_id = $invite_result->ID;
+					$code_status = get_post_meta($id, '_pmsafe_code_status', true);
+					if($code_status == 'available'){
+						update_post_meta($post_id,'code_active_inactive',0);
+					}
+				}
+			}
+		}else if($param == 'distributors-lists'){
+			$contact_info = $wpdb->get_results('SELECT wum.user_id,wu.user_email,wu.user_login FROM wp_users wu, wp_usermeta wum WHERE wu.ID = wum.user_id AND wum.meta_key = "contact_distributor_id" AND wum.meta_value =' . $user_id);
+			if($is_checked == 'true'){
+					update_user_meta($user_id,'user_active_inactive',1);	
+				 foreach ($contact_info as $key => $value) {
+					$contact_id = $value->user_id;	
+					update_user_meta($contact_id,'user_active_inactive',1);	
+				 }
+			}
+			if($is_checked == 'false'){
+				update_user_meta($user_id,'user_active_inactive',0);
+				foreach ($contact_info as $key => $value) {
+					$contact_id = $value->user_id;	
+					update_user_meta($contact_id,'user_active_inactive',0);	
+				}
+			}
+		}
+		else{
 
 			if($is_checked == 0){
 				update_post_meta($post_id,'code_active_inactive',0);

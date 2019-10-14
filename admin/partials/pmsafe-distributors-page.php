@@ -161,6 +161,18 @@ if ($action == 'view') {
 
             echo '<td style="font-size:15px;border-right:none;">';
             echo '<b>Person ' . $number . '</b>';
+            $is_active = get_user_meta($user_id,'user_active_inactive',true);
+            $distributor_is_active = get_user_meta($distributor_id,'user_active_inactive',true);
+            if($distributor_is_active == 0){
+                echo '<input type="checkbox" disabled class="jtoggler" data-id="'.$user_id.'" data-val="'.$is_active.'">';
+            }else{
+                if($is_active == 0){
+                    echo '<input type="checkbox" class="jtoggler" data-id="'.$user_id.'" data-val="'.$is_active.'">';
+                }
+                if($is_active == 1){
+                    echo '<input type="checkbox" checked class="jtoggler" data-id="'.$user_id.'" data-val="'.$is_active.'">';
+                }
+            }
             echo '</td>';
 
             echo '<td style="border-left:none;text-align:right;">';
@@ -448,6 +460,10 @@ if ($action == 'view') {
     echo '<th>';
     echo 'Created Date';
     echo '</th>';
+    
+    echo '<th>';
+    echo 'Active/Inactive';
+    echo '</th>';
 
     echo '</tr>';
     echo '</thead>';
@@ -545,6 +561,18 @@ if ($action == 'view') {
         echo '<td>' . $user->user_email . '</td>';
         echo '<td style="text-align:center;">' . $dealer_name . '</td>';
         echo '<td style="text-align:center;">' . $registered_date . '</td>';
+        echo '<td class="text-center">';
+        $is_active = get_user_meta($user_id,'user_active_inactive',true);
+             
+            if($is_active == 0){
+        
+                echo '<input type="checkbox" class="jtoggler" data-id="'.$user_id.'" data-val="'.$is_active.'">';
+            }
+            if($is_active == 1){
+        
+                echo '<input type="checkbox" checked class="jtoggler" data-id="'.$user_id.'" data-val="'.$is_active.'">';
+            }
+        echo '</td>';
         echo '</tr>';
     }
     echo '</tbody>';
