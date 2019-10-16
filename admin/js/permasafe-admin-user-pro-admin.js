@@ -4,253 +4,253 @@ jQuery(document).ready(function () {
     // for states
 
     var availableStates = [{
-            label: "ALABAMA",
-            value: "AL"
-        },
-        {
-            label: "ALASKA",
-            value: "AK"
-        },
-        {
-            label: "AMERICAN SAMOA",
-            value: "AS"
-        },
-        {
-            label: "ARIZONA",
-            value: "AZ"
-        },
-        {
-            label: "ARKANSAS",
-            value: "AR"
-        },
-        {
-            label: "CALIFORNIA",
-            value: "CA"
-        },
-        {
-            label: "COLORADO",
-            value: "CO"
-        },
-        {
-            label: "CONNECTICUT",
-            value: "CT"
-        },
-        {
-            label: "DELAWARE",
-            value: "DE"
-        },
-        {
-            label: "DISTRICT OF COLUMBIA",
-            value: "DC"
-        },
-        {
-            label: "FEDERATED STATES OF MICRONESIA",
-            value: "FM"
-        },
-        {
-            label: "FLORIDA",
-            value: "FL"
-        },
-        {
-            label: "GEORGIA",
-            value: "GA"
-        },
-        {
-            label: "GUAM GU",
-            value: "GU"
-        },
-        {
-            label: "HAWAII",
-            value: "HI"
-        },
-        {
-            label: "IDAHO",
-            value: "ID"
-        },
-        {
-            label: "ILLINOIS",
-            value: "IL"
-        },
-        {
-            label: "INDIANA",
-            value: "IN"
-        },
-        {
-            label: "IOWA",
-            value: "IA"
-        },
-        {
-            label: "KANSAS",
-            value: "KS"
-        },
-        {
-            label: "KENTUCKY",
-            value: "KY"
-        },
-        {
-            label: "LOUISIANA",
-            value: "LA"
-        },
-        {
-            label: "MAINE",
-            value: "ME"
-        },
-        {
-            label: "MARSHALL ISLANDS",
-            value: "MH"
-        },
-        {
-            label: "MARYLAND",
-            value: "MD"
-        },
-        {
-            label: "MASSACHUSETTS",
-            value: "MA"
-        },
-        {
-            label: "MICHIGAN",
-            value: "MI"
-        },
-        {
-            label: "MINNESOTA",
-            value: "MN"
-        },
-        {
-            label: "MISSISSIPPI",
-            value: "MS"
-        },
-        {
-            label: "MISSOURI",
-            value: "MO"
-        },
-        {
-            label: "MONTANA",
-            value: "MT"
-        },
-        {
-            label: "NEBRASKA",
-            value: "NE"
-        },
-        {
-            label: "NEVADA",
-            value: "NV"
-        },
-        {
-            label: "NEW HAMPSHIRE",
-            value: "NH"
-        },
-        {
-            label: "NEW JERSEY",
-            value: "NJ"
-        },
-        {
-            label: "NEW MEXICO",
-            value: "NM"
-        },
-        {
-            label: "NEW YORK",
-            value: "NY"
-        },
-        {
-            label: "NORTH CAROLINA",
-            value: "NC"
-        },
-        {
-            label: "NORTH DAKOTA",
-            value: "ND"
-        },
-        {
-            label: "NORTHERN MARIANA ISLANDS",
-            value: "MP"
-        },
-        {
-            label: "OHIO",
-            value: "OH"
-        },
-        {
-            label: "OKLAHOMA",
-            value: "OK"
-        },
-        {
-            label: "OREGON",
-            value: "OR"
-        },
-        {
-            label: "PALAU",
-            value: "PW"
-        },
-        {
-            label: "PENNSYLVANIA",
-            value: "PA"
-        },
-        {
-            label: "PUERTO RICO",
-            value: "PR"
-        },
-        {
-            label: "RHODE ISLAND",
-            value: "RI"
-        },
-        {
-            label: "SOUTH CAROLINA",
-            value: "SC"
-        },
-        {
-            label: "SOUTH DAKOTA",
-            value: "SD"
-        },
-        {
-            label: "TENNESSEE",
-            value: "TN"
-        },
-        {
-            label: "TEXAS",
-            value: "TX"
-        },
-        {
-            label: "UTAH",
-            value: "UT"
-        },
-        {
-            label: "VERMONT",
-            value: "VT"
-        },
-        {
-            label: "VIRGIN ISLANDS",
-            value: "VI"
-        },
-        {
-            label: "VIRGINIA",
-            value: "VA"
-        },
-        {
-            label: "WASHINGTON",
-            value: "WA"
-        },
-        {
-            label: "WEST VIRGINIA",
-            value: "WV"
-        },
-        {
-            label: "WISCONSIN",
-            value: "WI"
-        },
-        {
-            label: "WYOMING",
-            value: "WY"
-        },
-        {
-            label: "ARMED FORCES AFRICA \ CANADA \ EUROPE \ MIDDLE EAST",
-            value: "AE"
-        },
-        {
-            label: "ARMED FORCES AMERICA (EXCEPT CANADA)",
-            value: "AA"
-        },
-        {
-            label: "ARMED FORCES PACIFIC",
-            value: "AP"
-        }
+        label: "ALABAMA",
+        value: "AL"
+    },
+    {
+        label: "ALASKA",
+        value: "AK"
+    },
+    {
+        label: "AMERICAN SAMOA",
+        value: "AS"
+    },
+    {
+        label: "ARIZONA",
+        value: "AZ"
+    },
+    {
+        label: "ARKANSAS",
+        value: "AR"
+    },
+    {
+        label: "CALIFORNIA",
+        value: "CA"
+    },
+    {
+        label: "COLORADO",
+        value: "CO"
+    },
+    {
+        label: "CONNECTICUT",
+        value: "CT"
+    },
+    {
+        label: "DELAWARE",
+        value: "DE"
+    },
+    {
+        label: "DISTRICT OF COLUMBIA",
+        value: "DC"
+    },
+    {
+        label: "FEDERATED STATES OF MICRONESIA",
+        value: "FM"
+    },
+    {
+        label: "FLORIDA",
+        value: "FL"
+    },
+    {
+        label: "GEORGIA",
+        value: "GA"
+    },
+    {
+        label: "GUAM GU",
+        value: "GU"
+    },
+    {
+        label: "HAWAII",
+        value: "HI"
+    },
+    {
+        label: "IDAHO",
+        value: "ID"
+    },
+    {
+        label: "ILLINOIS",
+        value: "IL"
+    },
+    {
+        label: "INDIANA",
+        value: "IN"
+    },
+    {
+        label: "IOWA",
+        value: "IA"
+    },
+    {
+        label: "KANSAS",
+        value: "KS"
+    },
+    {
+        label: "KENTUCKY",
+        value: "KY"
+    },
+    {
+        label: "LOUISIANA",
+        value: "LA"
+    },
+    {
+        label: "MAINE",
+        value: "ME"
+    },
+    {
+        label: "MARSHALL ISLANDS",
+        value: "MH"
+    },
+    {
+        label: "MARYLAND",
+        value: "MD"
+    },
+    {
+        label: "MASSACHUSETTS",
+        value: "MA"
+    },
+    {
+        label: "MICHIGAN",
+        value: "MI"
+    },
+    {
+        label: "MINNESOTA",
+        value: "MN"
+    },
+    {
+        label: "MISSISSIPPI",
+        value: "MS"
+    },
+    {
+        label: "MISSOURI",
+        value: "MO"
+    },
+    {
+        label: "MONTANA",
+        value: "MT"
+    },
+    {
+        label: "NEBRASKA",
+        value: "NE"
+    },
+    {
+        label: "NEVADA",
+        value: "NV"
+    },
+    {
+        label: "NEW HAMPSHIRE",
+        value: "NH"
+    },
+    {
+        label: "NEW JERSEY",
+        value: "NJ"
+    },
+    {
+        label: "NEW MEXICO",
+        value: "NM"
+    },
+    {
+        label: "NEW YORK",
+        value: "NY"
+    },
+    {
+        label: "NORTH CAROLINA",
+        value: "NC"
+    },
+    {
+        label: "NORTH DAKOTA",
+        value: "ND"
+    },
+    {
+        label: "NORTHERN MARIANA ISLANDS",
+        value: "MP"
+    },
+    {
+        label: "OHIO",
+        value: "OH"
+    },
+    {
+        label: "OKLAHOMA",
+        value: "OK"
+    },
+    {
+        label: "OREGON",
+        value: "OR"
+    },
+    {
+        label: "PALAU",
+        value: "PW"
+    },
+    {
+        label: "PENNSYLVANIA",
+        value: "PA"
+    },
+    {
+        label: "PUERTO RICO",
+        value: "PR"
+    },
+    {
+        label: "RHODE ISLAND",
+        value: "RI"
+    },
+    {
+        label: "SOUTH CAROLINA",
+        value: "SC"
+    },
+    {
+        label: "SOUTH DAKOTA",
+        value: "SD"
+    },
+    {
+        label: "TENNESSEE",
+        value: "TN"
+    },
+    {
+        label: "TEXAS",
+        value: "TX"
+    },
+    {
+        label: "UTAH",
+        value: "UT"
+    },
+    {
+        label: "VERMONT",
+        value: "VT"
+    },
+    {
+        label: "VIRGIN ISLANDS",
+        value: "VI"
+    },
+    {
+        label: "VIRGINIA",
+        value: "VA"
+    },
+    {
+        label: "WASHINGTON",
+        value: "WA"
+    },
+    {
+        label: "WEST VIRGINIA",
+        value: "WV"
+    },
+    {
+        label: "WISCONSIN",
+        value: "WI"
+    },
+    {
+        label: "WYOMING",
+        value: "WY"
+    },
+    {
+        label: "ARMED FORCES AFRICA \ CANADA \ EUROPE \ MIDDLE EAST",
+        value: "AE"
+    },
+    {
+        label: "ARMED FORCES AMERICA (EXCEPT CANADA)",
+        value: "AA"
+    },
+    {
+        label: "ARMED FORCES PACIFIC",
+        value: "AP"
+    }
     ];
 
     var state_options = {
@@ -1783,48 +1783,48 @@ jQuery(document).ready(function () {
             targets: 0
         }],
         buttons: [{
-                extend: 'csv',
-                //Name the CSV
-                filename: 'customer_list',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-                },
+            extend: 'csv',
+            //Name the CSV
+            filename: 'customer_list',
+            exportOptions: {
+                columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
             },
-            {
-                extend: 'pdfHtml5',
-                text: 'PDF',
-                orientation: 'landscape',
-                pageSize: 'LEGAL',
-                filename: 'customer_list',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-                    // columns: [0, 1, 2, 3, 4, 5, 6, 8, 9, 11 ]
-                },
+        },
+        {
+            extend: 'pdfHtml5',
+            text: 'PDF',
+            orientation: 'landscape',
+            pageSize: 'LEGAL',
+            filename: 'customer_list',
+            exportOptions: {
+                columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                // columns: [0, 1, 2, 3, 4, 5, 6, 8, 9, 11 ]
             },
-            {
-                extend: 'excel',
-                text: 'EXCEL',
-                filename: 'customer_list',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-                    // columns: [0, 1, 2, 3, 4, 5, 6, 8, 9, 11 ]
-                },
+        },
+        {
+            extend: 'excel',
+            text: 'EXCEL',
+            filename: 'customer_list',
+            exportOptions: {
+                columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                // columns: [0, 1, 2, 3, 4, 5, 6, 8, 9, 11 ]
             },
-            {
-                extend: 'print',
-                text: 'PRINT',
-                filename: 'customer_list',
-                orientation: 'landscape',
-                pageSize: 'LEGAL',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-                    // columns: [0, 1, 2, 3, 4, 5, 6, 8, 9, 11 ]
-                },
-                customize: function (win) {
-                    jQuery(win.document.body).find('table').addClass('display').css('font-size', '5px');
+        },
+        {
+            extend: 'print',
+            text: 'PRINT',
+            filename: 'customer_list',
+            orientation: 'landscape',
+            pageSize: 'LEGAL',
+            exportOptions: {
+                columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                // columns: [0, 1, 2, 3, 4, 5, 6, 8, 9, 11 ]
+            },
+            customize: function (win) {
+                jQuery(win.document.body).find('table').addClass('display').css('font-size', '5px');
 
-                }
             }
+        }
         ]
         // filename: 'dealer_list',
     });
@@ -2256,43 +2256,43 @@ jQuery(document).ready(function () {
                     orderCellsTop: true,
                     fixedHeader: true,
                     buttons: [{
-                            extend: 'csv',
-                            //Name the CSV
-                            filename: 'Search Report',
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 5]
-                            },
+                        extend: 'csv',
+                        //Name the CSV
+                        filename: 'Search Report',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 5]
                         },
-                        {
-                            extend: 'pdfHtml5',
-                            text: 'PDF',
-                            orientation: 'landscape',
-                            pageSize: 'LEGAL',
-                            filename: 'Search Report',
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 5]
-                            },
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: 'PDF',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL',
+                        filename: 'Search Report',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 5]
                         },
-                        {
-                            extend: 'excel',
-                            text: 'EXCEL',
-                            filename: 'Search Report',
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 5]
-                            },
+                    },
+                    {
+                        extend: 'excel',
+                        text: 'EXCEL',
+                        filename: 'Search Report',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 5]
                         },
-                        {
-                            extend: 'print',
-                            text: 'PRINT',
-                            filename: 'Search Report',
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 5]
-                            },
-                            customize: function (win) {
-                                jQuery(win.document.body).find('table').addClass('display').css('font-size', '15px');
+                    },
+                    {
+                        extend: 'print',
+                        text: 'PRINT',
+                        filename: 'Search Report',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 5]
+                        },
+                        customize: function (win) {
+                            jQuery(win.document.body).find('table').addClass('display').css('font-size', '15px');
 
-                            }
                         }
+                    }
                     ]
                     // filename: 'dealer_list',
                 });
@@ -2398,43 +2398,43 @@ jQuery(document).ready(function () {
                     orderCellsTop: true,
                     fixedHeader: true,
                     buttons: [{
-                            extend: 'csv',
-                            //Name the CSV
-                            filename: 'Search Report',
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-                            },
+                        extend: 'csv',
+                        //Name the CSV
+                        filename: 'Search Report',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
                         },
-                        {
-                            extend: 'pdfHtml5',
-                            text: 'PDF',
-                            orientation: 'landscape',
-                            pageSize: 'LEGAL',
-                            filename: 'Search Report',
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-                            },
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: 'PDF',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL',
+                        filename: 'Search Report',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
                         },
-                        {
-                            extend: 'excel',
-                            text: 'EXCEL',
-                            filename: 'Search Report',
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-                            },
+                    },
+                    {
+                        extend: 'excel',
+                        text: 'EXCEL',
+                        filename: 'Search Report',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
                         },
-                        {
-                            extend: 'print',
-                            text: 'PRINT',
-                            filename: 'Search Report',
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-                            },
-                            customize: function (win) {
-                                jQuery(win.document.body).find('table').addClass('display').css('font-size', '15px');
+                    },
+                    {
+                        extend: 'print',
+                        text: 'PRINT',
+                        filename: 'Search Report',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                        },
+                        customize: function (win) {
+                            jQuery(win.document.body).find('table').addClass('display').css('font-size', '15px');
 
-                            }
                         }
+                    }
                     ]
                     // filename: 'dealer_list',
                 });
@@ -2538,47 +2538,47 @@ jQuery(document).ready(function () {
                         orderCellsTop: true,
                         fixedHeader: true,
                         buttons: [{
-                                extend: 'csv',
-                                //Name the CSV
-                                filename: obj.toptitle,
-                                title: obj.toptitle,
-                                exportOptions: {
-                                    columns: [columntarget]
-                                },
+                            extend: 'csv',
+                            //Name the CSV
+                            filename: obj.toptitle,
+                            title: obj.toptitle,
+                            exportOptions: {
+                                columns: [columntarget]
                             },
-                            {
-                                extend: 'pdfHtml5',
-                                text: 'PDF',
-                                orientation: 'landscape',
-                                pageSize: 'LEGAL',
-                                filename: obj.toptitle,
-                                title: obj.toptitle,
-                                exportOptions: {
-                                    columns: [columntarget]
-                                },
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'PDF',
+                            orientation: 'landscape',
+                            pageSize: 'LEGAL',
+                            filename: obj.toptitle,
+                            title: obj.toptitle,
+                            exportOptions: {
+                                columns: [columntarget]
                             },
-                            {
-                                extend: 'excel',
-                                text: 'EXCEL',
-                                filename: obj.toptitle,
-                                title: obj.toptitle,
-                                exportOptions: {
-                                    columns: [columntarget]
-                                },
+                        },
+                        {
+                            extend: 'excel',
+                            text: 'EXCEL',
+                            filename: obj.toptitle,
+                            title: obj.toptitle,
+                            exportOptions: {
+                                columns: [columntarget]
                             },
-                            {
-                                extend: 'print',
-                                text: 'PRINT',
-                                filename: obj.toptitle,
-                                title: obj.toptitle,
-                                exportOptions: {
-                                    columns: [columntarget]
-                                },
-                                customize: function (win) {
-                                    jQuery(win.document.body).find('table').addClass('display').css('font-size', '15px');
+                        },
+                        {
+                            extend: 'print',
+                            text: 'PRINT',
+                            filename: obj.toptitle,
+                            title: obj.toptitle,
+                            exportOptions: {
+                                columns: [columntarget]
+                            },
+                            customize: function (win) {
+                                jQuery(win.document.body).find('table').addClass('display').css('font-size', '15px');
 
-                                }
                             }
+                        }
                         ]
                         // filename: 'dealer_list',
                     });
@@ -2831,49 +2831,49 @@ jQuery(document).ready(function () {
         }],
         buttons: [{
 
-                extend: 'csv',
-                //Name the CSV
-                filename: 'Upgrade Report',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
-                },
-
+            extend: 'csv',
+            //Name the CSV
+            filename: 'Upgrade Report',
+            exportOptions: {
+                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
             },
-            {
-                extend: 'pdfHtml5',
-                text: 'PDF',
-                filename: 'Upgrade Report',
-                orientation: 'landscape',
-                pageSize: 'LEGAL',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
-                },
-                title: 'UPGRADE REPORT'
+
+        },
+        {
+            extend: 'pdfHtml5',
+            text: 'PDF',
+            filename: 'Upgrade Report',
+            orientation: 'landscape',
+            pageSize: 'LEGAL',
+            exportOptions: {
+                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
             },
-            {
-                extend: 'excel',
-                text: 'EXCEL',
-                filename: 'Upgrade Report',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
-                },
-                title: 'UPGRADE REPORT'
-
+            title: 'UPGRADE REPORT'
+        },
+        {
+            extend: 'excel',
+            text: 'EXCEL',
+            filename: 'Upgrade Report',
+            exportOptions: {
+                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
             },
-            {
-                extend: 'print',
-                text: 'PRINT',
-                filename: 'Upgrade Report',
+            title: 'UPGRADE REPORT'
 
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
-                },
-                title: 'UPGRADE REPORT',
-                customize: function (win) {
-                    jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
+        },
+        {
+            extend: 'print',
+            text: 'PRINT',
+            filename: 'Upgrade Report',
 
-                }
+            exportOptions: {
+                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+            },
+            title: 'UPGRADE REPORT',
+            customize: function (win) {
+                jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
+
             }
+        }
 
 
         ]
@@ -3000,47 +3000,47 @@ jQuery(document).ready(function () {
                         }],
                         buttons: [{
 
-                                extend: 'csv',
-                                //Name the CSV
-                                filename: obj.toptitle,
-                                exportOptions: {
-                                    columns: [columntarget]
-                                },
+                            extend: 'csv',
+                            //Name the CSV
+                            filename: obj.toptitle,
+                            exportOptions: {
+                                columns: [columntarget]
                             },
-                            {
-                                extend: 'pdfHtml5',
-                                text: 'PDF',
-                                filename: obj.toptitle,
-                                orientation: 'landscape',
-                                pageSize: 'LEGAL',
-                                exportOptions: {
-                                    columns: [columntarget]
-                                },
-                                title: obj.toptitle
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'PDF',
+                            filename: obj.toptitle,
+                            orientation: 'landscape',
+                            pageSize: 'LEGAL',
+                            exportOptions: {
+                                columns: [columntarget]
                             },
-                            {
-                                extend: 'excel',
-                                text: 'EXCEL',
-                                filename: obj.toptitle,
-                                exportOptions: {
-                                    columns: [columntarget]
-                                },
-                                title: obj.toptitle
+                            title: obj.toptitle
+                        },
+                        {
+                            extend: 'excel',
+                            text: 'EXCEL',
+                            filename: obj.toptitle,
+                            exportOptions: {
+                                columns: [columntarget]
                             },
-                            {
-                                extend: 'print',
-                                text: 'PRINT',
-                                filename: 'Upgrade Report',
-                                exportOptions: {
-                                    columns: [columntarget]
-                                },
-                                title: obj.toptitle,
-                                customize: function (win) {
-                                    jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
-
-                                }
+                            title: obj.toptitle
+                        },
+                        {
+                            extend: 'print',
+                            text: 'PRINT',
+                            filename: 'Upgrade Report',
+                            exportOptions: {
+                                columns: [columntarget]
+                            },
+                            title: obj.toptitle,
+                            customize: function (win) {
+                                jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
 
                             }
+
+                        }
 
 
                         ]
@@ -4172,8 +4172,31 @@ jQuery(document).ready(function () {
         "order": [
             [1, "asc"]
         ],
+        'columnDefs': [{
+            'targets': [0, 1, 2, 3, 4, 5],
+            /* column index */
+            'orderable': false,
+            /* true or false */
+        }],
+        stateSave: true
 
     });
+
+    jQuery("#tbl_distributors_paginate .paginate_input").on('keyup', function () {
+        setTimeout(function () {
+            jQuery('.jtoggler').jtoggler();
+            jQuery('.jtoggler-wrapper').each(function () {
+                jQuery(this).find('span').css('display', 'none');
+                if (jQuery(this).find('.jtoggler').data('val') == 0) {
+                    jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
+                }
+                if (jQuery(this).find('.jtoggler').data('val') == 1) {
+                    jQuery(this).append('<span style="color:#008000">Active</span>');
+                }
+            });
+        }, 100);
+    });
+
     jQuery('#tbl_distributors').on('page.dt', function () {
 
         setTimeout(function () {
@@ -4200,7 +4223,29 @@ jQuery(document).ready(function () {
         "order": [
             [1, "asc"]
         ],
+        'columnDefs': [{
+            'targets': [0, 1, 2, 3, 4, 5, 6, 7],
+            /* column index */
+            'orderable': false,
+            /* true or false */
+        }],
+        stateSave: true
 
+    });
+
+    jQuery("#tbl_dealers_paginate .paginate_input").on('keyup', function () {
+        setTimeout(function () {
+            jQuery('.jtoggler').jtoggler();
+            jQuery('.jtoggler-wrapper').each(function () {
+                jQuery(this).find('span').css('display', 'none');
+                if (jQuery(this).find('.jtoggler').data('val') == 0) {
+                    jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
+                }
+                if (jQuery(this).find('.jtoggler').data('val') == 1) {
+                    jQuery(this).append('<span style="color:#008000">Active</span>');
+                }
+            });
+        }, 100);
     });
 
     jQuery('#tbl_dealers').on('page.dt', function () {
@@ -4297,44 +4342,44 @@ jQuery(document).ready(function () {
                     }],
                     buttons: [{
 
-                            extend: 'csv',
-                            //Name the CSV
-                            filename: 'Billing Report',
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-                            },
+                        extend: 'csv',
+                        //Name the CSV
+                        filename: 'Billing Report',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
                         },
-                        {
-                            extend: 'pdfHtml5',
-                            text: 'PDF',
-                            filename: 'Billing Report',
-                            orientation: 'landscape',
-                            pageSize: 'LEGAL',
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-                            },
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        text: 'PDF',
+                        filename: 'Billing Report',
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
                         },
-                        {
-                            extend: 'excel',
-                            text: 'EXCEL',
-                            filename: 'Billing Report',
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-                            },
+                    },
+                    {
+                        extend: 'excel',
+                        text: 'EXCEL',
+                        filename: 'Billing Report',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
                         },
-                        {
-                            extend: 'print',
-                            text: 'PRINT',
-                            filename: 'Billing Report',
+                    },
+                    {
+                        extend: 'print',
+                        text: 'PRINT',
+                        filename: 'Billing Report',
 
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-                            },
-                            customize: function (win) {
-                                jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                        },
+                        customize: function (win) {
+                            jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
 
-                            }
                         }
+                    }
                     ]
 
                 });

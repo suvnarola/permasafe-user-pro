@@ -86,6 +86,9 @@ if ($action == 'view') {
     // pr($posts);    
     echo '<div class="top-head">';
     echo '<h1 class="top-heading">View <span style="color:#0065a7">' . $name . ' (' . $dealer_login . ')</span> Information</h1>';
+    if(!empty($_GET['row_action'])){
+        echo '<a id="back_link" href="'.admin_url('admin.php?page=dealers-lists&row_action='.$_GET['row_action']).'" class="dealer-list-link" data-action="'.$_GET['row_action'].'">Back to Dealer List</a>';
+    }
     echo '<div class="navigation-btn">';
     echo $actions['edit'];
     echo $actions['addcode'];
@@ -688,16 +691,21 @@ if ($action == 'view') {
 
     echo $html;
 } else {
+    $action = $_GET['action'];
+    $distributor_id = $_GET['distributor'];
     echo '<div class="top-head">';
     echo '<h1 class="top-heading">Dealers</h1>';
     $url = admin_url('admin.php?page=add-new-dealer');
     echo '<a class="dealer_add" href="' . $url . '">Add New Dealer</a>';
-    echo '</div>';
-
-    $action = $_GET['action'];
-    $distributor_id = $_GET['distributor'];
     if ($action == 'viewdealers') {
+        echo '<a id="back_link" href="'.admin_url('admin.php?page=distributors-lists&action=view&distributor=' . $distributor_id).'">Back to    Distributor</a>';
+    }
+    echo '</div>';
+   
 
+    
+    if ($action == 'viewdealers') {
+        
         $dealers =  get_users(
             array(
                 'meta_key' => 'dealer_distributor_name',
@@ -852,6 +860,7 @@ if ($action == 'view') {
             'page'   => $page,
             'action' => 'view',
             'dealer'  => $value['dealer_id'],
+            'row_action'  => $value['dealer_id']
         );
 
         $actions['view'] = sprintf(
@@ -885,8 +894,12 @@ if ($action == 'view') {
             esc_url(add_query_arg($delete_query_args, 'admin.php'), 'deletedealer_' . $value['dealer_id']),
             _x('Delete', 'List table row action', 'wp-list-table-example')
         );
-
-        echo '<tr>';
+        if($_GET['row_action'] == $value['dealer_id']){
+            $style = 'box-shadow: inset 0 0 10px #0065a7;';
+        }else{
+            $style = '';
+        }
+        echo '<tr id="'.$value['dealer_id'].'" style="'.$style.'">';
         // echo '<td>'.$value['dealer_number'].'</td>';
         echo '<td>';
         echo $value['dealer_number'];
@@ -913,4 +926,5 @@ if ($action == 'view') {
     echo '</tbody>';
     echo '</table>';
     echo '</div>';
+
 }

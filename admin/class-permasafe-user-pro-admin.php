@@ -694,6 +694,7 @@ class Permasafe_User_Pro_Admin
 	// add dealer
 	public function pmsafe_register_dealer_form_function()
 	{
+
 		$user_prefix = 'S';
 		$dealers = get_users('role=contributor&orderby=ID&order=DESC');
 		$last_id = $dealers[0]->user_login;
@@ -735,8 +736,11 @@ class Permasafe_User_Pro_Admin
 			update_user_meta($user_id, 'dealer_distributor_name', $dealer_distributor);
 			update_user_meta($user_id, 'user_active_inactive', 1);
 			
-
-			$redirect_url = admin_url('admin.php?page=dealers-lists&action=view&dealer=' . $user_id);
+			if(!empty($_POST['pmsafe_distributor_id'])){
+				$redirect_url = admin_url('admin.php?page=distributors-lists&action=view&distributor=' . $_POST['pmsafe_distributor_id']);
+			}else{
+				$redirect_url = admin_url('admin.php?page=dealers-lists&action=view&dealer=' . $user_id);
+			}
 			$response = array('status' => true, 'redirect' => $redirect_url);
 		} else {
 			$response = array('status' => false);

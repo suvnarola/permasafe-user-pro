@@ -8,7 +8,9 @@ echo '<form name="perma_register_dealer" id="perma_register_dealer_form" method=
 
 $create_date = current_time('mysql');
 echo '<input type="hidden" name="pmsafe_dealer_create_date" value="' . $create_date . '" />';
-
+if ($action == 'add') {
+	echo '<input type="hidden" name="pmsafe_distributor_id" value="' . $distributor_id . '" />';
+}
 echo '<div id="name_div">';
 echo '<label><strong>Dealer Name</strong></label>';
 echo '<input type="text" id="pmsafe_dealer_name" name="pmsafe_dealer_name" value="" class="widefat" />';

@@ -24,13 +24,15 @@ if ($action == 'view_upgraded_policy') {
         $users_array = get_code_by_dealer_login($dealer_login);
     }
     if ($distributor_login) {
-        echo '<div class="top-head">';
-        echo '<h1 class="top-heading">View <span style="color:#0065a7">' . $distributor_name . ' (' . $distributor_login . ')</span> Upgrade Report</h1>';
-        echo '</div>';
-
         $users = get_user_by('login', $distributor_login);
         $distributor_id = $users->ID;
         $users_array = get_code_by_distributor_login($distributor_id);
+        echo '<div class="top-head">';
+        echo '<h1 class="top-heading">View <span style="color:#0065a7">' . $distributor_name . ' (' . $distributor_login . ')</span> Upgrade Report</h1>';
+        echo '<a id="back_link" href="'.admin_url('admin.php?page=distributors-lists&action=view&distributor='.$distributor_id).'">Back to Distributor</a>';
+        echo '</div>';
+
+        
     }
 } else {
     echo '<div class="top-head">';
