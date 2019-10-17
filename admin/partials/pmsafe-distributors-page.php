@@ -71,6 +71,9 @@ if ($action == 'view') {
 
     echo '<div class="top-head">';
     echo '<h1 class="top-heading">View <span style="color:#0065a7">' . $name . ' (' . $distributor_login . ')</span> Information</h1>';
+    if(!empty($_GET['row_action'])){
+        echo '<a id="back_link" href="'.admin_url('admin.php?page=distributors-lists&row_action='.$_GET['row_action']).'" data-action="'.$_GET['row_action'].'">Back to Distributor List</a>';
+    }
     echo $actions['edit'];
     echo $actions['add'];
     $dealer_distributor_name =  get_users(
@@ -489,6 +492,7 @@ if ($action == 'view') {
                 'page'   => 'dealers-lists',
                 'action' => 'viewdealers',
                 'distributor'  => $user_id,
+                'row_action'  => $user_id
             );
 
             $actions['viewdealers'] = sprintf(
@@ -520,6 +524,7 @@ if ($action == 'view') {
             'page'   => $page,
             'action' => 'view',
             'distributor'  => $user_id,
+            'row_action'  => $user_id
         );
 
         $actions['view'] = sprintf(
@@ -552,7 +557,12 @@ if ($action == 'view') {
             esc_url(add_query_arg($delete_query_args, 'admin.php'), 'deletedistributor_' . $user_id),
             _x('Delete', 'List table row action', 'wp-list-table-example')
         );
-        echo '<tr>';
+          if($_GET['row_action'] == $user_id){
+            $style = 'box-shadow: inset 0 0 10px #0065a7;';
+        }else{
+            $style = '';
+        }
+        echo '<tr id="'.$user_id.'" style="'.$style.'">';
         echo '<td>';
         echo $user->user_login;
         echo '<div class="row-actions"><span class="add">' . $actions['add'] . ' | </span><span class="view">' . $actions['view'] . ' | </span><span class="edit">' . $actions['edit'] . ' | </span><span class="delete">' . $actions['delete'] . '</span></div>';

@@ -95,9 +95,11 @@ class PMSafe_Bulk_Invitation{
             if($export == '1'){
                 echo '<style type="text/css">.page-title-action { display:none; }</style>';
                 $views['my-button'] = '<input type="submit" id="export-dealer-csv" title="CSV" value="Export to CSV"  style="margin:5px" /><input type="hidden" id="hdn_dealer_login" value="'.$dealer_login.'"><input type="hidden" id="hdn_dealer_name" value="'.$dealer_name.'">';
-
-                $views['btn-code-redirect'] = '<a id="back_link" href="'.admin_url('admin.php?page=dealers-lists&action=view&dealer='.$dealer_id).'">Back to Dealer</a>';
-
+                if(!empty($_GET['row_action'])){
+                    $views['btn-code-redirect'] = '<a id="back_link" href="'.admin_url('admin.php?page=dealers-lists&row_action='.$_GET['row_action']).'" data-action="'.$_GET['row_action'].'">Back to Dealer List</a>';
+                }else{
+                    $views['btn-code-redirect'] = '<a id="back_link" href="'.admin_url('admin.php?page=dealers-lists&action=view&dealer='.$dealer_id).'">Back to Dealer</a>';
+                }
                 return $views;
             }
             else{
@@ -347,14 +349,8 @@ class PMSafe_Bulk_Invitation{
                     $create_date = current_time( 'mysql' );
                 }
                 echo '<input type="hidden" name="pmsafe_code_create_date" value="'.$create_date.'" />';
-//                echo '<tr>';
-//                    echo '<th>';
-//                        echo '<label><strong>Number of member codes to create:</strong></label>';
-//                    echo '</th>';
-//                    echo '<td>';
-//                        echo '<input type="number" name="pmsafe_no_of_invitation_code" value="' . get_post_meta($post_id, '_pmsafe_no_of_invitation_code', true)  . '" class="widefat" />';
-//                    echo '</td>';
-//                echo '</tr>';
+                echo '<input type="hidden" name="row_action" value="'.$_GET['row_action'].'" />';
+
                 echo '<tr>';
                     echo '<th>';
                         echo '<label><strong>First Code in Range</strong></label>';
@@ -384,8 +380,7 @@ class PMSafe_Bulk_Invitation{
 
                 $benefit_prefix = pmsafe_get_meta_values( '_pmsafe_benefit_prefix', 'pmsafe_benefits', 'publish' );
                 
-                // if($_GET['action'] != 'edit'){
-                    // echo 'testingggg'.get_post_meta($post_id,'_pmsafe_invitation_prefix',true);
+              
 
                 echo '<tr>';
                     echo '<th>';
@@ -626,11 +621,6 @@ class PMSafe_Bulk_Invitation{
 
                             echo '<select name="pmsafe_dealer" id="pmsafe_dealer" disabled>';
                                 echo '<option value="">Select dealer</option>';
-                                // foreach ( $contributor_users as $user ) {
-                                //     $contributor_id = $user->ID;
-                                //     $contributor_name = get_user_meta( $contributor_id, 'dealer_name' , true );
-                                //     echo '<option value="'.$user->user_login.'" '. selected( get_post_meta($post_id,'_pmsafe_dealer',true), $user->user_login, false ) .'>'.$contributor_name .' ('. $user->user_login .')</option>';
-                                // }
                             echo '</select>';
                         echo '</td>';
                     }
@@ -819,8 +809,6 @@ class PMSafe_Bulk_Invitation{
 
             global $wpdb;
 
-    
-
             if($post->post_type != "pmsafe_bulk_invi")
                 return;
 
@@ -934,7 +922,13 @@ class PMSafe_Bulk_Invitation{
 
             $dealer_users = get_user_by('login',$_POST['pmsafe_dealer']);
             $dealer_id = $dealer_users->ID;
-            $url = 'admin.php?page=dealers-lists&action=view&dealer='.$dealer_id;
+
+            
+            if(!empty($_POST['row_action'])){
+                $url = 'admin.php?page=dealers-lists&row_action='.$dealer_id;
+            }else{
+                $url = 'admin.php?page=dealers-lists&action=view&dealer='.$dealer_id;
+            }
             wp_redirect($url);
             exit;
      
@@ -983,7 +977,6 @@ class PMSafe_Bulk_Invitation{
                 case 'invitation_code':
                         $start_code = get_post_meta( $post_id, '_pmsafe_invitation_code_start', true ); 
                         $end_code = get_post_meta( $post_id, '_pmsafe_invitation_code_end', true );     
-//                        echo '<a href="'.admin_url().'edit.php?post_type=pmsafe_invitecode&bulk-invitation-id='.$post_id.'" target="_blank" class="button-secondary">Show</a>'; 
                         echo '<a href="'.admin_url().'edit.php?post_type=pmsafe_invitecode&bulk-invitation-id='.$post_id.'" target="_blank" class="button-secondary">'.$start_code .' - '. $end_code.'</a>'; 
                         break;
                 case 'date_create':
@@ -1214,8 +1207,7 @@ class PMSafe_Bulk_Invitation{
 
                 $query->set( 'meta_query', $meta_query );
             };
-//            pr($query);
-//            die;
+
     }
 }
 

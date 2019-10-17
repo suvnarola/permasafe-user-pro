@@ -1828,6 +1828,20 @@ jQuery(document).ready(function () {
         ]
         // filename: 'dealer_list',
     });
+    jQuery("#view_customer_table_paginate .paginate_input").on('keyup', function () {
+        setTimeout(function () {
+            jQuery('.jtoggler').jtoggler();
+            jQuery('.jtoggler-wrapper').each(function () {
+                jQuery(this).find('span').css('display', 'none');
+                if (jQuery(this).find('.jtoggler').data('val') == 0) {
+                    jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
+                }
+                if (jQuery(this).find('.jtoggler').data('val') == 1) {
+                    jQuery(this).append('<span style="color:#008000">Active</span>');
+                }
+            });
+        }, 100);
+    });
 
     jQuery('#view_customer_table').on('page.dt', function () {
 

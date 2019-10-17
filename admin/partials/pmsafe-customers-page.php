@@ -161,7 +161,11 @@ if ($action == 'view_customer_details') {
     echo '<div class="top-head">';
     echo '<h1 class="top-heading"><span style="color:#0065a7">' . $dealer_name . ' ( ' . $user->user_login . ' )\'s ' . '</span>Registered Customers</h1>';
     echo $actions["search_customer_details"];
-    echo '<a id="back_link" href="'.admin_url('admin.php?page=dealers-lists&action=view&dealer='.$dealer_id).'">Back to Dealer</a>';
+    if(!empty($_GET['row_action'])){
+           echo '<a id="back_link" href="'.admin_url('admin.php?page=dealers-lists&row_action='.$_GET['row_action']).'">Back to Dealer List</a>';
+    }else{
+        echo '<a id="back_link" href="'.admin_url('admin.php?page=dealers-lists&action=view&dealer='.$dealer_id).'">Back to Dealer</a>';
+    }
     echo '</div>';
   
   
@@ -272,9 +276,6 @@ if ($action == 'view_customer_details') {
         $html .= $value['code'];
         $html .= '</td>';
 
-        // $html .= '<td>';
-        //     $html .= $value['code'];
-        // $html .= '</td>';
 
         $html .= '<td>';
         $html .= $value['fname'] . ' ' . $value['lname'];
@@ -300,10 +301,6 @@ if ($action == 'view_customer_details') {
         $html .= '<td class="nisl-pdf-link">';
         $html .= $value['package'];
         $html .= '</td>';
-
-        // $html .= '<td class="nisl-pdf-link">';
-        //     $html .= $value['package'];
-        // $html .= '</td>';
 
         $html .= '<td class="nisl-pdf-link">';
         $html .= (($value['bulk_member']) ? $value['bulk_member'] : '-');

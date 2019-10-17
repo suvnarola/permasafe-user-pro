@@ -83,11 +83,11 @@ if ($action == 'view') {
         ),
     );
     $posts = get_posts($args);
-    // pr($posts);    
+    
     echo '<div class="top-head">';
     echo '<h1 class="top-heading">View <span style="color:#0065a7">' . $name . ' (' . $dealer_login . ')</span> Information</h1>';
     if(!empty($_GET['row_action'])){
-        echo '<a id="back_link" href="'.admin_url('admin.php?page=dealers-lists&row_action='.$_GET['row_action']).'" class="dealer-list-link" data-action="'.$_GET['row_action'].'">Back to Dealer List</a>';
+        echo '<a id="back_link" href="'.admin_url('admin.php?page=dealers-lists&row_action='.$_GET['row_action']).'" data-action="'.$_GET['row_action'].'">Back to Dealer List</a>';
     }
     echo '<div class="navigation-btn">';
     echo $actions['edit'];
@@ -111,10 +111,6 @@ if ($action == 'view') {
     echo '<td>' . $name . '</td>';
     echo '</tr>';
 
-    /* echo '<tr>';
-    echo '<td><strong>Email</strong></td>';
-    echo '<td>' . $user->user_email . '</td>';
-    echo '</tr>'; */
 
     if ($address) {
         echo '<tr>';
@@ -697,9 +693,15 @@ if ($action == 'view') {
     echo '<h1 class="top-heading">Dealers</h1>';
     $url = admin_url('admin.php?page=add-new-dealer');
     echo '<a class="dealer_add" href="' . $url . '">Add New Dealer</a>';
-    if ($action == 'viewdealers') {
-        echo '<a id="back_link" href="'.admin_url('admin.php?page=distributors-lists&action=view&distributor=' . $distributor_id).'">Back to    Distributor</a>';
+    
+    if(!empty($_GET['row_action'])){
+        echo '<a id="back_link" href="'.admin_url('admin.php?page=distributors-lists&row_action='.$_GET['row_action']).'" data-action="'.$_GET['row_action'].'">Back to Distributor List</a>';
+    }else{
+        if ($action == 'viewdealers') {
+            echo '<a id="back_link" href="'.admin_url('admin.php?page=distributors-lists&action=view&distributor=' . $distributor_id).'">Back to Distributor</a>';
+        }
     }
+
     echo '</div>';
    
 
@@ -771,6 +773,7 @@ if ($action == 'view') {
                 'post_type'   => 'pmsafe_bulk_invi',
                 'action' => 'addcode',
                 'dealer'  => $user_id,
+                'row_action'  => $user_id
             );
 
             $actions['addcode'] = sprintf(
@@ -785,6 +788,7 @@ if ($action == 'view') {
                 'page'   => 'customers-lists',
                 'action' => 'view_customer',
                 'dealer'  => $user_id,
+                'row_action'  => $user_id
             );
 
             $actions['view_customer'] = sprintf(
@@ -800,7 +804,7 @@ if ($action == 'view') {
             $fax = get_user_meta($user_id, 'dealer_fax_number', true);
             $distributor_id = get_user_meta($user_id, 'dealer_distributor_name', true);
             $distributor_name = get_user_meta($distributor_id, 'distributor_name', true);
-            $view_code_url = admin_url('edit.php?s&post_status=all&post_type=pmsafe_bulk_invi&dealer_list=' . $user->user_login . '&export=1');
+            $view_code_url = admin_url('edit.php?s&post_status=all&post_type=pmsafe_bulk_invi&dealer_list=' . $user->user_login . '&export=1&row_action='.$user_id);
             $dealer_array[] = array(
                 'dealer_id' => $user_id,
                 'dealer_number' => $user->user_login,

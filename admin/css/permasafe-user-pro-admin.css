@@ -95,7 +95,9 @@
     color: #ff0000
 }
 
+
 /* admin dealer and distributor */
+
 form#perma_register_distributor_form div,
 form#perma_edit_distributor_form div,
 form#perma_register_dealer_form div,
@@ -315,7 +317,9 @@ input#add_new:hover {
     color: #ffffff;
 }
 
+
 /*datatable*/
+
 .dataTables_wrapper .fg-toolbar div.dataTables_length label {
     display: flex !important;
     align-items: center;
@@ -447,7 +451,9 @@ div#view_customer_table_filter {
     text-align: center;
 }
 
+
 /*datatable*/
+
 #wpadminbar .quicklinks .ab-empty-item {
     margin-top: 15px;
 }
@@ -464,7 +470,6 @@ div#view_customer_table_filter {
     min-height: .01%;
     overflow-x: auto;
 }
-
 
 table.view-distributor-tbl,
 table.view-dealer-tbl,
@@ -697,7 +702,6 @@ table#search_tbl td a {
     margin: 10px !important;
 }
 
-
 #search_tbl th.sorting.ui-state-default {
     border-left: medium none;
     border-style: none solid solid none;
@@ -760,7 +764,6 @@ div#search_tbl_wrapper {
 }
 
 .filter-wrap .input-filter-wrap {
-
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -822,7 +825,6 @@ div#search_tbl_wrapper {
     margin-bottom: 10px;
 }
 
-
 .membership-count {
     display: flex;
     flex-wrap: wrap;
@@ -849,7 +851,6 @@ div#search_tbl_wrapper {
     padding-left: 5px;
     font-size: 17px;
 }
-
 
 .lr-wrapper {
     display: flex
@@ -944,7 +945,9 @@ table.view-dealer-price-tbl thead>tr>th p {
     border: 1px solid #eeecec !important
 }
 
+
 /*sweet alert*/
+
 .swal-icon--success__line,
 .swal-button--confirm,
 .swal-button--confirm:hover {
@@ -1070,7 +1073,6 @@ ul.chklist-wrap {
     -webkit-column-count: 4;
     -webkit-column-gap: 20px;
     column-count: 3;
-
 }
 
 .post-type-pmsafe_bulk_invi .tablenav .tablenav-pages {
@@ -1219,8 +1221,8 @@ a#back_link {
     width: 90px;
 }
 
-/******** Responsive **********/
 
+/******** Responsive **********/
 
 @media(max-width:1400px) {
     .filter-main-wrapper .filter-wrapper {
@@ -1233,7 +1235,6 @@ a#back_link {
         position: static !important;
         margin-bottom: 10px;
     }
-
     div#view_customer_table_wrapper .dt-buttons {
         display: -webkit-box;
         display: -ms-flexbox;
@@ -1242,75 +1243,59 @@ a#back_link {
 }
 
 @media(min-width:1024px) and (max-width:1280px) {
-
     .filter-wrap .filter-mid,
     .filter-wrap .filter-down {
         width: 14%;
     }
-
     .filter-wrap .btn-filter-wrap {
         width: 13%;
     }
 }
 
-
 @media(max-width:1024px) {
-
     .search-result-wrap .tbl-result-wrap,
     .search-result-wrap .data-result-wrap {
         width: 100%;
     }
-
     .search-result-wrap {
         -ms-flex-wrap: wrap;
         flex-wrap: wrap;
-
     }
-
     .filter-wrap {
         justify-content: space-between;
     }
-
     .filter-wrap .input-filter-wrap {
         width: 48%;
         margin-bottom: 15px;
         padding: 0;
     }
-
     .filter-wrap .filter-up {
         width: 50%;
         margin-bottom: 15px;
     }
-
     .filter-wrap .filter-mid {
         width: 38%;
     }
-
     .filter-wrap .filter-down {
         width: 38%;
         padding: 0;
     }
-
     .filter-wrap .btn-filter-wrap {
         width: 20%;
     }
-
 }
 
 @media(max-width:767px) {
     form#perma_register_distributor_form label {
         width: 100%;
     }
-
     form#perma_register_distributor_form input,
     form#perma_register_distributor_form textarea {
         width: 100%;
     }
-
     form#perma_register_distributor_form div#fname_divgroup label {
         margin-bottom: 5px;
     }
-
     div#tbl_dealers_filter,
     div#tbl_distributors_filter,
     div#view_customer_table_filter {
@@ -1318,47 +1303,37 @@ a#back_link {
         display: -ms-flexbox;
         display: flex;
     }
-
     div#search_tbl_wrapper {
         width: 100%;
         overflow: auto;
     }
-
     .reports-wrap .reports-wrap-inner,
     .reports-wrap .reports-wrap-inner .input-div input {
         width: 100%;
     }
-
     .search-result-wrap .dt-buttons {
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
     }
-
 }
 
-
 @media(max-width:600px) {
-
     .filter-wrap .filter-up,
     .filter-wrap .input-filter-wrap {
         width: 100%;
     }
-
     .filter-wrap .filter-mid {
         width: 100%;
     }
-
     .filter-wrap .filter-down {
         width: 100%;
         margin-top: 20px;
     }
-
     .filter-wrap .btn-filter-wrap {
         width: 100%;
         margin-top: 20px;
     }
-
     .filter-wrap .input-filter-wrap {
         display: -webkit-box;
         display: -ms-flexbox;
@@ -1367,7 +1342,6 @@ a#back_link {
         -ms-flex-pack: justify;
         justify-content: space-between;
     }
-
     .filter-wrap .input-filter-wrap input#datepicker2 {
         margin: 0;
         width: 50% !important;
