@@ -2215,6 +2215,8 @@ class Permasafe_User_Pro_Admin
 		
 		foreach ($dis_arr as $key => $value) {
 			$total_distributor_members = 0;
+			$all_distributor_cost = 0;
+			$all_dealer_cost = 0;
 
 			$distributor_id = $value['id'];
 			$dis_name = get_user_meta($distributor_id, 'distributor_name', true);
@@ -2811,6 +2813,8 @@ class Permasafe_User_Pro_Admin
 					$html .= '</tr>'; 
 				}
 					$total_distributor_members += $total_members;
+					$all_dealer_cost += $total_dealer_cost;
+					$all_distributor_cost += $total_distributor_cost;
 					
 				} // dealers
 				
@@ -2827,7 +2831,7 @@ class Permasafe_User_Pro_Admin
 				}
 				unset($dis_packTotal);
 				$html .= '<tr style="background-color: #86abc6;font-weight: 700;color: #000000;">';
-						$html .= '<td>Total '.$select_option.' - '.$dis_name.'</td><td></td><td class="text-center">'.$total_distributor_members.'</td><td></td><td></td><td class="dealer-hide text-center"></td><td class="distributor-hide text-center"></td><td></td><td></td><td></td>';
+						$html .= '<td>Total '.$select_option.' - '.$dis_name.'</td><td></td><td class="text-center">'.$total_distributor_members.'</td><td></td><td></td><td class="dealer-hide text-center">$'.$all_dealer_cost.'</td><td class="distributor-hide text-center"> $'.$all_distributor_cost.'</td><td></td><td></td><td></td>';
 				$html .= '</tr>'; 
 
 		} //distributors
@@ -3246,6 +3250,9 @@ class Permasafe_User_Pro_Admin
 					);
 			}
 			$total_distributor_upgrades = 0;
+			$all_dealer_cost = 0;
+			$all_distributor_cost = 0;
+
 			foreach ($dealers as $in_dealer) {
 			
 			
@@ -3542,6 +3549,8 @@ class Permasafe_User_Pro_Admin
 				
 				}
 				$total_distributor_upgrades += $total_upgrades; 
+				$all_dealer_cost += $total_dealer_cost;
+				$all_distributor_cost += $total_distributor_cost;
 			}
 			if($dis_packTotal){
 				foreach ($dis_packTotal as $key => $value) {
@@ -3554,7 +3563,7 @@ class Permasafe_User_Pro_Admin
 			}
 			unset($dis_packTotal);
 			$html .= '<tr style="background-color: #86abc6;font-weight: 700;color: #000000;">';
-			$html .= '<td>Total Upgrades - '.$distributor_names.'</td><td></td><td></td><td></td><td class="text-center">'.$total_distributor_upgrades.'</td><td></td><td></td><td class="text-center dealer-hide"></td><td class="text-center distributor-hide"></td>';
+			$html .= '<td>Total Upgrades - '.$distributor_names.'</td><td></td><td></td><td></td><td class="text-center">'.$total_distributor_upgrades.'</td><td></td><td></td><td class="text-center dealer-hide">$'.$all_dealer_cost.'</td><td class="text-center distributor-hide">$'.$all_distributor_cost.'</td>';
 			$html .= '</tr>'; 
 		}
 		$html .= '</tbody>';
