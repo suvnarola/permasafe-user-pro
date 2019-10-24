@@ -8,6 +8,9 @@ $name = get_user_meta($dealer_id, 'dealer_name', true);
 $address = get_user_meta($dealer_id, 'dealer_store_address', true);
 $phone = get_user_meta($dealer_id, 'dealer_phone_number', true);
 $fax = get_user_meta($dealer_id, 'dealer_fax_number', true);
+$remittance_address = get_user_meta($dealer_id, 'pmsafe_remittance_address', true);
+$remittance_address_option = get_user_meta($dealer_id, 'pmsafe_remittance_address_option', true);
+$fax = get_user_meta($dealer_id, 'dealer_fax_number', true);
 $distributor_id = get_user_meta($dealer_id, 'dealer_distributor_name', true);
 $distributor_name = get_user_meta($distributor_id, 'distributor_name', true);
 $dealer_login = $user->user_login;
@@ -144,6 +147,26 @@ if ($action == 'view') {
         esc_url(add_query_arg($view_query_args, 'admin.php'), 'viewdistributor_' . $distributor_id),
         _x($distributor_name, 'List table row action', 'wp-list-table-example')
     );
+    if($remittance_address_option){
+        echo '<tr>';
+        echo '<td><strong>Remittance Address Option</strong></td>';
+        if($remittance_address_option == 'permasafe_directly'){
+            echo '<td>Permasafe Directly</td>';
+        }
+        if($remittance_address_option == 'distributor'){
+            echo '<td>Distributor</td>';
+        }
+        if($remittance_address_option == 'custom'){
+            echo '<td>Custom</td>';
+        }
+        echo '</tr>';
+    }
+    if($remittance_address){
+        echo '<tr>';
+        echo '<td><strong>Remittance Address</strong></td>';
+        echo '<td>' . $remittance_address . '</td>';
+        echo '</tr>';
+    }
     echo '<tr>';
     echo '<td><strong>Distributor Name</strong></td>';
     echo '<td>' . $actions['view'] . '</td>';
@@ -490,7 +513,7 @@ if ($action == 'view') {
 
     echo '<div id="distributor_div">';
     echo '<label><strong>Distributors</strong></label>';
-    echo '<select name="pmsafe_dealer_distributor">';
+    echo '<select name="pmsafe_dealer_distributor" id="pmsafe_dealer_distributor">';
     echo '<option>Select Distributor</option>';
     foreach ($distributors as $user) {
         $user_id = $user->ID;
@@ -508,6 +531,39 @@ if ($action == 'view') {
     }
     echo '</select>';
     echo '</div>';
+
+   $remittance_address_option = get_user_meta($dealer_id, 'pmsafe_remittance_address_option',true);
+    echo '<div>';
+    echo '<label><strong>Select Remittance Address</strong></label>';
+    echo '<select id="select_rem_address" name="select_rem_address">';
+        echo '<option value="">Select Address</option>';
+        if($remittance_address_option == 'permasafe_directly'){
+            echo '<option value="permasafe_directly" selected>Permasafe Directly</option>';
+        }else{
+            echo '<option value="permasafe_directly">Permasafe Directly</option>';
+        }
+        if($remittance_address_option == 'distributor'){
+            echo '<option value="distributor" selected>Distributor</option>';
+        }else{
+            echo '<option value="distributor">Distributor</option>';
+        }
+        if($remittance_address_option == 'custom'){
+            echo '<option value="custom" selected>Custom</option>';    
+        }else{
+            echo '<option value="custom">Custom</option>';
+        }
+     
+        
+        
+    echo '</select>';
+    echo '</div>';
+
+    $remittance_address = get_user_meta($dealer_id,'pmsafe_remittance_address',true);
+    echo '<div id="rem_div">';
+    echo '<label><strong>Remittance Address</strong></label>';
+    echo '<textarea id="pmsafe_remittance_address" name="pmsafe_remittance_address" class="widefat">'.$remittance_address.'</textarea>';
+    echo '</div>';
+
 
     echo '<input type="submit" id="pmsafe_dealers_update" value="Save" class="button button-primary button-large btn-disabled">';
 

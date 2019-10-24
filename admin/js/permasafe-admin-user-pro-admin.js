@@ -621,7 +621,7 @@ jQuery(document).ready(function () {
 
     //add dealer
     jQuery(document).on("click", "#pmsafe_dealers_submit", function (e) {
-        // alert('in');
+
         e.preventDefault();
         jQuery('.error').remove();
 
@@ -669,6 +669,18 @@ jQuery(document).ready(function () {
             });
         }
 
+        if (jQuery('#select_rem_address').val().trim() == "") {
+            jQuery('#select_rem_address').css({
+                'border': '1px solid #ff0000'
+            });
+            jQuery('#select_rem_address').after("<span class='error'>This field is required.</span>");
+            validflag = false;
+        } else {
+            jQuery('#select_rem_address').css({
+                'color': '#333333'
+            });
+        }
+
 
         if (!validflag) {
             return validflag;
@@ -701,7 +713,7 @@ jQuery(document).ready(function () {
     }); // submit button 
 
     // Focus and blure dealers
-    jQuery('#pmsafe_dealer_name,#pmsafe_dealer_email, #pmsafe_dealer_password, #pmsafe_dealer_store_address, #pmsafe_dealer_phone_number,#pmsafe_dealer_distributor').focus(function () {
+    jQuery('#pmsafe_dealer_name,#pmsafe_dealer_email, #pmsafe_dealer_password, #pmsafe_dealer_store_address, #pmsafe_dealer_phone_number,#pmsafe_dealer_distributor,#select_rem_address').focus(function () {
         jQuery(this).css({
             'border-color': '#cccccc'
         });
@@ -710,7 +722,7 @@ jQuery(document).ready(function () {
         });
         jQuery(this).siblings('.error').remove();
     });
-    jQuery('#pmsafe_dealer_name,#pmsafe_dealer_email, #pmsafe_dealer_password, #pmsafe_dealer_store_address, #pmsafe_dealer_phone_number,#pmsafe_dealer_distributor').blur(function () {
+    jQuery('#pmsafe_dealer_name,#pmsafe_dealer_email, #pmsafe_dealer_password, #pmsafe_dealer_store_address, #pmsafe_dealer_phone_number,#pmsafe_dealer_distributor,#select_rem_address').blur(function () {
         jQuery(this).css({
             'color': '#555'
         });
@@ -4211,6 +4223,21 @@ jQuery(document).ready(function () {
         }, 100);
     });
 
+    jQuery("#tbl_distributors_filter input[type='search']").on('keyup', function () {
+        setTimeout(function () {
+            jQuery('.jtoggler').jtoggler();
+            jQuery('.jtoggler-wrapper').each(function () {
+                jQuery(this).find('span').css('display', 'none');
+                if (jQuery(this).find('.jtoggler').data('val') == 0) {
+                    jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
+                }
+                if (jQuery(this).find('.jtoggler').data('val') == 1) {
+                    jQuery(this).append('<span style="color:#008000">Active</span>');
+                }
+            });
+        }, 100);
+    });
+
     jQuery('#tbl_distributors').on('page.dt', function () {
 
         setTimeout(function () {
@@ -4248,6 +4275,21 @@ jQuery(document).ready(function () {
     });
 
     jQuery("#tbl_dealers_paginate .paginate_input").on('keyup', function () {
+        setTimeout(function () {
+            jQuery('.jtoggler').jtoggler();
+            jQuery('.jtoggler-wrapper').each(function () {
+                jQuery(this).find('span').css('display', 'none');
+                if (jQuery(this).find('.jtoggler').data('val') == 0) {
+                    jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
+                }
+                if (jQuery(this).find('.jtoggler').data('val') == 1) {
+                    jQuery(this).append('<span style="color:#008000">Active</span>');
+                }
+            });
+        }, 100);
+    });
+
+    jQuery("#tbl_dealers_filter input[type='search']").on('keyup', function () {
         setTimeout(function () {
             jQuery('.jtoggler').jtoggler();
             jQuery('.jtoggler-wrapper').each(function () {
@@ -4531,6 +4573,210 @@ jQuery(document).ready(function () {
                 }
             }
         })
+    });
+
+
+    jQuery(document).on("click", "#select_rem_address", function (e) {
+        e.preventDefault();
+        jQuery('#pmsafe_dealer_distributor').siblings('.error').remove();
+        var address_option = jQuery('#select_rem_address').val();
+        var distributor = jQuery('#pmsafe_dealer_distributor').val();
+
+        if (address_option == 'distributor') {
+            //select 
+            if (jQuery('#pmsafe_dealer_distributor').val().trim() == "") {
+                jQuery('#pmsafe_dealer_distributor').css({
+                    'border': '1px solid #ff0000'
+                });
+                jQuery('#pmsafe_dealer_distributor').after("<span class='error'>This field is required.</span>");
+
+            } else {
+                jQuery('#pmsafe_dealer_distributor').css({
+                    'color': '#333333'
+                });
+            }
+        }
+
+        if (distributor == '') {
+            var data = {
+                action: 'set_remittance_address_function',
+                address_option: address_option
+            };
+        } else {
+            var data = {
+                action: 'set_remittance_address_function',
+                address_option: address_option,
+                distributor: distributor
+            };
+        }
+        jQuery.ajax({
+            type: 'POST',
+            url: pmAjax.ajaxurl,
+            data: data,
+
+            success: function (response) {
+                jQuery('#pmsafe_remittance_address').val(response);
+                if (address_option != '') {
+                    jQuery('#rem_div').removeAttr('style');
+                }
+
+            }
+        });
+    });
+
+    jQuery(document).on("click", "#remittance_report_submit", function (e) {
+        jQuery('.error').remove();
+        var validflag = true;
+
+        var datepicker1 = jQuery('#membership_datepicker1').val();
+        var datepicker2 = jQuery('#membership_datepicker2').val();
+        var dealer = jQuery('#filter_dealers').val();
+        var distributor = jQuery('#filter_distributors').val();
+        var policy = jQuery('#policy').val();
+        var package = jQuery('#benefit_packages').val();
+        var registration_type = jQuery("input[name='registration_type']:checked").val();
+        var data = {
+            action: 'admin_remittance_report_filter',
+            datepicker1: datepicker1,
+            datepicker2: datepicker2,
+            dealer: dealer,
+            distributor: distributor,
+            policy: policy,
+            package: package,
+            registration_type: registration_type
+        }
+        if (policy != '' && package == '') {
+            jQuery('#benefit_packages').css({
+                'border': '1px solid #ff0000'
+            });
+            jQuery('#benefit_packages').after("<span class='error'>This field is required.</span>");
+            validflag = false;
+        } else {
+            jQuery('#benefit_packages').css({
+                'color': '#333333'
+            });
+        }
+        jQuery('.perma-admin-loader').show();
+        if (!validflag) {
+            jQuery('.perma-admin-loader').hide();
+            return validflag;
+        } else {
+            jQuery.ajax({
+                type: 'POST',
+                url: pmAjax.ajaxurl,
+                data: data,
+                // dataType: 'html',
+                success: function (response) {
+                    jQuery('.perma-admin-loader').hide();
+                    var obj = jQuery.parseJSON(response);
+                    jQuery('.remittance-result-wrap').html('');
+
+                    jQuery('.remittance-result-wrap').html('<h3 style="text-align:center;">' + obj.toptitle + '</h3>' + obj.dttable);
+                    var radioValue = jQuery("input[name='show_hide']:checked").val();
+
+                    if (jQuery("input[name='show_hide']:radio").is(":checked")) {
+                        if (radioValue == 'hide_dealer') {
+                            jQuery('.dealer-hide').addClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13';
+                        }
+                        if (radioValue == 'hide_distributor') {
+                            jQuery('.distributor-hide').addClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10';
+                        }
+                        if (radioValue == 'no_cost') {
+                            jQuery('.dealer-hide').addClass('nisl-pdf-link');
+                            jQuery('.distributor-hide').addClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7';
+                        }
+                        if (radioValue == 'show_cost') {
+                            jQuery('.dealer-hide').removeClass('nisl-pdf-link');
+                            jQuery('.distributor-hide').removeClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13';
+                        }
+                    } else {
+
+                        var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13';
+                    }
+                    var address_show_hide = jQuery("input[name='address_show_hide']:checked").val();
+                    if (jQuery("input[name='address_show_hide']:radio").is(":checked")) {
+                        if (address_show_hide == 'hide_address') {
+                            jQuery('.address-row').remove();
+                        }
+
+                    }
+
+                    jQuery('#remittance_report_table').DataTable({
+                        dom: 'Bfrtip',
+                        "pagingType": "input",
+                        responsive: true,
+                        "pageLength": 20,
+                        orderCellsTop: true,
+                        fixedHeader: true,
+                        "ordering": false,
+                        'columnDefs': [{
+                            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                            /* column index */
+                            'orderable': false,
+                            /* true or false */
+                        }],
+                        createdRow: function (row, data, dataIndex) {
+                            if (data[0] === 'Address') {
+
+                                var me = jQuery(row).closest('tr').attr('class');
+                                jQuery('.' + me + ' td:not(.saveme)').css('display', 'none');
+                                jQuery('td:eq(1)', row).attr('colspan', 13);
+                                jQuery('.' + me + ' .adr_rmv').css('color', 'rgb(188, 188, 188)');
+                            }
+                        },
+                        buttons: [{
+
+                            extend: 'csv',
+                            //Name the CSV
+                            filename: obj.toptitle,
+                            exportOptions: {
+                                columns: [columntarget]
+                            },
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'PDF',
+                            filename: obj.toptitle,
+                            orientation: 'landscape',
+                            pageSize: 'LEGAL',
+                            exportOptions: {
+                                columns: [columntarget]
+                            },
+                            title: obj.toptitle
+                        },
+                        {
+                            extend: 'excel',
+                            text: 'EXCEL',
+                            filename: obj.toptitle,
+                            exportOptions: {
+                                columns: [columntarget]
+                            },
+                            title: obj.toptitle
+                        },
+                        {
+                            extend: 'print',
+                            text: 'PRINT',
+                            filename: 'Upgrade Report',
+                            exportOptions: {
+                                columns: [columntarget]
+                            },
+                            title: obj.toptitle,
+                            customize: function (win) {
+                                jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
+                            }
+                        }
+                        ]
+                        // filename: 'dealer_list',
+                    });
+
+                },
+
+            });
+        }
     });
 
 }); // ready

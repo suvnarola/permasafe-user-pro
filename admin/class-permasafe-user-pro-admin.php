@@ -216,6 +216,15 @@ class Permasafe_User_Pro_Admin
 			array($this, 'permasafe_upgraded_membership_page')
 		);
 
+		$this->plugin_screen_hook_suffix = add_submenu_page(
+			'customer-filter',
+			__('Remittance Reports', ''),
+			__('Remittance Reports', ''),
+			'manage_options',
+			'remittance-report',
+			array($this, 'permasafe_remittance_report_page')
+		);
+
 
 		/**
 		 * Create admin side Dealers Page
@@ -362,8 +371,9 @@ class Permasafe_User_Pro_Admin
 
 	public function pmsafe_register_setting()
 	{
-		register_setting('pmsafe_setting', 'pmsafe_redirect_url');                                             // save redirect URL
-		register_setting('pmsafe_setting', 'pmsafe_demo_benefit_prefix');                                      // save demo registration benefit prefix
+		register_setting('pmsafe_setting', 'pmsafe_redirect_url');                       // save redirect URL
+		register_setting('pmsafe_setting', 'pmsafe_demo_benefit_prefix');                // save demo registration benefit prefix
+		register_setting('pmsafe_setting', 'pmsafe_remittance_address');                // save demo registration benefit prefix
 	}
 
 	/**
@@ -404,6 +414,10 @@ class Permasafe_User_Pro_Admin
 	public function permasafe_upgraded_membership_page()
 	{
 		include_once 'partials/permasafe-upgraded-membership-page.php';
+	}
+	public function permasafe_remittance_report_page()
+	{
+		include_once 'partials/pmsafe-remittance-report-page.php';
 	}
 
 	public function display_permasafe_dealers_page()
@@ -722,6 +736,8 @@ class Permasafe_User_Pro_Admin
 		$dealer_phone_number = $_POST['pmsafe_dealer_phone_number'];
 		$dealer_fax_number = $_POST['pmsafe_dealer_fax_number'];
 		$dealer_distributor = $_POST['pmsafe_dealer_distributor'];
+		$dealer_rem_add = $_POST['pmsafe_remittance_address'];
+		$dealer_select_rem_address = $_POST['select_rem_address'];
 
 		$user_id = wp_create_user($dealers_code, $dealer_password, $dealer_email);
 		if ($user_id) {
@@ -734,6 +750,11 @@ class Permasafe_User_Pro_Admin
 			update_user_meta($user_id, 'dealer_phone_number', $dealer_phone_number);
 			update_user_meta($user_id, 'dealer_fax_number', $dealer_fax_number);
 			update_user_meta($user_id, 'dealer_distributor_name', $dealer_distributor);
+			update_user_meta($user_id, 'pmsafe_remittance_address', $dealer_rem_add);
+			update_user_meta($user_id, 'pmsafe_remittance_address_option', $dealer_select_rem_address);
+			if($dealer_select_rem_address == 'distributor'){
+				update_user_meta($dealer_distributor, 'distributor_store_address', $dealer_rem_add);
+			}
 			update_user_meta($user_id, 'user_active_inactive', 1);
 			
 			if(!empty($_POST['pmsafe_distributor_id'])){
@@ -766,6 +787,8 @@ class Permasafe_User_Pro_Admin
 		$edit_fax_number = $_POST['pmsafe_dealer_fax_number'];
 		$new_password = $_POST['pmsafe_dealer_password'];
 		$dealer_distributor = $_POST['pmsafe_dealer_distributor'];
+		$dealer_rem_add = $_POST['pmsafe_remittance_address'];
+		$dealer_select_rem_address = $_POST['select_rem_address'];
 		$user_id = wp_update_user(array('ID' => $user_id, 'user_email' => $edit_email));
 
 		update_user_meta($user_id, 'dealer_name', $edit_name);
@@ -773,6 +796,11 @@ class Permasafe_User_Pro_Admin
 		update_user_meta($user_id, 'dealer_phone_number', $edit_phone_number);
 		update_user_meta($user_id, 'dealer_fax_number', $edit_fax_number);
 		update_user_meta($user_id, 'dealer_distributor_name', $dealer_distributor);
+		update_user_meta($user_id, 'pmsafe_remittance_address', $dealer_rem_add);
+		update_user_meta($user_id, 'pmsafe_remittance_address_option', $dealer_select_rem_address);
+		if($dealer_select_rem_address == 'distributor'){
+			update_user_meta($dealer_distributor, 'distributor_store_address', $dealer_rem_add);
+		}
 		if ($new_password != '') {
 			wp_set_password($new_password, $user_id);
 		}
@@ -1092,6 +1120,9 @@ class Permasafe_User_Pro_Admin
 		delete_post_meta($post_id, '_pmsafe_used_code_user_name');
 		delete_post_meta($post_id, '_pmsafe_used_code_date');
 		delete_post_meta($post_id, 'pmsafe_pdf_link');
+		delete_post_meta($post_id, 'is_upgraded');
+		delete_post_meta($post_id, 'upgraded_by');
+		delete_post_meta($post_id, 'upgraded_date');
 
 		$redirect_url = admin_url('admin.php?page=customers-lists&action=view_customer&dealer=' . $dealer_id);
 		$response = array('status' => true, 'redirect' => $redirect_url);
@@ -1118,6 +1149,9 @@ class Permasafe_User_Pro_Admin
 		delete_post_meta($post_id, '_pmsafe_used_code_user_name');
 		delete_post_meta($post_id, '_pmsafe_used_code_date');
 		delete_post_meta($post_id, 'pmsafe_pdf_link');
+		delete_post_meta($post_id, 'is_upgraded');
+		delete_post_meta($post_id, 'upgraded_by');
+		delete_post_meta($post_id, 'upgraded_date');
 
 		$redirect_url = admin_url('admin.php?page=customers-lists');
 		$response = array('status' => true, 'redirect' => $redirect_url);
@@ -2310,7 +2344,7 @@ class Permasafe_User_Pro_Admin
 										else{
 											$packTotal[$benefits_package] = 1;
 										}
-										$html .= '<tr>';
+										$html .= '<tr class="code-row">';
 
 										$html .= '<td class="text-center">';
 										$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $nickname . '</a>';
@@ -2445,7 +2479,7 @@ class Permasafe_User_Pro_Admin
 										$datepicker2 = $expiration_date;
 
 									if (($expiration_date >= $datepicker1) && ($expiration_date <= $datepicker2)) {
-										$html .= '<tr>';
+										$html .= '<tr class="code-row">';
 
 										$html .= '<td class="text-center">';
 										$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $nickname . '</a>';
@@ -2459,7 +2493,7 @@ class Permasafe_User_Pro_Admin
 										$html .= $benefits_package;
 										$html .= '</td>';
 
-											$html .= '<td class="text-center">';
+										$html .= '<td class="text-center">';
 										$html .=  date('m-d-Y', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
 										$html .= '</td>';
 
@@ -2566,7 +2600,7 @@ class Permasafe_User_Pro_Admin
 										else{
 											$packTotal[$benefits_package] = 1;
 										}
-										$html .= '<tr>';
+										$html .= '<tr class="code-row">';
 
 										$html .= '<td class="text-center">';
 										$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $nickname . '</a>';
@@ -2688,7 +2722,7 @@ class Permasafe_User_Pro_Admin
 										else{
 											$packTotal[$benefits_package] = 1;
 										}
-										$html .= '<tr>';
+										$html .= '<tr class="code-row">';
 
 										$html .= '<td class="text-center">';
 										$html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $nickname . '</a>';
@@ -3339,7 +3373,7 @@ class Permasafe_User_Pro_Admin
 											else{
 												$packTotal[$code_prefix] = 1;
 											}
-											$html .= '<tr>';
+											$html .= '<tr class="code-row">';
 											$html .= '<td class="text-center">';
 											$html .= $code;
 											$html .= '</td>';
@@ -3404,7 +3438,7 @@ class Permasafe_User_Pro_Admin
 											else{
 												$packTotal[$code_prefix] = 1;
 											}
-											$html .= '<tr>';
+											$html .= '<tr class="code-row">';
 											$html .= '<td class="text-center">';
 											$html .= $code;
 											$html .= '</td>';
@@ -3468,7 +3502,7 @@ class Permasafe_User_Pro_Admin
 										else{
 											$packTotal[$code_prefix] = 1;
 										}
-										$html .= '<tr>';
+										$html .= '<tr class="code-row">';
 										$html .= '<td class="text-center">';
 										$html .= $code;
 										$html .= '</td>';
@@ -4137,7 +4171,7 @@ class Permasafe_User_Pro_Admin
 							}else{
 								$no_upgraded_count++;
 							}
-								echo '<tr>';
+								echo '<tr class="code-row">';
 									echo '<td>'.$nickname.'</td>';
 									echo '<td>'.$fname.' '.$lname.'</td>';
 									echo '<td>'.$vehicle_info[0][$nickname]['pmsafe_vin'].'</td>';
@@ -4547,6 +4581,522 @@ class Permasafe_User_Pro_Admin
 			
 		}
 		
+		die;
+	}
+
+	public function set_remittance_address_function(){
+		$address_option = $_POST['address_option'];
+		$distributor = $_POST['distributor'];
+		if($address_option == 'permasafe_directly'){
+			$address = get_option('pmsafe_remittance_address');
+		}else if($address_option == 'distributor'){
+			$address = get_user_meta($distributor, 'distributor_store_address', true);
+		}else{
+			$address = '';
+		}
+		echo $address;
+		die;
+	}
+
+	public function admin_remittance_report_filter(){
+		global $wpdb;
+		$datepicker1 = $_POST['datepicker1'];
+		$datepicker2 = $_POST['datepicker2'];
+		$dealer = $_POST['dealer'];
+		$distributor = $_POST['distributor'];
+		$policy = $_POST['policy'];
+		$package = $_POST['package'];
+		$registration_type = $_POST['registration_type'];
+		
+		$title = '';
+		$title .= 'Remittance Report';
+
+		if($registration_type == '' || $registration_type == 'all_registration'){
+			$title .= ' | All Registrations';
+		}
+		if($registration_type == 'upgraded_registration'){
+			$title .= ' | Upgraded Registrations';
+		}
+		if($registration_type == 'non_upgraded_registration'){
+			$title .= ' | Non-Upgraded Registrations';
+		}
+
+		if(!empty($dealer) && empty($distributor) || !empty($distributor) && !empty($dealer)){
+			
+			$input_dealers = $dealer;
+			foreach ($input_dealers as $loop_dealer) {
+				$dealer_users = get_user_by('login', $loop_dealer);
+				$dealer_arr[] = get_code_by_dealer_login($loop_dealer);
+				$dealer_id = $dealer_users->ID;
+				$get_dealer_name[] = get_user_meta($dealer_id,'dealer_name',true);
+				$distributor_login = get_user_meta($dealer_id, 'dealer_distributor_name', true);
+				$distributors = get_users(array('search' => $distributor_login));
+				foreach ($distributors as $distributor) {
+					if($distributor->user_login != $distributor_login){
+						$distributor_name = get_user_meta($distributor->ID, 'distributor_name', true);
+						$dis_arr[$distributor->user_login] = array('id'=>$distributor->ID,'name'=>$distributor_name);
+					}
+				}
+			}
+			$get_dealer_name = implode(' | ',$get_dealer_name);
+			$title .= ' | '.$get_dealer_name;
+			$check_array = array_flatten($dealer_arr);
+		}
+		if(!empty($distributor) && empty($dealer)){
+				foreach ($distributor as $key => $value) {
+					$users = get_user_by('login', $value);
+					$distributor_id = $users->ID;
+					$distributor_arr[] =  get_code_by_distributor_login($distributor_id);
+					$get_distributor_name[] = get_user_meta($distributor_id,'distributor_name',true);
+                    $dealers =  get_users(
+						array(
+							'meta_key' => 'dealer_distributor_name',
+							'meta_value' => $distributor_id
+						)
+					);
+					foreach ($dealers as $user) {
+						$input_dealers[] = $user->user_login;
+					}
+                    $distributor_name = get_user_meta($distributor_id,'distributor_name',true);
+                    $dis_arr[$value] = array('id'=>$distributor_id,'name'=>$distributor_name);
+				}
+				$get_distributor_name = implode(' | ',$get_distributor_name);
+				$title .= ' | '.$get_distributor_name;
+				$check_array = array_flatten($distributor_arr);
+			}
+
+			if(empty($distributor) && empty($dealer)){
+				
+				$distributors = get_users('role=author');
+				foreach ($distributors as $key => $value) {
+					$distributor_login = $value->user_login;
+					$users = get_user_by('login', $distributor_login);
+				 	$distributor_id = $users->ID;
+					$distributor_arr[] =  get_code_by_distributor_login($distributor_id);
+					$get_distributor_name[] = get_user_meta($distributor_id,'distributor_name',true);
+                    $dealers =  get_users(
+						array(
+							'meta_key' => 'dealer_distributor_name',
+							'meta_value' => $distributor_id
+						)
+					);
+					foreach ($dealers as $user) {
+						$input_dealers[] = $user->user_login;
+					}
+                    $distributor_name = get_user_meta($distributor_id,'distributor_name',true);
+                    $dis_arr[$distributor_login] = array('id'=>$distributor_id,'name'=>$distributor_name);
+				}
+			}
+
+		if(!empty($datepicker1)){
+			$title .= ' | '.$datepicker1;
+		}
+		if(!empty($datepicker2)){
+			$title .= ' | '.$datepicker2;
+		}
+
+		if ($policy == "upgraded") {
+			$title .= ' | Upgraded Policy- '.$package;
+		}
+		
+		if ($policy == "original") {
+			$title .= ' | Original Policy- '.$package;
+		}
+
+		$setStart = ($datepicker1 == '' || !isset($datepicker1)) ? false : true;
+		$setExpire = ($datepicker2 == '' || !isset($datepicker2)) ? false : true;
+		
+		
+		$html = '';
+		$html .= '<div class="table-responsive">';
+		$html .= '<table id="remittance_report_table" style="width:100%">';
+			$html .= '<thead>';
+			
+				$html .= '<tr>';
+					$html .= '<th>';
+					$html .= 'Registration Number';
+					$html .= '</th>';
+
+					$html .= '<th>';
+					$html .= 'Customer Name';
+					$html .= '</th>';
+
+					$html .= '<th>';
+					$html .= 'VIN';
+					$html .= '</th>';
+
+					$html .= '<th>';
+					$html .= 'Upgraded';
+					$html .= '</th>';
+
+					$html .= '<th>';
+					$html .= 'Original Policy';
+					$html .= '</th>';
+
+					$html .= '<th>';
+					$html .= 'Final Policy';
+					$html .= '</th>';
+
+					$html .= '<th>';
+					$html .= 'Registered By';
+					$html .= '</th>';
+
+					$html .= '<th class="billing-date">';
+					$html .= 'Date';
+					$html .= '</th>';
+
+					$html .= '<th class="dealer-hide">';
+					$html .= 'Dealer Cost Original Policy';
+					$html .= '</th>';
+
+					$html .= '<th class="dealer-hide">';
+					$html .= 'Dealer Cost Final Policy';
+					$html .= '</th>';
+					
+					$html .= '<th class="dealer-hide">';
+					$html .= 'Dealer Cost Price to Upgrade';
+					$html .= '</th>';
+					
+					$html .= '<th class="distributor-hide">';
+					$html .= 'Distributor Cost Original Policy';
+					$html .= '</th>';
+				
+					$html .= '<th class="distributor-hide">';
+					$html .= 'Distributor Cost Final Policy';
+					$html .= '</th>';
+				
+					$html .= '<th class="distributor-hide">';
+					$html .= 'Distributor Cost Price to Upgrade';
+					$html .= '</th>';
+				$html .= '</tr>';
+			$html .= '</thead>';
+
+			$html .= '<tbody>';
+
+			if($registration_type == 'all_registration' || $registration_type == ''){
+				$sql = 'SELECT user_id FROM wp_usermeta WHERE meta_key="nickname" AND meta_value IN (SELECT meta_value FROM wp_postmeta WHERE meta_key="_pmsafe_invitation_code" AND post_id IN (SELECT post_id FROM wp_postmeta WHERE meta_key = "_pmsafe_code_status" and meta_value = "used"))';
+			} else if($registration_type == 'upgraded_registration'){
+				$sql = 'SELECT user_id FROM wp_usermeta WHERE meta_key="nickname" AND meta_value IN (SELECT meta_value FROM wp_postmeta WHERE meta_key="_pmsafe_invitation_code" AND post_id IN (SELECT post_id FROM wp_postmeta WHERE meta_key = "is_upgraded" and meta_value ="1"))';
+			}else if($registration_type == 'non_upgraded_registration'){
+				 $sql = 'SELECT user_id FROM wp_usermeta WHERE meta_key="nickname" AND meta_value IN (SELECT meta_value FROM wp_postmeta WHERE meta_key="_pmsafe_invitation_code" AND post_id NOT IN (SELECT post_id FROM wp_postmeta WHERE meta_key = "is_upgraded" and meta_value = "1"))';
+			} 
+
+			$query = $wpdb->get_results($sql);
+			
+			foreach ($dis_arr as $key => $value) {
+				$total_distributor_members = 0;
+				$dealer_original_policy_total_sum = 0;
+				$dealer_final_policy_total_sum = 0;
+				$dealer_price_to_upgrade_total_sum = 0;
+				$distributor_original_policy_total_sum = 0;
+				$distributor_final_policy_total_sum = 0;
+				$distributor_price_to_upgrade_total_sum = 0;
+			
+				$distributor_id = $value['id'];
+				$dealer_users =  get_users(
+					array(
+						'meta_key' => 'dealer_distributor_name',
+						'meta_value' => $distributor_id
+					)
+				);
+				$distributor_name = $value['name'];
+				$html .= '<tr style="background-color: #A0CEEF;font-weight: 700;color: #000000;">';
+					$html .='<td>'.$distributor_name.'</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="dealer-hide"></td><td class="dealer-hide"></td><td class="dealer-hide"></td><td class="distributor-hide"></td><td class="distributor-hide"></td><td class="distributor-hide"></td>';		
+				$html .= '</tr>';
+
+				foreach ($dealer_users as $dealer) {
+
+					$total_members = 0;
+					$dealer_original_policy_sum = 0;
+					$dealer_final_policy_sum = 0;
+					$dealer_price_to_upgrade_sum = 0;
+
+					$distributor_original_policy_sum = 0;
+					$distributor_final_policy_sum = 0;
+					$distributor_price_to_upgrade_sum = 0;
+
+					$dealer_id = $dealer->ID;
+					$dealer_login = $dealer->user_login;
+					$dealer_name = get_user_meta($dealer_id, 'dealer_name', true);
+					$dealer_arr = get_code_by_dealer_login($dealer_login);
+
+					if(in_array($dealer_login,$input_dealers)){
+
+						$html .= '<tr style="background-color: #B5D777;font-weight: 700;color: #000000;">';
+						$html .='<td>'.$dealer_name.'</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="dealer-hide"></td><td class="dealer-hide"></td><td class="dealer-hide"></td><td class="distributor-hide"></td><td class="distributor-hide"></td><td class="distributor-hide"></td>';		
+						$html .= '</tr>';
+						$packTotal = array();
+
+						foreach ($query as $key => $value) {
+
+							$user_id = $value->user_id;
+							$nickname = get_user_meta($user_id, 'nickname', true);
+							$vehicle_info = get_user_meta($user_id, 'pmsafe_vehicle_info', false);
+							$registration_date = date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
+							
+							if (!$setStart)
+								$datepicker1 = $registration_date;
+
+							if (!$setExpire)
+								$datepicker2 = $registration_date;
+
+							if (($registration_date >= $datepicker1 && $registration_date <= $datepicker2)) {
+								if (in_array($nickname, $dealer_arr)) {
+									$fname = get_user_meta($user_id, 'first_name', true);
+									$lname = get_user_meta($user_id, 'last_name', true);
+									$post_id = $vehicle_info[0][$nickname]['pmsafe_member_code_id'];
+									$is_upgraded = get_post_meta($post_id,'is_upgraded',true);
+									$original_policy = get_post_meta($post_id, '_pmsafe_invitation_prefix', true);
+									$final_policy = get_post_meta($post_id, '_pmsafe_code_prefix', true);
+									
+									$registered_by = get_post_meta($post_id, 'registered_by', true);
+									$get_users = get_user_by('login',$registered_by);
+									$uid =  $get_users->ID;
+									// $upgraded_id = get_post_meta($post_id, 'upgraded_by', true);
+									$registered_by_dealer = get_user_meta($uid, 'dealer_name', true);
+									$registered_by_distributor = get_user_meta($uid, 'distributor_name', true);
+									$registered_by_dealer_contact = get_user_meta($uid, 'contact_fname', true);
+									$registered_by_distributor_contact = get_user_meta($uid, 'distributor_contact_fname', true);
+									$customer_fname = get_user_meta($uid, 'first_name', true);
+									$customer_lname = get_user_meta($uid, 'last_name', true);
+									$registered_by_customer = $customer_fname.' '.$customer_lname;
+									
+									$dealer_price_arr = get_user_meta($dealer_id, 'pricing_package', true);
+									$dealer_cost_original_policy = $dealer_price_arr[$original_policy]['dealer_cost'];
+									$dealer_cost_final_policy = $dealer_price_arr[$final_policy]['dealer_cost'];
+									$dealer_cost_price_to_upgrade = $dealer_cost_original_policy - $dealer_cost_final_policy;
+
+									
+
+									$distributor_price_arr = get_user_meta($distributor_id, 'pricing_package', true);
+									$distributor_cost_original_policy = $distributor_price_arr[$original_policy]['distributor_cost'];
+									$distributor_cost_final_policy = $distributor_price_arr[$final_policy]['distributor_cost'];
+									$distributor_cost_price_to_upgrade = $distributor_cost_original_policy - $distributor_cost_final_policy;
+									
+									
+									if ($policy == "upgraded") {
+										if ($final_policy == $package) {
+								
+											$dealer_original_policy_sum += $dealer_cost_original_policy; 
+											$dealer_final_policy_sum += $dealer_cost_final_policy; 
+											$dealer_price_to_upgrade_sum += abs($dealer_cost_price_to_upgrade); 
+
+											$distributor_original_policy_sum += $distributor_cost_original_policy; 
+											$distributor_final_policy_sum += $distributor_cost_final_policy; 
+											$distributor_price_to_upgrade_sum += abs($distributor_cost_price_to_upgrade); 
+
+											if(isset($packTotal[$final_policy])){
+												$packTotal[$final_policy] = $packTotal[$final_policy]	+ 1;
+											}else{
+													$packTotal[$final_policy] = 1;
+											}
+											
+										
+											$html .= '<tr class="code-row">';
+												$html .= '<td>'.$nickname.'</td>';
+												$html .= '<td>'.$fname.' '.$lname.'</td>';
+												$html .= '<td>'.$vehicle_info[0][$nickname]['pmsafe_vin'].'</td>';
+												$html .= '<td class="text-center">'.(($is_upgraded == 1)?'<span style="color:#008000;">Yes</span>':'<span style="color:#ff0000;">No</span>').'</td>';
+												$html .= '<td class="text-center">'.$original_policy.'</td>';
+												$html .= '<td class="text-center">'.$final_policy.'</td>';
+												$html .= '<td>';
+												
+													if ($registered_by_dealer) {
+														$html .= $registered_by_dealer;
+													}
+													if ($registered_by_distributor) {
+														$html .= $registered_by_distributor;
+													}
+													if ($registered_by_dealer_contact) {
+														$html .= $registered_by_dealer_contact;
+													}
+													if ($registered_by_distributor_contact) {
+														$html .= $registered_by_distributor_contact;
+													}
+													if ($registered_by_customer) {
+														$html .= $registered_by_customer;
+													}
+													if($registered_by == ''){
+														$html .= $fname.' '.$lname;
+													}
+												$html .= '</td>';
+												$html .= '<td>'.$registration_date = date('m-d-Y', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])).'</td>';;
+												$html .= '<td class="text-center dealer-hide">$'.(($dealer_cost_original_policy)?$dealer_cost_original_policy:'0').'</td>';
+												$html .= '<td class="text-center dealer-hide">$'.(($dealer_cost_final_policy)?$dealer_cost_final_policy:'0').'</td>';
+												$html .= '<td class="text-center dealer-hide">$'.abs($dealer_cost_price_to_upgrade).'</td>';
+												$html .= '<td class="text-center distributor-hide">$'.(($distributor_cost_original_policy)?$distributor_cost_original_policy:'0').'</td>';
+												$html .= '<td class="text-center distributor-hide">$'.(($distributor_cost_final_policy)?$distributor_cost_final_policy:'0').'</td>';
+												$html .= '<td class="text-center distributor-hide">$'.abs($distributor_cost_price_to_upgrade).'</td>';
+											$html .= '</tr>';
+											$total_members += count($nickname);
+										}// upgraded policy
+									}else if ($policy == "original") {
+										if ($original_policy == $package) {
+											$dealer_original_policy_sum += $dealer_cost_original_policy; 
+											$dealer_final_policy_sum += $dealer_cost_final_policy; 
+											$dealer_price_to_upgrade_sum += abs($dealer_cost_price_to_upgrade); 
+
+											$distributor_original_policy_sum += $distributor_cost_original_policy; 
+											$distributor_final_policy_sum += $distributor_cost_final_policy; 
+											$distributor_price_to_upgrade_sum += abs($distributor_cost_price_to_upgrade); 
+
+											if(isset($packTotal[$final_policy])){
+												$packTotal[$final_policy] = $packTotal[$final_policy]	+ 1;
+											}else{
+													$packTotal[$final_policy] = 1;
+											}
+											
+										
+											$html .= '<tr class="code-row">';
+												$html .= '<td>'.$nickname.'</td>';
+												$html .= '<td>'.$fname.' '.$lname.'</td>';
+												$html .= '<td>'.$vehicle_info[0][$nickname]['pmsafe_vin'].'</td>';
+												$html .= '<td class="text-center">'.(($is_upgraded == 1)?'<span style="color:#008000;">Yes</span>':'<span style="color:#ff0000;">No</span>').'</td>';
+												$html .= '<td class="text-center">'.$original_policy.'</td>';
+												$html .= '<td class="text-center">'.$final_policy.'</td>';
+												$html .= '<td>';
+												
+													if ($registered_by_dealer) {
+														$html .= $registered_by_dealer;
+													}
+													if ($registered_by_distributor) {
+														$html .= $registered_by_distributor;
+													}
+													if ($registered_by_dealer_contact) {
+														$html .= $registered_by_dealer_contact;
+													}
+													if ($registered_by_distributor_contact) {
+														$html .= $registered_by_distributor_contact;
+													}
+													if ($registered_by_customer) {
+														$html .= $registered_by_customer;
+													}
+													if($registered_by == ''){
+														$html .= $fname.' '.$lname;
+													}
+												$html .= '</td>';
+												$html .= '<td>'.$registration_date = date('m-d-Y', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])).'</td>';;
+												$html .= '<td class="text-center dealer-hide">$'.(($dealer_cost_original_policy)?$dealer_cost_original_policy:'0').'</td>';
+												$html .= '<td class="text-center dealer-hide">$'.(($dealer_cost_final_policy)?$dealer_cost_final_policy:'0').'</td>';
+												$html .= '<td class="text-center dealer-hide">$'.abs($dealer_cost_price_to_upgrade).'</td>';
+												$html .= '<td class="text-center distributor-hide">$'.(($distributor_cost_original_policy)?$distributor_cost_original_policy:'0').'</td>';
+												$html .= '<td class="text-center distributor-hide">$'.(($distributor_cost_final_policy)?$distributor_cost_final_policy:'0').'</td>';
+												$html .= '<td class="text-center distributor-hide">$'.abs($distributor_cost_price_to_upgrade).'</td>';
+											$html .= '</tr>';
+											$total_members += count($nickname);
+										}//original policy
+									}else{
+										$dealer_original_policy_sum += $dealer_cost_original_policy; 
+											$dealer_final_policy_sum += $dealer_cost_final_policy; 
+											$dealer_price_to_upgrade_sum += abs($dealer_cost_price_to_upgrade); 
+
+											$distributor_original_policy_sum += $distributor_cost_original_policy; 
+											$distributor_final_policy_sum += $distributor_cost_final_policy; 
+											$distributor_price_to_upgrade_sum += abs($distributor_cost_price_to_upgrade); 
+
+											if(isset($packTotal[$final_policy])){
+												$packTotal[$final_policy] = $packTotal[$final_policy]	+ 1;
+											}else{
+													$packTotal[$final_policy] = 1;
+											}
+											
+										
+											$html .= '<tr class="code-row">';
+												$html .= '<td>'.$nickname.'</td>';
+												$html .= '<td>'.$fname.' '.$lname.'</td>';
+												$html .= '<td>'.$vehicle_info[0][$nickname]['pmsafe_vin'].'</td>';
+												$html .= '<td class="text-center">'.(($is_upgraded == 1)?'<span style="color:#008000;">Yes</span>':'<span style="color:#ff0000;">No</span>').'</td>';
+												$html .= '<td class="text-center">'.$original_policy.'</td>';
+												$html .= '<td class="text-center">'.$final_policy.'</td>';
+												$html .= '<td>';
+												
+													if ($registered_by_dealer) {
+														$html .= $registered_by_dealer;
+													}
+													if ($registered_by_distributor) {
+														$html .= $registered_by_distributor;
+													}
+													if ($registered_by_dealer_contact) {
+														$html .= $registered_by_dealer_contact;
+													}
+													if ($registered_by_distributor_contact) {
+														$html .= $registered_by_distributor_contact;
+													}
+													if ($registered_by_customer) {
+														$html .= $registered_by_customer;
+													}
+													if($registered_by == ''){
+														$html .= $fname.' '.$lname;
+													}
+												$html .= '</td>';
+												$html .= '<td>'.$registration_date = date('m-d-Y', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])).'</td>';;
+												$html .= '<td class="text-center dealer-hide">$'.(($dealer_cost_original_policy)?$dealer_cost_original_policy:'0').'</td>';
+												$html .= '<td class="text-center dealer-hide">$'.(($dealer_cost_final_policy)?$dealer_cost_final_policy:'0').'</td>';
+												$html .= '<td class="text-center dealer-hide">$'.abs($dealer_cost_price_to_upgrade).'</td>';
+												$html .= '<td class="text-center distributor-hide">$'.(($distributor_cost_original_policy)?$distributor_cost_original_policy:'0').'</td>';
+												$html .= '<td class="text-center distributor-hide">$'.(($distributor_cost_final_policy)?$distributor_cost_final_policy:'0').'</td>';
+												$html .= '<td class="text-center distributor-hide">$'.abs($distributor_cost_price_to_upgrade).'</td>';
+											$html .= '</tr>';
+											$total_members += count($nickname);
+									}
+								}// in array dealer array
+								
+							
+							}// date fileter
+						} // users loop
+					
+					if($packTotal){
+						foreach ($packTotal as $key => $value) {
+					
+							$html .= '<tr style="background-color: #F0CF65;font-weight: 700;color: #000000;">';
+								$html .= '<td>Total '.$key.'</td><td></td><td></td><td></td><td></td><td class="text-center">'.$value.'</td><td></td><td></td><td class="dealer-hide"></td><td class="dealer-hide"></td><td class="dealer-hide"></td><td class="distributor-hide"></td><td class="distributor-hide"></td><td class="distributor-hide"></td>';
+							$html .= '</tr>'; 
+							$dis_packTotal[$key] += $value;
+						}
+					}
+				
+					$html .= '<tr style="background-color: #F0CF65;font-weight: 700;color: #000000;">';
+						$html .='<td>Total Upgrades - '.$dealer_name.'</td><td></td><td></td><td></td><td></td><td class="text-center">'.$total_members.'</td><td></td><td></td><td class="dealer-hide text-center">$'.$dealer_original_policy_sum.'</td><td class="dealer-hide text-center">$'.$dealer_final_policy_sum.'</td><td class="dealer-hide text-center">$'.$dealer_price_to_upgrade_sum.'</td><td class="distributor-hide text-center">$'.$distributor_original_policy_sum.'</td><td class="distributor-hide text-center">$'.$distributor_final_policy_sum.'</td><td class="distributor-hide text-center">$'.$distributor_price_to_upgrade_sum.'</td>';		
+					$html .= '</tr>';
+
+					$remittance_address = get_user_meta($dealer_id,'pmsafe_remittance_address',true);
+					$html .= '<tr style="background-color: #8c8c8c94;font-weight: 700;color: #000;" class="address-row">';
+					// $html .= '<td>'.$remittance_address.'</td>';
+						$html .='<td class="saveme adr_rmv">Address</td><td class="saveme">For <span style="margin-right:100px;">'.$dealer_name.',</span> Submit your remittance to: <span style="font-size:18px;font-family:serif;">'.$remittance_address.'</span></td><td></td><td></td><td></td><td class="text-center"></td><td></td><td></td><td class="dealer-hide text-center"></td><td class="dealer-hide text-center"></td><td class="dealer-hide text-center"></td><td class="distributor-hide text-center"></td><td class="distributor-hide text-center"></td><td class="distributor-hide text-center"></td>';		
+					$html .= '</tr>';
+				
+					$total_distributor_members += $total_members;
+					$dealer_original_policy_total_sum += $dealer_original_policy_sum;
+					$dealer_final_policy_total_sum += $dealer_final_policy_sum;
+					$dealer_price_to_upgrade_total_sum += $dealer_price_to_upgrade_sum;
+
+					$distributor_original_policy_total_sum += $distributor_original_policy_sum; 
+					$distributor_final_policy_total_sum += $distributor_final_policy_sum; 
+					$distributor_price_to_upgrade_total_sum += $distributor_price_to_upgrade_sum; 
+					}// in array input dealers
+				
+				}//dealer array
+				
+				if($dis_packTotal){
+				foreach ($dis_packTotal as $key => $value) {
+			
+						$html .= '<tr style="background-color: #86abc6;font-weight: 700;color: #000000;">';
+							$html .= '<td>Total '.$key.'</td><td></td><td></td><td></td><td></td><td class="text-center">'.$value.'</td><td></td><td></td><td class="dealer-hide"></td><td class="dealer-hide"></td><td class="dealer-hide"></td><td class="distributor-hide"></td><td class="distributor-hide"></td><td class="distributor-hide"></td>';
+						$html .= '</tr>'; 
+					
+					}
+				}
+				unset($dis_packTotal);
+				$html .= '<tr style="background-color: #86abc6;font-weight: 700;color: #000000;">';
+					$html .='<td>Total Upgrades - '.$distributor_name.'</td><td></td><td></td><td></td><td></td><td class="text-center">'.$total_distributor_members.'</td><td></td><td></td><td class="dealer-hide text-center">$'.$dealer_original_policy_total_sum.'</td><td class="dealer-hide text-center">$'.$dealer_final_policy_total_sum.'</td><td class="dealer-hide text-center">$'.$dealer_price_to_upgrade_total_sum.'</td><td class="distributor-hide text-center">$'.$distributor_original_policy_total_sum.'</td><td class="distributor-hide text-center">$'.$distributor_final_policy_total_sum.'</td><td class="distributor-hide text-center">$'.$distributor_price_to_upgrade_total_sum.'</td>';
+				$html .= '</tr>'; 
+			}// distributor array
+		
+			$html .= '</tbody>';
+		$html .= '</table>';
+
+		$response = array('dttable'=>$html,'toptitle'=>$title);
+		echo json_encode($response);
 		die;
 	}
 }

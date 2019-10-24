@@ -279,7 +279,7 @@ foreach ($distributors as $distributor) {
                 $vin = $vehicle_info[$code]['pmsafe_vin'];
 
                 if (in_array($code, $dealer_arr)) {
-                    echo '<tr>';
+                    echo '<tr class="code-row">';
                     echo '<td style="text-align:center;">';
                     echo $code;
                     echo '</td>';

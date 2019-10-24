@@ -199,6 +199,7 @@ table.dealers {
 .toplevel_page_permasafe-upgraded-membership div#wpcontent,
 .toplevel_page_customer-filter div#wpcontent,
 .reports_page_permasafe-upgraded-membership div#wpcontent,
+.reports_page_remittance-report div#wpcontent,
 .reports_page_billing-reports div#wpcontent {
     padding-right: 60px;
 }
@@ -821,6 +822,7 @@ div#search_tbl_wrapper {
 #membership_info_table_filter input,
 #membership_date_table_filter input,
 #billing_info_table_filter input,
+#remittance_report_table_filter input,
 #search_tbl_filter input {
     margin-bottom: 10px;
 }
@@ -1007,6 +1009,7 @@ input#billing_report_submit {
 #search_tbl_info,
 #membership_date_table_info,
 #membership_info_table_info,
+#remittance_report_table_info,
 #billing_info_table_info {
     display: none;
 }
@@ -1221,8 +1224,16 @@ a#back_link {
     width: 90px;
 }
 
+#remittance_report_table_wrapper table.dataTable thead th, #remittance_report_table_wrapper table.dataTable thead td {padding: 10px 12px;}
+#remittance_report_table_wrapper table.dataTable thead th:nth-child(3) {width: 40px !important;}
+#remittance_report_table_wrapper table.dataTable thead th:first-child {width: 50px !important;}  
+#remittance_report_table_wrapper table.dataTable thead th:nth-child(8) {width: 70px !important;}
+#remittance_report_table_wrapper table.dataTable thead th:nth-child(2) {width: 90px !important;}
+tr.code-row td {border-right: 1px solid #e7e7e7;border-bottom: 1px solid #e7e7e7;}
+.code-row td:first-child {border-left: 1px solid #e7e7e7;}
 
 /******** Responsive **********/
+
 
 @media(max-width:1400px) {
     .filter-main-wrapper .filter-wrapper {

@@ -42,6 +42,12 @@
                             ?>
                         <span class="description">Select demo registration benefits package. </span></td>
                     </tr>
+                    <tr valign="top">
+                        <th scope="row"><label for="pmsafe_remittance_address">PermaSafe’s Remittance Address</label></th>
+                        <td>
+                            <textarea id="pmsafe_remittance_address" name="pmsafe_remittance_address" cols="50"><?php echo esc_attr(get_option('pmsafe_remittance_address')); ?></textarea>
+                        <span class="description">Here you can set PermaSafe’s Remittance Address. </span></td>
+                    </tr>
                 </tbody>
             </table>
         </div>

@@ -71,6 +71,21 @@ if ($action == 'add') {
 }
 echo '</div>';
 
+echo '<div>';
+echo '<label><strong>Select Remittance Address</strong></label>';
+echo '<select id="select_rem_address" name="select_rem_address">';
+	echo '<option value="">Select Address</option>';
+	echo '<option value="permasafe_directly">Permasafe Directly</option>';
+	echo '<option value="distributor">Distributor</option>';
+	echo '<option value="custom">Custom</option>';
+echo '</select>';
+echo '</div>';
+
+echo '<div id="rem_div" style="display:none;">';
+echo '<label><strong>Remittance Address</strong></label>';
+echo '<textarea id="pmsafe_remittance_address" name="pmsafe_remittance_address" class="widefat"></textarea>';
+echo '</div>';
+
 echo '<input type="submit" id="pmsafe_dealers_submit" value="Save" class="button button-primary button-large btn-disabled">';
 
 echo '</form>';

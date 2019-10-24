@@ -292,6 +292,15 @@ class Permasafe_User_Pro
 
 		$this->loader->add_action('wp_ajax_active_inactive_code_function', $plugin_admin, 'active_inactive_code_function');
 		$this->loader->add_action('wp_ajax_nopriv_active_inactive_code_function', $plugin_admin, 'active_inactive_code_function');
+		
+		$this->loader->add_action('wp_ajax_set_remittance_address_function', $plugin_admin, 'set_remittance_address_function');
+		$this->loader->add_action('wp_ajax_nopriv_set_remittance_address_function', $plugin_admin, 'set_remittance_address_function');
+		
+		$this->loader->add_action('wp_ajax_set_remittance_address_function', $plugin_admin, 'set_remittance_address_function');
+		$this->loader->add_action('wp_ajax_nopriv_set_remittance_address_function', $plugin_admin, 'set_remittance_address_function');
+		
+		$this->loader->add_action('wp_ajax_admin_remittance_report_filter', $plugin_admin, 'admin_remittance_report_filter');
+		$this->loader->add_action('wp_ajax_nopriv_admin_remittance_report_filter', $plugin_admin, 'admin_remittance_report_filter');
 	}
 
 	/**
