@@ -4400,21 +4400,104 @@ class Permasafe_User_Pro_Admin
 		$invitation_id = explode(',', $invitation_ids);
 	
 		if($param == 'pmsafe_invitecode'){
+
+			$bulk_id = get_post_meta($post_id,'_pmsafe_bulk_invitation_id',true);
+			
 			if($is_checked == 'true'){
-				update_post_meta($post_id,'code_active_inactive',1);		
+				update_post_meta($post_id,'code_active_inactive',1);
+				
+				if($bulk_id){
+					$invitation_id = get_post_meta($bulk_id, '_pmsafe_invitation_ids', true);
+					$results = $wpdb->get_results('SELECT post_id, meta_value FROM wp_postmeta WHERE meta_key = "code_active_inactive" AND post_id in ('.$invitation_id.')');	
+					
+					foreach ($results as $key => $value) {
+						$meta_value[] = $value->meta_value;
+					}
+					if(in_array(1,$meta_value) && in_array(0,$meta_value)){
+						update_post_meta($bulk_id,'code_active_inactive',1); // 0 and 1
+					}
+					if(!in_array(0,$meta_value)){
+						update_post_meta($bulk_id,'code_active_inactive',2); // Only 1
+					}
+					if(!in_array(1,$meta_value)){
+						update_post_meta($bulk_id,'code_active_inactive',0); // Only 0
+					}
+				}
 			}
+
 			if($is_checked == 'false'){
+			
 				update_post_meta($post_id,'code_active_inactive',0);
+
+				if($bulk_id){
+					$invitation_id = get_post_meta($bulk_id, '_pmsafe_invitation_ids', true);
+					$results = $wpdb->get_results('SELECT post_id, meta_value FROM wp_postmeta WHERE meta_key = "code_active_inactive" AND post_id in ('.$invitation_id.')');	
+					pr($results);
+					foreach ($results as $key => $value) {
+						$meta_value[] = $value->meta_value;
+					}
+					if(in_array(1,$meta_value) && in_array(0,$meta_value)){
+						update_post_meta($bulk_id,'code_active_inactive',1); // 0 and 1
+					}
+					if(!in_array(0,$meta_value)){
+						update_post_meta($bulk_id,'code_active_inactive',2); // Only 1
+					}
+					if(!in_array(1,$meta_value)){
+						update_post_meta($bulk_id,'code_active_inactive',0); // Only 0
+					}
+				}
 			}
 		
-		}else if($param == 'customers-lists'){
+		}
+		if($param == 'customers-lists'){
+			$get_meta_value = get_user_meta($user_id,'nickname',true);
+			$post_id = get_post_id_by_meta_key_and_value('_pmsafe_invitation_code',$get_meta_value);
+			$bulk_id = get_post_meta($post_id,'_pmsafe_bulk_invitation_id',true);
+			
 			if($is_checked == 'true'){
-				update_user_meta($user_id,'user_active_inactive',1);		
+				update_user_meta($user_id,'user_active_inactive',1);
+				update_post_meta($post_id,'code_active_inactive',1);
+				 if($bulk_id){
+					$invitation_id = get_post_meta($bulk_id, '_pmsafe_invitation_ids', true);
+					$results = $wpdb->get_results('SELECT post_id, meta_value FROM wp_postmeta WHERE meta_key = "code_active_inactive" AND post_id in ('.$invitation_id.')');	
+					
+					foreach ($results as $key => $value) {
+						$meta_value[] = $value->meta_value;
+					}
+					if(in_array(1,$meta_value) && in_array(0,$meta_value)){
+						update_post_meta($bulk_id,'code_active_inactive',1); // 0 and 1
+					}
+					if(!in_array(0,$meta_value)){
+						update_post_meta($bulk_id,'code_active_inactive',2); // Only 1
+					}
+					if(!in_array(1,$meta_value)){
+						update_post_meta($bulk_id,'code_active_inactive',0); // Only 0
+					}
+				}                                                                                                                            
 			}
 			if($is_checked == 'false'){
 				update_user_meta($user_id,'user_active_inactive',0);
+				update_post_meta($post_id,'code_active_inactive',0);
+				 if($bulk_id){
+					$invitation_id = get_post_meta($bulk_id, '_pmsafe_invitation_ids', true);
+					$results = $wpdb->get_results('SELECT post_id, meta_value FROM wp_postmeta WHERE meta_key = "code_active_inactive" AND post_id in ('.$invitation_id.')');	
+					
+					foreach ($results as $key => $value) {
+						$meta_value[] = $value->meta_value;
+					}
+					if(in_array(1,$meta_value) && in_array(0,$meta_value)){
+						update_post_meta($bulk_id,'code_active_inactive',1); // 0 and 1
+					}
+					if(!in_array(0,$meta_value)){
+						update_post_meta($bulk_id,'code_active_inactive',2); // Only 1
+					}
+					if(!in_array(1,$meta_value)){
+						update_post_meta($bulk_id,'code_active_inactive',0); // Only 0
+					}
+				}
 			}
-		}else if($param == 'dealers-lists'){
+		}
+		if($param == 'dealers-lists'){
 			$contact_info = $wpdb->get_results('SELECT wum.user_id,wu.user_email,wu.user_login FROM wp_users wu, wp_usermeta wum WHERE wu.ID = wum.user_id AND wum.meta_key = "contact_dealer_id" AND wum.meta_value =' . $user_id);	
 			
 			$dealer_users = get_user_by('ID',$user_id);
@@ -4465,28 +4548,25 @@ class Permasafe_User_Pro_Admin
 				
 
 			if($is_checked == 'true'){
+
 				update_user_meta($user_id,'user_active_inactive',1);	
+				foreach ($contact_info as $key => $value) {
+					$contact_id = $value->user_id;	
+					update_user_meta($contact_id,'user_active_inactive',1);	
+				}
 				
 				foreach ($bulk_results as $bulk_result) {
 					$post_id = $bulk_result->ID;
 					$invitation_id = get_post_meta($post_id, '_pmsafe_invitation_ids', true);
 					$invitation_id = explode(',', $invitation_id);
-					
 					$data = pmsafe_unused_code_count($post_id);
-					if($data['used'] == 0 || $data['used'] == $data['total']){
-						update_post_meta($post_id,'code_active_inactive',2);
-						foreach ($invitation_id as $id) {
-							update_post_meta($id,'code_active_inactive',1);
-							 
-						}
-					}else{
-						update_post_meta($post_id,'code_active_inactive',1);
-						foreach ($invitation_id as $id) {
-							
-								update_post_meta($id,'code_active_inactive',1);
-						}
+					foreach ($invitation_id as $id) {
+						update_post_meta($id,'code_active_inactive',1);
+						// $meta_value[] = get_post_meta($id,'code_active_inactive',true) ;
 					}
+					update_post_meta($post_id,'code_active_inactive',2);
 				}
+
 				foreach ($invite_results as $invite_result) {
 					$post_id = $invite_result->ID;
 					$code_status = get_post_meta($id, '_pmsafe_code_status', true);
@@ -4494,10 +4574,7 @@ class Permasafe_User_Pro_Admin
 						update_post_meta($post_id,'code_active_inactive',1);
 					}
 				}
-				 foreach ($contact_info as $key => $value) {
-					$contact_id = $value->user_id;	
-					update_user_meta($contact_id,'user_active_inactive',1);	
-				 }
+				 
 			}
 			if($is_checked == 'false'){
 				update_user_meta($user_id,'user_active_inactive',0);
@@ -4509,30 +4586,27 @@ class Permasafe_User_Pro_Admin
 					$post_id = $bulk_result->ID;
 					$invitation_id = get_post_meta($post_id, '_pmsafe_invitation_ids', true);
 					$invitation_id = explode(',', $invitation_id);
+					$meta_value = array();
+					foreach ($invitation_id as $id) {
+						$code_status = get_post_meta($id, '_pmsafe_code_status', true);
 					
-					$data = pmsafe_unused_code_count($post_id);
-					if($data['used'] == 0){
-						update_post_meta($post_id,'code_active_inactive',0);
-						foreach ($invitation_id as $id) {
+						if($code_status == 'available'){
 							update_post_meta($id,'code_active_inactive',0);
-							 
 						}
-					}else if($data['used'] == $data['total']){
-						update_post_meta($post_id,'code_active_inactive',2);
-						foreach ($invitation_id as $id) {
-							update_post_meta($id,'code_active_inactive',1);
-							 
-						}
-					}else{
-						update_post_meta($post_id,'code_active_inactive',1);
-						foreach ($invitation_id as $id) {
-							$code_status = get_post_meta($id, '_pmsafe_code_status', true);
-							if ($code_status != 'used') {
-								update_post_meta($id,'code_active_inactive',0);
-							}
-						}
+						$meta_value[] = get_post_meta($id,'code_active_inactive',true) ;
+					}
+
+					if(in_array(1,$meta_value) && in_array(0,$meta_value)){
+						update_post_meta($post_id,'code_active_inactive',1); // 0 and 1
+					}
+					if(!in_array(0,$meta_value)){
+						update_post_meta($post_id,'code_active_inactive',2); // Only 1
+					}
+					if(!in_array(1,$meta_value)){
+						update_post_meta($post_id,'code_active_inactive',0); // Only 0
 					}
 				}
+				
 				foreach ($invite_results as $invite_result) {
 					$post_id = $invite_result->ID;
 					$code_status = get_post_meta($id, '_pmsafe_code_status', true);
@@ -4541,7 +4615,8 @@ class Permasafe_User_Pro_Admin
 					}
 				}
 			}
-		}else if($param == 'distributors-lists'){
+		}
+		if($param == 'distributors-lists'){
 			$contact_info = $wpdb->get_results('SELECT wum.user_id,wu.user_email,wu.user_login FROM wp_users wu, wp_usermeta wum WHERE wu.ID = wum.user_id AND wum.meta_key = "contact_distributor_id" AND wum.meta_value =' . $user_id);
 			if($is_checked == 'true'){
 					update_user_meta($user_id,'user_active_inactive',1);	
@@ -4558,29 +4633,6 @@ class Permasafe_User_Pro_Admin
 				}
 			}
 		}
-		else{
-
-			if($is_checked == 0){
-				update_post_meta($post_id,'code_active_inactive',0);
-				foreach ($invitation_id as $id) {
-					update_post_meta($id,'code_active_inactive',0);
-				}
-			
-			}
-			if($is_checked == 1){
-				update_post_meta($post_id,'code_active_inactive',1);
-			}
-			if($is_checked == 2){
-				update_post_meta($post_id,'code_active_inactive',2);
-				foreach ($invitation_id as $id) {
-					update_post_meta($id,'code_active_inactive',1);		
-				}
-			
-			}
-			
-			
-		}
-		
 		die;
 	}
 

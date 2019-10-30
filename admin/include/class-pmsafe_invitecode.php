@@ -655,32 +655,11 @@ class PMSafe_Invitation_Code {
                       
                         $bulk_id = get_post_meta($post_id,'_pmsafe_bulk_invitation_id',true);
                         $bulk_active_inactive = get_post_meta($bulk_id,'code_active_inactive',true);
-                        if($bulk_id != $post_id){
-                            if($bulk_active_inactive == 0){
-                                echo '<input type="checkbox"  disabled class="jtoggler" data-id="'.$post_id.'" data-val="'.$is_active.'">';
-                            
-                            }
-                            if($bulk_active_inactive == 2){
-                                echo '<input type="checkbox" disabled checked class="jtoggler" data-id="'.$post_id.'" data-val="'.$is_active.'">';
-                            }
-                            if($bulk_active_inactive == 1){
-                                if($is_active == 0){
-                                    echo '<input type="checkbox" class="jtoggler" data-id="'.$post_id.'" data-val="'.$is_active.'">';
-                                }
-                                if($is_active == 1){
-                                    echo '<input type="checkbox" checked class="jtoggler" data-id="'.$post_id.'" data-val="'.$is_active.'">';
-                                }
-                            }
-                        }else{
-                            $is_invite = get_post_meta($post_id,'_pmsafe_is_invite_code',true);
-                            if($is_invite == 1){
-                                if($is_active == 0){
-                                    echo '<input type="checkbox" class="jtoggler" data-id="'.$post_id.'" data-val="'.$is_active.'">';
-                                }
-                                if($is_active == 1){
-                                    echo '<input type="checkbox" checked class="jtoggler" data-id="'.$post_id.'" data-val="'.$is_active.'">';
-                                }
-                            }
+                        if($is_active == 1){
+                            echo '<input type="checkbox" checked  class="jtoggler" data-id="'.$post_id.'" data-val="'.$is_active.'">';
+                        }
+                        if($is_active == 0){
+                            echo '<input type="checkbox" class="jtoggler" data-id="'.$post_id.'" data-val="'.$is_active.'">';
                         }
                 break;
             }

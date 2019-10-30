@@ -2,10 +2,10 @@
     display: none !important;
 }
 
-.jtoggler:disabled+.jtoggler-control,
+/* .jtoggler:disabled+.jtoggler-control,
 .jtoggler:checked:disabled+.jtoggler-control {
     background-color: rgba(0, 0, 0, 0.05);
-}
+} */
 
 .jtoggler:disabled+.jtoggler-control .jtoggler-handle {
     background-color: #ccc;

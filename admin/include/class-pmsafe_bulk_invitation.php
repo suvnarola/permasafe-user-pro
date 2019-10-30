@@ -996,7 +996,7 @@ class PMSafe_Bulk_Invitation{
                 break;
                 case 'active_inactive':// 0 = Inactive 1 = Mixed 2 = Active
                         $is_active = get_post_meta($post_id,'code_active_inactive',true);
-                        echo '<input type="checkbox" class="jtoggler" data-id="'.$post_id.'" data-val="'.$is_active.'" data-jtmulti-state>';
+                        echo '<input type="checkbox" class="jtoggler" disabled data-id="'.$post_id.'" data-val="'.$is_active.'" data-jtmulti-state>';
                 break;
                
             }
