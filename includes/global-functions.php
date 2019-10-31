@@ -699,7 +699,7 @@ function pmsafe_warranty_card($user_id, $membercode)
     $html .= '</div>';
     $html .= '<h2 class="heading">IF YOU HAVE ANY QUESTIONS REGARDING THIS WARRANTY OR FILING<br/> A CLAIM CONTACT WARRANTOR AT: (866) 372-9622</h2>';
     $html .= '<span class="head-block">I. DEFINITIONS</span>';
-    $html .= '<p><b><u>ADMINISTRATOR/WARRANTOR ("WE," "US," "OUR"):</u> PERMASAFE PROTECTIVE COATINGS ("PPC"), 4613 North University Drive #470, Coral Springs, FL 33067, 866-372-9622,</b> who is the <b>Warrantor</b> to this <b>Warranty</b>, or any successor Warrantor designated by <b>PPC</b> from time to time.</p>';
+    $html .= '<p><b><u>ADMINISTRATOR/WARRANTOR ("WE," "US," "OUR"):</u> PERMASAFE PROTECTIVE COATINGS ("PPC"), 6855 Lyons Technology Cir STE 18, Coconut Creek, FL 33073, 866-372-9622,</b> who is the <b>Warrantor</b> to this <b>Warranty</b>, or any successor Warrantor designated by <b>PPC</b> from time to time.</p>';
     $html .= '<p><b><u>DEALER:</u></b> the dealership identified above under <b>Dealership Information.</b></p>';
     $html .= '<p><b><u>YOU OR YOUR:</u></b> the customer identified above under <b>Customer Information.</p>';
 
@@ -938,7 +938,7 @@ function sales_person_generate_pdf($pdf_array)
     $html .= '</div>';
     $html .= '<div style="font-family: Libre Franklin;color: #000;font-size: 12px;text-align: center;font-weight: bold;">IF YOU HAVE ANY QUESTIONS REGARDING THIS WARRANTY OR FILING<br/>A CLAIM CONTACT WARRANTOR AT: (866) 372-9622</div>';
     $html .= '<div style="font-family: Libre Franklin;background: #000;width: 100%;display: block;text-align: center;color: #fff;font-size: 13px;">I. DEFINITIONS</div>';
-    $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;"><b style="font-size: 12px;color: #000;"><u style="font-size: 12px;color: #000;">ADMINISTRATOR/WARRANTOR ("WE," "US," "OUR"):</u> PERMASAFE PROTECTIVE COATINGS ("PPC"), 4613 North University Drive #470, Coral Springs, FL 33067, 866-372-9622,</b> who is the <b style="font-size: 12px;color: #000;">Warrantor</b> to this <b style="font-size: 12px;color: #000;">Warranty</b>, or any successor Warrantor designated by <b style="font-size: 12px;color: #000;">PPC</b> from time to time.</div>';
+    $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;"><b style="font-size: 12px;color: #000;"><u style="font-size: 12px;color: #000;">ADMINISTRATOR/WARRANTOR ("WE," "US," "OUR"):</u> PERMASAFE PROTECTIVE COATINGS ("PPC"), 6855 Lyons Technology Cir STE 18, Coconut Creek, FL 33073, 866-372-9622,</b> who is the <b style="font-size: 12px;color: #000;">Warrantor</b> to this <b style="font-size: 12px;color: #000;">Warranty</b>, or any successor Warrantor designated by <b style="font-size: 12px;color: #000;">PPC</b> from time to time.</div>';
     $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;"><b style="font-size: 12px;color: #000;"><u style="font-size: 12px;color: #000;">DEALER:</u></b> the dealership identified above under <b style="font-size: 12px;color: #000;">Dealership Information.</b></div>';
     $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;"><b style="font-size: 12px;color: #000;"><u style="font-size: 12px;color: #000;">YOU OR YOUR:</u></b> the customer identified above under <b style="font-size: 12px;color: #000;">Customer Information.</b></div>';
 
@@ -1106,7 +1106,7 @@ function pmsafe_sales_person_warranty_card($array, $pdf_link)
     $html .= '</div>';
     $html .= '<h2 class="heading">IF YOU HAVE ANY QUESTIONS REGARDING THIS WARRANTY OR HOW TO FILE A CLAIM CONTACTWARRANTOR: (866) 372-9622</h2>';
     $html .= '<span class="head-block">I. DEFINITIONS</span>';
-    $html .= '<p><b><u>WARRANTOR ("WE," "US," "OUR"):</u> PERMASAFE PROTECTIVE COATINGS ("PPC"), 4613 North University Drive #470, Coral Springs, FL 33067, 866-372-9622,</b> who is the <b>Warrantor</b> to this <b>Warranty</b>, or any successor Warrantor designated by <b>PPC</b> from time to time.</p>';
+    $html .= '<p><b><u>WARRANTOR ("WE," "US," "OUR"):</u> PERMASAFE PROTECTIVE COATINGS ("PPC"), 6855 Lyons Technology Cir STE 18, Coconut Creek, FL 33073, 866-372-9622,</b> who is the <b>Warrantor</b> to this <b>Warranty</b>, or any successor Warrantor designated by <b>PPC</b> from time to time.</p>';
     $html .= '<p><b><u>DEALER:</u></b> the authorized retail seller of PermaSafe Products.</p>';
     $html .= '<p><b><u>YOU OR YOUR:</u></b> the person listed in the Customer Information section on the Limited Warranty Registration.</p>';
 
@@ -1316,7 +1316,7 @@ function pmsafe_warranty_card_pdf($user_id, $member_code)
     $html .= '</div>';
     $html .= '<div style="font-family: Libre Franklin;color: #000;font-size: 12px;text-align: center;font-weight: bold;">IF YOU HAVE ANY QUESTIONS REGARDING THIS WARRANTY OR FILING<br/>A CLAIM CONTACT WARRANTOR AT: (866) 372-9622</div>';
     $html .= '<div style="font-family: Libre Franklin;background: #000;width: 100%;display: block;text-align: center;color: #fff;font-size: 13px;">I. DEFINITIONS</div>';
-    $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;"><b style="font-size: 12px;color: #000;"><u style="font-size: 12px;color: #000;">ADMINISTRATOR/WARRANTOR ("WE," "US," "OUR"):</u> PERMASAFE PROTECTIVE COATINGS ("PPC"), 4613 North University Drive #470, Coral Springs, FL 33067, 866-372-9622,</b> who is the <b style="font-size: 12px;color: #000;">Warrantor</b> to this <b style="font-size: 12px;color: #000;">Warranty</b>, or any successor Warrantor designated by <b style="font-size: 12px;color: #000;">PPC</b> from time to time.</div>';
+    $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;"><b style="font-size: 12px;color: #000;"><u style="font-size: 12px;color: #000;">ADMINISTRATOR/WARRANTOR ("WE," "US," "OUR"):</u> PERMASAFE PROTECTIVE COATINGS ("PPC"), 6855 Lyons Technology Cir STE 18, Coconut Creek, FL 33073, 866-372-9622,</b> who is the <b style="font-size: 12px;color: #000;">Warrantor</b> to this <b style="font-size: 12px;color: #000;">Warranty</b>, or any successor Warrantor designated by <b style="font-size: 12px;color: #000;">PPC</b> from time to time.</div>';
     $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;"><b style="font-size: 12px;color: #000;"><u style="font-size: 12px;color: #000;">DEALER:</u></b> the dealership identified above under <b style="font-size: 12px;color: #000;">Dealership Information.</b></div>';
     $html .= '<div style="font-family: Libre Franklin;font-size: 12px;color: #000;"><b style="font-size: 12px;color: #000;"><u style="font-size: 12px;color: #000;">YOU OR YOUR:</u></b> the customer identified above under <b style="font-size: 12px;color: #000;">Customer Information.</b></div>';
 
