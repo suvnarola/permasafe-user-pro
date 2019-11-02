@@ -137,6 +137,15 @@ if ($action == 'view_upgraded_policy') {
             echo '<input type="radio" name="show_hide" id="cost_hide" value="no_cost">No Pricing';
             echo '</div>';
         echo '</div>';
+
+        echo '<div class="radio-wrap">';
+            echo '<div class="">';
+            echo '<label>Active/Inactive Members</label>';
+            echo '<input type="radio" name="active_inactive" id="all_active_inactive" value="all_active_inactive">All Members (Active & Inactive Members)';
+            echo '<input type="radio" name="active_inactive" id="only_active" value="only_active">Active Members Only';
+            echo '<input type="radio" name="active_inactive" id="only_inactive" value="only_inactive">Inactive Members Only';
+            echo '</div>';
+        echo '</div>';
     echo '</div>';
 
     echo '<div class="reports-btn-wrap">';
@@ -192,6 +201,10 @@ echo '<th>';
 echo 'Distributor Cost';
 echo '</th>';
 
+echo '<th>';
+echo 'Active/Inactive';
+echo '</th>';
+
 echo '</tr>';
 echo '</thead>';
 
@@ -214,7 +227,7 @@ foreach ($distributors as $distributor) {
     $distributor_id = $distributor->ID;
     $distributor_name = get_user_meta($distributor_id, 'distributor_name', true);
     echo '<tr style="background-color: #A0CEEF;font-weight: 700;color: #000000;">';
-    echo '<td>' . $distributor_name . '</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>';
+    echo '<td>' . $distributor_name . '</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>';
     if ($action == 'view_upgraded_policy' && isset($_GET['dealer'])) {
         $dealers = get_users(array('search' => $_GET['dealer']));
     } else {
@@ -234,7 +247,7 @@ foreach ($distributors as $distributor) {
         $dealer_arr = get_code_by_dealer_login($dealer_login);
         $dealer_name = get_user_meta($dealer_id, 'dealer_name', true);
         echo '<tr style="background-color: #B5D777;font-weight: 700;color: #000000;">';
-        echo '<td>' . $dealer_name . '</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>';
+        echo '<td>' . $dealer_name . '</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>';
         echo '</tr>';
         $membership_results = $wpdb->get_results('SELECT post_id FROM wp_postmeta WHERE meta_key = "is_upgraded" and meta_value ="1"');
         foreach ($membership_results as $str) {
@@ -329,6 +342,10 @@ foreach ($distributors as $distributor) {
 
                     echo '<td style="text-align:center;">';
                     echo (($distributor_cost) ? '$' . $distributor_cost : '-');
+                    echo '</td>';
+
+                    echo '<td class="text-center">';
+                    echo  ((get_user_meta($user_id,'user_active_inactive',true)==1)?'<span style="color:#008000;">Active</span>':'<span style="color:#ff0000;">Inactive</span>');
                     echo '</td>';
 
                     echo '</tr>';

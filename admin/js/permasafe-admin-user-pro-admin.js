@@ -1789,7 +1789,6 @@ jQuery(document).ready(function () {
             [17, "desc"]
         ],
         orderCellsTop: true,
-        fixedHeader: true,
         columnDefs: [{
             type: 'natural-nohtml',
             targets: 0
@@ -2280,7 +2279,6 @@ jQuery(document).ready(function () {
                     dom: 'Bfrtip',
                     "pagingType": "input",
                     orderCellsTop: true,
-                    fixedHeader: true,
                     buttons: [{
                         extend: 'csv',
                         //Name the CSV
@@ -2422,7 +2420,6 @@ jQuery(document).ready(function () {
                     dom: 'Bfrtip',
                     "pagingType": "input",
                     orderCellsTop: true,
-                    fixedHeader: true,
                     buttons: [{
                         extend: 'csv',
                         //Name the CSV
@@ -2483,7 +2480,7 @@ jQuery(document).ready(function () {
         var select = jQuery('#quick_filters').val();
         var dealer_name = jQuery('#filter_dealers').val();
         var distributor_name = jQuery('#filter_distributors').val();
-
+        var members_type = jQuery("input[name='active_inactive']:checked").val();
 
         if (jQuery('#quick_filters').val().trim() == "0") {
             jQuery('#quick_filters').css({
@@ -2503,8 +2500,8 @@ jQuery(document).ready(function () {
             datepicker2: datepicker2,
             select: select,
             dealer_name: dealer_name,
-            distributor_name: distributor_name
-
+            distributor_name: distributor_name,
+            members_type: members_type
         };
 
         jQuery('.perma-admin-loader').show();
@@ -2528,24 +2525,24 @@ jQuery(document).ready(function () {
                     if (jQuery("input:radio").is(":checked")) {
                         if (radioValue == 'hide_dealer') {
                             jQuery('.dealer-hide').addClass('nisl-pdf-link');
-                            var columntarget = '0, 1, 2, 3, 4, 6';
+                            var columntarget = '0, 1, 2, 3, 4, 6, 7';
                         }
                         if (radioValue == 'hide_distributor') {
                             jQuery('.distributor-hide').addClass('nisl-pdf-link');
-                            var columntarget = '0, 1, 2, 3, 4, 5';
+                            var columntarget = '0, 1, 2, 3, 4, 5, 7';
                         }
                         if (radioValue == 'no_cost') {
                             jQuery('.dealer-hide').addClass('nisl-pdf-link');
                             jQuery('.distributor-hide').addClass('nisl-pdf-link');
-                            var columntarget = '0, 1, 2, 3, 4';
+                            var columntarget = '0, 1, 2, 3, 4, 7';
                         }
                         if (radioValue == 'show_cost') {
                             jQuery('.dealer-hide').removeClass('nisl-pdf-link');
                             jQuery('.distributor-hide').removeClass('nisl-pdf-link');
-                            var columntarget = '0, 1, 2, 3, 4, 5, 6';
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7';
                         }
                     } else {
-                        var columntarget = '0, 1, 2, 3, 4, 5, 6';
+                        var columntarget = '0, 1, 2, 3, 4, 5, 6, 7';
                     }
 
                     // jQuery('.tbl-result-wrap').html(response);
@@ -2556,13 +2553,12 @@ jQuery(document).ready(function () {
                         "pageLength": 20,
                         "ordering": false,
                         'columnDefs': [{
-                            'targets': [0, 1, 2, 3, 4, 5, 6],
+                            'targets': [0, 1, 2, 3, 4, 5, 6, 7],
                             /* column index */
                             'orderable': false,
                             /* true or false */
                         }],
                         orderCellsTop: true,
-                        fixedHeader: true,
                         buttons: [{
                             extend: 'csv',
                             //Name the CSV
@@ -2847,10 +2843,9 @@ jQuery(document).ready(function () {
         "pagingType": "input",
         "pageLength": 20,
         orderCellsTop: true,
-        fixedHeader: true,
         "ordering": false,
         'columnDefs': [{
-            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8],
+            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
             /* column index */
             'orderable': false,
             /* true or false */
@@ -2861,7 +2856,7 @@ jQuery(document).ready(function () {
             //Name the CSV
             filename: 'Upgrade Report',
             exportOptions: {
-                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
             },
 
         },
@@ -2872,7 +2867,7 @@ jQuery(document).ready(function () {
             orientation: 'landscape',
             pageSize: 'LEGAL',
             exportOptions: {
-                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
             },
             title: 'UPGRADE REPORT'
         },
@@ -2881,7 +2876,7 @@ jQuery(document).ready(function () {
             text: 'EXCEL',
             filename: 'Upgrade Report',
             exportOptions: {
-                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
             },
             title: 'UPGRADE REPORT'
 
@@ -2892,7 +2887,7 @@ jQuery(document).ready(function () {
             filename: 'Upgrade Report',
 
             exportOptions: {
-                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
             },
             title: 'UPGRADE REPORT',
             customize: function (win) {
@@ -2929,6 +2924,7 @@ jQuery(document).ready(function () {
         var distributor = jQuery('#filter_distributors').val();
         var policy = jQuery('#policy').val();
         var package = jQuery('#benefit_packages').val();
+        var members_type = jQuery("input[name='active_inactive']:checked").val();
         var login = jQuery('#membership_login').val();
 
 
@@ -2943,6 +2939,7 @@ jQuery(document).ready(function () {
                 dealer: dealer,
                 distributor: distributor,
                 policy: policy,
+                members_type: members_type,
                 package: package
             }
         } else {
@@ -2953,6 +2950,7 @@ jQuery(document).ready(function () {
                 datepicker2: datepicker2,
                 policy: policy,
                 package: package,
+                members_type: members_type,
                 login: login
             }
 
@@ -2991,24 +2989,24 @@ jQuery(document).ready(function () {
                     if (jQuery("input:radio").is(":checked")) {
                         if (radioValue == 'hide_dealer') {
                             jQuery('.dealer-hide').addClass('nisl-pdf-link');
-                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 8';
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 8, 9';
                         }
                         if (radioValue == 'hide_distributor') {
                             jQuery('.distributor-hide').addClass('nisl-pdf-link');
-                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7';
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 9';
                         }
                         if (radioValue == 'no_cost') {
                             jQuery('.dealer-hide').addClass('nisl-pdf-link');
                             jQuery('.distributor-hide').addClass('nisl-pdf-link');
-                            var columntarget = '0, 1, 2, 3, 4, 5, 6';
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 9';
                         }
                         if (radioValue == 'show_cost') {
                             jQuery('.dealer-hide').removeClass('nisl-pdf-link');
                             jQuery('.distributor-hide').removeClass('nisl-pdf-link');
-                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8';
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8, 9';
                         }
                     } else {
-                        var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8';
+                        var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8, 9';
                     }
                     jQuery('#membership_date_table').DataTable({
                         dom: 'Bfrtip',
@@ -3016,10 +3014,9 @@ jQuery(document).ready(function () {
                         responsive: true,
                         "pageLength": 20,
                         orderCellsTop: true,
-                        fixedHeader: true,
                         "ordering": false,
                         'columnDefs': [{
-                            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8],
+                            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
                             /* column index */
                             'orderable': false,
                             /* true or false */
@@ -4194,7 +4191,6 @@ jQuery(document).ready(function () {
         responsive: true,
         "pagingType": "input",
         orderCellsTop: true,
-        fixedHeader: true,
         "order": [
             [1, "asc"]
         ],
@@ -4260,7 +4256,6 @@ jQuery(document).ready(function () {
         "pagingType": "input",
         responsive: true,
         orderCellsTop: true,
-        fixedHeader: true,
         "order": [
             [1, "asc"]
         ],
@@ -4366,12 +4361,14 @@ jQuery(document).ready(function () {
         var billing_date1 = jQuery('#billing_datepicker1').val();
         var billing_date2 = jQuery('#billing_datepicker2').val();
         var dealers = jQuery('#pmsafe_dealers').val();
+        var members_type = jQuery("input[name='active_inactive']:checked").val();
 
         var data = {
             action: 'billing_report_function',
             billing_date1: billing_date1,
             billing_date2: billing_date2,
-            dealers: dealers
+            dealers: dealers,
+            members_type: members_type
         };
         jQuery('.perma-admin-loader').show();
         jQuery.ajax({
@@ -4388,10 +4385,9 @@ jQuery(document).ready(function () {
                     "pagingType": "input",
                     "pageLength": 20,
                     orderCellsTop: true,
-                    fixedHeader: true,
                     "ordering": false,
                     'columnDefs': [{
-                        'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                        'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
                         /* column index */
                         'orderable': false,
                         /* true or false */
@@ -4402,7 +4398,7 @@ jQuery(document).ready(function () {
                         //Name the CSV
                         filename: 'Billing Report',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
                         },
                     },
                     {
@@ -4412,7 +4408,7 @@ jQuery(document).ready(function () {
                         orientation: 'landscape',
                         pageSize: 'LEGAL',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
                         },
                     },
                     {
@@ -4420,7 +4416,7 @@ jQuery(document).ready(function () {
                         text: 'EXCEL',
                         filename: 'Billing Report',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
                         },
                     },
                     {
@@ -4429,7 +4425,7 @@ jQuery(document).ready(function () {
                         filename: 'Billing Report',
 
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                            columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
                         },
                         customize: function (win) {
                             jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
@@ -4635,6 +4631,8 @@ jQuery(document).ready(function () {
         var policy = jQuery('#policy').val();
         var package = jQuery('#benefit_packages').val();
         var registration_type = jQuery("input[name='registration_type']:checked").val();
+        var members_type = jQuery("input[name='active_inactive']:checked").val();
+
         var data = {
             action: 'admin_remittance_report_filter',
             datepicker1: datepicker1,
@@ -4643,7 +4641,8 @@ jQuery(document).ready(function () {
             distributor: distributor,
             policy: policy,
             package: package,
-            registration_type: registration_type
+            registration_type: registration_type,
+            members_type: members_type
         }
         if (policy != '' && package == '') {
             jQuery('#benefit_packages').css({
@@ -4677,25 +4676,25 @@ jQuery(document).ready(function () {
                     if (jQuery("input[name='show_hide']:radio").is(":checked")) {
                         if (radioValue == 'hide_dealer') {
                             jQuery('.dealer-hide').addClass('nisl-pdf-link');
-                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13';
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13,14';
                         }
                         if (radioValue == 'hide_distributor') {
                             jQuery('.distributor-hide').addClass('nisl-pdf-link');
-                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10';
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,14';
                         }
                         if (radioValue == 'no_cost') {
                             jQuery('.dealer-hide').addClass('nisl-pdf-link');
                             jQuery('.distributor-hide').addClass('nisl-pdf-link');
-                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7';
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7,14';
                         }
                         if (radioValue == 'show_cost') {
                             jQuery('.dealer-hide').removeClass('nisl-pdf-link');
                             jQuery('.distributor-hide').removeClass('nisl-pdf-link');
-                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13';
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14';
                         }
                     } else {
 
-                        var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13';
+                        var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14';
                     }
                     var address_show_hide = jQuery("input[name='address_show_hide']:checked").val();
                     if (jQuery("input[name='address_show_hide']:radio").is(":checked")) {
@@ -4711,10 +4710,9 @@ jQuery(document).ready(function () {
                         responsive: true,
                         "pageLength": 20,
                         orderCellsTop: true,
-                        fixedHeader: true,
                         "ordering": false,
                         'columnDefs': [{
-                            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+                            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
                             /* column index */
                             'orderable': false,
                             /* true or false */
@@ -4724,7 +4722,7 @@ jQuery(document).ready(function () {
 
                                 var me = jQuery(row).closest('tr').attr('class');
                                 jQuery('.' + me + ' td:not(.saveme)').css('display', 'none');
-                                jQuery('td:eq(1)', row).attr('colspan', 13);
+                                jQuery('td:eq(1)', row).attr('colspan', 14);
                                 jQuery('.' + me + ' .adr_rmv').css('color', 'rgb(188, 188, 188)');
                             }
                         },

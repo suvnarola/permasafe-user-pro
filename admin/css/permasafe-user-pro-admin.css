@@ -1231,6 +1231,11 @@ a#back_link {
 #remittance_report_table_wrapper table.dataTable thead th:nth-child(2) {width: 90px !important;}
 tr.code-row td {border-right: 1px solid #e7e7e7;border-bottom: 1px solid #e7e7e7;}
 .code-row td:first-child {border-left: 1px solid #e7e7e7;}
+table#billing_info_table.dataTable tbody td:nth-child(3) {width: 70px !important;white-space: initial;word-break: break-all;}
+table#billing_info_table thead th:nth-child(3) {width: 70px !important;}
+input#billing_report_submit {margin-left: 195px;margin-bottom: 30px;border: 0;padding: 7px 20px;}
+table#membership_date_table.dataTable thead th {padding: 10px 14px;}
+
 
 /******** Responsive **********/
 

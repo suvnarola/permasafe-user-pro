@@ -105,6 +105,15 @@ echo '<div class="filter-wrap">';
             echo '</div>';
         echo '</div>';
 
+        echo '<div class="radio-wrap">';
+            echo '<div class="">';
+            echo '<label>Active/Inactive Members</label>';
+            echo '<input type="radio" name="active_inactive" id="all_active_inactive" value="all_active_inactive">All Members (Active & Inactive Members)';
+            echo '<input type="radio" name="active_inactive" id="only_active" value="only_active">Active Members Only';
+            echo '<input type="radio" name="active_inactive" id="only_inactive" value="only_inactive">Inactive Members Only';
+            echo '</div>';
+        echo '</div>';
+
     echo '</div>';
 
     echo '<div class="reports-btn-wrap">';
