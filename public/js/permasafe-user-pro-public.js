@@ -1910,46 +1910,57 @@ jQuery(document).ready(function () {
     });
 
 
-    var mebership_info_table = jQuery('#mebership_info_table').DataTable({
+    var membership_info_table = jQuery('#membership_info_table').DataTable({
+
         dom: 'Bfrtip',
         responsive: true,
         orderCellsTop: true,
-        fixedHeader: true,
+        "pagingType": "input",
+        "pageLength": 20,
+        "ordering": false,
+        'columnDefs': [{
+            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+            /* column index */
+            'orderable': false,
+            /* true or false */
+        }],
         buttons: [
             {
-
                 extend: 'csv',
                 //Name the CSV
-                filename: 'mebership_info',
+                filename: 'Upgrade Report',
                 exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5]
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
                 },
+                title: 'UPGRADE REPORT'
             },
             {
                 extend: 'pdfHtml5',
                 text: 'PDF',
-                filename: 'mebership_info',
+                filename: 'Upgrade Report',
                 orientation: 'landscape',
                 pageSize: 'LEGAL',
                 exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5]
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
                 },
+                title: 'UPGRADE REPORT'
             },
             {
                 extend: 'excel',
                 text: 'EXCEL',
-                filename: 'mebership_info',
+                filename: 'Upgrade Report',
                 exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5]
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
                 },
+                title: 'UPGRADE REPORT'
             },
             {
                 extend: 'print',
                 text: 'PRINT',
-                filename: 'mebership_info',
-
+                filename: 'Upgrade Report',
+                title: 'UPGRADE REPORT',
                 exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5]
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
                 },
                 customize: function (win) {
                     jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
@@ -1967,7 +1978,7 @@ jQuery(document).ready(function () {
         onSelect: function (date) {
             var date2 = jQuery('#membership_datepicker1').datepicker('getDate');
             date2.setDate(date2.getDate() + 1);
-            jQuery('#membership_datepicker2').datepicker('setDate', date2);
+            // jQuery('#membership_datepicker2').datepicker('setDate', date2);
             //sets minDate to dt1 date + 1
             jQuery('#membership_datepicker2').datepicker('option', 'minDate', date2);
         }
@@ -1982,6 +1993,7 @@ jQuery(document).ready(function () {
         var datepicker2 = jQuery('#membership_datepicker2').val();
         var view_membership = jQuery('#view_membership').val();
         var policy = jQuery('#policy').val();
+        var members_type = jQuery("input[name='active_inactive']:checked").val();
         var package = jQuery('#benefit_packages').val();
 
         if (view_membership != undefined) {
@@ -1991,6 +2003,7 @@ jQuery(document).ready(function () {
                 datepicker1: datepicker1,
                 datepicker2: datepicker2,
                 policy: policy,
+                members_type: members_type,
                 package: package
             }
         } else {
@@ -2000,6 +2013,7 @@ jQuery(document).ready(function () {
                 datepicker1: datepicker1,
                 datepicker2: datepicker2,
                 policy: policy,
+                members_type: members_type,
                 package: package
             }
         }
@@ -2012,7 +2026,6 @@ jQuery(document).ready(function () {
             jQuery('#benefit_packages').css({ 'color': '#333333' });
         }
         if (!validflag) {
-            jQuery('.perma-admin-loader').hide();
             return validflag;
         } else {
             jQuery('.perma-loader').show();
@@ -2023,58 +2036,89 @@ jQuery(document).ready(function () {
                 dataType: 'html',
                 success: function (response) {
                     jQuery('.perma-loader').hide();
+                    var obj = jQuery.parseJSON(response);
                     jQuery('.membership-result-wrap').html('');
-                    jQuery('.membership-result-wrap').html(response);
-                    jQuery('#mebership_date_table').DataTable({
+
+                    jQuery('.membership-result-wrap').html('<h3 style="text-align:center;">' + obj.toptitle + '</h3>' + obj.dttable);
+                    var radioValue = jQuery("input[name='show_hide']:checked").val();
+                    if (jQuery("input:radio").is(":checked")) {
+                        if (radioValue == 'hide_dealer') {
+                            jQuery('.dealer-hide').addClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 9';
+                        }
+                        if (radioValue == 'hide_distributor') {
+                            jQuery('.distributor-hide').addClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8';
+                        }
+                        if (radioValue == 'no_cost') {
+                            jQuery('.dealer-hide').addClass('nisl-pdf-link');
+                            jQuery('.distributor-hide').addClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6,7';
+                        }
+                        if (radioValue == 'show_cost') {
+                            jQuery('.dealer-hide').removeClass('nisl-pdf-link');
+                            jQuery('.distributor-hide').removeClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8, 9';
+                        }
+                    } else {
+                        var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8, 9';
+                    }
+
+                    jQuery('#membership_date_table').DataTable({
                         dom: 'Bfrtip',
+                        "pagingType": "input",
                         responsive: true,
+                        "pageLength": 20,
                         orderCellsTop: true,
-                        fixedHeader: true,
-                        buttons: [
-                            {
+                        "ordering": false,
+                        'columnDefs': [{
+                            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                            /* column index */
+                            'orderable': false,
+                            /* true or false */
+                        }],
+                        buttons: [{
 
-                                extend: 'csv',
-                                //Name the CSV
-                                filename: 'mebership_info',
-                                exportOptions: {
-                                    columns: [0, 1, 2, 3, 4, 5]
-                                },
+                            extend: 'csv',
+                            //Name the CSV
+                            filename: obj.toptitle,
+                            exportOptions: {
+                                columns: [columntarget]
                             },
-                            {
-                                extend: 'pdfHtml5',
-                                text: 'PDF',
-                                filename: 'mebership_info',
-                                orientation: 'landscape',
-                                pageSize: 'LEGAL',
-                                exportOptions: {
-                                    columns: [0, 1, 2, 3, 4, 5]
-                                },
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'PDF',
+                            filename: obj.toptitle,
+                            orientation: 'landscape',
+                            pageSize: 'LEGAL',
+                            exportOptions: {
+                                columns: [columntarget]
                             },
-                            {
-                                extend: 'excel',
-                                text: 'EXCEL',
-                                filename: 'mebership_info',
-                                exportOptions: {
-                                    columns: [0, 1, 2, 3, 4, 5]
-                                },
+                            title: obj.toptitle
+                        },
+                        {
+                            extend: 'excel',
+                            text: 'EXCEL',
+                            filename: obj.toptitle,
+                            exportOptions: {
+                                columns: [columntarget]
                             },
-                            {
-                                extend: 'print',
-                                text: 'PRINT',
-                                filename: 'mebership_info',
-
-                                exportOptions: {
-                                    columns: [0, 1, 2, 3, 4, 5]
-                                },
-                                customize: function (win) {
-                                    jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
-
-                                }
+                            title: obj.toptitle
+                        },
+                        {
+                            extend: 'print',
+                            text: 'PRINT',
+                            filename: 'Upgrade Report',
+                            exportOptions: {
+                                columns: [columntarget]
+                            },
+                            title: obj.toptitle,
+                            customize: function (win) {
+                                jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
                             }
-
-
+                        }
                         ]
-                        // filename: 'dealer_list',
                     });
 
                 },
