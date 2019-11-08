@@ -94,7 +94,6 @@ a.ui-state-default:hover {background-color: #007fff !important;color: #ffffff !i
     min-height: 90px;
 }
 table#search_tbl td{
-padding: 0;
 vertical-align: middle;
 }
 table#search_tbl  td a{
@@ -323,7 +322,10 @@ right: -12px;top: -11px;font-size: 13px;width: 26px;height: 26px;line-height: 27
 .dataTables_wrapper .dataTables_paginate .fg-button {background: #0065a7;color: #ffffff;}
 .dataTables_wrapper .dataTables_filter input {border: 1px solid #ddd;box-shadow: inset 0 1px 2px rgba(0,0,0,.07);background-color: #fff;color: #32373c;outline: 0;transition: 50ms border-color ease-in-out;width: auto;max-width: 230px;margin-left: 10px !important;}
 .dataTables_wrapper .dataTables_filter {margin-bottom: 20px;}
-
+.fontweight td {font-weight: 600;}
+.search-result-wrap.coverage-report-wrap {flex-wrap: wrap;}
+.coverage-report-wrap .data-result-wrap,.coverage-report-wrap .tbl-result-wrap,.coverage-report-wrap #search_tbl{width:100% !important;}
+.coverage-wrap {column-count: 2;}
 
 /** media start here **/
 

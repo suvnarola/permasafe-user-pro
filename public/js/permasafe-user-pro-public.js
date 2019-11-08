@@ -1718,6 +1718,8 @@ jQuery(document).ready(function () {
 
         var datepicker2 = jQuery('#datepicker2').val();
         var select = jQuery('#quick_filters').val();
+        var dealer_session = jQuery('#dealer_session').val();
+        var members_type = jQuery("input[name='active_inactive']:checked").val();
 
 
         if (jQuery('#quick_filters').val().trim() == "0") {
@@ -1728,13 +1730,24 @@ jQuery(document).ready(function () {
             jQuery('#quick_filters').css({ 'color': '#333333' });
         }
 
-        var data = {
-            action: 'dealer_distributor_quick_filters',
-            datepicker1: datepicker1,
-            datepicker2: datepicker2,
-            select: select,
-
-        };
+        if (dealer_session != undefined) {
+            var data = {
+                action: 'dealer_distributor_quick_filters',
+                datepicker1: datepicker1,
+                datepicker2: datepicker2,
+                select: select,
+                members_type: members_type,
+                dealer_session: dealer_session
+            }
+        } else {
+            var data = {
+                action: 'dealer_distributor_quick_filters',
+                datepicker1: datepicker1,
+                datepicker2: datepicker2,
+                select: select,
+                members_type: members_type
+            }
+        }
 
         jQuery('.perma-loader').show();
         if (!validflag) {
@@ -1748,53 +1761,91 @@ jQuery(document).ready(function () {
                 dataType: 'html',
                 success: function (response) {
                     jQuery('.perma-loader').hide();
+                    var obj = jQuery.parseJSON(response);
                     jQuery('.tbl-result-wrap').html('');
                     jQuery('.data-result-wrap').html('');
-                    jQuery('.tbl-result-wrap').html(response);
+                    jQuery('.tbl-result-wrap').html('<h3 style="text-align:center;">' + obj.toptitle + '</h3>' + obj.dttable);
+                    jQuery('html, body').animate({
+                        scrollTop: jQuery(".coverage-report-wrap").offset().top
+                    }, 1000)
+                    var radioValue = jQuery("input[name='show_hide']:checked").val();
+                    if (jQuery("input:radio").is(":checked")) {
+                        if (radioValue == 'hide_dealer') {
+                            jQuery('.dealer-hide').addClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 7';
+                        }
+                        if (radioValue == 'hide_distributor') {
+                            jQuery('.distributor-hide').addClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6';
+                        }
+                        if (radioValue == 'no_cost') {
+                            jQuery('.dealer-hide').addClass('nisl-pdf-link');
+                            jQuery('.distributor-hide').addClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5';
+                        }
+                        if (radioValue == 'show_cost') {
+                            jQuery('.dealer-hide').removeClass('nisl-pdf-link');
+                            jQuery('.distributor-hide').removeClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7';
+                        }
+                    } else {
+                        var columntarget = '0, 1, 2, 3, 4, 5, 6, 7';
+                    }
 
                     jQuery('#search_tbl').DataTable({
                         dom: 'Bfrtip',
+                        "pagingType": "input",
+                        "pageLength": 20,
+                        "ordering": false,
+                        'columnDefs': [{
+                            'targets': [0, 1, 2, 3, 4, 5, 6, 7],
+                            /* column index */
+                            'orderable': false,
+                            /* true or false */
+                        }],
                         orderCellsTop: true,
-                        fixedHeader: true,
-                        buttons: [
-                            {
-                                extend: 'csv',
-                                //Name the CSV
-                                filename: 'quick_filters',
-                                exportOptions: {
-                                    columns: [0, 1, 2, 3, 5]
-                                },
+                        buttons: [{
+                            extend: 'csv',
+                            //Name the CSV
+                            filename: obj.toptitle,
+                            title: obj.toptitle,
+                            exportOptions: {
+                                columns: [columntarget]
                             },
-                            {
-                                extend: 'pdfHtml5',
-                                text: 'PDF',
-                                orientation: 'landscape',
-                                pageSize: 'LEGAL',
-                                filename: 'quick_filters',
-                                exportOptions: {
-                                    columns: [0, 1, 2, 3, 5]
-                                },
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'PDF',
+                            orientation: 'landscape',
+                            pageSize: 'LEGAL',
+                            filename: obj.toptitle,
+                            title: obj.toptitle,
+                            exportOptions: {
+                                columns: [columntarget]
                             },
-                            {
-                                extend: 'excel',
-                                text: 'EXCEL',
-                                filename: 'quick_filters',
-                                exportOptions: {
-                                    columns: [0, 1, 2, 3, 5]
-                                },
+                        },
+                        {
+                            extend: 'excel',
+                            text: 'EXCEL',
+                            filename: obj.toptitle,
+                            title: obj.toptitle,
+                            exportOptions: {
+                                columns: [columntarget]
                             },
-                            {
-                                extend: 'print',
-                                text: 'PRINT',
-                                filename: 'quick_filters',
-                                exportOptions: {
-                                    columns: [0, 1, 2, 3, 5]
-                                },
-                                customize: function (win) {
-                                    jQuery(win.document.body).find('table').addClass('display').css('font-size', '15px');
+                        },
+                        {
+                            extend: 'print',
+                            text: 'PRINT',
+                            filename: obj.toptitle,
+                            title: obj.toptitle,
+                            exportOptions: {
+                                columns: [columntarget]
+                            },
+                            customize: function (win) {
+                                jQuery(win.document.body).find('table').addClass('display').css('font-size', '15px');
 
-                                }
                             }
+                        }
                         ]
                         // filename: 'dealer_list',
                     });
@@ -1807,6 +1858,11 @@ jQuery(document).ready(function () {
         // alert(datepicker1 + ' ' + datepicker2 + ' ' + select);
     });
 
+    jQuery(document).on("click", ".coverage-report-wrap .view-data", function (e) {
+        jQuery('html, body').animate({
+            scrollTop: jQuery(".coverage-report-wrap .data-result-wrap").offset().top
+        }, 1000)
+    });
 
     jQuery(document).on("change", "#quick_filters", function (e) {
         jQuery(this).css({ 'border-color': '#cccccc' });
@@ -1827,7 +1883,7 @@ jQuery(document).ready(function () {
                 onSelect: function (date) {
                     var date2 = jQuery('#datepicker1').datepicker('getDate');
                     date2.setDate(date2.getDate() + 1);
-                    jQuery('#datepicker2').datepicker('setDate', date2);
+                    // jQuery('#datepicker2').datepicker('setDate', date2);
                     //sets minDate to dt1 date + 1
                     jQuery('#datepicker2').datepicker('option', 'minDate', date2);
                 }
@@ -1835,8 +1891,6 @@ jQuery(document).ready(function () {
             });
             jQuery("#datepicker2").datepicker({
                 dateFormat: 'yy-mm-dd',
-
-
             });
         }
 
@@ -1848,7 +1902,7 @@ jQuery(document).ready(function () {
                 onSelect: function (date) {
                     var date2 = jQuery('#datepicker1').datepicker('getDate');
                     date2.setDate(date2.getDate() + 1);
-                    jQuery('#datepicker2').datepicker('setDate', date2);
+                    // jQuery('#datepicker2').datepicker('setDate', date2);
                     //sets minDate to dt1 date + 1
                     jQuery('#datepicker2').datepicker('option', 'minDate', date2);
                 }
@@ -1867,7 +1921,7 @@ jQuery(document).ready(function () {
                 onSelect: function (date) {
                     var date2 = jQuery('#datepicker1').datepicker('getDate');
                     date2.setDate(date2.getDate() + 1);
-                    jQuery('#datepicker2').datepicker('setDate', date2);
+                    // jQuery('#datepicker2').datepicker('setDate', date2);
                     //sets minDate to dt1 date + 1
                     jQuery('#datepicker2').datepicker('option', 'minDate', date2);
                 }
@@ -1885,7 +1939,26 @@ jQuery(document).ready(function () {
                 onSelect: function (date) {
                     var date2 = jQuery('#datepicker1').datepicker('getDate');
                     date2.setDate(date2.getDate() + 1);
-                    jQuery('#datepicker2').datepicker('setDate', date2);
+                    // jQuery('#datepicker2').datepicker('setDate', date2);
+                    //sets minDate to dt1 date + 1
+                    jQuery('#datepicker2').datepicker('option', 'minDate', date2);
+                }
+
+            });
+            jQuery("#datepicker2").datepicker({
+                dateFormat: 'yy-mm-dd',
+
+
+            });
+        }
+        if (select == 4) {
+            jQuery('.input-filter-wrap').html('<label>Date: </label><input type="text" id="datepicker1" style="width:auto;"> <input type="text" id="datepicker2" style="width:auto;">');
+            jQuery("#datepicker1").datepicker({
+                dateFormat: 'yy-mm-dd',
+                onSelect: function (date) {
+                    var date2 = jQuery('#datepicker1').datepicker('getDate');
+                    date2.setDate(date2.getDate() + 1);
+                    // jQuery('#datepicker2').datepicker('setDate', date2);
                     //sets minDate to dt1 date + 1
                     jQuery('#datepicker2').datepicker('option', 'minDate', date2);
                 }

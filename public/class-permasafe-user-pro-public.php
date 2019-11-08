@@ -1722,38 +1722,86 @@ class Permasafe_User_Pro_Public
     {
         if (is_user_logged_in()) {
             $html = '';
+            session_start();
             $current_user = wp_get_current_user();
             $role = (array) $current_user->caps;
+            $dealer_session = $_SESSION['dealer_login'];
 
-            if ($role['author'] == 1 || $role['contributor'] == 1 || $role['dealer-user'] == 1 || $role['distributor-user'] == 1) {
-                $html .= '<div class="filter-wrap">';
-                $html .= '<div class="select-filter-wrap">';
-                $html .= '<select id="quick_filters">';
-                $html .= '<option value="0">Quick Filters</option>';
-                $html .= '<option value="1">Expired Members</option>';
-                $html .= '<option value="2">Expiring Members</option>';
-                $html .= '<option value="3">Current Members</option>';
-                $html .= '</select>';
-                $html .= '</div>';
+            
+                $html .= '<div class="filter-wrap filter-reports">';
+                $html .= '<div class="filter-inner-wrap">';
 
-                $html .= '<div class="input-filter-wrap">';
-                $html .= '<label>Date: </label><input type="text" id="datepicker1" style="width:auto;" disabled> <input type="text" id="datepicker2" style="width:auto;" disabled>';
-                $html .= '</div>';
+                    $html .= '<div class="inner-wrap">';
+                             $html .= '<div class="filter-dropdown-wrap">';
+                                $html .= '<div class="filter-policy">';
+                                    $html .= '<div class="select-filter-wrap">';
+                                          $html .= '<select id="quick_filters">';
+                                            $html .= '<option value="0">Quick Filters</option>';
+                                            $html .= '<option value="1">Expired Members</option>';
+                                            $html .= '<option value="2">Expiring Members</option>';
+                                            $html .= '<option value="3">Current Members</option>';
+                                            $html .= '<option value="4">New Members</option>';
+                                        $html .= '</select>';
+                                    $html .= '</div>';
+                                $html .= '</div>';
+                            $html .= '</div>';
 
-                $html .= '<div class="btn-filter-wrap">';
-                $html .= '<input type="button" id="date_submit" value="submit"/>';
-                $html .= '</div>';
-                $html .= '</div>';
-                $html .= '<div class="search-result-wrap">';
-                $html .= '<div class="tbl-result-wrap">';
+                            $html .= '<div class="input-filter-wrap">';
+                                $html .= '<label>Date: </label><input type="text" id="datepicker1" style="width:auto;" disabled> <input type="text" id="datepicker2" style="width:auto;" disabled>';
+                            $html .= '</div>';
+                    $html .= '</div>';
+                    
+                    if($dealer_session){
+                        $html .= '<div class="radio_wrapper_cstm">';
+                            $html .= '<h4>Hide/Show Cost Column</h4>';
+                            $html .= '<div class="radio-wrap">';
+                            $html .= '<div class="radio_cstm"><input type="radio" name="show_hide" id="distributor_cost_show" value="hide_dealer"><label for="distributor_cost_show">Show Distributor Cost Only</label></label></div>';
+                            $html .= '<div class="radio_cstm"><input type="radio" name="show_hide" id="dealer_cost_show" value="hide_distributor"><label for="dealer_cost_show">Show Dealer Cost Only</label></div>';
+                            $html .= '<div class="radio_cstm"><input type="radio" name="show_hide" id="cost_show" value="show_cost"><label for="cost_show">Show Distributor & Dealer Cost</label></div>';
+                            $html .= '<div class="radio_cstm"><input type="radio" name="show_hide" id="cost_hide" value="no_cost"><label for="cost_hide">No Pricing</label></div>';
+                            $html .= '</div>';
+                        $html .= '</div>';
+                    }else{
+                        $html .= '<div class="radio_wrapper_cstm">';
+                            $html .= '<h4>Hide/Show Cost Column</h4>';
+                            $html .= '<div class="radio-wrap">';
+                            $html .= '<div class="radio_cstm"><input type="radio" name="show_hide" id="dealer_cost_show" value="hide_distributor"><label for="dealer_cost_show">Show Dealer Cost</label></div>';
+                            $html .= '<div class="radio_cstm"><input type="radio" name="show_hide" id="cost_hide" value="no_cost"><label for="cost_hide">No Pricing</label></div>';
+                            $html .= '</div>';
+                        $html .= '</div>';
+                    }
+                    
+                    $html .= '<div class="radio_wrapper_cstm">';
+                        $html .= '<h4>Active/Inactive Members</h4>';
+                        $html .= '<div class="radio-wrap">';
+                        $html .= '<div class="radio_cstm"><input type="radio" name="active_inactive" id="all_active_inactive" value="all_active_inactive"><label for="all_active_inactive">All Members (Active & Inactive Members)</label></div>';
+                        $html .= '<div class="radio_cstm"><input type="radio" name="active_inactive" id="only_active" value="only_active"><label for="only_active">Active Members Only</label></div>';
+                        $html .= '<div class="radio_cstm"><input type="radio" name="active_inactive" id="only_inactive" value="only_inactive"><label for="only_inactive">Inactive Members Only</label></div>';
+                        $html .= '</div>';
+                    $html .= '</div>';
+                    $html .= '</div>';
+
+                    $html .= '<div class="reports-btn-wrap">';
+                        $html .= '<div class="btn-filter-wrap">';
+                            $html .= '<input type="button" id="date_submit" value="Submit"/>';
+                        $html .= '</div>';
+                        $html .= '<div>';
+                            $html .= '<input type="button" name="reset" id="search_reset" value="Reset"/>';
+                        $html .= '</div>';
+                    $html .= '</div>';
 
                 $html .= '</div>';
-                $html .= '<div class="data-result-wrap">';
-
-                $html .= '</div>';
+                if ($dealer_session) {
+                    $html .= '<input type="hidden" value="' . $dealer_session . '" id="dealer_session">';
+                }
+                $html .= '<div class="search-result-wrap coverage-report-wrap">';
+                    $html .= '<div class="tbl-result-wrap">';
+                    $html .= '</div>';
+                    $html .= '<div class="data-result-wrap">';
+                    $html .= '</div>';
                 $html .= '</div>';
                 return $html;
-            }
+            
         } else {
             $location = get_site_url() . "/perma-register/";
             wp_redirect($location, 301);
@@ -1775,46 +1823,92 @@ class Permasafe_User_Pro_Public
             $datepicker2 = $_POST['datepicker2'];
             $select = $_POST['select'];
             $login = $current_user->user_login;
+            $members_type = $_POST['members_type'];
+           $dealer_session = $_POST['dealer_session'];
+           
+            $title = '';
+            $title .= 'Coverage Report';
 
-            if ($role['author'] == 1) {
+           if (isset($dealer_session)) {
+               
+                $dealer_array = get_code_by_dealer_login($dealer_session);
+                $dealers = get_user_by('login', $dealer_session);
+                $dealer_id = $dealers->ID;
+                $distributor_id = get_user_meta($dealer_id, 'dealer_distributor_name', true);
+               $distributor_name = get_user_meta($distributor_id, 'distributor_name', true);
+                $dealer_name = get_user_meta($dealer_id, 'dealer_name', true);
+                $dealer_username = $dealer_session;
+                $title .= ' | '.$dealer_name.' | '.$distributor_name;
+            } else {
+                $current_user = wp_get_current_user();
+                $role = (array) $current_user->caps;
+                $login = $current_user->user_login;
 
-                $users = get_user_by('login', $login);
-                $distributor_id = $users->ID;
-                $check_array =  get_code_by_distributor_login($distributor_id);
+                if ($role['contributor'] == 1) {
+                    $dealer_array = get_code_by_dealer_login($login);
+                    $dealers = get_user_by('login', $login);
+                    $dealer_id = $dealers->ID;
+                    $distributor_id = get_user_meta($dealer_id, 'dealer_distributor_name', true);
+                    $dealer_name = get_user_meta($dealer_id, 'dealer_name', true);
+                    $dealer_username = $login;
+                    $title .= ' | '.$dealer_name;
+                }
+                if ($role['dealer-user'] == 1) {
+                    $dealer_user_login = $current_user->user_login;
+                    $user = get_user_by('login', $dealer_user_login);
+                    $contact_id = $user->ID;
+                    $dealer_id = get_user_meta($contact_id, 'contact_dealer_id', true);
+                    $contact_fname = get_user_meta($contact_id, 'contact_fname', true);
+                    $contact_lname = get_user_meta($contact_id, 'contact_lname', true);
+                    $dealer_user = get_user_by('id', $dealer_id);
+                    $dealer_username = $dealer_user->user_login;
+
+                    $dealer_array = get_code_by_dealer_login($dealer_username);
+                    $distributor_id = get_user_meta($dealer_id, 'dealer_distributor_name', true);
+                    $title .= ' | '.$contact_fname.' '.$contact_lname;
+                }
             }
-            if ($role['distributor-user'] == 1) {
-                $distributor_user_login = $current_user->user_login;
-                $user = get_user_by('login', $distributor_user_login);
-                $contact_id = $user->ID;
-                $distributor_id = get_user_meta($contact_id, 'contact_distributor_id', true);
-                $distributor_user = get_user_by('id', $distributor_id);
-                $distributor_username = $distributor_user->user_login;
 
 
-                $check_array =  get_code_by_distributor_login($distributor_id);
+            if($members_type == 'all_active_inactive' || $members_type == ''){
+                $sql = 'SELECT user_id FROM wp_usermeta WHERE meta_key="user_active_inactive"';
+                $title .= ' | All Members(Active & Inactive Members)';
+            } 
+            if($members_type == 'only_active'){
+                $sql = 'SELECT user_id FROM wp_usermeta WHERE meta_key="user_active_inactive" AND meta_value=1';
+                $title .= ' | Active Members';
             }
-            if ($role['contributor'] == 1) {
+            if($members_type == 'only_inactive'){
+                    $sql = 'SELECT user_id FROM wp_usermeta WHERE meta_key="user_active_inactive" AND meta_value=0';
+                    $title .= ' | Inactive Members';
+            } 
+            $query = $wpdb->get_results($sql);
 
-                $check_array = get_code_by_dealer_login($login);
+            if($select == 1){
+                $title .= ' | Expired Members';
             }
-            if ($role['dealer-user'] == 1) {
-                $dealer_user_login = $current_user->user_login;
-                $user = get_user_by('login', $dealer_user_login);
-                $contact_id = $user->ID;
-                $dealer_id = get_user_meta($contact_id, 'contact_dealer_id', true);
-                $dealer_user = get_user_by('id', $dealer_id);
-                $dealer_username = $dealer_user->user_login;
+            if($select == 2){
+                $title .= ' | Expiring Members';
+            }
+            if($select == 3){
+                $title .= ' | Current Members';
+            }
+            if($select == 4){
+                $title .= ' | New Members';
+            }
 
-
-                $check_array = get_code_by_dealer_login($dealer_username);
+            if(!empty($datepicker1)){
+                $title .= ' | '.$datepicker1;
+            }
+            if(!empty($datepicker2)){
+                $title .= ' | '.$datepicker2;
             }
 
 
             $setStart = ($datepicker1 == '' || !isset($datepicker1)) ? false : true;
             $setExpire = ($datepicker2 == '' || !isset($datepicker2)) ? false : true;
 
-            $sql = "SELECT user_id FROM wp_usermeta WHERE meta_key='pmsafe_vehicle_info'";
-            $query = $wpdb->get_results($sql);
+           
             $html = '';
             $html .= '<table id="search_tbl">';
             $html .= '<thead>';
@@ -1825,31 +1919,493 @@ class Permasafe_User_Pro_Public
             $html .= '</th>';
 
             $html .= '<th>';
-            $html .= 'First Name';
+            $html .= 'Customer Name';
             $html .= '</th>';
 
             $html .= '<th>';
-            $html .= 'Last Name';
+            $html .= 'Benefits<br/> Package';
             $html .= '</th>';
 
             $html .= '<th>';
-            $html .= 'Address';
+            $html .= 'Registration <br/> Date';
             $html .= '</th>';
 
             $html .= '<th>';
-            $html .= 'PDF';
+            $html .= 'Registration By';
             $html .= '</th>';
 
-            $html .= '<th class="nisl-pdf-link">';
-            $html .= 'PDF';
+            $html .= '<th>';
+            $html .= 'Active/Inactive';
             $html .= '</th>';
 
+            $html .= '<th class="dealer-hide">';
+            $html .= 'Dealer Cost';
+            $html .= '</th>';
+
+            if($dealer_session){
+                $html .= '<th class="distributor-hide">';
+                $html .= 'Distributor Cost';
+                $html .= '</th>';
+            }
+
+            $html .= '<th class="nisl-pdf-link">'; 
+            $html .= '';
+            $html .= '</th>';
+            
             $html .= '</tr>';
             $html .= '</thead>';
             $html .= '<tbody>';
 
 
+            if($dealer_session){
+                $html .= '<tr class="fontweight" style="background-color: #A0CEEF;font-weight: 700;color: #000000;">';
+                    $html .= '<td style="text-align:center;">';
+                    $html .= $distributor_name;
+                    $html .= '</td>';
+                    $html .= '<td></td><td></td><td></td><td></td><td></td><td class="dealer-hide"></td><td class="distributor-hide"></td><td class="nisl-pdf-link"></td>';
+                $html .= '</tr>';
+            }
+            $dealer_names = get_user_meta($dealer_id, 'dealer_name', true);
+            $html .=  '<tr class="fontweight" style="background-color: #B5D777;font-weight: 700;color: #000000;">';
+                $html .= '<td style="text-align:center;">';
+                $html .= $dealer_names;
+                $html .= '</td>';
+                $html .= '<td></td><td></td><td></td><td></td><td></td><td class="dealer-hide"></td>';
+                if($dealer_session){
+                    $html .= '<td class="distributor-hide"></td>';
+                }
+                $html .= '<td class="nisl-pdf-link"></td>';
+            $html .=  '</tr>';
+            $packTotal = array();
             foreach ($query as $key => $value) {
+                $user_id = $value->user_id;
+                $nickname = get_user_meta($value->user_id, 'nickname', true);
+                if (in_array($nickname, $dealer_array)) {
+                    $nickname = get_user_meta($value->user_id, 'nickname', true);
+                    $vehicle_info = get_user_meta($value->user_id, 'pmsafe_vehicle_info', false);
+                    $post_id = $vehicle_info[0][$nickname]['pmsafe_member_code_id'];
+                    $benefits_package = get_post_meta($vehicle_info[0][$nickname]['pmsafe_member_code_id'], '_pmsafe_code_prefix', true);
+                    $term_length_id = get_post_id_by_meta_key_and_value('_pmsafe_benefit_prefix', $benefits_package);
+                    $term_length = get_post_meta($term_length_id, '_pmsafe_benefit_term_length', true);
+                    $vehicle_registration_date = date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
+                    $expiration_date = date('Y-m-d', strtotime("+" . $term_length . " months", strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])));
+                    $current_date = date('Y-m-d');
+                                                
+                    $dealer_price_arr = get_user_meta($dealer_id, 'pricing_package', true);
+                    // $dealer_cost_original_policy = $dealer_price_arr[$original_policy]['dealer_cost'];
+                    $dealer_cost_final_policy = $dealer_price_arr[$benefits_package]['dealer_cost'];
+                                                
+                    $distributor_price_arr = get_user_meta($distributor_id, 'pricing_package', true);
+                    // $distributor_cost_original_policy = $distributor_price_arr[$original_policy]['distributor_cost'];
+                    $distributor_cost_final_policy = $distributor_price_arr[$benefits_package]['distributor_cost'];
+                    
+
+                    $address1 = get_user_meta($value->user_id, 'pmsafe_address_1', true);
+                    $address2 = get_user_meta($value->user_id, 'pmsafe_address_2', true);
+                    $city = get_user_meta($value->user_id, 'pmsafe_city', true);
+                    $state = get_user_meta($value->user_id, 'pmsafe_state', true);
+                    $zip_code = get_user_meta($value->user_id, 'pmsafe_zip_code', true);
+                    $vehicle_info = get_user_meta($value->user_id, 'pmsafe_vehicle_info', false);
+                    
+                    $registered_by = get_post_meta($post_id, 'registered_by', true);
+                    $get_users = get_user_by('login',$registered_by);
+                    $uid =  $get_users->ID;
+                    // $upgraded_id = get_post_meta($post_id, 'upgraded_by', true);
+                    $registered_by_dealer = get_user_meta($uid, 'dealer_name', true);
+                    $registered_by_distributor = get_user_meta($uid, 'distributor_name', true);
+                    $dealer_contact_fname = get_user_meta($uid, 'contact_fname', true);
+                    $dealer_contact_lname = get_user_meta($uid, 'contact_lname', true);
+                    $distributor_contact_fname = get_user_meta($uid, 'distributor_contact_fname', true);
+                    $distributor_contact_lname = get_user_meta($uid, 'distributor_contact_lname', true);
+                    $customer_fname = get_user_meta($uid, 'first_name', true);
+                    $customer_lname = get_user_meta($uid, 'last_name', true);
+                    
+                    
+                    $fname = get_user_meta($user_id, 'first_name', true);
+                    $lname = get_user_meta($user_id, 'last_name', true);
+                    if ($select == 1) {
+                        $select_option = "Expired Members";
+                        if ($current_date > $expiration_date) {
+                            if (!$setStart){
+                                    $datepicker1 = $expiration_date;
+                            }
+							if (!$setExpire){
+                                $datepicker2 = $expiration_date;
+                            }
+                            if (($expiration_date >= $datepicker1) && ($expiration_date <= $datepicker2)) {
+                                if(isset($packTotal[$benefits_package])){
+                                    $packTotal[$benefits_package] = $packTotal[$benefits_package] + 1;
+                                }
+                                else{
+                                    $packTotal[$benefits_package] = 1;
+                                }
+                                $html .= '<tr class="code-row">';
+
+                                $html .= '<td class="text-center">';
+                                $html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $nickname . '</a>';
+                                $html .= '</td>';
+
+                                $html .= '<td>';
+                                $html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $fname .' '.$lname .'</a>';
+                                $html .= '</td>';
+
+                                $html .= '<td class="text-center">';
+                                $html .= $benefits_package;
+                                $html .= '</td>';
+
+                                    $html .= '<td class="text-center">';
+                                $html .=  date('m-d-Y', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
+                                $html .= '</td>';
+
+                                $html .= '<td class="text-center">';
+                            
+                                    if ($registered_by_dealer) {
+                                        $html .= $registered_by_dealer;
+                                    }
+                                    if ($registered_by_distributor) {
+                                        $html .= $registered_by_distributor;
+                                    }
+                                    if ($dealer_contact_fname) {
+                                        $html .= $dealer_contact_fname.' '.$dealer_contact_lname;
+                                    }
+                                    if ($distributor_contact_fname) {
+                                        $html .= $distributor_contact_fname.' '.$distributor_contact_lname;
+                                    }
+                                    if ($customer_fname) {
+                                        $html .= $customer_fname.' '.$customer_lname;
+                                    }
+                                    if($registered_by == ''){
+                                        $html .= $fname .' '.$lname;
+                                    }
+                                $html .= '</td>';
+
+                                $html .= '<td class="text-center">';
+                                $html .=  ((get_user_meta($user_id,'user_active_inactive',true)==1)?'<span style="color:#008000;">Active</span>':'<span style="color:#ff0000;">Inactive</span>');
+                                $html .= '</td>';
+
+                                $html .= '<td class="dealer-hide text-center">';
+                                $html .=  (($dealer_cost_final_policy)?'$'.$dealer_cost_final_policy:'-');
+                                $html .= '</td>';
+                                
+                                if($dealer_session){
+                                    $html .= '<td class="distributor-hide text-center">';
+                                    $html .=  (($distributor_cost_final_policy)?'$'.$distributor_cost_final_policy:'-');
+                                    $html .= '</td>';
+                                }
+                                
+                                $html .= '<td class="nisl-pdf-link">';
+                                $html .= '';
+                                $html .= '</td>';
+
+                                $html .= '</tr>';
+                                $total_members += count($nickname);
+                                $total_dealer_cost += $dealer_cost_final_policy;
+                                $total_distributor_cost += $distributor_cost_final_policy;
+                            }
+                        }
+                    } else if ($select == 2) {
+                        $select_option = "Expiring Members";
+                        $date1 = $current_date;
+                        $date2 = $expiration_date;
+
+                        $ts1 = strtotime($date1);
+                        $ts2 = strtotime($date2);
+
+                        $year1 = date('Y', $ts1);
+                        $year2 = date('Y', $ts2);
+
+                        $month1 = date('m', $ts1);
+                        $month2 = date('m', $ts2);
+
+                        $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
+                        if ($diff >= 1 && $diff <= 6) {
+                            if(isset($packTotal[$benefits_package])){
+                                $packTotal[$benefits_package] = $packTotal[$benefits_package] + 1;
+                            }
+                            else{
+                                $packTotal[$benefits_package] = 1;
+                            }
+                            if (!$setStart){
+                                $datepicker1 = $expiration_date;
+                            }
+
+                            if (!$setExpire){
+                                $datepicker2 = $expiration_date;
+                            }
+                            if (($expiration_date >= $datepicker1) && ($expiration_date <= $datepicker2)) {
+                                 $html .= '<tr class="code-row">';
+
+                                $html .= '<td class="text-center">';
+                                $html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $nickname . '</a>';
+                                $html .= '</td>';
+
+                                $html .= '<td>';
+                                $html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $fname .' '.$lname .'</a>';
+                                $html .= '</td>';
+
+                                $html .= '<td class="text-center">';
+                                $html .= $benefits_package;
+                                $html .= '</td>';
+
+                                    $html .= '<td class="text-center">';
+                                $html .=  date('m-d-Y', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
+                                $html .= '</td>';
+
+                                $html .= '<td class="text-center">';
+                            
+                                    if ($registered_by_dealer) {
+                                        $html .= $registered_by_dealer;
+                                    }
+                                    if ($registered_by_distributor) {
+                                        $html .= $registered_by_distributor;
+                                    }
+                                    if ($dealer_contact_fname) {
+                                        $html .= $dealer_contact_fname.' '.$dealer_contact_lname;
+                                    }
+                                    if ($distributor_contact_fname) {
+                                        $html .= $distributor_contact_fname.' '.$distributor_contact_lname;
+                                    }
+                                    if ($customer_fname) {
+                                        $html .= $customer_fname.' '.$customer_lname;
+                                    }
+                                    if($registered_by == ''){
+                                        $html .= $fname .' '.$lname;
+                                    }
+                                $html .= '</td>';
+
+                                $html .= '<td class="text-center">';
+                                $html .=  ((get_user_meta($user_id,'user_active_inactive',true)==1)?'<span style="color:#008000;">Active</span>':'<span style="color:#ff0000;">Inactive</span>');
+                                $html .= '</td>';
+
+                                $html .= '<td class="dealer-hide text-center">';
+                                $html .=  (($dealer_cost_final_policy)?'$'.$dealer_cost_final_policy:'-');
+                                $html .= '</td>';
+                                
+                                if($dealer_session){
+                                    $html .= '<td class="distributor-hide text-center">';
+                                    $html .=  (($distributor_cost_final_policy)?'$'.$distributor_cost_final_policy:'-');
+                                    $html .= '</td>';
+                                }
+                                
+                                $html .= '<td class="nisl-pdf-link">';
+                                $html .= '';
+                                $html .= '</td>';
+                                
+                                $html .= '</tr>';
+                                $total_members += count($nickname);
+                                $total_dealer_cost += $dealer_cost_final_policy;
+                                $total_distributor_cost += $distributor_cost_final_policy;
+                            }
+                        }
+                    }else if ($select == 3) {
+                        $select_option = "Current Members";
+                        if ($current_date < $expiration_date) {
+                            if (!$setStart){
+                                $datepicker1 = $vehicle_registration_date;
+                            }
+                            if (!$setExpire){
+                                $datepicker2 = $vehicle_registration_date;
+                            }
+                            if (($vehicle_registration_date >= $datepicker1 && $vehicle_registration_date <= $datepicker2)) {
+                               if(isset($packTotal[$benefits_package])){
+                                    $packTotal[$benefits_package] = $packTotal[$benefits_package] + 1;
+                                }
+                                else{
+                                    $packTotal[$benefits_package] = 1;
+                                }
+                                  $html .= '<tr class="code-row">';
+
+                                $html .= '<td class="text-center">';
+                                $html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $nickname . '</a>';
+                                $html .= '</td>';
+
+                                $html .= '<td>';
+                                $html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $fname .' '.$lname .'</a>';
+                                $html .= '</td>';
+
+                                $html .= '<td class="text-center">';
+                                $html .= $benefits_package;
+                                $html .= '</td>';
+
+                                    $html .= '<td class="text-center">';
+                                $html .=  date('m-d-Y', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
+                                $html .= '</td>';
+
+                                $html .= '<td class="text-center">';
+                            
+                                    if ($registered_by_dealer) {
+                                        $html .= $registered_by_dealer;
+                                    }
+                                    if ($registered_by_distributor) {
+                                        $html .= $registered_by_distributor;
+                                    }
+                                    if ($dealer_contact_fname) {
+                                        $html .= $dealer_contact_fname.' '.$dealer_contact_lname;
+                                    }
+                                    if ($distributor_contact_fname) {
+                                        $html .= $distributor_contact_fname.' '.$distributor_contact_lname;
+                                    }
+                                    if ($customer_fname) {
+                                        $html .= $customer_fname.' '.$customer_lname;
+                                    }
+                                    if($registered_by == ''){
+                                        $html .= $fname .' '.$lname;
+                                    }
+                                $html .= '</td>';
+
+                                $html .= '<td class="text-center">';
+                                $html .=  ((get_user_meta($user_id,'user_active_inactive',true)==1)?'<span style="color:#008000;">Active</span>':'<span style="color:#ff0000;">Inactive</span>');
+                                $html .= '</td>';
+
+                                $html .= '<td class="dealer-hide text-center">';
+                                $html .=  (($dealer_cost_final_policy)?'$'.$dealer_cost_final_policy:'-');
+                                $html .= '</td>';
+                                
+                                if($dealer_session){
+                                    $html .= '<td class="distributor-hide text-center">';
+                                    $html .=  (($distributor_cost_final_policy)?'$'.$distributor_cost_final_policy:'-');
+                                    $html .= '</td>';
+                                }
+                                
+                                $html .= '<td class="nisl-pdf-link">';
+                                $html .= '';
+                                $html .= '</td>';
+
+                                $html .= '</tr>';
+                                $total_members += count($nickname);
+                                $total_dealer_cost += $dealer_cost_final_policy;
+                                $total_distributor_cost += $distributor_cost_final_policy;
+                            }
+                        }
+                    }else if ($select == 4) {
+                        $select_option = "New Members";
+                        if (!$setStart){
+                            $datepicker1 = $vehicle_registration_date;
+                        }
+
+                        if (!$setExpire){
+                            $datepicker2 = $vehicle_registration_date;
+                        }
+                        if (($vehicle_registration_date >= $datepicker1 && $vehicle_registration_date <= $datepicker2)) {
+                            if(isset($packTotal[$benefits_package])){
+                                $packTotal[$benefits_package] = $packTotal[$benefits_package] + 1;
+                            }
+                            else{
+                                $packTotal[$benefits_package] = 1;
+                            }
+
+                              $html .= '<tr class="code-row">';
+
+                                $html .= '<td class="text-center">';
+                                $html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $nickname . '</a>';
+                                $html .= '</td>';
+
+                                $html .= '<td>';
+                                $html .= '<a href="" class="view-data" data-id="' . $user_id . '">' . $fname .' '.$lname .'</a>';
+                                $html .= '</td>';
+
+                                $html .= '<td class="text-center">';
+                                $html .= $benefits_package;
+                                $html .= '</td>';
+
+                                    $html .= '<td class="text-center">';
+                                $html .=  date('m-d-Y', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date']));
+                                $html .= '</td>';
+
+                                $html .= '<td class="text-center">';
+                            
+                                    if ($registered_by_dealer) {
+                                        $html .= $registered_by_dealer;
+                                    }
+                                    if ($registered_by_distributor) {
+                                        $html .= $registered_by_distributor;
+                                    }
+                                    if ($dealer_contact_fname) {
+                                        $html .= $dealer_contact_fname.' '.$dealer_contact_lname;
+                                    }
+                                    if ($distributor_contact_fname) {
+                                        $html .= $distributor_contact_fname.' '.$distributor_contact_lname;
+                                    }
+                                    if ($customer_fname) {
+                                        $html .= $customer_fname.' '.$customer_lname;
+                                    }
+                                    if($registered_by == ''){
+                                        $html .= $fname .' '.$lname;
+                                    }
+                                $html .= '</td>';
+
+                                $html .= '<td class="text-center">';
+                                $html .=  ((get_user_meta($user_id,'user_active_inactive',true)==1)?'<span style="color:#008000;">Active</span>':'<span style="color:#ff0000;">Inactive</span>');
+                                $html .= '</td>';
+
+                                $html .= '<td class="dealer-hide text-center">';
+                                $html .=  (($dealer_cost_final_policy)?'$'.$dealer_cost_final_policy:'-');
+                                $html .= '</td>';
+                                
+                                if($dealer_session){
+                                    $html .= '<td class="distributor-hide text-center">';
+                                    $html .=  (($distributor_cost_final_policy)?'$'.$distributor_cost_final_policy:'-');
+                                    $html .= '</td>';
+                                }
+                                
+                                $html .= '<td class="nisl-pdf-link">';
+                                $html .= '';
+                                $html .= '</td>';
+                                
+                                $html .= '</tr>';
+                                $total_members += count($nickname);
+                                $total_dealer_cost += $dealer_cost_final_policy;
+                                $total_distributor_cost += $distributor_cost_final_policy;
+
+                        }
+                    }//select 4
+                }
+            }// foreach
+            if($packTotal){
+                foreach ($packTotal as $key => $value) {
+        
+                    $html .= '<tr class="fontweight" style="background-color: #F0CF65;font-weight: 700;color: #000000;">';
+                        $html .= '<td style="text-align:center;">';
+                        $html .= $key;
+                        $html .= '</td>';
+                        $html .= '<td></td><td class="text-center">'.$value.'</td><td></td><td></td><td></td><td class="dealer-hide"></td>';
+                        if($dealer_session){
+                            $html .= '<td class="distributor-hide"></td>';
+                        }
+                        $html .= '<td class="nisl-pdf-link"></td>';
+                    $html .= '</tr>'; 
+                }
+            }
+            $html .= '<tr class="fontweight" style="background-color: #F0CF65;font-weight: 700;color: #000000;">';
+                $html .= '<td>Total '.$select_option.' - '.$dealer_names.'</td>';
+                $html .= '<td></td><td class="text-center">'.$total_members.'</td><td></td><td></td><td></td><td class="dealer-hide text-center">$'.$total_dealer_cost.'</td>';
+                if($dealer_session){
+                    $html .= '<td class="distributor-hide text-center">$'.$total_distributor_cost.'</td>';
+                }
+                $html .= '<td class="nisl-pdf-link"></td>';
+            $html .= '</tr>'; 
+            if($dealer_session){
+                if($packTotal){
+                    foreach ($packTotal as $key => $value) {
+            
+                        $html .= '<tr class="fontweight" style="background-color: #86abc6;font-weight: 700;color: #000000;">';
+                            $html .= '<td style="text-align:center;">';
+                            $html .= $key;
+                            $html .= '</td>';
+                            $html .= '<td></td><td class="text-center">'.$value.'</td><td></td><td></td><td></td><td class="dealer-hide"></td>';
+                            $html .= '<td class="distributor-hide"></td>';
+                            $html .= '<td class="nisl-pdf-link"></td>';
+                        $html .= '</tr>'; 
+                    }
+                }
+                $html .= '<tr class="fontweight" style="background-color: #86abc6;font-weight: 700;color: #000000;">';
+                    $html .= '<td>Total '.$select_option.' - '.$distributor_name.'</td>';
+                    $html .= '<td></td><td class="text-center">'.$total_members.'</td><td></td><td></td><td></td><td class="dealer-hide text-center">$'.$total_dealer_cost.'</td>';
+                    $html .= '<td class="distributor-hide text-center">$'.$total_distributor_cost.'</td>';
+                    $html .= '<td class="nisl-pdf-link"></td>';
+                $html .= '</tr>'; 
+            }
+            /*foreach ($query as $key => $value) {
                 // echo $value->user_id.'<br/>';
                 $nickname = get_user_meta($value->user_id, 'nickname', true);
                 if (in_array($nickname, $check_array)) {
@@ -2020,13 +2576,14 @@ class Permasafe_User_Pro_Public
                         }
                     }
                 }
-            }
+            } */
             //}
             $html .= '</tbody>';
             $html .= '</table>';
 
 
-            echo $html;
+            $response = array('dttable'=>$html,'toptitle'=>$title);
+		    echo json_encode($response);
         }
         die;
     }
@@ -3679,7 +4236,7 @@ class Permasafe_User_Pro_Public
                 // $distributor_id = $distributor->ID;
                 $distributor_name = get_user_meta($distributor_id, 'distributor_name', true);
                 if($dealer_session){
-                    $html .= '<tr style="background-color: #A0CEEF;font-weight: 700;color: #000000;">';
+                    $html .= '<tr class="fontweight" style="background-color: #A0CEEF;font-weight: 700;color: #000000;">';
                         $html .= '<td style="text-align:center;">';
                         $html .= $distributor_name;
                         $html .= '</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="nisl-pdf-link"></td>';
@@ -3687,7 +4244,7 @@ class Permasafe_User_Pro_Public
                 }
                     
                 $dealer_name = get_user_meta($dealer_id, 'dealer_name', true);
-                $html .=  '<tr style="background-color: #B5D777;font-weight: 700;color: #000000;">';
+                $html .=  '<tr class="fontweight" style="background-color: #B5D777;font-weight: 700;color: #000000;">';
                 $html .= '<td style="text-align:center;">';
                     $html .= $dealer_name;
                     $html .= '</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>';
@@ -3973,14 +4530,14 @@ class Permasafe_User_Pro_Public
             $html .= '<tbody id="">';
 
                 if($view_membership){
-                    $html .= '<tr style="background-color: #A0CEEF;font-weight: 700;color: #000000;">';
+                    $html .= '<tr class="fontweight" style="background-color: #A0CEEF;font-weight: 700;color: #000000;">';
                         $html .= '<td style="text-align:center;">';
                         $html .= $distributor_name;
                         $html .= '</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="dealer-hide"></td><td class="distributor-hide"></td><td class="nisl-pdf-link"></td>';
                     $html .= '</tr>';
                 }
                 $dealer_names = get_user_meta($dealer_id, 'dealer_name', true);
-                $html .=  '<tr style="background-color: #B5D777;font-weight: 700;color: #000000;">';
+                $html .=  '<tr class="fontweight" style="background-color: #B5D777;font-weight: 700;color: #000000;">';
                 $html .= '<td style="text-align:center;">';
                     $html .= $dealer_names;
                     $html .= '</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="dealer-hide"></td>';
@@ -4277,7 +4834,7 @@ class Permasafe_User_Pro_Public
                 }
                if($packTotal){
                     foreach ($packTotal as $key => $value) {
-                        $html .= '<tr style="background-color: #F0CF65;font-weight: 700;color: #000000;">';
+                        $html .= '<tr class="fontweight" style="background-color: #F0CF65;font-weight: 700;color: #000000;">';
                              $html .= '<td>Total '.$key.'</td><td></td><td></td><td></td><td style="text-align:center;">'.$value.'</td><td></td><td></td><td></td><td class="dealer-hide"></td>';
                               if($view_membership){
                                 $html .= '<td class="text-center distributor-hide"></td>';
@@ -4287,7 +4844,7 @@ class Permasafe_User_Pro_Public
                         $dis_packTotal[$key] += $value;
                     }
                 }
-                $html .= '<tr style="background-color: #F0CF65;font-weight: 700;color: #000000;">';
+                $html .= '<tr class="fontweight" style="background-color: #F0CF65;font-weight: 700;color: #000000;">';
                     $html .= '<td>Total Upgrades - '.$dealer_names.'</td><td></td><td></td><td></td><td class="text-center">'.$total_upgrades.'</td><td></td><td></td><td></td><td class="text-center dealer-hide">$'.$total_dealer_cost.'</td>';
                     if($view_membership){
                         $html .= '<td class="text-center distributor-hide">$'.$total_distributor_cost.'</td>';
@@ -4297,13 +4854,13 @@ class Permasafe_User_Pro_Public
                 if($view_membership){ 
                    if($packTotal){
                         foreach ($packTotal as $key => $value) {
-                          $html .= '<tr style="background-color: #86abc6;font-weight: 700;color: #000000;">';
+                          $html .= '<tr class="fontweight" style="background-color: #86abc6;font-weight: 700;color: #000000;">';
                                 $html .= '<td>Total '.$key.'</td><td></td><td></td><td></td><td style="text-align:center;">'.$value.'</td><td></td><td></td><td></td><td class="dealer-hide"></td><td class="distributor-hide"></td><td class="nisl-pdf-link"></td>';
                             $html .= '</tr>'; 
                             $dis_packTotal[$key] += $value;
                         }
                     }
-                   $html .= '<tr style="background-color: #86abc6;font-weight: 700;color: #000000;">';
+                   $html .= '<tr class="fontweight" style="background-color: #86abc6;font-weight: 700;color: #000000;">';
                         $html .= '<td>Total Upgrades - '.$dealer_names.'</td><td></td><td></td><td></td><td class="text-center">'.$total_upgrades.'</td><td></td><td></td><td></td><td class="text-center dealer-hide">$'.$total_dealer_cost.'</td><td class="text-center distributor-hide">$'.$total_distributor_cost.'</td><td class="nisl-pdf-link"></td>';
                     $html .= '</tr>';
                 }

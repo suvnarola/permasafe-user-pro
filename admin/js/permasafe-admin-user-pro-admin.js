@@ -2643,7 +2643,7 @@ jQuery(document).ready(function () {
                 onSelect: function (date) {
                     var date2 = jQuery('#datepicker1').datepicker('getDate');
                     date2.setDate(date2.getDate() + 1);
-                    jQuery('#datepicker2').datepicker('setDate', date2);
+                    // jQuery('#datepicker2').datepicker('setDate', date2);
                     //sets minDate to dt1 date + 1
                     jQuery('#datepicker2').datepicker('option', 'minDate', date2);
                 }
@@ -2664,7 +2664,7 @@ jQuery(document).ready(function () {
                 onSelect: function (date) {
                     var date2 = jQuery('#datepicker1').datepicker('getDate');
                     date2.setDate(date2.getDate() + 1);
-                    jQuery('#datepicker2').datepicker('setDate', date2);
+                    // jQuery('#datepicker2').datepicker('setDate', date2);
                     //sets minDate to dt1 date + 1
                     jQuery('#datepicker2').datepicker('option', 'minDate', date2);
                 }
@@ -2683,7 +2683,7 @@ jQuery(document).ready(function () {
                 onSelect: function (date) {
                     var date2 = jQuery('#datepicker1').datepicker('getDate');
                     date2.setDate(date2.getDate() + 1);
-                    jQuery('#datepicker2').datepicker('setDate', date2);
+                    // jQuery('#datepicker2').datepicker('setDate', date2);
                     //sets minDate to dt1 date + 1
                     jQuery('#datepicker2').datepicker('option', 'minDate', date2);
                 }
@@ -2701,7 +2701,7 @@ jQuery(document).ready(function () {
                 onSelect: function (date) {
                     var date2 = jQuery('#datepicker1').datepicker('getDate');
                     date2.setDate(date2.getDate() + 1);
-                    jQuery('#datepicker2').datepicker('setDate', date2);
+                    // jQuery('#datepicker2').datepicker('setDate', date2);
                     //sets minDate to dt1 date + 1
                     jQuery('#datepicker2').datepicker('option', 'minDate', date2);
                 }
@@ -2720,7 +2720,7 @@ jQuery(document).ready(function () {
                 onSelect: function (date) {
                     var date2 = jQuery('#datepicker1').datepicker('getDate');
                     date2.setDate(date2.getDate() + 1);
-                    jQuery('#datepicker2').datepicker('setDate', date2);
+                    // jQuery('#datepicker2').datepicker('setDate', date2);
                     //sets minDate to dt1 date + 1
                     jQuery('#datepicker2').datepicker('option', 'minDate', date2);
                 }
