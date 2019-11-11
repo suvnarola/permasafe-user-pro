@@ -1330,6 +1330,11 @@ class Permasafe_User_Pro_Admin
 			$html .= '<i class="fa fa-trash" id="delete_code_button" style="cursor:pointer;color:#ff0000;font-size:18px;" data-id="' . $post_id . '"></i>';
 			$html .= '</td>';
 
+			$html .= '<td class="active_inactive column-active_inactive" data-colname="Active/Inactive">';
+			$is_active = get_post_meta($post_id,'code_active_inactive',true);
+				$html .=  '<input type="checkbox" class="jtoggler" disabled data-id="'.$post_id.'" data-val="'.$is_active.'" data-jtmulti-state>';
+			$html .= '</td>';
+
 			$html .= '</tr>';
 		} else {
 			$html .= '<tr class="no-items"><td class="colspanchange" colspan="9">No Batch Member Codes found.</td></tr>';
@@ -1423,6 +1428,20 @@ class Permasafe_User_Pro_Admin
 			$html .= '<td class="reset column-reset" data-colname="Reset Code">';
 			$html .= '<i class="fa fa-undo" style="font-size:20px;cursor:pointer;color:#0065a7;" title="reset" id="reset-code" data-id="' . $post_id . '"></i>';
 			$html .= '</td>';
+			
+			$html .= '<td class="class="active_inactive column-active_inactive"" data-colname="Active/Inactive">';
+			  $is_active = get_post_meta($post_id,'code_active_inactive',true);
+                      
+			$bulk_id = get_post_meta($post_id,'_pmsafe_bulk_invitation_id',true);
+			$bulk_active_inactive = get_post_meta($bulk_id,'code_active_inactive',true);
+			if($is_active == 1){
+				$html .= '<input type="checkbox" checked  class="jtoggler" data-id="'.$post_id.'" data-val="'.$is_active.'">';
+			}
+			if($is_active == 0){
+				$html .= '<input type="checkbox" class="jtoggler" data-id="'.$post_id.'" data-val="'.$is_active.'">';
+			}
+			$html .= '</td>';
+			
 
 			$html .= '</tr>';
 		} else {

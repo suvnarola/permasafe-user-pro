@@ -808,7 +808,7 @@ jQuery(document).ready(function () {
                 contentType: false,
                 data: fd,
                 success: function (response) {
-                    console.log(response);
+
                     jQuery('.perma-admin-loader').hide();
                     var obj = jQuery.parseJSON(response);
                     // var obj = jQuery.parseJSON(response);
@@ -1630,6 +1630,38 @@ jQuery(document).ready(function () {
                     // console.log(response);
                     jQuery('#the-list').html('');
                     jQuery('#the-list').html(response);
+                    jQuery('.jtoggler').jtoggler();
+                    jQuery('.jtoggler-wrapper').each(function () {
+
+                        var post_type = jQuery.urlParam('post_type');
+                        var page_param = jQuery.urlParam('page');
+                        if (post_type == 'pmsafe_bulk_invi') {
+                            if (jQuery(this).find('.jtoggler').data('val') == 0) {
+                                jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
+
+                                jQuery(this).find('.jtoggler-btn-wrapper:nth-child(1)').addClass('is-active');
+                                jQuery(this).find('.jtoggler-btn-wrapper:nth-child(2)').removeClass('is-active');
+                                jQuery(this).find('.jtoggler-btn-wrapper:nth-child(3)').removeClass('is-active');
+                            }
+                            if (jQuery(this).find('.jtoggler').data('val') == 1) {
+                                jQuery(this).append('<span style="color:#ffa500">Mixed</span>');
+
+                                jQuery(this).find('.jtoggler-control').addClass('mixed-state');
+                                jQuery(this).find('.jtoggler-btn-wrapper:nth-child(1)').removeClass('is-active');
+                                jQuery(this).find('.jtoggler-btn-wrapper:nth-child(2)').addClass('is-active');
+                                jQuery(this).find('.jtoggler-btn-wrapper:nth-child(3)').removeClass('is-active');
+                            }
+                            if (jQuery(this).find('.jtoggler').data('val') == 2) {
+                                jQuery(this).append('<span style="color:#008000">Active</span>');
+
+                                jQuery(this).find('.jtoggler-control').addClass('is-fully-active');
+                                jQuery(this).find('.jtoggler-btn-wrapper:nth-child(1)').removeClass('is-active');
+                                jQuery(this).find('.jtoggler-btn-wrapper:nth-child(2)').removeClass('is-active');
+                                jQuery(this).find('.jtoggler-btn-wrapper:nth-child(3)').addClass('is-active');
+                            }
+                        }
+
+                    });
                 },
                 dataType: 'html'
             });
@@ -1672,6 +1704,22 @@ jQuery(document).ready(function () {
                     // console.log(response);
                     jQuery('#the-list').html('');
                     jQuery('#the-list').html(response);
+                    jQuery('.jtoggler').jtoggler();
+                    jQuery('.jtoggler-wrapper').each(function () {
+
+                        var post_type = jQuery.urlParam('post_type');
+                        var page_param = jQuery.urlParam('page');
+
+                        if (post_type == 'pmsafe_invitecode') {
+                            if (jQuery(this).find('.jtoggler').data('val') == 0) {
+                                jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
+                            }
+                            if (jQuery(this).find('.jtoggler').data('val') == 1) {
+                                jQuery(this).append('<span style="color:#008000">Active</span>');
+                            }
+                        }
+
+                    });
                 },
                 dataType: 'html'
             });
@@ -1728,6 +1776,38 @@ jQuery(document).ready(function () {
                         // console.log(response);
                         jQuery('#the-list').html('');
                         jQuery('#the-list').html(response);
+                        jQuery('.jtoggler').jtoggler();
+                        jQuery('.jtoggler-wrapper').each(function () {
+
+                            var post_type = jQuery.urlParam('post_type');
+                            var page_param = jQuery.urlParam('page');
+                            if (post_type == 'pmsafe_bulk_invi') {
+                                if (jQuery(this).find('.jtoggler').data('val') == 0) {
+                                    jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
+
+                                    jQuery(this).find('.jtoggler-btn-wrapper:nth-child(1)').addClass('is-active');
+                                    jQuery(this).find('.jtoggler-btn-wrapper:nth-child(2)').removeClass('is-active');
+                                    jQuery(this).find('.jtoggler-btn-wrapper:nth-child(3)').removeClass('is-active');
+                                }
+                                if (jQuery(this).find('.jtoggler').data('val') == 1) {
+                                    jQuery(this).append('<span style="color:#ffa500">Mixed</span>');
+
+                                    jQuery(this).find('.jtoggler-control').addClass('mixed-state');
+                                    jQuery(this).find('.jtoggler-btn-wrapper:nth-child(1)').removeClass('is-active');
+                                    jQuery(this).find('.jtoggler-btn-wrapper:nth-child(2)').addClass('is-active');
+                                    jQuery(this).find('.jtoggler-btn-wrapper:nth-child(3)').removeClass('is-active');
+                                }
+                                if (jQuery(this).find('.jtoggler').data('val') == 2) {
+                                    jQuery(this).append('<span style="color:#008000">Active</span>');
+
+                                    jQuery(this).find('.jtoggler-control').addClass('is-fully-active');
+                                    jQuery(this).find('.jtoggler-btn-wrapper:nth-child(1)').removeClass('is-active');
+                                    jQuery(this).find('.jtoggler-btn-wrapper:nth-child(2)').removeClass('is-active');
+                                    jQuery(this).find('.jtoggler-btn-wrapper:nth-child(3)').addClass('is-active');
+                                }
+                            }
+
+                        });
                     },
                     dataType: 'html'
                 });
@@ -1773,6 +1853,21 @@ jQuery(document).ready(function () {
                         // console.log(response);
                         jQuery('#the-list').html('');
                         jQuery('#the-list').html(response);
+                        jQuery('.jtoggler').jtoggler();
+                        jQuery('.jtoggler-wrapper').each(function () {
+
+                            var post_type = jQuery.urlParam('post_type');
+                            var page_param = jQuery.urlParam('page');
+                            if (post_type == 'pmsafe_invitecode') {
+                                if (jQuery(this).find('.jtoggler').data('val') == 0) {
+                                    jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
+                                }
+                                if (jQuery(this).find('.jtoggler').data('val') == 1) {
+                                    jQuery(this).append('<span style="color:#008000">Active</span>');
+                                }
+                            }
+
+                        });
                     },
                     dataType: 'html'
                 });

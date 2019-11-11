@@ -212,6 +212,7 @@ class PMSafe_Bulk_Invitation{
             {
                 jQuery('#export-dealer-csv').prependTo('span.displaying-num');    
                 jQuery('#back_link').prependTo('span.displaying-num');    
+                jQuery(document).find('.no-pages').removeClass('no-pages').addClass('one-page');
             });     
         </script>
         <?php 
