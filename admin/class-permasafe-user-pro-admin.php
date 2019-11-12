@@ -2155,7 +2155,7 @@ class Permasafe_User_Pro_Admin
 		$html .= 'Distributor Cost';
 		$html .= '</th>';
 		
-		$html .= '<th class="distributor-hide">';
+		$html .= '<th class="">';
 		$html .= 'Active/Inactive';
 		$html .= '</th>';
 
@@ -4976,7 +4976,7 @@ class Permasafe_User_Pro_Admin
 					$html .= 'Distributor Cost Price to Upgrade';
 					$html .= '</th>';
 					
-					$html .= '<th class="distributor-hide">';
+					$html .= '<th class="">';
 					$html .= 'Active/Inactive';
 					$html .= '</th>';
 				$html .= '</tr>';
@@ -5134,7 +5134,7 @@ class Permasafe_User_Pro_Admin
 															$html .= $fname.' '.$lname;
 														}
 													$html .= '</td>';
-													$html .= '<td>'.$registration_date = date('m-d-Y', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])).'</td>';;
+													$html .= '<td>'.$registration_date = date('m-d-Y', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])).'</td>';
 													$html .= '<td class="text-center dealer-hide">$'.(($dealer_cost_original_policy)?$dealer_cost_original_policy:'0').'</td>';
 													$html .= '<td class="text-center dealer-hide">$'.(($dealer_cost_final_policy)?$dealer_cost_final_policy:'0').'</td>';
 													$html .= '<td class="text-center dealer-hide">$'.abs($dealer_cost_price_to_upgrade).'</td>';
@@ -5194,7 +5194,7 @@ class Permasafe_User_Pro_Admin
 															$html .= $fname.' '.$lname;
 														}
 													$html .= '</td>';
-													$html .= '<td>'.$registration_date = date('m-d-Y', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])).'</td>';;
+													$html .= '<td>'.$registration_date = date('m-d-Y', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])).'</td>';
 													$html .= '<td class="text-center dealer-hide">$'.(($dealer_cost_original_policy)?$dealer_cost_original_policy:'0').'</td>';
 													$html .= '<td class="text-center dealer-hide">$'.(($dealer_cost_final_policy)?$dealer_cost_final_policy:'0').'</td>';
 													$html .= '<td class="text-center dealer-hide">$'.abs($dealer_cost_price_to_upgrade).'</td>';
@@ -5254,7 +5254,7 @@ class Permasafe_User_Pro_Admin
 														$html .= $fname.' '.$lname;
 													}
 												$html .= '</td>';
-												$html .= '<td>'.$registration_date = date('m-d-Y', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])).'</td>';;
+												$html .= '<td>'.$registration_date = date('m-d-Y', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])).'</td>';
 												$html .= '<td class="text-center dealer-hide">$'.(($dealer_cost_original_policy)?$dealer_cost_original_policy:'0').'</td>';
 												$html .= '<td class="text-center dealer-hide">$'.(($dealer_cost_final_policy)?$dealer_cost_final_policy:'0').'</td>';
 												$html .= '<td class="text-center dealer-hide">$'.abs($dealer_cost_price_to_upgrade).'</td>';
@@ -5285,7 +5285,11 @@ class Permasafe_User_Pro_Admin
 					}
 				
 					$html .= '<tr style="background-color: #F0CF65;font-weight: 700;color: #000000;">';
-						$html .='<td>Total Upgrades - '.$dealer_name.'</td><td></td><td></td><td></td><td></td><td class="text-center">'.$total_members.'</td><td></td><td></td><td class="dealer-hide text-center">$'.$dealer_original_policy_sum.'</td><td class="dealer-hide text-center">$'.$dealer_final_policy_sum.'</td><td class="dealer-hide text-center">$'.$dealer_price_to_upgrade_sum.'</td><td class="distributor-hide text-center">$'.$distributor_original_policy_sum.'</td><td class="distributor-hide text-center">$'.$distributor_final_policy_sum.'</td><td class="distributor-hide text-center">$'.$distributor_price_to_upgrade_sum.'</td><td></td>';		
+						$html .='<td>Total Base Policy Cost - '.$dealer_name.'</td><td></td><td></td><td></td><td></td><td class="text-center">'.$total_members.'</td><td></td><td></td><td class="dealer-hide text-center">$'.$dealer_original_policy_sum.'</td><td class="dealer-hide text-center">$'.$dealer_final_policy_sum.'</td><td class="dealer-hide text-center"></td><td class="distributor-hide text-center">$'.$distributor_original_policy_sum.'</td><td class="distributor-hide text-center">$'.$distributor_final_policy_sum.'</td><td class="distributor-hide text-center"></td><td></td>';		
+					$html .= '</tr>';
+
+					$html .= '<tr style="background-color: #F0CF65;font-weight: 700;color: #000000;">';
+						$html .='<td>Total Cost to Upgrade - '.$dealer_name.'</td><td></td><td></td><td></td><td></td><td class="text-center">'.$total_members.'</td><td></td><td></td><td class="dealer-hide text-center"></td><td class="dealer-hide text-center"></td><td class="dealer-hide text-center">$'.$dealer_price_to_upgrade_sum.'</td><td class="distributor-hide text-center"></td><td class="distributor-hide text-center"></td><td class="distributor-hide text-center">$'.$distributor_price_to_upgrade_sum.'</td><td></td>';		
 					$html .= '</tr>';
 
 					$remittance_address = get_user_meta($dealer_id,'pmsafe_remittance_address',true);
@@ -5323,6 +5327,7 @@ class Permasafe_User_Pro_Admin
 		
 			$html .= '</tbody>';
 		$html .= '</table>';
+		$html .= '</div>';
 
 		$response = array('dttable'=>$html,'toptitle'=>$title);
 		echo json_encode($response);

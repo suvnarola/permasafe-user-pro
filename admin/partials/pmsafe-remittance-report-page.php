@@ -118,10 +118,10 @@ echo '<div class="filter-wrap">';
 
     echo '<div class="reports-btn-wrap">';
         echo '<div class="btn-filter-wrap">';
-            echo '<input type="button" id="remittance_report_submit" value="Submit" style="color:#fff;background-color:#0065a7;width: 100%;margin: 0;"/>';
+            echo '<input type="button" id="remittance_report_submit" value="Submit"/>';
         echo '</div>';
         echo '<div>';
-            echo '<input type="button" name="reset" id="search_reset" value="Reset" style="background-color: #f1f1f1;padding: 2px 30px;"/>';
+            echo '<input type="button" name="reset" id="search_reset" value="Reset"/>';
         echo '</div>';
     echo '</div>';
 

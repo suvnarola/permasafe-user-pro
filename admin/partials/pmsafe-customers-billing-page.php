@@ -42,7 +42,8 @@ echo '<div class="b-report-wrap">';
         echo '</div>';
     echo '</div>';
     
- echo '<input type="button" id="billing_report_submit" value="Run Report" style="color:#fff;background-color:#0065a7;"/>';
+ echo '<input type="button" id="billing_report_submit" value="Run Report"/>';
+ echo '<input type="button" name="reset" id="search_reset" value="Reset">';
 echo '</div>';
 
 echo '<div id="billing_report_result">';

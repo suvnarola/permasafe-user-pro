@@ -301,6 +301,7 @@ class Permasafe_User_Pro
 		
 		$this->loader->add_action('wp_ajax_admin_remittance_report_filter', $plugin_admin, 'admin_remittance_report_filter');
 		$this->loader->add_action('wp_ajax_nopriv_admin_remittance_report_filter', $plugin_admin, 'admin_remittance_report_filter');
+		
 	}
 
 	/**

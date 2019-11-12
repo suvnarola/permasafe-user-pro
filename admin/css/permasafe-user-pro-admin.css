@@ -595,13 +595,6 @@ li.unused-code {
     color: #fff;
 }
 
-.reports-wrap .input-btn input#search_reset {
-    background: #ddd;
-    border: 0;
-    color: #333;
-    cursor: pointer;
-}
-
 .view-data-wrap .view-data-wrap-inner {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -791,22 +784,48 @@ div#search_tbl_wrapper {
     width: 100%
 }
 
-.filter-wrap .btn-filter-wrap {
+/* .filter-wrap .btn-filter-wrap {
     width: 10%;
     margin-right: 15px;
-}
+} */
 
 .filter-wrap .input-filter-wrap input {
     width: 228px !important;
     margin: 0 10px;
 }
 
-.filter-wrap .btn-filter-wrap input#date_submit,
-.filter-wrap .btn-filter-wrap input#membership_date_submit {
-    width: 100%;
-    margin: 0;
+input#remittance_report_submit,
+input#date_submit,
+input#billing_report_submit,
+input#membership_date_submit,
+input#search_all_submit {
+    width: auto !important;
+    min-height: 36px;
+    padding: 0 20px;
+    margin: 0px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    background: #1565a9;
+    border: 2px solid #1565a9;
+    color: #fff;
+    cursor: pointer;
 }
-
+ input#search_reset{
+    background-color: #f1f1f1;
+    padding: 2px 30px;
+    width: auto !important;
+    min-height: 36px;
+    padding: 0 20px;
+    margin: 0px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    background: transparent;
+    border: 2px solid #1565a9;
+    color: #1565a9;
+    cursor: pointer;
+}
 .filter-wrap .select-filter-wrap .fancy-select-wrap {
     padding-top: 0;
 }
@@ -1190,9 +1209,9 @@ a#back_link {
     justify-content: flex-end;
 }
 
-.coverage-main .btn-filter-wrap input#date_submit {
+/* .coverage-main .btn-filter-wrap input#date_submit {
     max-width: 200px;
-}
+} */
 
 .jtoggler-wrapper {
     display: inline-block !important;

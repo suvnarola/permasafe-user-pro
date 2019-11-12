@@ -2402,4 +2402,175 @@ jQuery(document).ready(function () {
 
     });
 
+
+    jQuery(document).on("click", "#remittance_report_submit", function (e) {
+        jQuery('.error').remove();
+        var validflag = true;
+
+        var datepicker1 = jQuery('#membership_datepicker1').val();
+        var datepicker2 = jQuery('#membership_datepicker2').val();
+        var policy = jQuery('#policy').val();
+        var package = jQuery('#benefit_packages').val();
+        var registration_type = jQuery("input[name='registration_type']:checked").val();
+        var members_type = jQuery("input[name='active_inactive']:checked").val();
+        var dealer_session = jQuery('#dealer_session').val();
+
+        if (dealer_session != undefined) {
+            var data = {
+                action: 'remittance_report_filter',
+                datepicker1: datepicker1,
+                datepicker2: datepicker2,
+                policy: policy,
+                package: package,
+                registration_type: registration_type,
+                members_type: members_type,
+                dealer_session: dealer_session
+            }
+        } else {
+
+            var data = {
+                action: 'remittance_report_filter',
+                datepicker1: datepicker1,
+                datepicker2: datepicker2,
+                policy: policy,
+                package: package,
+                registration_type: registration_type,
+                members_type: members_type
+            }
+        }
+        if (policy != '' && package == '') {
+            jQuery('#benefit_packages').css({
+                'border': '1px solid #ff0000'
+            });
+            jQuery('#benefit_packages').after("<span class='error'>This field is required.</span>");
+            validflag = false;
+        } else {
+            jQuery('#benefit_packages').css({
+                'color': '#333333'
+            });
+        }
+        jQuery('.perma-loader').show();
+        if (!validflag) {
+            jQuery('.perma-loader').hide();
+            return validflag;
+        } else {
+            jQuery.ajax({
+                type: 'POST',
+                url: pmAjax.ajaxurl,
+                data: data,
+                // dataType: 'html',
+                success: function (response) {
+                    jQuery('.perma-loader').hide();
+                    var obj = jQuery.parseJSON(response);
+                    jQuery('.remittance-result-wrap').html('');
+
+                    jQuery('.remittance-result-wrap').html('<h3 style="text-align:center;">' + obj.toptitle + '</h3>' + obj.dttable);
+                    var radioValue = jQuery("input[name='show_hide']:checked").val();
+
+                    if (jQuery("input[name='show_hide']:radio").is(":checked")) {
+                        if (radioValue == 'hide_dealer') {
+                            jQuery('.dealer-hide').addClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13,14';
+                        }
+                        if (radioValue == 'hide_distributor') {
+                            jQuery('.distributor-hide').addClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11';
+                        }
+                        if (radioValue == 'no_cost') {
+                            jQuery('.dealer-hide').addClass('nisl-pdf-link');
+                            jQuery('.distributor-hide').addClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8';
+                        }
+                        if (radioValue == 'show_cost') {
+                            jQuery('.dealer-hide').removeClass('nisl-pdf-link');
+                            jQuery('.distributor-hide').removeClass('nisl-pdf-link');
+                            var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14';
+                        }
+                    } else {
+
+                        var columntarget = '0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14';
+                    }
+
+                    var address_show_hide = jQuery("input[name='address_show_hide']:checked").val();
+                    if (jQuery("input[name='address_show_hide']:radio").is(":checked")) {
+                        if (address_show_hide == 'hide_address') {
+                            jQuery('.address-row').remove();
+                        }
+
+                    }
+
+                    jQuery('#remittance_report_table').DataTable({
+                        dom: 'Bfrtip',
+                        "pagingType": "input",
+                        responsive: true,
+                        "pageLength": 20,
+                        orderCellsTop: true,
+                        "ordering": false,
+                        'columnDefs': [{
+                            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+                            /* column index */
+                            'orderable': false,
+                            /* true or false */
+                        }],
+                        createdRow: function (row, data, dataIndex) {
+                            if (data[0] === 'Address') {
+
+                                var me = jQuery(row).closest('tr').attr('class');
+
+                                jQuery('.' + me + ' td:not(.saveme)').css('display', 'none');
+                                jQuery('td:eq(1)', row).attr('colspan', 17);
+                                jQuery('.' + me + ' .adr_rmv').css('color', 'rgb(188, 188, 188)');
+                            }
+                        },
+                        buttons: [{
+
+                            extend: 'csv',
+                            //Name the CSV
+                            filename: obj.toptitle,
+                            exportOptions: {
+                                columns: [columntarget]
+                            },
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'PDF',
+                            filename: obj.toptitle,
+                            orientation: 'landscape',
+                            pageSize: 'LEGAL',
+                            exportOptions: {
+                                columns: [columntarget]
+                            },
+                            title: obj.toptitle
+                        },
+                        {
+                            extend: 'excel',
+                            text: 'EXCEL',
+                            filename: obj.toptitle,
+                            exportOptions: {
+                                columns: [columntarget]
+                            },
+                            title: obj.toptitle
+                        },
+                        {
+                            extend: 'print',
+                            text: 'PRINT',
+                            filename: 'Upgrade Report',
+                            exportOptions: {
+                                columns: [columntarget]
+                            },
+                            title: obj.toptitle,
+                            customize: function (win) {
+                                jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
+                            }
+                        }
+                        ]
+                        // filename: 'dealer_list',
+                    });
+
+                },
+
+            });
+        }
+    });
+
 });
