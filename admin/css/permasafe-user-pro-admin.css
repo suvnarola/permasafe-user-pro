@@ -1255,8 +1255,12 @@ table#billing_info_table thead th:nth-child(3) {width: 70px !important;}
 input#billing_report_submit {margin-left: 195px;margin-bottom: 30px;border: 0;padding: 7px 20px;}
 table#membership_date_table.dataTable thead th {padding: 10px 14px;}
 
+input.batch_cb[type="checkbox"]:checked + label:before {background-color: red;border-color: red;color: #fff;}
+input.batch_cb[type="checkbox"] + label:before {content: "\2714";border: 1px solid #000;border-radius: 2px;display: flex;width: 18px;height: 18px;padding-left: 0;padding-bottom: 0;margin-right: 0;vertical-align: bottom;color: transparent;transition: .2s;align-items: center;justify-content: center;}
+input.batch_cb[type="checkbox"] {display: none;}
+.chk_div {display: flex;align-items: center;justify-content: center;flex-wrap: wrap;padding-top: 4px;}
 
-/******** Responsive **********/
+/******** media start here **********/
 
 
 @media(max-width:1400px) {

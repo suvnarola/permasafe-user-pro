@@ -2932,69 +2932,7 @@ jQuery(document).ready(function () {
         });
     });
 
-    var mebership_info_table = jQuery('#membership_info_table').DataTable({
-        dom: 'Bfrtip',
-        responsive: true,
-        "pagingType": "input",
-        "pageLength": 20,
-        orderCellsTop: true,
-        "ordering": false,
-        'columnDefs': [{
-            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-            /* column index */
-            'orderable': false,
-            /* true or false */
-        }],
-        buttons: [{
 
-            extend: 'csv',
-            //Name the CSV
-            filename: 'Upgrade Report',
-            exportOptions: {
-                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-            },
-
-        },
-        {
-            extend: 'pdfHtml5',
-            text: 'PDF',
-            filename: 'Upgrade Report',
-            orientation: 'landscape',
-            pageSize: 'LEGAL',
-            exportOptions: {
-                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-            },
-            title: 'UPGRADE REPORT'
-        },
-        {
-            extend: 'excel',
-            text: 'EXCEL',
-            filename: 'Upgrade Report',
-            exportOptions: {
-                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-            },
-            title: 'UPGRADE REPORT'
-
-        },
-        {
-            extend: 'print',
-            text: 'PRINT',
-            filename: 'Upgrade Report',
-
-            exportOptions: {
-                columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-            },
-            title: 'UPGRADE REPORT',
-            customize: function (win) {
-                jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
-
-            }
-        }
-
-
-        ]
-
-    });
     jQuery("#membership_datepicker1").datepicker({
         dateFormat: 'yy-mm-dd',
         onSelect: function (date) {
@@ -3021,9 +2959,6 @@ jQuery(document).ready(function () {
         var package = jQuery('#benefit_packages').val();
         var members_type = jQuery("input[name='active_inactive']:checked").val();
         var login = jQuery('#membership_login').val();
-
-
-
 
         if (login === undefined) {
 
@@ -4870,6 +4805,58 @@ jQuery(document).ready(function () {
 
             });
         }
+    });
+
+    jQuery(document).on('change', '.batch_cb', function () {
+        var post_id = jQuery(this).val();
+        var post_type = jQuery.urlParam('post_type');
+        if (jQuery(this).is(":checked")) {
+            var is_checked = 1;
+        } else {
+            var is_checked = 0;
+        }
+        var data = {
+            action: 'active_inactive_code_function',
+            post_id: post_id,
+            param: post_type,
+            is_checked: is_checked
+        };
+        jQuery('.perma-admin-loader').show();
+        jQuery.ajax({
+            type: 'POST',
+            url: pmAjax.ajaxurl,
+            data: data,
+
+            success: function (response) {
+                jQuery('.perma-admin-loader').hide();
+
+                jQuery('.jtoggler-wrapper').each(function () {
+                    if (jQuery(this).find('.jtoggler').data('id') == post_id) {
+                        jQuery(this).find('.jtoggler').parents('.jtoggler-wrapper-multistate').find('span').css('display', 'none');
+                        if (is_checked == 1) {
+                            jQuery(this).find('.jtoggler').data('val', 0);
+                            jQuery(this).find('.jtoggler').parents('.jtoggler-wrapper-multistate').find('.jtoggler-control').removeClass('is-fully-active');
+                            jQuery(this).find('.jtoggler').parents('.jtoggler-wrapper-multistate').find('.jtoggler-control').removeClass('mixed-state');
+                            jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
+
+                            jQuery(this).find('.jtoggler-btn-wrapper:nth-child(1)').addClass('is-active');
+                            jQuery(this).find('.jtoggler-btn-wrapper:nth-child(2)').removeClass('is-active');
+                            jQuery(this).find('.jtoggler-btn-wrapper:nth-child(3)').removeClass('is-active');
+                        }
+                        if (is_checked == 0) {
+                            jQuery(this).find('.jtoggler').data('val', 2);
+                            jQuery(this).append('<span style="color:#008000">Active</span>');
+
+                            jQuery(this).find('.jtoggler-control').addClass('is-fully-active');
+                            jQuery(this).find('.jtoggler-btn-wrapper:nth-child(1)').removeClass('is-active');
+                            jQuery(this).find('.jtoggler-btn-wrapper:nth-child(2)').removeClass('is-active');
+                            jQuery(this).find('.jtoggler-btn-wrapper:nth-child(3)').addClass('is-active');
+                        }
+                    }
+                });
+            }
+        })
+
     });
 
 }); // ready

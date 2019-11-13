@@ -1983,68 +1983,7 @@ jQuery(document).ready(function () {
     });
 
 
-    var membership_info_table = jQuery('#membership_info_table').DataTable({
 
-        dom: 'Bfrtip',
-        responsive: true,
-        orderCellsTop: true,
-        "pagingType": "input",
-        "pageLength": 20,
-        "ordering": false,
-        'columnDefs': [{
-            'targets': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-            /* column index */
-            'orderable': false,
-            /* true or false */
-        }],
-        buttons: [
-            {
-                extend: 'csv',
-                //Name the CSV
-                filename: 'Upgrade Report',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                },
-                title: 'UPGRADE REPORT'
-            },
-            {
-                extend: 'pdfHtml5',
-                text: 'PDF',
-                filename: 'Upgrade Report',
-                orientation: 'landscape',
-                pageSize: 'LEGAL',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                },
-                title: 'UPGRADE REPORT'
-            },
-            {
-                extend: 'excel',
-                text: 'EXCEL',
-                filename: 'Upgrade Report',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                },
-                title: 'UPGRADE REPORT'
-            },
-            {
-                extend: 'print',
-                text: 'PRINT',
-                filename: 'Upgrade Report',
-                title: 'UPGRADE REPORT',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                },
-                customize: function (win) {
-                    jQuery(win.document.body).find('table').addClass('display').css('font-size', '10px');
-
-                }
-            }
-
-
-        ]
-
-    });
 
     jQuery("#membership_datepicker1").datepicker({
         dateFormat: 'yy-mm-dd',

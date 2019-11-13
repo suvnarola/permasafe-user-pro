@@ -52,18 +52,8 @@ class PMSafe_Bulk_Invitation{
             add_filter( 'views_edit-pmsafe_bulk_invi', array( $this,'export_dealer_csv_function' ));
             add_filter( 'views_edit-pmsafe_bulk_invi', array( $this,'total_range_codes' ));
             add_action( 'admin_head-edit.php', array ( $this, 'move_export_dealer_csv_function' ));
-            // add_action( 'admin_footer', array ( $this, 'pdfscript' ));
             add_action('admin_footer',array($this, 'disable_enter_key_event'));
-            // add_filter('publish_post',array($this, 'redirect_to_post_on_publish_or_save'));
     }
-
-    
-    // public function redirect_to_post_on_publish_or_save($ID, $post ){
-    //     die('testinggggg');
-    //     $pl = 'www.google.com'.$ID;
-    //     wp_redirect($pl);
-    //     exit;
-    // }
 
     public function disable_enter_key_event(){
         $post_type = $_GET['post_type']; 
@@ -940,6 +930,7 @@ class PMSafe_Bulk_Invitation{
         unset( $columns['title'] );
         unset( $columns['author'] );
         unset( $columns['date'] );
+        $columns['inactive_batch']         = __( 'Inactive Batch', '' );
         $columns['invitation_code']         = __( 'Member code', '' );
         $columns['benefits_package']        = __( 'Benefits Package', '' );
         $columns['dealer']                  = __( 'Dealer', '' );
@@ -956,6 +947,19 @@ class PMSafe_Bulk_Invitation{
 
     public function custom_columns( $column, $post_id ) {
             switch ( $column ) {
+
+                case 'inactive_batch':
+                echo '<div class="chk_div">';
+                 $batch_is_active = get_post_meta($post_id,'code_active_inactive',true);
+                 if($batch_is_active == 0){
+                    echo '<input type="checkbox" checked id="'.$post_id.'" value="'.$post_id.'" class="batch_cb"><label for="'.$post_id.'"></label>';
+                 }
+                 if($batch_is_active == 1 || $batch_is_active == 2){
+                    echo '<input type="checkbox" id="'.$post_id.'" value="'.$post_id.'" class="batch_cb"><label for="'.$post_id.'"></label>'; 
+                 }
+                    
+                echo '</div>';
+                break;
 
                 case 'count_unused_code':
                         $data = pmsafe_unused_code_count($post_id);
@@ -1005,9 +1009,8 @@ class PMSafe_Bulk_Invitation{
     
     public function remove_row_actions( $actions ){
         if( get_post_type() === 'pmsafe_bulk_invi' ){
-            // unset( $actions['edit'] );
+            unset( $actions['edit'] );
             unset( $actions['trash'] );
-            // unset( $actions['inline hide-if-no-js'] );
         }
         return $actions;
     }

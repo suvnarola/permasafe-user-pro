@@ -4182,7 +4182,7 @@ class Permasafe_User_Pro_Public
             
             $html .= '<div class="membership-result-wrap">';
 
-            $html .= '<table id="membership_info_table" class="display nowrap" style="width:100%">';
+            /*$html .= '<table id="membership_info_table" class="display nowrap" style="width:100%">';
             $html .= '<thead>';
             $html .= '<tr>';
             $html .= '<th>';
@@ -4370,7 +4370,7 @@ class Permasafe_User_Pro_Public
                
             // } // distributor loop 
             $html .= '</tbody>';
-            $html .= '</table>';
+            $html .= '</table>';*/
             $html .= '</div>';
         } else {
 

@@ -161,7 +161,7 @@ echo '</div>';
 
 
 echo '<div class="membership-result-wrap">';
-echo '<div class="table-responsive">';
+/*echo '<div class="table-responsive">';
 echo '<table id="membership_info_table" class="display nowrap" style="width:100%">';
 echo '<thead>';
 echo '<tr>';
@@ -357,5 +357,5 @@ foreach ($distributors as $distributor) {
 
 echo '</tbody>';
 echo '</table>';
-echo '</div>';
+echo '</div>';*/
 echo '</div>';
