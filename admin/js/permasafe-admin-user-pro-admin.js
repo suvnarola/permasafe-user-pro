@@ -4264,6 +4264,21 @@ jQuery(document).ready(function () {
         }, 100);
     });
 
+    jQuery("#view_customer_table_filter input[type='search']").on('keyup', function () {
+        setTimeout(function () {
+            jQuery('.jtoggler').jtoggler();
+            jQuery('.jtoggler-wrapper').each(function () {
+                jQuery(this).find('span').css('display', 'none');
+                if (jQuery(this).find('.jtoggler').data('val') == 0) {
+                    jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
+                }
+                if (jQuery(this).find('.jtoggler').data('val') == 1) {
+                    jQuery(this).append('<span style="color:#008000">Active</span>');
+                }
+            });
+        }, 100);
+    });
+
     jQuery('#tbl_distributors').on('page.dt', function () {
 
         setTimeout(function () {
@@ -4807,14 +4822,14 @@ jQuery(document).ready(function () {
         }
     });
 
-    jQuery(document).on('change', '.batch_cb', function () {
+    jQuery(document).on('click', '.batch_cb', function (e) {
+        e.preventDefault();
+
         var post_id = jQuery(this).val();
         var post_type = jQuery.urlParam('post_type');
-        if (jQuery(this).is(":checked")) {
-            var is_checked = 1;
-        } else {
-            var is_checked = 0;
-        }
+        var is_checked = jQuery(this).attr('data-val');
+        var current_element = jQuery(this);
+
         var data = {
             action: 'active_inactive_code_function',
             post_id: post_id,
@@ -4829,31 +4844,40 @@ jQuery(document).ready(function () {
 
             success: function (response) {
                 jQuery('.perma-admin-loader').hide();
+                jQuery('tr#post-' + post_id).find('.jtoggler').parents('.jtoggler-wrapper-multistate').find('span').css('display', 'none');
+                if (is_checked == 0) {
 
-                jQuery('.jtoggler-wrapper').each(function () {
-                    if (jQuery(this).find('.jtoggler').data('id') == post_id) {
-                        jQuery(this).find('.jtoggler').parents('.jtoggler-wrapper-multistate').find('span').css('display', 'none');
-                        if (is_checked == 1) {
-                            jQuery(this).find('.jtoggler').data('val', 0);
-                            jQuery(this).find('.jtoggler').parents('.jtoggler-wrapper-multistate').find('.jtoggler-control').removeClass('is-fully-active');
-                            jQuery(this).find('.jtoggler').parents('.jtoggler-wrapper-multistate').find('.jtoggler-control').removeClass('mixed-state');
-                            jQuery(this).append('<span style="color:#ff0000">Inactive</span>');
+                    jQuery(current_element).attr('data-val', 1);
+                    jQuery(current_element).toggleClass("deactivate_batch activate_batch");
+                    jQuery(current_element).find("i").toggleClass("fa-toggle-off fa-toggle-on");
+                    jQuery(current_element).find('label').html('Activate Batch');
 
-                            jQuery(this).find('.jtoggler-btn-wrapper:nth-child(1)').addClass('is-active');
-                            jQuery(this).find('.jtoggler-btn-wrapper:nth-child(2)').removeClass('is-active');
-                            jQuery(this).find('.jtoggler-btn-wrapper:nth-child(3)').removeClass('is-active');
-                        }
-                        if (is_checked == 0) {
-                            jQuery(this).find('.jtoggler').data('val', 2);
-                            jQuery(this).append('<span style="color:#008000">Active</span>');
+                    jQuery('tr#post-' + post_id).find('.jtoggler').data('val', 0);
+                    jQuery('tr#post-' + post_id).find('.jtoggler').parents('.jtoggler-wrapper-multistate').find('.jtoggler-control').removeClass('is-fully-active');
+                    jQuery('tr#post-' + post_id).find('.jtoggler').parents('.jtoggler-wrapper-multistate').find('.jtoggler-control').removeClass('mixed-state');
+                    jQuery('tr#post-' + post_id).find('.jtoggler-wrapper').append('<span style="color:#ff0000">Inactive</span>');
 
-                            jQuery(this).find('.jtoggler-control').addClass('is-fully-active');
-                            jQuery(this).find('.jtoggler-btn-wrapper:nth-child(1)').removeClass('is-active');
-                            jQuery(this).find('.jtoggler-btn-wrapper:nth-child(2)').removeClass('is-active');
-                            jQuery(this).find('.jtoggler-btn-wrapper:nth-child(3)').addClass('is-active');
-                        }
-                    }
-                });
+                    jQuery('tr#post-' + post_id).find('.jtoggler-btn-wrapper:nth-child(1)').addClass('is-active');
+                    jQuery('tr#post-' + post_id).find('.jtoggler-btn-wrapper:nth-child(2)').removeClass('is-active');
+                    jQuery('tr#post-' + post_id).find('.jtoggler-btn-wrapper:nth-child(3)').removeClass('is-active');
+
+                }
+                if (is_checked == 1) {
+                    jQuery(current_element).attr('data-val', 0);
+                    jQuery(current_element).toggleClass("activate_batch deactivate_batch");
+                    jQuery(current_element).find("i").toggleClass("fa-toggle-on fa-toggle-off");
+                    jQuery(current_element).find('label').html('Deactivate Batch');
+
+
+                    jQuery('tr#post-' + post_id).find('.jtoggler').data('val', 2);
+                    jQuery('tr#post-' + post_id).find('.jtoggler-wrapper').append('<span style="color:#008000">Active</span>');
+
+                    jQuery('tr#post-' + post_id).find('.jtoggler-control').addClass('is-fully-active');
+                    jQuery('tr#post-' + post_id).find('.jtoggler-btn-wrapper:nth-child(1)').removeClass('is-active');
+                    jQuery('tr#post-' + post_id).find('.jtoggler-btn-wrapper:nth-child(2)').removeClass('is-active');
+                    jQuery('tr#post-' + post_id).find('.jtoggler-btn-wrapper:nth-child(3)').addClass('is-active');
+                }
+
             }
         })
 

@@ -586,7 +586,7 @@ class PMSafe_Invitation_Code {
         $columns['pdf']                     = __( 'PDF', '' );
         $columns['reset']                   = __( 'Reset Code', '' );
         $columns['reset']                   = __( 'Reset Code', '' );
-        $columns['active_inactive']       = __( 'Active/<br/>Inactive', '' );
+        $columns['active_inactive']       = __( 'Code Status', '' );
 
         return $columns;
     }

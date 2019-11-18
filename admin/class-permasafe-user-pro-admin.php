@@ -1285,17 +1285,7 @@ class Permasafe_User_Pro_Admin
 		if ($search_val >= $start &&  $search_val <= $end) {
 			$html .= '<tr id="post-' . $post_id . '" class="iedit author-self level-0  type-pmsafe_bulk_invi status-publish hentry">';
 
-			$html .= '<td class="inactive_batch column-inactive_batch has-row-actions column-primary" data-colname="Inactive Batch">';
-				$html .= '<div class="chk_div">';
-					$batch_is_active = get_post_meta($post_id,'code_active_inactive',true);
-					if($batch_is_active == 0){
-						$html .= '<input type="checkbox" checked id="'.$post_id.'" value="'.$post_id.'" class="batch_cb"><label for="'.$post_id.'"></label>';
-					}
-					if($batch_is_active == 1 || $batch_is_active == 2){
-						$html .= '<input type="checkbox" id="'.$post_id.'" value="'.$post_id.'" class="batch_cb"><label for="'.$post_id.'"></label>'; 
-					}
-				$html .= '</div>';
-			$html .= '</td>';
+			
 
 			$html .= '<td class="invitation_code column-invitation_code" data-colname="Member code">';
 			$html .= '<a href="' . admin_url() . 'edit.php?post_type=pmsafe_invitecode&bulk-invitation-id=' . $post_id . '" target="_blank" class="button-secondary">' . $start . ' - ' . $end . '</a>';
@@ -1345,6 +1335,18 @@ class Permasafe_User_Pro_Admin
 			$html .= '<td class="active_inactive column-active_inactive" data-colname="Active/Inactive">';
 			$is_active = get_post_meta($post_id,'code_active_inactive',true);
 				$html .=  '<input type="checkbox" class="jtoggler" disabled data-id="'.$post_id.'" data-val="'.$is_active.'" data-jtmulti-state>';
+			$html .= '</td>';
+
+			$html .= '<td class="inactive_batch column-inactive_batch" data-colname="Inactive Batch">';
+				$html .= '<div class="chk_div">';
+					$batch_is_active = get_post_meta($post_id,'code_active_inactive',true);
+					if($batch_is_active == 0){
+						$html .= '<input type="checkbox" checked id="'.$post_id.'" value="'.$post_id.'" class="batch_cb"><label for="'.$post_id.'"></label>';
+					}
+					if($batch_is_active == 1 || $batch_is_active == 2){
+						$html .= '<input type="checkbox" id="'.$post_id.'" value="'.$post_id.'" class="batch_cb"><label for="'.$post_id.'"></label>'; 
+					}
+				$html .= '</div>';
 			$html .= '</td>';
 
 			$html .= '</tr>';
@@ -4550,7 +4552,10 @@ class Permasafe_User_Pro_Admin
 			
 			if($is_checked == 'true'){
 				update_post_meta($post_id,'code_active_inactive',1);
-				
+				$code = get_post_meta($post_id, '_pmsafe_invitation_code', true);
+				$users = get_user_by('login',$code);
+				$user_id = $users->ID;
+				update_user_meta($user_id,'user_active_inactive',1);
 				if($bulk_id){
 					$invitation_id = get_post_meta($bulk_id, '_pmsafe_invitation_ids', true);
 					$results = $wpdb->get_results('SELECT post_id, meta_value FROM wp_postmeta WHERE meta_key = "code_active_inactive" AND post_id in ('.$invitation_id.')');	
@@ -4573,11 +4578,15 @@ class Permasafe_User_Pro_Admin
 			if($is_checked == 'false'){
 			
 				update_post_meta($post_id,'code_active_inactive',0);
+				echo $code = get_post_meta($post_id, '_pmsafe_invitation_code', true);
+				$users = get_user_by('login',$code);
+				$user_id = $users->ID;
+				update_user_meta($user_id,'user_active_inactive',0);
 
 				if($bulk_id){
 					$invitation_id = get_post_meta($bulk_id, '_pmsafe_invitation_ids', true);
 					$results = $wpdb->get_results('SELECT post_id, meta_value FROM wp_postmeta WHERE meta_key = "code_active_inactive" AND post_id in ('.$invitation_id.')');	
-					pr($results);
+					
 					foreach ($results as $key => $value) {
 						$meta_value[] = $value->meta_value;
 					}
@@ -4784,13 +4793,13 @@ class Permasafe_User_Pro_Admin
 			$benefits_package = get_post_meta($post_id, '_pmsafe_invitation_prefix', true);
 			$invitation_id = explode(',', $invitation_ids);
 			
-			if($is_checked == 1){
+			if($is_checked == 0){
 				update_post_meta($post_id,'code_active_inactive',0);
 				foreach ($invitation_id as $id) {
 					update_post_meta($id,'code_active_inactive',0);
 				}
 			}
-			if($is_checked == 0){
+			if($is_checked == 1){
 				update_post_meta($post_id,'code_active_inactive',2);
 				foreach ($invitation_id as $id) {
 					update_post_meta($id,'code_active_inactive',1);

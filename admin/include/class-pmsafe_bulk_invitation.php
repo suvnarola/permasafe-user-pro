@@ -930,7 +930,7 @@ class PMSafe_Bulk_Invitation{
         unset( $columns['title'] );
         unset( $columns['author'] );
         unset( $columns['date'] );
-        $columns['inactive_batch']         = __( 'Inactive Batch', '' );
+       
         $columns['invitation_code']         = __( 'Member code', '' );
         $columns['benefits_package']        = __( 'Benefits Package', '' );
         $columns['dealer']                  = __( 'Dealer', '' );
@@ -940,7 +940,8 @@ class PMSafe_Bulk_Invitation{
         $columns['count_unused_code']       = __( 'Count unused', '' );
         $columns['edit_code']       = __( 'Edit', '' );
         $columns['delete_code']       = __( 'Delete', '' );
-        $columns['active_inactive']       = __( 'Active/Inactive', '' );
+        $columns['active_inactive']       = __( 'Batch Status', '' );
+        $columns['inactive_batch']         = __( 'Batch Control', '' );
 
         return $columns;
     }
@@ -950,13 +951,27 @@ class PMSafe_Bulk_Invitation{
 
                 case 'inactive_batch':
                 echo '<div class="chk_div">';
-                 $batch_is_active = get_post_meta($post_id,'code_active_inactive',true);
-                 if($batch_is_active == 0){
-                    echo '<input type="checkbox" checked id="'.$post_id.'" value="'.$post_id.'" class="batch_cb"><label for="'.$post_id.'"></label>';
-                 }
-                 if($batch_is_active == 1 || $batch_is_active == 2){
-                    echo '<input type="checkbox" id="'.$post_id.'" value="'.$post_id.'" class="batch_cb"><label for="'.$post_id.'"></label>'; 
-                 }
+                $batch_is_active = get_post_meta($post_id,'code_active_inactive',true);
+                if($batch_is_active == 0 ){
+                        $button_name = 'Activate Batch';
+                        $class = "activate_batch";
+                        $i_class = "fa fa-toggle-on";
+                        $data_val = 1;
+                }
+                if($batch_is_active == 1 || $batch_is_active == 2){
+                  $button_name = 'Deactivate Batch';
+                  $class = "deactivate_batch";
+                  $i_class = "fa fa-toggle-off";
+                  $data_val = 0;
+                }
+                //  echo '<input type="button" id="'.$post_id.'" value="'.$button_name.'" class="batch_cb '.$class.'"/>';
+                echo '<button id="'.$post_id.'" value="'.$post_id.'" class="batch_cb '.$class.'" data-val="'.$data_val.'"><i class="'.$i_class.'"></i><label>'.$button_name.'</label></button>';
+                //  if($batch_is_active == 0){
+                //     echo '<input type="checkbox" checked id="'.$post_id.'" value="'.$post_id.'" class="batch_cb"><label for="'.$post_id.'"></label>';
+                //  }
+                //  if($batch_is_active == 1 || $batch_is_active == 2){
+                //     echo '<input type="checkbox" id="'.$post_id.'" value="'.$post_id.'" class="batch_cb"><label for="'.$post_id.'"></label>'; 
+                //  }
                     
                 echo '</div>';
                 break;

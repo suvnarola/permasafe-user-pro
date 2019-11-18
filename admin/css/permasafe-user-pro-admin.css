@@ -1255,10 +1255,20 @@ table#billing_info_table thead th:nth-child(3) {width: 70px !important;}
 input#billing_report_submit {margin-left: 195px;margin-bottom: 30px;border: 0;padding: 7px 20px;}
 table#membership_date_table.dataTable thead th {padding: 10px 14px;}
 
-input.batch_cb[type="checkbox"]:checked + label:before {background-color: red;border-color: red;color: #fff;}
+/* input.batch_cb[type="checkbox"]:checked + label:before {background-color: red;border-color: red;color: #fff;}
 input.batch_cb[type="checkbox"] + label:before {content: "\2714";border: 1px solid #000;border-radius: 2px;display: flex;width: 18px;height: 18px;padding-left: 0;padding-bottom: 0;margin-right: 0;vertical-align: bottom;color: transparent;transition: .2s;align-items: center;justify-content: center;}
-input.batch_cb[type="checkbox"] {display: none;}
-.chk_div {display: flex;align-items: center;justify-content: center;flex-wrap: wrap;padding-top: 4px;}
+input.batch_cb[type="checkbox"] {display: none;} */
+/* .chk_div {display: flex;align-items: center;justify-content: center;flex-wrap: wrap;padding-top: 4px;} */
+.deactivate_batch {color: #fff;background-color: #ce3232;}
+.activate_batch {color: #fff;background-color: #396939;}
+#search-individual-code:hover, #search-batch-code:hover{background: #0065a7 !important;border-color: #0065a7 !important;} 
+.post-type-pmsafe_bulk_invi .wp-list-table tr th:last-child {width: 150px !important;}
+.post-type-pmsafe_bulk_invi .wp-list-table tr th:nth-child(10) {width: 100px;}
+.chk_div button i {margin-right: 5px;vertical-align: middle;}
+.chk_div button {border: 0;width: 100%;padding: 8px 10px;border-radius: 4px;font-size: 14px;cursor: pointer;}
+
+
+
 
 /******** media start here **********/
 
