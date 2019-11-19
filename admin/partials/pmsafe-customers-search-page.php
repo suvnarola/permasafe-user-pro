@@ -1,5 +1,6 @@
 <?php
 $html .= '<h1 class="top-heading">Search Customer Information</h1>'; 
+$html .= '<form name="searchcustomer">';
 $html .= '<div class="reports-wrap">';	
 
 // member code
@@ -183,13 +184,15 @@ $html .= '</div>';
 // Submit
 
 $html .= '<div class="input-btn">';	    	
-    $html .= '<input type="button" name="search_all_submit" id="search_all_submit" value="Search" data-scroll-to="#id1" data-scroll-focus="#id1" data-scroll-speed="700" data-scroll-offset="5"/>';
+    $html .= '<input type="submit" name="search_all_submit" id="search_all_submit" value="Search" data-scroll-to="#id1" data-scroll-focus="#id1" data-scroll-speed="700" data-scroll-offset="5"/>';
     $html .= '<input type="button" name="reset" id="search_reset" value="Reset"/>';
 $html .= '</div>';          			
 
 
 
-$html .= '</div>';	    	
+$html .= '</div>';	  
+$html .= '</form>';	  
+
 $html .= '<section id="id1"></section>';
 $html .= '<div class="search-result-wrap">';	
 $html .= '<div class="tbl-result-wrap">'; 

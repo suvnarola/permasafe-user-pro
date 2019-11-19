@@ -1339,14 +1339,21 @@ class Permasafe_User_Pro_Admin
 
 			$html .= '<td class="inactive_batch column-inactive_batch" data-colname="Inactive Batch">';
 				$html .= '<div class="chk_div">';
-					$batch_is_active = get_post_meta($post_id,'code_active_inactive',true);
-					if($batch_is_active == 0){
-						$html .= '<input type="checkbox" checked id="'.$post_id.'" value="'.$post_id.'" class="batch_cb"><label for="'.$post_id.'"></label>';
-					}
-					if($batch_is_active == 1 || $batch_is_active == 2){
-						$html .= '<input type="checkbox" id="'.$post_id.'" value="'.$post_id.'" class="batch_cb"><label for="'.$post_id.'"></label>'; 
-					}
-				$html .= '</div>';
+                $batch_is_active = get_post_meta($post_id,'code_active_inactive',true);
+                if($batch_is_active == 0 ){
+                        $button_name = 'Activate Batch';
+                        $class = "activate_batch";
+                        $i_class = "fa fa-toggle-on";
+                        $data_val = 1;
+                }
+                if($batch_is_active == 1 || $batch_is_active == 2){
+                  $button_name = 'Deactivate Batch';
+                  $class = "deactivate_batch";
+                  $i_class = "fa fa-toggle-off";
+                  $data_val = 0;
+                }
+                //  echo '<input type="button" id="'.$post_id.'" value="'.$button_name.'" class="batch_cb '.$class.'"/>';
+                $html .= '<button id="'.$post_id.'" value="'.$post_id.'" class="batch_cb '.$class.'" data-val="'.$data_val.'"><i class="'.$i_class.'"></i><label>'.$button_name.'</label></button>';
 			$html .= '</td>';
 
 			$html .= '</tr>';

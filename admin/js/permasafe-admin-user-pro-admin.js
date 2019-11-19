@@ -2456,7 +2456,7 @@ jQuery(document).ready(function () {
 
     // search all customers 
     jQuery(document).on("click", "#search_all_submit", function (e) {
-
+        e.preventDefault();
         var member_code = jQuery('#member_code').val();
         var first_name = jQuery('#first_name').val();
         var last_name = jQuery('#last_name').val();
