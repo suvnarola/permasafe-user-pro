@@ -45,7 +45,7 @@ class PMSafe_Bulk_Invitation{
 
             add_filter( 'post_updated_messages', array( $this,'change_post_updated_messages'), 10, 1 );
             
-            add_filter("posts_orderby", array( $this,'change_orderby_filter'), 10, 2);
+            // add_filter("posts_orderby", array( $this,'change_orderby_filter'), 10, 2);
             
             add_action( 'pre_get_posts', array( $this,'extend_admin_search') );
 
@@ -950,30 +950,23 @@ class PMSafe_Bulk_Invitation{
             switch ( $column ) {
 
                 case 'inactive_batch':
-                echo '<div class="chk_div">';
-                $batch_is_active = get_post_meta($post_id,'code_active_inactive',true);
-                if($batch_is_active == 0 ){
-                        $button_name = 'Activate Batch';
-                        $class = "activate_batch";
-                        $i_class = "fa fa-toggle-on";
-                        $data_val = 1;
-                }
-                if($batch_is_active == 1 || $batch_is_active == 2){
-                  $button_name = 'Deactivate Batch';
-                  $class = "deactivate_batch";
-                  $i_class = "fa fa-toggle-off";
-                  $data_val = 0;
-                }
-                //  echo '<input type="button" id="'.$post_id.'" value="'.$button_name.'" class="batch_cb '.$class.'"/>';
-                echo '<button id="'.$post_id.'" value="'.$post_id.'" class="batch_cb '.$class.'" data-val="'.$data_val.'"><i class="'.$i_class.'"></i><label>'.$button_name.'</label></button>';
-                //  if($batch_is_active == 0){
-                //     echo '<input type="checkbox" checked id="'.$post_id.'" value="'.$post_id.'" class="batch_cb"><label for="'.$post_id.'"></label>';
-                //  }
-                //  if($batch_is_active == 1 || $batch_is_active == 2){
-                //     echo '<input type="checkbox" id="'.$post_id.'" value="'.$post_id.'" class="batch_cb"><label for="'.$post_id.'"></label>'; 
-                //  }
-                    
-                echo '</div>';
+                    echo '<div class="chk_div">';
+                    $batch_is_active = get_post_meta($post_id,'code_active_inactive',true);
+                    if($batch_is_active == 0 ){
+                            $button_name = 'Activate Batch';
+                            $class = "activate_batch";
+                            $i_class = "fa fa-toggle-on";
+                            $data_val = 1;
+                    }
+                    if($batch_is_active == 1 || $batch_is_active == 2){
+                    $button_name = 'Deactivate Batch';
+                    $class = "deactivate_batch";
+                    $i_class = "fa fa-toggle-off";
+                    $data_val = 0;
+                    }
+                    echo '<button id="'.$post_id.'" value="'.$post_id.'" class="batch_cb '.$class.'" data-val="'.$data_val.'"><i class="'.$i_class.'"></i><label>'.$button_name.'</label></button>';
+                        
+                    echo '</div>';
                 break;
 
                 case 'count_unused_code':
@@ -1095,6 +1088,7 @@ class PMSafe_Bulk_Invitation{
     
     public function change_orderby_filter($orderby, &$query){
             global $wpdb;
+            // pr($query);
             //figure out whether you want to change the order
             if (get_query_var("post_type") == "pmsafe_bulk_invi") {
                  return "$wpdb->posts.ID DESC";
@@ -1224,8 +1218,35 @@ class PMSafe_Bulk_Invitation{
                     ));
                 }
 
-                $query->set( 'meta_query', $meta_query );
-            };
+                $query->set( 'meta_key', $meta_query );
+
+            }
+        if($_GET['dealer_list']){
+            $query->set('meta_key','' );
+            $query->set('meta_value','' );
+            $meta_query = array(
+                array(
+                    
+                    'key' => '_pmsafe_dealer',
+                    'value' => $_GET['dealer_list'],
+                    'compare' => '='
+                ),
+               
+            );
+                $query->set('meta_query', $meta_query);
+                 $query->set('meta_key','_pmsafe_invitation_code_start' );
+            $query->set('orderby','meta_value_num' );
+            $query->set('order','ASC' );
+                // $query->set('orderby', array('_pmsafe_invitation_code_start' => 'ASC'));
+            //     // $query->set('orderby','meta_value_num' );
+            //   $query->set('orderby', array('month_clause' => 'ASC'));
+        }else{
+            
+            $query->set('meta_key','_pmsafe_invitation_code_start' );
+            $query->set('orderby','meta_value_num' );
+            $query->set('order','ASC' );
+        }
+        
 
     }
 }

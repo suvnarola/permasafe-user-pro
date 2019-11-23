@@ -27,7 +27,7 @@ class PMSafe_Invitation_Code {
             add_filter( 'gettext', array( $this,'change_publish_button' ), 10, 2 );
             add_filter( 'post_updated_messages', array( $this,'change_post_updated_messages' ), 10, 1 );
             
-            add_filter( 'posts_orderby', array( $this,'change_orderby_filter' ), 10, 2 );
+            // add_filter( 'posts_orderby', array( $this,'change_orderby_filter' ), 10, 2 );
             
             add_action( 'pre_get_posts', array( $this,'extend_admin_search') );
 
@@ -906,13 +906,7 @@ class PMSafe_Invitation_Code {
                 return;
 
             $search_term = $query->query_vars['s'];
-//            if($search_term == 'used'){
-//                $search_term = '1';
-//            }elseif($search_term == 'available'){
-//                $search_term = '0';
-//            }else{
-//                $search_term = $search_term;
-//            }
+
 
             // Set to empty, otherwise it won't find anything
             $query->query_vars['s'] = '';
@@ -930,8 +924,17 @@ class PMSafe_Invitation_Code {
 
                 $query->set( 'meta_query', $meta_query );
             };
-//            pr($query);
-//            die;
+
+
+
+            if($query->get('meta_key') == '_pmsafe_bulk_invitation_id'){
+                $query->set('orderby', array('_pmsafe_invitation_code' => 'ASC'));
+            }else{
+                $query->set('meta_key','_pmsafe_invitation_code' );
+                $query->set('orderby','meta_value_num' );
+                $query->set('order','ASC' );
+            }
+
     }
     
     public function change_publish_button( $translation, $text ) {

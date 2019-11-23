@@ -5380,4 +5380,5 @@ class Permasafe_User_Pro_Admin
 		echo json_encode($response);
 		die;
 	}
+
 }
