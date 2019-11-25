@@ -117,6 +117,10 @@ if ($action == 'view_customer_details') {
     echo '<td>' . $vehicle_info[0][$nickname]['pmsafe_vin'] . '</td>';
     echo '</tr>';
     echo '<tr>';
+    echo '<td>Benefits Package</td>';
+    echo '<td>' . get_post_meta($vehicle_info[0][$nickname]['pmsafe_member_code_id'], '_pmsafe_code_prefix', true) . '</td>';
+    echo '</tr>';
+    echo '<tr>';
     echo '<td>Registration Date</td>';
     echo '<td>' . date('Y-m-d', strtotime($vehicle_info[0][$nickname]['pmsafe_registration_date'])) . '</td>';
     echo '</tr>';
@@ -204,17 +208,18 @@ if ($action == 'view_customer_details') {
     $html .= '</th>';
 
     $html .= '<th>';
-    $html .= 'PDF';
-    $html .= '</th>';
-
-    $html .= '<th class="nisl-pdf-link">';
-    $html .= 'PDF';
-    $html .= '</th>';
-
-    $html .= '<th class="nisl-pdf-link">';
     $html .= 'Benefits<br/> Package';
     $html .= '</th>';
 
+    $html .= '<th>';
+    $html .= 'PDF';
+    $html .= '</th>';
+
+    $html .= '<th class="nisl-pdf-link">';
+    $html .= 'PDF';
+    $html .= '</th>';
+
+    
     $html .= '<th class="nisl-pdf-link">';
     $html .= 'Product Code <br/> Range';
     $html .= '</th>';
@@ -289,6 +294,10 @@ if ($action == 'view_customer_details') {
         $html .= $value['address'];
         $html .= '</td>';
 
+        $html .= '<td>';
+        $html .= $value['package'];
+        $html .= '</td>';
+
         $html .= '<td class="text-center">';
         $document_url = get_site_url() . '/wp-includes/images/media/document.png';
         $html .= '<a href="' . $value['pdf_link'] . '" target="_blank"><img src="' . $document_url . '" class="attachment-thumbnail" style="width:20px !important"></a>';
@@ -298,9 +307,7 @@ if ($action == 'view_customer_details') {
         $html .= $value['pdf_link'];
         $html .= '</td>';
 
-        $html .= '<td class="nisl-pdf-link">';
-        $html .= $value['package'];
-        $html .= '</td>';
+   
 
         $html .= '<td class="nisl-pdf-link">';
         $html .= (($value['bulk_member']) ? $value['bulk_member'] : '-');
@@ -555,15 +562,15 @@ if ($action == 'view_customer_details') {
     $html .= '</th>';
 
     $html .= '<th>';
-    $html .= 'PDF';
-    $html .= '</th>';
-
-    $html .= '<th class="nisl-pdf-link">';
-    $html .= 'PDF';
-    $html .= '</th>';
-
-    $html .= '<th class="nisl-pdf-link">';
     $html .= 'Benefits<br/> Package';
+    $html .= '</th>';
+
+    $html .= '<th>';
+    $html .= 'PDF';
+    $html .= '</th>';
+
+    $html .= '<th class="nisl-pdf-link">';
+    $html .= 'PDF';
     $html .= '</th>';
 
     $html .= '<th class="nisl-pdf-link">';
@@ -680,6 +687,10 @@ if ($action == 'view_customer_details') {
             $html .= $address . '<br/>' . $city . ', ' . $state . ', ' . $zip_code;
             $html .= '</td>';
 
+            $html .= '<td>';
+            $html .= $benefits_package;
+            $html .= '</td>';
+
             $html .= '<td class="text-center">';
             $document_url = get_site_url() . '/wp-includes/images/media/document.png';
             $html .= '<a href="' . $pdf_link . '" target="_blank"><img src="' . $document_url . '" class="attachment-thumbnail" style="width:20px !important"></a>';
@@ -687,10 +698,6 @@ if ($action == 'view_customer_details') {
 
             $html .= '<td class="nisl-pdf-link">';
             $html .= $pdf_link;
-            $html .= '</td>';
-
-            $html .= '<td class="nisl-pdf-link">';
-            $html .= $benefits_package;
             $html .= '</td>';
 
             $html .= '<td class="nisl-pdf-link">';

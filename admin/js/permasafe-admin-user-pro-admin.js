@@ -1893,7 +1893,7 @@ jQuery(document).ready(function () {
             //Name the CSV
             filename: 'customer_list',
             exportOptions: {
-                columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+                columns: [0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13]
             },
         },
         {
@@ -1903,8 +1903,7 @@ jQuery(document).ready(function () {
             pageSize: 'LEGAL',
             filename: 'customer_list',
             exportOptions: {
-                columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-                // columns: [0, 1, 2, 3, 4, 5, 6, 8, 9, 11 ]
+                columns: [0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13]
             },
         },
         {
@@ -1912,8 +1911,7 @@ jQuery(document).ready(function () {
             text: 'EXCEL',
             filename: 'customer_list',
             exportOptions: {
-                columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-                // columns: [0, 1, 2, 3, 4, 5, 6, 8, 9, 11 ]
+                columns: [0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13]
             },
         },
         {
@@ -1923,8 +1921,7 @@ jQuery(document).ready(function () {
             orientation: 'landscape',
             pageSize: 'LEGAL',
             exportOptions: {
-                columns: [0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-                // columns: [0, 1, 2, 3, 4, 5, 6, 8, 9, 11 ]
+                columns: [0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13]
             },
             customize: function (win) {
                 jQuery(win.document.body).find('table').addClass('display').css('font-size', '5px');
