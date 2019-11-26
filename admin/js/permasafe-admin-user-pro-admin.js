@@ -3660,7 +3660,7 @@ jQuery(document).ready(function () {
         var password = jQuery('#pmsafe_dealer_contact_password').val();
         var dealer_id = jQuery('#pricing_dealer_id').val();
 
-        var name = /^[A-Za-z]+$/;
+        var name = /^[A-Za-z ]+$/;
         if (jQuery('#pmsafe_dealer_contact_fname').val().trim() == "") {
             jQuery('#pmsafe_dealer_contact_fname').css({
                 'border': '1px solid #ff0000'
@@ -4088,7 +4088,7 @@ jQuery(document).ready(function () {
         var password = jQuery('#pmsafe_distributor_contact_password').val();
         var distributor_id = jQuery('#distributor_id').val();
 
-        var name = /^[A-Za-z]+$/;
+        var name = /^[A-Za-z ]+$/;
         if (jQuery('#pmsafe_distributor_contact_fname').val().trim() == "") {
             jQuery('#pmsafe_distributor_contact_fname').css({
                 'border': '1px solid #ff0000'
