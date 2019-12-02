@@ -381,7 +381,7 @@ jQuery(document).ready(function () {
         if (select == 0) {
             jQuery('#pmsafe_update_prefix').attr('value', 'Skip');
         } else {
-            jQuery('#pmsafe_update_prefix').attr('value', 'Update');
+            jQuery('#pmsafe_update_prefix').attr('value', 'Next');
         }
     });
 
@@ -391,56 +391,34 @@ jQuery(document).ready(function () {
         jQuery('.error').remove();
         var select = jQuery('#select_upgradable_package').val();
         var code = jQuery('#member_number').val();
-        var login_id = jQuery('#login_id').val();
-        var data = {
-            action: 'update_benefit_package',
-            code: code,
-            select: select,
-            login_id: login_id
-        }
+
         jQuery('.perma-loader').show();
+
+        jQuery('#member_code_div').css('display', 'none');
+        jQuery('#change_benefits_package').css('display', 'none');
+        jQuery('#change_benefits_package_price').removeAttr('style');
+
+        var package = select;
+        var code = code;
+
+        var data = {
+            action: 'get_benefit_package_price',
+            package: package,
+            code: code
+        }
+
         jQuery.ajax({
             type: 'POST',
             url: pmAjax.ajaxurl,
             data: data,
             dataType: 'html',
             success: function (response) {
-
-
-                var obj = jQuery.parseJSON(response);
-                if (obj.status == true) {
-
-                    jQuery('#member_code_div').css('display', 'none');
-                    jQuery('#change_benefits_package').css('display', 'none');
-                    jQuery('#change_benefits_package_price').removeAttr('style');
-                    if (obj.msg) {
-                        jQuery('#hidden_form').before('<p style="color: #038503;background-color: #c6f2c6;border-color: #ebccd1;padding: 15px;margin-bottom: 20px;border: 1px solid transparent;border-radius: 4px;">' + obj.msg + '</p>');
-                    }
-                    var package = obj.package;
-                    var code_id = obj.code_id;
-
-                    var data = {
-                        action: 'get_benefit_package_price',
-                        package: package,
-                        code_id: code_id
-                    }
-
-                    jQuery.ajax({
-                        type: 'POST',
-                        url: pmAjax.ajaxurl,
-                        data: data,
-                        dataType: 'html',
-                        success: function (response) {
-                            jQuery('.perma-loader').hide();
-                            jQuery('#hidden_form').before(response);
-                        },
-                    });
-
-                }
+                jQuery('.perma-loader').hide();
+                jQuery('#hidden_form').before(response);
             },
-
         });
-        return false;
+
+
     });
 
     jQuery(document).on("click", "#pmsafe_update_price", function (e) {
@@ -452,14 +430,7 @@ jQuery(document).ready(function () {
         var login_id = jQuery('#login_id').val();
         var validflag = true;
 
-        var data = {
-            action: 'update_benefit_package_price',
-            selling_price: selling_price,
-            package: package,
-            code_id: code_id,
-            login_id: login_id
-        }
-        //Selling price
+
         if (jQuery('#selling_price').val().trim() == "") {
             jQuery('#selling_price').css({ 'border': '1px solid #ff0000', 'color': '#ff0000' });
             jQuery('#selling_price').after("<span class='error'>This field is required.</span>");
@@ -472,34 +443,14 @@ jQuery(document).ready(function () {
             return validflag;
         } else {
 
-            jQuery('.perma-loader').show();
-            jQuery.ajax({
-                type: 'POST',
-                url: pmAjax.ajaxurl,
-                data: data,
-                dataType: 'html',
-                success: function (response) {
+            jQuery('#member_code_div').css('display', 'none');
+            jQuery('#change_benefits_package').css('display', 'none');
+            jQuery('#change_benefits_package_price').removeAttr('style');
+            jQuery('#update_package_price').css('display', 'none');
 
-                    jQuery('.perma-loader').hide();
-
-                    var obj = jQuery.parseJSON(response);
-                    if (obj.status == true) {
-
-                        jQuery('#member_code_div').css('display', 'none');
-                        jQuery('#change_benefits_package').css('display', 'none');
-                        jQuery('#change_benefits_package_price').removeAttr('style');
-                        jQuery('#update_package_price').css('display', 'none');
-                        if (obj.msg) {
-                            jQuery('#hidden_form').before('<p style="color: #038503;background-color: #c6f2c6;border-color: #ebccd1;padding: 15px;margin-bottom: 20px;border: 1px solid transparent;border-radius: 4px;">' + obj.msg + '.</p>');
-                        }
-
-                        jQuery('#hidden_form').html(registration_form);
-                    }
-                },
-
-            });
-            return false;
+            jQuery('#hidden_form').html(registration_form);
         }
+
     });
 
 

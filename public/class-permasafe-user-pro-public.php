@@ -60,17 +60,13 @@ class Permasafe_User_Pro_Public
         add_action('wp_ajax_pmsafe_registration_code_form', array($this, 'pmsafe_registration_code_form_function'));
         add_action('wp_ajax_nopriv_pmsafe_registration_code_form', array($this, 'pmsafe_registration_code_form_function'));
 
-        add_action('wp_ajax_update_benefit_package', array($this, 'update_benefit_package'));
-        add_action('wp_ajax_nopriv_update_benefit_package', array($this, 'update_benefit_package'));
+     
 
         add_action('wp_ajax_get_benefit_package_price', array($this, 'get_benefit_package_price'));
         add_action('wp_ajax_nopriv_get_benefit_package_price', array($this, 'get_benefit_package_price'));
 
         add_action('wp_ajax_check_no_coverage_policy', array($this, 'check_no_coverage_policy'));
         add_action('wp_ajax_nopriv_check_no_coverage_policy', array($this, 'check_no_coverage_policy'));
-
-        add_action('wp_ajax_update_benefit_package_price', array($this, 'update_benefit_package_price'));
-        add_action('wp_ajax_nopriv_update_benefit_package_price', array($this, 'update_benefit_package_price'));
 
         add_action('wp_ajax_pmsafe_registration_form', array($this, 'pmsafe_registration_form_function'));
         add_action('wp_ajax_nopriv_pmsafe_registration_form', array($this, 'pmsafe_registration_form_function'));
@@ -3343,7 +3339,7 @@ class Permasafe_User_Pro_Public
             $html .= '<input type="hidden" name="login_id" id="login_id" value="' . $login_id . '"/>';
             $html .= '<div class="content-column one_half" id="upgradable_package_div" style="display:none;">';
             $html .= '<label>Upgradable Packages: ';
-            $html .= '<select id="select_upgradable_package">';
+            $html .= '<select id="select_upgradable_package" name="select_upgradable_package">';
             $html .= '<option value="0">Select Package</option>';
 
             $html .= '</select>';
@@ -5553,17 +5549,23 @@ class Permasafe_User_Pro_Public
     public function get_benefit_package_price()
     {
         $package = $_POST['package'];
-        $code_id = $_POST['code_id'];
+        
+        $code = $_POST['code'];
+        $code_id = get_post_id_by_meta_key_and_value('_pmsafe_invitation_code', $code);;
         $dealer_login = get_post_meta($code_id, '_pmsafe_dealer', true);
         $user = get_user_by('login', $dealer_login);
         $dealer_id = $user->ID;
-
+        if($package == "0"){
+            $package = get_post_meta($code_id, '_pmsafe_code_prefix', true);
+        }else{
+            $package = $_POST['package'];
+        }
         $price_arr = get_user_meta($dealer_id, 'pricing_package', true);
         $selling_price = $price_arr[$package]['selling_price'];
         $html = '';
         $html .= '<div id="update_package_price">';
         if ($selling_price != '') {
-            $value = "Update";
+            $value = "Next";
         } else {
             $value = "Add";
         }
@@ -5608,54 +5610,7 @@ class Permasafe_User_Pro_Public
         die;
     }
 
-    public function update_benefit_package_price()
-    {
-        $package = $_POST['package'];
-        $code_id = $_POST['code_id'];
-        $login_id = $_POST['login_id'];
-        $dealer_login = get_post_meta($code_id, '_pmsafe_dealer', true);
-        $user = get_user_by('login', $dealer_login);
-        $dealer_id = $user->ID;
-        $input_selling_price = $_POST['selling_price'];
 
-        $get_price_arr = get_user_meta($dealer_id, 'pricing_package', true);
-        $selling_price = $get_price_arr[$package]['selling_price'];
-        if ($selling_price != $input_selling_price) {
-            update_post_meta($code_id, 'updated_selling_price', $input_selling_price);
-            update_post_meta($code_id, 'updated_selling_price_by', $login_id);
-            $response = array('status' => true, 'msg' => 'Selling price is successfully updated for package ' . $package);
-        } else {
-            $response = array('status' => true);
-        }
-
-        echo json_encode($response);
-        die;
-    }
-
-    public function update_benefit_package()
-    {
-
-        $select = $_POST['select'];
-        $code = $_POST['code'];
-        $login_id = $_POST['login_id'];
-        $member_code_postid = get_post_id_by_meta_key_and_value('_pmsafe_invitation_code', $code);
-        if ($select != '0') {
-            $is_upgrade = 1;
-            $update = update_post_meta($member_code_postid, '_pmsafe_code_prefix', $select);
-            $package = get_post_meta($member_code_postid, '_pmsafe_code_prefix', true);
-            update_post_meta($member_code_postid, 'is_upgraded', $is_upgrade);
-            update_post_meta($member_code_postid, 'upgraded_date', date('Y-m-d'));
-            update_post_meta($member_code_postid, 'upgraded_by', $login_id);
-            if (isset($update)) {
-                $response = array('status' => true, 'msg' => 'package is successfully updated for code ' . $code, 'package' => $package, 'code_id' => $member_code_postid);
-            }
-        } else {
-            $package = get_post_meta($member_code_postid, '_pmsafe_code_prefix', true);
-            $response = array('status' => true, 'package' => $package, 'code_id' => $member_code_postid);
-        }
-        echo json_encode($response);
-        die;
-    }
     /**
      * Perma register ajax funcion
      */
@@ -5714,8 +5669,6 @@ class Permasafe_User_Pro_Public
             $password = $_POST['zip_code'];
 
             if ($member_code_id) {
-
-
                 $user_data = pmsafe_create_user($_POST['email'], $password, $member_code);
                 if ($user_data) {
                     if ($user_data['user_type'] == "New") {
@@ -5755,6 +5708,35 @@ class Permasafe_User_Pro_Public
                         update_user_meta($user_id, 'pmsafe_signature', $_POST['signature']);
                         update_user_meta($user_id, 'user_active_inactive', 1);
 
+                        $select = $_POST['select_upgradable_package'];
+                        $login_id = $_POST['login_id'];
+                        
+                        if ($select != '0') {
+                            $is_upgrade = 1;
+                            $update = update_post_meta($member_code_id, '_pmsafe_code_prefix', $select);
+                            update_post_meta($member_code_id, 'is_upgraded', $is_upgrade);
+                            update_post_meta($member_code_id, 'upgraded_date', date('Y-m-d'));
+                            update_post_meta($member_code_id, 'upgraded_by', $login_id);
+                            
+                        }
+
+                        if($select == 0){
+                            $package = get_post_meta($member_code_id, '_pmsafe_code_prefix', true);
+                        }else{
+                            $package = $_POST['package'];
+                        }
+                        $dealer_login = get_post_meta($member_code_id, '_pmsafe_dealer', true);
+                        $dealer_users = get_user_by('login', $dealer_login);
+                        $dealer_id = $dealer_users->ID;
+                        $input_selling_price = $_POST['selling_price'];
+
+                        $get_price_arr = get_user_meta($dealer_id, 'pricing_package', true);
+                        $selling_price = $get_price_arr[$package]['selling_price'];
+                        if ($selling_price != $input_selling_price) {
+                            update_post_meta($member_code_id, 'updated_selling_price', $input_selling_price);
+                            update_post_meta($member_code_id, 'updated_selling_price_by', $login_id);
+                        }
+
                         $vehicle_info = array();
 
                         $vehicle_info[$member_code] = array(
@@ -5784,7 +5766,8 @@ class Permasafe_User_Pro_Public
                             update_post_meta($member_code_id,'registered_by',$member_code);
                         }
                         
-
+                        
+                        
                         $to = $_POST['email'];
                         $subject = 'PermaSafe: Your Registration Information';
                         $password = $password;
@@ -5820,6 +5803,7 @@ class Permasafe_User_Pro_Public
                         $response = array('status' => true, 'redirect' => $url, 'code' => $member_code);
                         echo json_encode($response);
                     } elseif ($user_data['user_type'] == "Exist") {
+                       
                         $member_code = $_POST['member_number'];
                         $member_code_id = pmsafe_if_code_exist($member_code);
                         $password = $_POST['zip_code'];
@@ -5879,6 +5863,34 @@ class Permasafe_User_Pro_Public
                                 update_user_meta($user_id, 'pmsafe_signature', $_POST['signature']);
                                 update_user_meta($user_id, 'user_active_inactive', 1);
 
+                                $select = $_POST['select_upgradable_package'];
+                                $login_id = $_POST['login_id'];
+                                
+                                if ($select != '0') {
+                                    $is_upgrade = 1;
+                                    $update = update_post_meta($member_code_id, '_pmsafe_code_prefix', $select);
+                                    update_post_meta($member_code_id, 'is_upgraded', $is_upgrade);
+                                    update_post_meta($member_code_id, 'upgraded_date', date('Y-m-d'));
+                                    update_post_meta($member_code_id, 'upgraded_by', $login_id);
+                                   
+                                }
+
+                                if($select == "0"){
+                                    $package = get_post_meta($member_code_id, '_pmsafe_code_prefix', true);
+                                }else{
+                                    $package = $_POST['package'];
+                                }
+                                $dealer_login = get_post_meta($member_code_id, '_pmsafe_dealer', true);
+                                $dealer_users = get_user_by('login', $dealer_login);
+                                $dealer_id = $dealer_users->ID;
+                                $input_selling_price = $_POST['selling_price'];
+
+                                $get_price_arr = get_user_meta($dealer_id, 'pricing_package', true);
+                                $selling_price = $get_price_arr[$package]['selling_price'];
+                                if ($selling_price != $input_selling_price) {
+                                    update_post_meta($member_code_id, 'updated_selling_price', $input_selling_price);
+                                    update_post_meta($member_code_id, 'updated_selling_price_by', $login_id);
+                                }
 
                                 $vehicle_info = array();
 
@@ -5904,6 +5916,8 @@ class Permasafe_User_Pro_Public
                                 update_user_meta($user_id, 'pmsafe_vehicle_info', $vehicle_info_pdf);
 
 
+                                
+
                                 $to = $_POST['email'];
                                 $subject = 'PermaSafe: Your Registration Information';
                                 $password = $password;
@@ -5912,7 +5926,7 @@ class Permasafe_User_Pro_Public
                                 $process = 'customer_registration';
                                 send_mail_to_users($to, $password, $subject, $fname, $member_code, $process);
 
-                                 if($login){
+                                if($login){
                                     update_post_meta($member_code_id,'registered_by',$login);
                                 }else{
                                     update_post_meta($member_code_id,'registered_by',$member_code);
