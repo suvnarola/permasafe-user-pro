@@ -5711,30 +5711,32 @@ class Permasafe_User_Pro_Public
                         $select = $_POST['select_upgradable_package'];
                         $login_id = $_POST['login_id'];
                         
-                        if ($select != '0') {
-                            $is_upgrade = 1;
-                            $update = update_post_meta($member_code_id, '_pmsafe_code_prefix', $select);
-                            update_post_meta($member_code_id, 'is_upgraded', $is_upgrade);
-                            update_post_meta($member_code_id, 'upgraded_date', date('Y-m-d'));
-                            update_post_meta($member_code_id, 'upgraded_by', $login_id);
-                            
-                        }
+                        if(isset($select)){
+                            if ($select != '0') {
+                                $is_upgrade = 1;
+                                $update = update_post_meta($member_code_id, '_pmsafe_code_prefix', $select);
+                                update_post_meta($member_code_id, 'is_upgraded', $is_upgrade);
+                                update_post_meta($member_code_id, 'upgraded_date', date('Y-m-d'));
+                                update_post_meta($member_code_id, 'upgraded_by', $login_id);
+                                
+                            }
+                        
+                            if($select == 0){
+                                $package = get_post_meta($member_code_id, '_pmsafe_code_prefix', true);
+                            }else{
+                                $package = $_POST['package'];
+                            }
+                            $dealer_login = get_post_meta($member_code_id, '_pmsafe_dealer', true);
+                            $dealer_users = get_user_by('login', $dealer_login);
+                            $dealer_id = $dealer_users->ID;
+                            $input_selling_price = $_POST['selling_price'];
 
-                        if($select == 0){
-                            $package = get_post_meta($member_code_id, '_pmsafe_code_prefix', true);
-                        }else{
-                            $package = $_POST['package'];
-                        }
-                        $dealer_login = get_post_meta($member_code_id, '_pmsafe_dealer', true);
-                        $dealer_users = get_user_by('login', $dealer_login);
-                        $dealer_id = $dealer_users->ID;
-                        $input_selling_price = $_POST['selling_price'];
-
-                        $get_price_arr = get_user_meta($dealer_id, 'pricing_package', true);
-                        $selling_price = $get_price_arr[$package]['selling_price'];
-                        if ($selling_price != $input_selling_price) {
-                            update_post_meta($member_code_id, 'updated_selling_price', $input_selling_price);
-                            update_post_meta($member_code_id, 'updated_selling_price_by', $login_id);
+                            $get_price_arr = get_user_meta($dealer_id, 'pricing_package', true);
+                            $selling_price = $get_price_arr[$package]['selling_price'];
+                            if ($selling_price != $input_selling_price) {
+                                update_post_meta($member_code_id, 'updated_selling_price', $input_selling_price);
+                                update_post_meta($member_code_id, 'updated_selling_price_by', $login_id);
+                            }
                         }
 
                         $vehicle_info = array();
@@ -5866,30 +5868,32 @@ class Permasafe_User_Pro_Public
                                 $select = $_POST['select_upgradable_package'];
                                 $login_id = $_POST['login_id'];
                                 
-                                if ($select != '0') {
-                                    $is_upgrade = 1;
-                                    $update = update_post_meta($member_code_id, '_pmsafe_code_prefix', $select);
-                                    update_post_meta($member_code_id, 'is_upgraded', $is_upgrade);
-                                    update_post_meta($member_code_id, 'upgraded_date', date('Y-m-d'));
-                                    update_post_meta($member_code_id, 'upgraded_by', $login_id);
-                                   
-                                }
+                                if(isset($select)){
+                                    if ($select != '0') {
+                                        $is_upgrade = 1;
+                                        $update = update_post_meta($member_code_id, '_pmsafe_code_prefix', $select);
+                                        update_post_meta($member_code_id, 'is_upgraded', $is_upgrade);
+                                        update_post_meta($member_code_id, 'upgraded_date', date('Y-m-d'));
+                                        update_post_meta($member_code_id, 'upgraded_by', $login_id);
+                                    
+                                    }
 
-                                if($select == "0"){
-                                    $package = get_post_meta($member_code_id, '_pmsafe_code_prefix', true);
-                                }else{
-                                    $package = $_POST['package'];
-                                }
-                                $dealer_login = get_post_meta($member_code_id, '_pmsafe_dealer', true);
-                                $dealer_users = get_user_by('login', $dealer_login);
-                                $dealer_id = $dealer_users->ID;
-                                $input_selling_price = $_POST['selling_price'];
+                                    if($select == "0"){
+                                        $package = get_post_meta($member_code_id, '_pmsafe_code_prefix', true);
+                                    }else{
+                                        $package = $_POST['package'];
+                                    }
+                                    $dealer_login = get_post_meta($member_code_id, '_pmsafe_dealer', true);
+                                    $dealer_users = get_user_by('login', $dealer_login);
+                                    $dealer_id = $dealer_users->ID;
+                                    $input_selling_price = $_POST['selling_price'];
 
-                                $get_price_arr = get_user_meta($dealer_id, 'pricing_package', true);
-                                $selling_price = $get_price_arr[$package]['selling_price'];
-                                if ($selling_price != $input_selling_price) {
-                                    update_post_meta($member_code_id, 'updated_selling_price', $input_selling_price);
-                                    update_post_meta($member_code_id, 'updated_selling_price_by', $login_id);
+                                    $get_price_arr = get_user_meta($dealer_id, 'pricing_package', true);
+                                    $selling_price = $get_price_arr[$package]['selling_price'];
+                                    if ($selling_price != $input_selling_price) {
+                                        update_post_meta($member_code_id, 'updated_selling_price', $input_selling_price);
+                                        update_post_meta($member_code_id, 'updated_selling_price_by', $login_id);
+                                    }
                                 }
 
                                 $vehicle_info = array();

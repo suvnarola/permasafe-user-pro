@@ -940,8 +940,8 @@ class PMSafe_Bulk_Invitation{
         $columns['count_unused_code']       = __( 'Count unused', '' );
         $columns['edit_code']       = __( 'Edit', '' );
         $columns['delete_code']       = __( 'Delete', '' );
-        $columns['active_inactive']       = __( 'Batch Status', '' );
-        $columns['inactive_batch']         = __( 'Batch Control', '' );
+        // $columns['active_inactive']       = __( 'Batch Status', '' );
+        $columns['batch_control']         = __( 'Batch Control', '' );
 
         return $columns;
     }
@@ -949,21 +949,61 @@ class PMSafe_Bulk_Invitation{
     public function custom_columns( $column, $post_id ) {
             switch ( $column ) {
 
-                case 'inactive_batch':
+                case 'batch_control':
                     echo '<div class="chk_div">';
                     $batch_is_active = get_post_meta($post_id,'code_active_inactive',true);
-                    if($batch_is_active == 0 ){
-                            $button_name = 'Activate Batch';
-                            $class = "activate_batch";
+                    $data = pmsafe_unused_code_count($post_id);
+                    
+                    /* for batch 
+                     * 0 = inactive, 
+                     * 1 = mixed, 
+                     * 2 = active, 
+                     * 3 = partially active,
+                     * 4 = partially deactive,
+                     * 5 = partially mixed
+                    */
+
+                    if($batch_is_active == 0){
+                        if($data['used'] > 0){
+                            $button_name = 'Deactivate Batch<br/>(Partially Used)';
+                            $class = "deactivate_partially_batch";
+                            $i_class = "fa fa-toggle-off";
+                            $data_val = 4;
+                        }else{
+                            $button_name = 'Deactivate Batch';
+                            $class = "deactivate_batch";
+                            $i_class = "fa fa-toggle-off";
+                            $data_val = 0;
+                        }
+                    }
+                    if($batch_is_active == 1 ){
+                          if($data['used'] > 0){
+                            $button_name = 'Mixed Batch<br/>(Partially Used)';
+                            $class = "mixed_partially_batch";
+                            $i_class = "fa fa-toggle-on";
+                            $data_val = 5;
+                          }else{
+                            $button_name = 'Mixed Batch';
+                            $class = "mixed_batch";
                             $i_class = "fa fa-toggle-on";
                             $data_val = 1;
+                          }
                     }
-                    if($batch_is_active == 1 || $batch_is_active == 2){
-                    $button_name = 'Deactivate Batch';
-                    $class = "deactivate_batch";
-                    $i_class = "fa fa-toggle-off";
-                    $data_val = 0;
+                    if($batch_is_active == 2 ){
+                        if($data['used'] > 0){
+                            $button_name = 'Active Batch<br/>(Partially Used)';
+                            $class = "activate_partially_batch";
+                            $i_class = "fa fa-toggle-on";
+                            $data_val = 3;
+                        }else{
+                            $button_name = 'Active Batch';
+                            $class = "activate_batch";
+                            $i_class = "fa fa-toggle-on";
+                            $data_val = 2;
+                        }
+                        
                     }
+                    
                     echo '<button id="'.$post_id.'" value="'.$post_id.'" class="batch_cb '.$class.'" data-val="'.$data_val.'"><i class="'.$i_class.'"></i><label>'.$button_name.'</label></button>';
                         
                     echo '</div>';
@@ -1007,10 +1047,10 @@ class PMSafe_Bulk_Invitation{
                 case 'delete_code':
                         echo '<i class="fa fa-trash" id="delete_code_button" style="cursor:pointer;color:#ff0000;font-size:18px;" data-id="'.$post_id.'"></i>';
                 break;
-                case 'active_inactive':// 0 = Inactive 1 = Mixed 2 = Active
-                        $is_active = get_post_meta($post_id,'code_active_inactive',true);
-                        echo '<input type="checkbox" class="jtoggler" disabled data-id="'.$post_id.'" data-val="'.$is_active.'" data-jtmulti-state>';
-                break;
+                // case 'active_inactive':// 0 = Inactive 1 = Mixed 2 = Active
+                //         $is_active = get_post_meta($post_id,'code_active_inactive',true);
+                //         echo '<input type="checkbox" class="jtoggler" disabled data-id="'.$post_id.'" data-val="'.$is_active.'" data-jtmulti-state>';
+                // break;
                
             }
     }

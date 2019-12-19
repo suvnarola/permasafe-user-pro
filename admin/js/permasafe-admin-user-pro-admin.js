@@ -4841,39 +4841,26 @@ jQuery(document).ready(function () {
 
             success: function (response) {
                 jQuery('.perma-admin-loader').hide();
-                jQuery('tr#post-' + post_id).find('.jtoggler').parents('.jtoggler-wrapper-multistate').find('span').css('display', 'none');
-                if (is_checked == 0) {
+                var obj = jQuery.parseJSON(response);
+                // if (is_checked == 1) {
+                jQuery(current_element).attr('data-val', obj.data_val);
+                jQuery(current_element).attr('class', 'batch_cb').addClass(obj.status_class);
+                jQuery(current_element).find("i").attr('class', obj.fa_class);
+                jQuery(current_element).find('label').html(obj.label);
+                // }
+                // if (is_checked == 2) {
+                //     jQuery(current_element).attr('data-val', 0);
+                //     jQuery(current_element).toggleClass("deactivate_batch activate_batch");
+                //     jQuery(current_element).find("i").toggleClass("fa-toggle-off fa-toggle-on");
+                //     jQuery(current_element).find('label').html('Deactivate Batch');
+                // }
+                // if (is_checked == 0) {
+                //     jQuery(current_element).attr('data-val', 2);
+                //     jQuery(current_element).toggleClass("activate_batch deactivate_batch");
+                //     jQuery(current_element).find("i").toggleClass("fa-toggle-on fa-toggle-off");
+                //     jQuery(current_element).find('label').html('Activate Batch');
+                // }
 
-                    jQuery(current_element).attr('data-val', 1);
-                    jQuery(current_element).toggleClass("deactivate_batch activate_batch");
-                    jQuery(current_element).find("i").toggleClass("fa-toggle-off fa-toggle-on");
-                    jQuery(current_element).find('label').html('Activate Batch');
-
-                    jQuery('tr#post-' + post_id).find('.jtoggler').data('val', 0);
-                    jQuery('tr#post-' + post_id).find('.jtoggler').parents('.jtoggler-wrapper-multistate').find('.jtoggler-control').removeClass('is-fully-active');
-                    jQuery('tr#post-' + post_id).find('.jtoggler').parents('.jtoggler-wrapper-multistate').find('.jtoggler-control').removeClass('mixed-state');
-                    jQuery('tr#post-' + post_id).find('.jtoggler-wrapper').append('<span style="color:#ff0000">Inactive</span>');
-
-                    jQuery('tr#post-' + post_id).find('.jtoggler-btn-wrapper:nth-child(1)').addClass('is-active');
-                    jQuery('tr#post-' + post_id).find('.jtoggler-btn-wrapper:nth-child(2)').removeClass('is-active');
-                    jQuery('tr#post-' + post_id).find('.jtoggler-btn-wrapper:nth-child(3)').removeClass('is-active');
-
-                }
-                if (is_checked == 1) {
-                    jQuery(current_element).attr('data-val', 0);
-                    jQuery(current_element).toggleClass("activate_batch deactivate_batch");
-                    jQuery(current_element).find("i").toggleClass("fa-toggle-on fa-toggle-off");
-                    jQuery(current_element).find('label').html('Deactivate Batch');
-
-
-                    jQuery('tr#post-' + post_id).find('.jtoggler').data('val', 2);
-                    jQuery('tr#post-' + post_id).find('.jtoggler-wrapper').append('<span style="color:#008000">Active</span>');
-
-                    jQuery('tr#post-' + post_id).find('.jtoggler-control').addClass('is-fully-active');
-                    jQuery('tr#post-' + post_id).find('.jtoggler-btn-wrapper:nth-child(1)').removeClass('is-active');
-                    jQuery('tr#post-' + post_id).find('.jtoggler-btn-wrapper:nth-child(2)').removeClass('is-active');
-                    jQuery('tr#post-' + post_id).find('.jtoggler-btn-wrapper:nth-child(3)').addClass('is-active');
-                }
 
             }
         })

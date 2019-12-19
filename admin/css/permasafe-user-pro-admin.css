@@ -1260,7 +1260,11 @@ input.batch_cb[type="checkbox"] + label:before {content: "\2714";border: 1px sol
 input.batch_cb[type="checkbox"] {display: none;} */
 /* .chk_div {display: flex;align-items: center;justify-content: center;flex-wrap: wrap;padding-top: 4px;} */
 .deactivate_batch {color: #fff;background-color: #ce3232;}
+.deactivate_partially_batch {color: #fff;background-color: #dd6161;}
 .activate_batch {color: #fff;background-color: #396939;}
+.activate_partially_batch {color: #fff;background-color: #65c774;}
+.mixed_batch {color: #fff;background-color: #ee7e00;}
+.mixed_partially_batch {color: #fff;background-color: #e99500;}
 #search-individual-code:hover, #search-batch-code:hover{background: #0065a7 !important;border-color: #0065a7 !important;} 
 .post-type-pmsafe_bulk_invi .wp-list-table tr th:last-child {width: 150px !important;}
 .post-type-pmsafe_bulk_invi .wp-list-table tr th:nth-child(10) {width: 100px;}

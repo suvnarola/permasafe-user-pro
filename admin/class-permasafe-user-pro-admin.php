@@ -1332,12 +1332,12 @@ class Permasafe_User_Pro_Admin
 			$html .= '<i class="fa fa-trash" id="delete_code_button" style="cursor:pointer;color:#ff0000;font-size:18px;" data-id="' . $post_id . '"></i>';
 			$html .= '</td>';
 
-			$html .= '<td class="active_inactive column-active_inactive" data-colname="Active/Inactive">';
-			$is_active = get_post_meta($post_id,'code_active_inactive',true);
-				$html .=  '<input type="checkbox" class="jtoggler" disabled data-id="'.$post_id.'" data-val="'.$is_active.'" data-jtmulti-state>';
-			$html .= '</td>';
+			// $html .= '<td class="active_inactive column-active_inactive" data-colname="Active/Inactive">';
+			// $is_active = get_post_meta($post_id,'code_active_inactive',true);
+			// 	$html .=  '<input type="checkbox" class="jtoggler" disabled data-id="'.$post_id.'" data-val="'.$is_active.'" data-jtmulti-state>';
+			// $html .= '</td>';
 
-			$html .= '<td class="inactive_batch column-inactive_batch" data-colname="Inactive Batch">';
+			$html .= '<td class="batch_control column-batch_control" data-colname="Batch Control">';
 				$html .= '<div class="chk_div">';
                 $batch_is_active = get_post_meta($post_id,'code_active_inactive',true);
                 if($batch_is_active == 0 ){
@@ -4565,11 +4565,20 @@ class Permasafe_User_Pro_Admin
 				update_user_meta($user_id,'user_active_inactive',1);
 				if($bulk_id){
 					$invitation_id = get_post_meta($bulk_id, '_pmsafe_invitation_ids', true);
-					$results = $wpdb->get_results('SELECT post_id, meta_value FROM wp_postmeta WHERE meta_key = "code_active_inactive" AND post_id in ('.$invitation_id.')');	
+					$invitation_id = explode(',', $invitation_id);
+					foreach ($invitation_id as $id) {
+						$code_status = get_post_meta($id, '_pmsafe_code_status', true);
+						if ($code_status == 'available') {
+							$id_arr[] = $id;
+						}
+					}
+					$id_array = implode(',',$id_arr);
+					$results = $wpdb->get_results('SELECT post_id, meta_value FROM wp_postmeta WHERE meta_key = "code_active_inactive" AND post_id in ('.$id_array.')');	
 					
 					foreach ($results as $key => $value) {
 						$meta_value[] = $value->meta_value;
 					}
+					
 					if(in_array(1,$meta_value) && in_array(0,$meta_value)){
 						update_post_meta($bulk_id,'code_active_inactive',1); // 0 and 1
 					}
@@ -4592,7 +4601,15 @@ class Permasafe_User_Pro_Admin
 
 				if($bulk_id){
 					$invitation_id = get_post_meta($bulk_id, '_pmsafe_invitation_ids', true);
-					$results = $wpdb->get_results('SELECT post_id, meta_value FROM wp_postmeta WHERE meta_key = "code_active_inactive" AND post_id in ('.$invitation_id.')');	
+					$invitation_id = explode(',', $invitation_id);
+					foreach ($invitation_id as $id) {
+						$code_status = get_post_meta($id, '_pmsafe_code_status', true);
+						if ($code_status == 'available') {
+							$id_arr[] = $id;
+						}
+					}
+					$id_array = implode(',',$id_arr);
+					$results = $wpdb->get_results('SELECT post_id, meta_value FROM wp_postmeta WHERE meta_key = "code_active_inactive" AND post_id in ('.$id_array.')');	
 					
 					foreach ($results as $key => $value) {
 						$meta_value[] = $value->meta_value;
@@ -4620,7 +4637,15 @@ class Permasafe_User_Pro_Admin
 				update_post_meta($post_id,'code_active_inactive',1);
 				 if($bulk_id){
 					$invitation_id = get_post_meta($bulk_id, '_pmsafe_invitation_ids', true);
-					$results = $wpdb->get_results('SELECT post_id, meta_value FROM wp_postmeta WHERE meta_key = "code_active_inactive" AND post_id in ('.$invitation_id.')');	
+					$invitation_id = explode(',', $invitation_id);
+					foreach ($invitation_id as $id) {
+						$code_status = get_post_meta($id, '_pmsafe_code_status', true);
+						if ($code_status == 'available') {
+							$id_arr[] = $id;
+						}
+					}
+					$id_array = implode(',',$id_arr);
+					$results = $wpdb->get_results('SELECT post_id, meta_value FROM wp_postmeta WHERE meta_key = "code_active_inactive" AND post_id in ('.$id_array.')');	
 					
 					foreach ($results as $key => $value) {
 						$meta_value[] = $value->meta_value;
@@ -4641,7 +4666,15 @@ class Permasafe_User_Pro_Admin
 				update_post_meta($post_id,'code_active_inactive',0);
 				 if($bulk_id){
 					$invitation_id = get_post_meta($bulk_id, '_pmsafe_invitation_ids', true);
-					$results = $wpdb->get_results('SELECT post_id, meta_value FROM wp_postmeta WHERE meta_key = "code_active_inactive" AND post_id in ('.$invitation_id.')');	
+					$invitation_id = explode(',', $invitation_id);
+					foreach ($invitation_id as $id) {
+						$code_status = get_post_meta($id, '_pmsafe_code_status', true);
+						if ($code_status == 'available') {
+							$id_arr[] = $id;
+						}
+					}
+					$id_array = implode(',',$id_arr);
+					$results = $wpdb->get_results('SELECT post_id, meta_value FROM wp_postmeta WHERE meta_key = "code_active_inactive" AND post_id in ('.$id_array.')');	
 					
 					foreach ($results as $key => $value) {
 						$meta_value[] = $value->meta_value;
@@ -4722,7 +4755,11 @@ class Permasafe_User_Pro_Admin
 					$invitation_id = explode(',', $invitation_id);
 					$data = pmsafe_unused_code_count($post_id);
 					foreach ($invitation_id as $id) {
-						update_post_meta($id,'code_active_inactive',1);
+						$code_status = get_post_meta($id, '_pmsafe_code_status', true);
+					
+						if($code_status == 'available'){
+							update_post_meta($id,'code_active_inactive',1);
+						}
 						// $meta_value[] = get_post_meta($id,'code_active_inactive',true) ;
 					}
 					update_post_meta($post_id,'code_active_inactive',2);
@@ -4753,8 +4790,8 @@ class Permasafe_User_Pro_Admin
 					
 						if($code_status == 'available'){
 							update_post_meta($id,'code_active_inactive',0);
+							$meta_value[] = get_post_meta($id,'code_active_inactive',true) ;
 						}
-						$meta_value[] = get_post_meta($id,'code_active_inactive',true) ;
 					}
 
 					if(in_array(1,$meta_value) && in_array(0,$meta_value)){
@@ -4801,17 +4838,50 @@ class Permasafe_User_Pro_Admin
 			$invitation_id = explode(',', $invitation_ids);
 			
 			if($is_checked == 0){
-				update_post_meta($post_id,'code_active_inactive',0);
-				foreach ($invitation_id as $id) {
-					update_post_meta($id,'code_active_inactive',0);
-				}
-			}
-			if($is_checked == 1){
 				update_post_meta($post_id,'code_active_inactive',2);
 				foreach ($invitation_id as $id) {
 					update_post_meta($id,'code_active_inactive',1);
 				}
+				$response = array('data_val'=>2,'status_class'=>'activate_batch','fa_class'=>'fa fa-toggle-on','label'=>'Activate Batch');
 			}
+
+			if($is_checked == 1){
+				update_post_meta($post_id,'code_active_inactive',0);
+				foreach ($invitation_id as $id) {
+					update_post_meta($id,'code_active_inactive',0);
+				}
+				$response = array('data_val'=>0,'status_class'=>'deactivate_batch','fa_class'=>'fa fa-toggle-off','label'=>'Deactivate Batch');
+			}
+
+			if($is_checked == 2){
+				update_post_meta($post_id,'code_active_inactive',0);
+				foreach ($invitation_id as $id) {
+					update_post_meta($id,'code_active_inactive',0);
+				}
+				$response = array('data_val'=>0,'status_class'=>'deactivate_batch','fa_class'=>'fa fa-toggle-off','label'=>'Deactivate Batch');
+			}
+			if($is_checked == 3 || $is_checked == 5){
+				update_post_meta($post_id,'code_active_inactive',0);
+				foreach ($invitation_id as $id) {
+					$code_status = get_post_meta($id, '_pmsafe_code_status', true);
+					if ($code_status == 'available') {
+						update_post_meta($id,'code_active_inactive',0);
+					}
+				}
+				$response = array('data_val'=>4,'status_class'=>'deactivate_partially_batch','fa_class'=>'fa fa-toggle-off','label'=>'Deactivate Batch<br/>(Partially Used)');
+			}
+
+			if($is_checked == 4){
+				update_post_meta($post_id,'code_active_inactive',2);
+				foreach ($invitation_id as $id) {
+					$code_status = get_post_meta($id, '_pmsafe_code_status', true);
+					if ($code_status == 'available') {
+						update_post_meta($id,'code_active_inactive',1);
+					}
+				}
+				$response = array('data_val'=>3,'status_class'=>'activate_partially_batch','fa_class'=>'fa fa-toggle-on','label'=>'Activate Batch<br/>(Partially Used)');
+			}
+			echo json_encode($response);
 		}
 		die;
 	}
