@@ -1001,6 +1001,7 @@ class Permasafe_User_Pro_Admin
 		$nickname = $_POST['pmsafe_customer_code'];
 		$fname = $_POST['pmsafe_customer_fname'];
 		$lname = $_POST['pmsafe_customer_lname'];
+		$mail = $_POST['pmsafe_customer_mail'];
 		$address1 = $_POST['pmsafe_customer_address1'];
 		$address2 = $_POST['pmsafe_customer_address2'];
 		$city = $_POST['pmsafe_customer_city'];
@@ -1023,10 +1024,14 @@ class Permasafe_User_Pro_Admin
 		$login = get_post_meta($post_id, '_pmsafe_dealer', true);
 		$users = get_user_by('login', $login);
 		$dealer_id = $users->ID;
-
-		$user_id = wp_update_user(array('ID' => $user_id));
+		$args = array(
+			'ID'         => $user_id,
+			'user_email' => $mail
+		);
+		$user_id = wp_update_user($args);
 		update_user_meta($user_id, 'first_name', $fname);
 		update_user_meta($user_id, 'last_name', $lname);
+		update_user_meta($user_id, 'pmsafe_email', $mail);
 		update_user_meta($user_id, 'pmsafe_address_1', $address1);
 		update_user_meta($user_id, 'pmsafe_address_2', $address2);
 		update_user_meta($user_id, 'pmsafe_city', $city);

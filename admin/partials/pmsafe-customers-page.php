@@ -442,6 +442,11 @@ if ($action == 'view_customer_details') {
     echo '<input type="text" id="pmsafe_customer_lname" name="pmsafe_customer_lname" value="' . $lname . '" class="widefat" />';
     echo '</div>';
 
+    echo '<div id="lname_div">';
+    echo '<label><strong>Email</strong></label>';
+    echo '<input type="text" id="pmsafe_customer_mail" name="pmsafe_customer_mail" value="' . get_user_meta($user_id, 'pmsafe_email', true) . '" class="widefat" />';
+    echo '</div>';
+
     // $customer_pwd = wp_generate_password();
 
     echo '<div id="password_div">';
